@@ -1,0 +1,45 @@
+{
+  "name": "webextensions-emulator",
+  "version": "1.2.4",
+  "description": "Functional fake WebExtensions environment for development.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/crimx/webextensions-emulator.git"
+  },
+  "scripts": {
+    "dev": "cross-env NODE_ENV=development webpack-dev-server --open --watch-poll --mode=development",
+    "build": "cross-env NODE_ENV=production webpack --mode=production"
+  },
+  "keywords": [
+    "webextension",
+    "extension",
+    "chrome",
+    "firefox",
+    "fake",
+    "environment",
+    "api"
+  ],
+  "author": "CRIMX",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/crimx/webextensions-emulator/issues"
+  },
+  "homepage": "https://github.com/crimx/webextensions-emulator#readme",
+  "devDependencies": {
+    "cross-env": "^5.2.0",
+    "eslint": "^5.12.1",
+    "eslint-config-standard": "^12.0.0",
+    "eslint-plugin-import": "^2.16.0",
+    "eslint-plugin-node": "^8.0.1",
+    "eslint-plugin-promise": "^4.0.1",
+    "eslint-plugin-standard": "^4.0.0",
+    "html-webpack-plugin": "^3.2.0",
+    "webpack": "^4.29.0",
+    "webpack-cli": "^3.2.1",
+    "webpack-dev-server": "^3.1.14"
+  },
+  "dependencies": {
+    "lodash": "^4.17.11",
+    "sinon-chrome": "^2.3.2"
+  }
+}

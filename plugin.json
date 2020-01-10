@@ -1,0 +1,15 @@
+{
+	"pluginName": "沙拉查词",
+	"description": "沙拉查词-聚合词典专业划词翻译",
+    "main": "quick-search.html",
+    "author": "anrgct",
+    "version": "0.0.1",
+    "logo": "logo.png",
+	"features": [
+	    {
+			"code": "沙拉查词",
+			"explain": "沙拉查词-聚合词典专业划词翻译",
+	        "cmds":["沙拉查词", "saladict"]
+	    }
+	]
+}
