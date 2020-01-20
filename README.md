@@ -1,8 +1,8 @@
-# 沙拉查词-聚合词典划词翻译
+### 沙拉查词-聚合词典划词翻译
 
-本项目移植自chrome上饱受赞誉的划词翻译插件——沙拉查词，沙拉查词项目地址<https://saladict.crimx.com>
+本项目移植自广受好评的chrome划词翻译插件——沙拉查词 <https://saladict.crimx.com>
 
-- 目前版本仅具备基本查询功能，其他功能待完善。
+当前仅具备**基本查词**功能，**设置**、**生词本**、**历史**等功能无法使用。
 
-![沙拉查词.jpg](https://img04.sogoucdn.com/app/a/100520146/3d1fc886aafb78939db4bf7b8ceb8075)
+![沙拉查词.jpg](https://s2.ax1x.com/2020/01/10/l4Ybhn.png)
 
