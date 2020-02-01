@@ -1,14 +1,52 @@
 import _ from 'lodash'
 
-const storageData = Symbol.for('fake_env_storageData')
-
-window[storageData] = {
-  local: {},
-  sync: {},
-  managed: {},
-  listeners: []
+const storageData = ('fake_env_storageData')
+function genStorage (prefix, source = {}) {
+  function restore (args) {
+    let name = `ls_${prefix}`
+    let objStr = localStorage.getItem(name)
+    if (/\{.*\}/.test(objStr) || /\[.*\]/.test(objStr)) {
+      objStr = eval(`(${objStr})`)
+    } else if (objStr == 'undefined' || objStr == 'NaN' || objStr == 'null') {
+      objStr = eval(`(${objStr})`)
+    }
+    _.extend(args[0], objStr)
+    return args[0]
+  }
+  function save (args) {
+    let name = `ls_${prefix}`
+    let objStr = args[0]
+    if (typeof objStr === 'object') {
+      objStr = JSON.stringify(objStr)
+    }
+    localStorage.setItem(name, objStr)
+    return objStr
+  }
+  return new Proxy(source, {
+    get: (...args) => {
+      switch (args[1]) {
+        case 'save':
+          return save.bind(args[0], args)
+        case 'restore':
+          return restore.bind(args[0], args)
+        case '__prefix__':
+          return prefix
+      }
+      return Reflect.get(...args)
+    }
+  })
 }
 
+// window.aa = genStorage('test')
+window[storageData] = {
+  local: genStorage('local'),
+  sync: genStorage('sync'),
+  managed: genStorage('managed'),
+  listeners: []
+}
+window[storageData].local.restore()
+window[storageData].sync.restore()
+window[storageData].managed.restore()
 window.browser.storage.onChanged.addListener = listener => {
   if (!_.isFunction(listener)) {
     return Promise.reject(new TypeError('Wrong argument type'))
@@ -91,7 +129,8 @@ function genStorageApis (area) {
       setTimeout(() => notifyListeners(changes, area), 0)
     }
 
-    window[storageData][area] = newData
+    window[storageData][area] = genStorage(window[storageData][area]['__prefix__'], newData)
+    window[storageData][area].save()
     return Promise.resolve()
   })
 
@@ -118,7 +157,8 @@ function genStorageApis (area) {
       setTimeout(() => notifyListeners(changes, area), 0)
     }
 
-    window[storageData][area] = newData
+    window[storageData][area] = genStorage(window[storageData][area]['__prefix__'], newData)
+    window[storageData][area].save()
     return Promise.resolve()
   })
 
@@ -138,7 +178,8 @@ function genStorageApis (area) {
       setTimeout(() => notifyListeners(changes, area), 0)
     }
 
-    window[storageData][area] = {}
+    window[storageData][area] = genStorage(window[storageData][area]['__prefix__'], {})
+    window[storageData][area].save()
     return Promise.resolve()
   })
 

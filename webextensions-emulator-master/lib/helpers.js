@@ -1,8 +1,8 @@
 import _ from 'lodash'
 import sinon from 'sinon'
 
-export const msgPageListeners = Symbol.for('fake_env_msgPageListeners')
-export const msgBgListeners = Symbol.for('fake_env_msgBackgroundListeners')
+export const msgPageListeners = ('fake_env_msgPageListeners')
+export const msgBgListeners = ('fake_env_msgBackgroundListeners')
 
 export function runtimeSendMessage (listenersArea) {
   function sendMessage (extensionId, message) {
@@ -63,8 +63,8 @@ export function runtimeSendMessage (listenersArea) {
   return sendMessage
 }
 
-export const connectPageListeners = Symbol.for('fake_env_connectPageListeners')
-export const connectBgListeners = Symbol.for(
+export const connectPageListeners = ('fake_env_connectPageListeners')
+export const connectBgListeners = (
   'fake_env_connectBackgroundListeners'
 )
 

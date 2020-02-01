@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Webpack App</title>
+    <script src="./webextensions-emulator-master/dist/core.js"></script>
+    <style>
+        html,body{
+            height: 100%;
+            margin:0;
+            padding:0;
+        }
+        #saladict-paste{
+            display: none;
+        }
+        iframe{
+            border: 0;
+        }
+        .iframe-wrap{
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        .close-iframe-btn{
+            position: absolute;
+            top: 0;
+            right: 0;
+            color: #333;
+            background: red;
+            cursor: pointer;
+        }
+        
+    </style>
+</head>
+
+<body>
+    <script src="./assets/runtime.a044b40a.js"></script>
+    <script src="./assets/15.2f3ecacf.js"></script>
+    <script src="./assets/1.aae3a86b.js"></script>
+    <script src="./assets/3.50fd9125.js"></script>
+    <script src="./assets/background.64baba5d.js"></script>
+</body>
+<script>
+    
+    window.browser.storage.sync.get().then(data=>{
+        if(!data.activeProfileID){
+            window.browser.runtime.onInstalled._listeners.forEach(listener => {
+                if (!_.isFunction(listener)) {
+                    throw new TypeError('Wrong argument type')
+                }
+                // delay startup calls
+                listener({ reason: '' })
+            })
+        }
+    })
+</script>
+
+</html>

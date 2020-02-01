@@ -4,14 +4,18 @@
 <head>
     <meta charset="utf-8">
     <title>Webpack App</title>
-    <script src="./webextensions-emulator-master/dist/core.js"></script>
+    <script src="./webextensions-emulator-master/dist/background.js"></script>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <link href="./assets/quick-search.681d65d2.css" rel="stylesheet">
+    <style>
+        .menuBar-Btn:nth-of-type(6),.menuBar-Btn:nth-of-type(7){
+            display: none;
+        }
+    </style>
 </head>
 
 <body>
     <div id="root"></div>
-    <iframe src="./background.html" frameborder="0" width="0" height="0"></iframe>
     <script src="./assets/runtime.a044b40a.js"></script>
     <script src="./assets/dictpanel.822e4acd.js"></script>
     <script src="./assets/5.81f86a6e.js"></script>

@@ -1,8 +1,9 @@
+import { openIframe } from '../../mock/utils'
 window.browser.tabs.create.callsFake(({ url }) => {
   if (!url) {
     return Promise.reject(new Error('invalid url'))
   }
-  window.open(url)
+  openIframe(url)
   return Promise.resolve({
     active: true,
     url: url,

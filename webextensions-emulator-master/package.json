@@ -8,7 +8,8 @@
   },
   "scripts": {
     "dev": "cross-env NODE_ENV=development webpack-dev-server --open --watch-poll --mode=development",
-    "build": "cross-env NODE_ENV=production webpack --mode=production"
+    "build": "cross-env NODE_ENV=production webpack --mode=production",
+    "watch": "cross-env NODE_ENV=development webpack --watch"
   },
   "keywords": [
     "webextension",

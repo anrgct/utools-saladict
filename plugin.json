@@ -1,15 +1,23 @@
 {
 	"pluginName": "沙拉查词",
-	"description": "沙拉查词-聚合词典专业划词翻译",
-    "main": "quick-search.html",
+	"description": "沙拉查词-聚合词典专业查词翻译",
+    "main": "utools.html",
     "author": "anrgct",
-    "version": "0.0.1",
-    "logo": "logo.png",
+    "version": "0.2.0",
+	"logo": "logo.png",
+	"preload":"preload.js",
+	"homepage": "https://github.com/anrgct/utools-saladic",
 	"features": [
 	    {
 			"code": "沙拉查词",
-			"explain": "沙拉查词-聚合词典专业划词翻译",
-	        "cmds":["沙拉查词", "saladict"]
-	    }
+			"explain": "沙拉查词",
+			"cmds":[
+				"沙拉查词",
+				"saladict",
+				{
+					"type": "over",
+					"label": "沙拉查词"
+				}]
+		}
 	]
 }
