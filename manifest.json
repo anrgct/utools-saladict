@@ -1,5 +1,5 @@
 {
-  "version": "7.6.1",
+  "version": "7.7.3",
   "content_scripts": [
     {
       "matches": [
@@ -8,11 +8,11 @@
       "js": [
         "assets/browser-polyfill.min.js",
         "assets/runtime.a044b40a.js",
-        "assets/dictpanel.822e4acd.js",
-        "assets/16.756712f4.js",
-        "assets/1.aae3a86b.js",
-        "assets/3.50fd9125.js",
-        "assets/content.fdd17916.js"
+        "assets/dictpanel.3aea54f4.js",
+        "assets/16.ee4c6e65.js",
+        "assets/1.c7c5ffd6.js",
+        "assets/3.d0692a3d.js",
+        "assets/content.e0f8a209.js"
       ]
     },
     {
@@ -24,9 +24,9 @@
       "js": [
         "assets/browser-polyfill.min.js",
         "assets/runtime.a044b40a.js",
-        "assets/17.365521ae.js",
-        "assets/1.aae3a86b.js",
-        "assets/selection.6b1ce906.js"
+        "assets/17.a464612a.js",
+        "assets/1.c7c5ffd6.js",
+        "assets/selection.cfda8e70.js"
       ]
     }
   ],
@@ -50,10 +50,10 @@
     "scripts": [
       "assets/browser-polyfill.min.js",
       "assets/runtime.a044b40a.js",
-      "assets/15.2f3ecacf.js",
-      "assets/1.aae3a86b.js",
-      "assets/3.50fd9125.js",
-      "assets/background.64baba5d.js"
+      "assets/15.ce10c657.js",
+      "assets/1.c7c5ffd6.js",
+      "assets/3.d0692a3d.js",
+      "assets/background.21ede37f.js"
     ],
     "persistent": true
   },
@@ -113,7 +113,7 @@
   "optional_permissions": [
     "clipboardWrite"
   ],
-  "content_security_policy": "script-src 'self' 'unsafe-eval' https://www.google-analytics.com; object-src 'self'",
+  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
   "incognito": "split",
   "update_url": "https://clients2.google.com/service/update2/crx"
 }

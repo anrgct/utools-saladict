@@ -32075,13 +32075,13 @@ const runtime = new Proxy(window.parent.browser.runtime, {
   get: (...args) => {
     switch (args[1]) {
       case 'sendMessage':
-        return Object(helpers["g" /* runtimeSendMessage */])(window.parent[helpers["e" /* msgPageListeners */]])
+        return Object(helpers["g" /* runtimeSendMessage */])(window.parent[helpers["e" /* msgPageListeners */]] ? window.parent[helpers["e" /* msgPageListeners */]] : window.parent.parent[helpers["e" /* msgPageListeners */]])
       case 'onMessage':
-        return Object(helpers["c" /* makeListener */])(window.parent[helpers["d" /* msgBgListeners */]])
+        return Object(helpers["c" /* makeListener */])(window.parent[helpers["d" /* msgBgListeners */]] ? window.parent[helpers["d" /* msgBgListeners */]] : window.parent.parent[helpers["d" /* msgBgListeners */]])
       case 'connect':
-        return Object(helpers["f" /* runtimeConnect */])(window.parent[helpers["b" /* connectPageListeners */]])
+        return Object(helpers["f" /* runtimeConnect */])(window.parent[helpers["b" /* connectPageListeners */]] ? window.parent[helpers["b" /* connectPageListeners */]] : window.parent.parent[helpers["b" /* connectPageListeners */]])
       case 'onConnect':
-        return Object(helpers["c" /* makeListener */])(window.parent[helpers["a" /* connectBgListeners */]])
+        return Object(helpers["c" /* makeListener */])(window.parent[helpers["a" /* connectBgListeners */]] ? window.parent[helpers["a" /* connectBgListeners */]] : window.parent.parent[helpers["a" /* connectBgListeners */]])
     }
     return Reflect.get(...args)
   }
@@ -32097,7 +32097,7 @@ var sinon_default = /*#__PURE__*/__webpack_require__.n(sinon);
 
 // Assuming all tab messages are sent to the tab that is under development
 // Filter out messages if you need to narrow down
-const _sendMessage = Object(helpers["g" /* runtimeSendMessage */])(window.parent[helpers["e" /* msgPageListeners */]])
+const _sendMessage = Object(helpers["g" /* runtimeSendMessage */])(window.parent[helpers["e" /* msgPageListeners */]] ? window.parent[helpers["e" /* msgPageListeners */]] : window.parent.parent[helpers["e" /* msgPageListeners */]])
 function sendTabMessage (tabId, message) {
   if (typeof tabId !== 'string') {
     return Promise.reject(new TypeError('Wrong argument type'))

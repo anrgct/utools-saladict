@@ -1,5 +1,5 @@
 export function openIframe (url, opt = {}) {
-  if (!/^\.\//.test(url)) {
+  if (!(/^\.\//.test(url) || /^bolb/.test(url) || /^http/.test(url))) {
     url = `./${url}`
   }
   let existIframe = document.querySelector(`iframe[src="${url}"]`)
@@ -11,7 +11,7 @@ export function openIframe (url, opt = {}) {
   var iframe = document.createElement('iframe')
   iframe.src = url
   iframe.width = '100%'
-  iframe.height = 544
+  iframe.height = '100%'
   iframe.frameborder = 0
   var wrap = document.createElement('div')
   wrap.classList.add('iframe-wrap')

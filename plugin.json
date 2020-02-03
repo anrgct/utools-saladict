@@ -3,7 +3,7 @@
 	"description": "沙拉查词-聚合词典专业查词翻译",
     "main": "utools.html",
     "author": "anrgct",
-    "version": "0.2.0",
+    "version": "0.2.1",
 	"logo": "logo.png",
 	"preload":"preload.js",
 	"homepage": "https://github.com/anrgct/utools-saladic",

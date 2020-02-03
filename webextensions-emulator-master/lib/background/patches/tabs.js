@@ -3,7 +3,7 @@ import { msgPageListeners, runtimeSendMessage } from '../../helpers'
 
 // Assuming all tab messages are sent to the tab that is under development
 // Filter out messages if you need to narrow down
-const _sendMessage = runtimeSendMessage(window.parent[msgPageListeners])
+const _sendMessage = runtimeSendMessage(window.parent[msgPageListeners] ? window.parent[msgPageListeners] : window.parent.parent[msgPageListeners])
 function sendTabMessage (tabId, message) {
   if (typeof tabId !== 'string') {
     return Promise.reject(new TypeError('Wrong argument type'))
