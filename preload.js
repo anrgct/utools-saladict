@@ -129,6 +129,9 @@ window.saveIndexedBDData = saveIndexedBDData;
 window.openExternal = function (url) {
     shell.openExternal(url)
 }
+window.outPlugin = function(){
+    utools.outPlugin()
+}
 class utoolsStorage {
     constructor(id) {
         this.id = id;

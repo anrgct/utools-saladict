@@ -19,5 +19,13 @@ if(location.href.includes('utools.html')){
             })
         }
     })
+    
     // openIframe('./quick-search.html',{hideCloseBtn : true})
+}
+if(location.href.includes('quick-search.html')){
+    document.addEventListener('keydown',function(e){
+        if(e && e.keyCode==27){ // 按 Esc  
+            window.parent.outPlugin && window.parent.outPlugin()
+        } 
+    })
 }
