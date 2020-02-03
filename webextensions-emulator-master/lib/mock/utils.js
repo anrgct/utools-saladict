@@ -21,6 +21,10 @@ export function openIframe (url, opt = {}) {
     closeBtn.classList.add('close-iframe-btn')
     closeBtn.onclick = () => {
       document.body.removeChild(wrap)
+      // 监听设置页关闭事件，保存indexedDB
+      if (url.includes('options.html')) {
+        window.parent.saveIndexedBDData && window.parent.saveIndexedBDData()
+      }
     }
     wrap.appendChild(closeBtn)
   }

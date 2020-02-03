@@ -17219,6 +17219,10 @@ const msgBgListeners = ('fake_env_msgBackgroundListeners')
 
 function runtimeSendMessage (listenersArea) {
   function sendMessage (extensionId, message) {
+    // 监听WORD_SAVED保存indexedDB
+    if (extensionId && extensionId.type && ['WORD_SAVED'].includes(extensionId.type)) {
+      window.saveIndexedBDData && window.saveIndexedBDData()
+    }
     return new Promise((resolve, reject) => {
       if (typeof extensionId !== 'string') {
         message = extensionId
@@ -17243,6 +17247,7 @@ function runtimeSendMessage (listenersArea) {
             return reject(new TypeError('Response data not serializable'))
           }
         }
+        
         resolve(response)
       }
 

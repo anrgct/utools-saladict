@@ -1,52 +1,35 @@
 import _ from 'lodash'
 
 const storageData = ('fake_env_storageData')
-function genStorage (prefix, source = {}) {
-  function restore (args) {
-    let name = `ls_${prefix}`
-    let objStr = localStorage.getItem(name)
-    if (/\{.*\}/.test(objStr) || /\[.*\]/.test(objStr)) {
-      objStr = eval(`(${objStr})`)
-    } else if (objStr == 'undefined' || objStr == 'NaN' || objStr == 'null') {
-      objStr = eval(`(${objStr})`)
-    }
-    _.extend(args[0], objStr)
-    return args[0]
+// 还原到本地
+window.restoreLocalStorageData = function (data = {}) {
+  let { local, sync, managed } = data
+  if (local) {
+    window[storageData].local = local
   }
-  function save (args) {
-    let name = `ls_${prefix}`
-    let objStr = args[0]
-    if (typeof objStr === 'object') {
-      objStr = JSON.stringify(objStr)
-    }
-    localStorage.setItem(name, objStr)
-    return objStr
+  if (sync) {
+    window[storageData].sync = sync
   }
-  return new Proxy(source, {
-    get: (...args) => {
-      switch (args[1]) {
-        case 'save':
-          return save.bind(args[0], args)
-        case 'restore':
-          return restore.bind(args[0], args)
-        case '__prefix__':
-          return prefix
-      }
-      return Reflect.get(...args)
-    }
+  if (managed) {
+    window[storageData].managed = managed
+  }
+}
+// 保存到utools
+function saveData () {
+  window.saveLocalStorageData && window.saveLocalStorageData({
+    local: window[storageData].local,
+    sync: window[storageData].sync,
+    managed: window[storageData].managed
   })
 }
-
 // window.aa = genStorage('test')
 window[storageData] = {
-  local: genStorage('local'),
-  sync: genStorage('sync'),
-  managed: genStorage('managed'),
+  local: {},
+  sync: {},
+  managed: {},
   listeners: []
 }
-window[storageData].local.restore()
-window[storageData].sync.restore()
-window[storageData].managed.restore()
+
 window.browser.storage.onChanged.addListener = listener => {
   if (!_.isFunction(listener)) {
     return Promise.reject(new TypeError('Wrong argument type'))
@@ -129,8 +112,8 @@ function genStorageApis (area) {
       setTimeout(() => notifyListeners(changes, area), 0)
     }
 
-    window[storageData][area] = genStorage(window[storageData][area]['__prefix__'], newData)
-    window[storageData][area].save()
+    window[storageData][area] = newData
+    saveData()
     return Promise.resolve()
   })
 
@@ -157,8 +140,8 @@ function genStorageApis (area) {
       setTimeout(() => notifyListeners(changes, area), 0)
     }
 
-    window[storageData][area] = genStorage(window[storageData][area]['__prefix__'], newData)
-    window[storageData][area].save()
+    window[storageData][area] = newData
+    saveData()
     return Promise.resolve()
   })
 
@@ -178,8 +161,8 @@ function genStorageApis (area) {
       setTimeout(() => notifyListeners(changes, area), 0)
     }
 
-    window[storageData][area] = genStorage(window[storageData][area]['__prefix__'], {})
-    window[storageData][area].save()
+    window[storageData][area] = {}
+    saveData()
     return Promise.resolve()
   })
 
