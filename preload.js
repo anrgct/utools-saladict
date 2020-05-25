@@ -1,13 +1,13 @@
 // const clipboard = require('electron').clipboard
 const shell = require('electron').shell
-const {exportToJson, importFromJson, clearDatabase} = require('./webextensions-emulator-master/lib/mock/idb-backup-and-restore.js')
+const { exportToJson, importFromJson, clearDatabase } = require('./webextensions-emulator-master/lib/mock/idb-backup-and-restore.js')
 let inited, enterEventListener;
 utools.onPluginEnter(({ code, type, payload }) => {
     // let clipboardText = clipboard.readText();
     if (payload == "沙拉查词" || payload == "saladict") {
         payload = ''
     }
-    enterEventListener = ()=>{
+    enterEventListener = () => {
         openIframe('./quick-search.html', { hideCloseBtn: true })
         document.execCommand = function (e) {
             // let clipboardText = clipboard.readText();
@@ -15,10 +15,10 @@ utools.onPluginEnter(({ code, type, payload }) => {
             document.getElementById("saladict-paste").value = payload
         }
     }
-    if(inited){
+    if (inited) {
         enterEventListener();
     }
-    
+
 })
 
 let localStorageData, indexedDBData;
@@ -28,9 +28,11 @@ utools.onPluginReady(async () => {
     localStorageData = new utoolsStorage('localStorageData');
     indexedDBData = new utoolsStorage('indexedDBData');
     restoreLocalStorageData();
-    let utoolsPageScript = ["./assets/runtime.a044b40a.js","./assets/15.ce10c657.js",
-    "./assets/1.c7c5ffd6.js","./assets/3.d0692a3d.js",
-    "./assets/background.21ede37f.js","./addon.js"];
+    let utoolsPageScript = ["./ext-saladic/assets/runtime.c624e5b8.js",
+        "./ext-saladic/assets/view-vendor.5dda2d4c.js",
+        "./ext-saladic/assets/dexie.3f044acc.js",
+        "./ext-saladic/assets/20.12068e63.js",
+        "./ext-saladic/assets/background.4fda7b96.js"];
     // 先加载沙拉
     await loadAllJs(utoolsPageScript);
     // 再还原indexedDB
@@ -59,7 +61,7 @@ function restoreIndexedBDData() {
             request.onerror = function (event) {
                 // console.log('数据库打开报错', event);
                 reject()
-              };
+            };
         })
     } else {
         return Promise.resolve()
@@ -73,7 +75,7 @@ function saveIndexedBDData() {
             let db = request.result;
             // console.log('数据库打开成功');
             let data = await exportToJson(db)
-            if(data){
+            if (data) {
                 indexedDBData.save(data);
             }
             db.close()
@@ -96,13 +98,13 @@ function saveLocalStorageData(data) {
     }
 }
 // 加载js
-async function loadAllJs(arr){
-    for(let url of arr){
+async function loadAllJs(arr) {
+    for (let url of arr) {
         await loadJs(url)
     }
 }
 function loadJs(url, callback) {
-    return new Promise((res, rej)=>{
+    return new Promise((res, rej) => {
         var script = document.createElement('script');
         script.type = "text/javascript";
         if (script.readyState) {
@@ -129,7 +131,7 @@ window.saveIndexedBDData = saveIndexedBDData;
 window.openExternal = function (url) {
     shell.openExternal(url)
 }
-window.outPlugin = function(){
+window.outPlugin = function () {
     utools.outPlugin()
 }
 class utoolsStorage {
@@ -150,8 +152,8 @@ class utoolsStorage {
             console.error(result.message)
         } else {
             this.data = {
-                _rev:result.rev,
-                data:{ ...data }
+                _rev: result.rev,
+                data: { ...data }
             }
         }
     }

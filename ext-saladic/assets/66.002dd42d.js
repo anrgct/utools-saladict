@@ -1,0 +1,1 @@
+(window.saladictEntry=window.saladictEntry||[]).push([[66],{1288:function(t,n,i){(n=i(205)(!1)).push([t.i,".dictEudic-Item{margin-bottom:10px}.dictEudic-Item p{margin:0}.dictEudic-Channel{color:#999}.dictEudic-Channel::before{content:'《'}.dictEudic-Channel::after{content:'》'}",""]),t.exports=n},646:function(t,n,i){var c=i(1288);t.exports="string"==typeof c?c:c.toString()}}]);
