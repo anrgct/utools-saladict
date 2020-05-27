@@ -1,9 +1,9 @@
 {
 	"pluginName": "沙拉查词",
 	"description": "沙拉查词-聚合词典专业查词翻译",
-	"main": "utools.html",
+	"main": "ext-saladic/utools.html",
 	"author": "anrgct",
-	"version": "0.2.2",
+	"version": "0.2.3",
 	"logo": "ext-saladic/assets/icon-128.png",
 	"preload": "preload.js",
 	"homepage": "https://github.com/anrgct/utools-saladic",

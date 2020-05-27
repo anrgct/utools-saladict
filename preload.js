@@ -8,7 +8,7 @@ utools.onPluginEnter(({ code, type, payload }) => {
         payload = ''
     }
     enterEventListener = () => {
-        openIframe('./quick-search.html', { hideCloseBtn: true })
+        openIframe('quick-search.html', { hideCloseBtn: true })
         document.execCommand = function (e) {
             // let clipboardText = clipboard.readText();
             // let queryStr = payload || clipboardText;
@@ -22,17 +22,18 @@ utools.onPluginEnter(({ code, type, payload }) => {
 })
 
 let localStorageData, indexedDBData;
-
-utools.onPluginReady(async () => {
-    await loadAllJs(["./webextensions-emulator-master/dist/core.js"]);
+async function init() {
+    await loadAllJs(["../webextensions-emulator-master/dist/core.js"]);
     localStorageData = new utoolsStorage('localStorageData');
     indexedDBData = new utoolsStorage('indexedDBData');
     restoreLocalStorageData();
-    let utoolsPageScript = ["./ext-saladic/assets/runtime.c624e5b8.js",
-        "./ext-saladic/assets/view-vendor.5dda2d4c.js",
-        "./ext-saladic/assets/dexie.3f044acc.js",
-        "./ext-saladic/assets/20.12068e63.js",
-        "./ext-saladic/assets/background.4fda7b96.js"];
+    let utoolsPageScript = [
+        "assets/runtime.c624e5b8.js",
+        "assets/view-vendor.5dda2d4c.js",
+        "assets/dexie.3f044acc.js",
+        "assets/20.12068e63.js",
+        "assets/background.4fda7b96.js",
+        "addon.js"];
     // 先加载沙拉
     await loadAllJs(utoolsPageScript);
     // 再还原indexedDB
@@ -40,6 +41,10 @@ utools.onPluginReady(async () => {
 
     inited = true;
     enterEventListener && enterEventListener();
+}
+window.init = init;
+utools.onPluginReady(() => {
+    init()
 })
 // utools.onPluginOut(async () => {
 //     // console.log('用户退出插件');

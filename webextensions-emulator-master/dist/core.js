@@ -33579,15 +33579,16 @@ module.exports = exports['default'];
 /***/ (function(module, exports, __webpack_require__) {
 
 var map = {
-	"./contextMenus.js": 78,
-	"./cookies.js": 79,
-	"./extension.js": 80,
-	"./i18n.js": 81,
-	"./notifications.js": 82,
-	"./runtime.js": 83,
-	"./storage.js": 84,
-	"./tabs.js": 85,
-	"./windows.js": 86
+	"./alarm.js": 78,
+	"./contextMenus.js": 79,
+	"./cookies.js": 80,
+	"./extension.js": 81,
+	"./i18n.js": 82,
+	"./notifications.js": 83,
+	"./runtime.js": 84,
+	"./storage.js": 85,
+	"./tabs.js": 86,
+	"./windows.js": 87
 };
 
 
@@ -33614,6 +33615,15 @@ webpackContext.id = 77;
 /* 78 */
 /***/ (function(module, exports) {
 
+// window.browser.alarms.clear.callsFake(() => Promise.resolve())
+// window.browser.alarms.create.callsFake(() => Promise.resolve())
+// window.browser.alarms.onAlarm.addListener.callsFake(() => Promise.resolve())
+// window.browser.alarms.onAlarm.removeListener.callsFake(() => Promise.resolve())
+
+/***/ }),
+/* 79 */
+/***/ (function(module, exports) {
+
 window.browser.menus.create.callsFake(() => Promise.resolve())
 window.browser.menus.remove.callsFake(() => Promise.resolve())
 window.browser.menus.removeAll.callsFake(() => Promise.resolve())
@@ -33628,7 +33638,7 @@ Object.keys(window.browser.menus).forEach(key => {
 
 
 /***/ }),
-/* 79 */
+/* 80 */
 /***/ (function(module, exports) {
 
 window.browser.cookies.get.callsFake(() => Promise.resolve())
@@ -33639,14 +33649,14 @@ window.browser.cookies.set.callsFake(() => Promise.resolve())
 
 
 /***/ }),
-/* 80 */
+/* 81 */
 /***/ (function(module, exports) {
 
 window.browser.extension.inIncognitoContext = false
 
 
 /***/ }),
-/* 81 */
+/* 82 */
 /***/ (function(module, exports) {
 
 window.browser.i18n.getMessage.callsFake(text => text)
@@ -33654,7 +33664,7 @@ window.browser.i18n.getUILanguage.returns(navigator.language)
 
 
 /***/ }),
-/* 82 */
+/* 83 */
 /***/ (function(module, exports) {
 
 window.browser.notifications.create.callsFake((...args) => {
@@ -33664,7 +33674,7 @@ window.browser.notifications.create.callsFake((...args) => {
 
 
 /***/ }),
-/* 83 */
+/* 84 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -33728,7 +33738,7 @@ window.browser.runtime.connect.callsFake(
 
 
 /***/ }),
-/* 84 */
+/* 85 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -33934,7 +33944,7 @@ function notifyListeners (changes, area) {
 
 
 /***/ }),
-/* 85 */
+/* 86 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -33958,11 +33968,14 @@ window.browser.tabs.sendMessage.callsFake(() => Promise.resolve())
 
 
 /***/ }),
-/* 86 */
+/* 87 */
 /***/ (function(module, exports) {
 
-window.browser.windows.create.callsFake(() => Promise.resolve())
-window.browser.windows.update.callsFake(() => Promise.resolve())
+window.browser.windows.create.callsFake(({ url }) => {
+  window.openIframe && window.openIframe(url)
+  return Promise.resolve()
+})
+window.browser.windows.update.callsFake(() => Promise.resolve());
 
 
 /***/ })

@@ -29,3 +29,11 @@ if(location.href.includes('quick-search.html')){
         } 
     })
 }
+var _windowClose = window.close;
+window.close = function(){
+    if(window.parent && window.parent.document.querySelector('.close-iframe-btn')){
+        window.parent.document.querySelector('.close-iframe-btn').click()
+    }else{
+        _windowClose();
+    }
+}
