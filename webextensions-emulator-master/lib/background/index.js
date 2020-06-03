@@ -12,3 +12,4 @@ window.browser = new Proxy(window.parent.browser, {
     return Reflect.get(...args)
   }
 })
+window.chrome = window.browser

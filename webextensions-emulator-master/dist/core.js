@@ -32117,18 +32117,6 @@ module.exports = exports["default"];
 /* 53 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var root = __webpack_require__(63);
-
-/** Built-in value references. */
-var Symbol = root.Symbol;
-
-module.exports = Symbol;
-
-
-/***/ }),
-/* 54 */
-/***/ (function(module, exports, __webpack_require__) {
-
 "use strict";
 
 
@@ -32155,17 +32143,30 @@ exports.default = new _api2.default(_stableApiFf2.default).create();
 module.exports = exports['default'];
 
 /***/ }),
+/* 54 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var root = __webpack_require__(63);
+
+/** Built-in value references. */
+var Symbol = root.Symbol;
+
+module.exports = Symbol;
+
+
+/***/ }),
 /* 55 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var sinon_chrome_webextensions__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(54);
+/* harmony import */ var sinon_chrome_webextensions__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(53);
 /* harmony import */ var sinon_chrome_webextensions__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(sinon_chrome_webextensions__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _mock_utils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(29);
 
 
 window.browser = sinon_chrome_webextensions__WEBPACK_IMPORTED_MODULE_0___default.a
+window.chrome = sinon_chrome_webextensions__WEBPACK_IMPORTED_MODULE_0___default.a
 window.openIframe = _mock_utils__WEBPACK_IMPORTED_MODULE_1__[/* openIframe */ "a"]
 const req = __webpack_require__(77)
 req.keys().map(req)
@@ -32899,7 +32900,7 @@ module.exports = isFunction;
 /* 62 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var Symbol = __webpack_require__(53),
+var Symbol = __webpack_require__(54),
     getRawTag = __webpack_require__(65),
     objectToString = __webpack_require__(66);
 
@@ -32959,7 +32960,7 @@ module.exports = freeGlobal;
 /* 65 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var Symbol = __webpack_require__(53);
+var Symbol = __webpack_require__(54);
 
 /** Used for built-in method references. */
 var objectProto = Object.prototype;
