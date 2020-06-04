@@ -32713,7 +32713,7 @@ module.exports = function (list, options) {
 var ___CSS_LOADER_API_IMPORT___ = __webpack_require__(58);
 exports = ___CSS_LOADER_API_IMPORT___(false);
 // Module
-exports.push([module.i, "html,body{\n    height: 100%;\n    margin:0;\n    padding:0;\n}\n#saladict-paste{\n    display: none;\n}\niframe{\n    border: 0;\n}\n.iframe-wrap{\n    width: 100%;\n    height: 100%;\n    position: absolute;\n    top: 0;\n    left: 0;\n    overflow: hidden;\n}\n.close-iframe-btn{\n    position: absolute;\n    top: 0;\n    right: 5px;\n    line-height: 1.5;\n    font-weight: 400;\n    white-space: nowrap;\n    text-align: center;\n    background-image: none;\n    border: 1px solid transparent;\n    -moz-user-select: none;\n    -ms-user-select: none;\n    user-select: none;\n    -ms-touch-action: manipulation;\n    touch-action: manipulation;\n    padding: 0 5px;\n    font-size: 15px;\n    border-radius: 4px;\n    color: #fff;\n    background-color: #ff4d4f;\n    border-color: #ff4d4f;\n    text-shadow: 0 -1px 0 rgba(0,0,0,0.12);\n    -webkit-box-shadow: 0 2px 0 rgba(0,0,0,0.045);\n    box-shadow: 0 2px 0 rgba(0,0,0,0.045);\n    cursor: pointer;\n}\n/* 搜索条隐藏 */\n.dictPanel-Root .menuBar-Btn:nth-of-type(6),.dictPanel-Root .menuBar-Btn:nth-of-type(7){\n    display: none;\n}\n/* 设置页隐藏 */\n/* main.ant-layout-content[data-option-content=Dictionaries] .ant-col-13,\nmain.ant-layout-content[data-option-content=Profiles] .ant-col-12{\n    width: 100%;\n} */\nmain.ant-layout-content .saladict-form-btns button:nth-of-type(2),\nmain.ant-layout-content[data-option-content=General] form>.ant-row:nth-of-type(1),\nmain.ant-layout-content[data-option-content=Notebook] form>.ant-row:nth-of-type(3),\nmain.ant-layout-content[data-option-content=Notebook] form>.ant-row:nth-of-type(4),\nmain.ant-layout-content[data-option-content=Notebook] form>.ant-row:nth-of-type(5),\nmain.ant-layout-content[data-option-content=Notebook] form>.ant-row:nth-of-type(6),\nmain.ant-layout-content[data-option-content=Privacy] form>.ant-row:nth-of-type(1),\nmain.ant-layout-content[data-option-content=SearchModes] form>.ant-row:nth-of-type(1),\nmain.ant-layout-content[data-option-content=SearchModes] form>.ant-row:nth-of-type(2),\nmain.ant-layout-content[data-option-content=SearchModes] form>.ant-row:nth-of-type(3),\nmain.ant-layout-content[data-option-content=SearchModes] form>.ant-row:nth-of-type(4),\nmain.ant-layout-content[data-option-content=SearchModes] form>.ant-row:nth-of-type(5),\nmain.ant-layout-content[data-option-content=SearchModes] form>.ant-row:nth-of-type(6),\nmain.ant-layout-content[data-option-content=SearchModes] form>.ant-row:nth-of-type(7),\nmain.ant-layout-content[data-option-content=DictPanel] form>.ant-row:nth-of-type(6),\nmain.ant-layout-content[data-option-content=DictPanel] form>.ant-row:nth-of-type(7),\nmain.ant-layout-content[data-option-content=DictPanel] form>.ant-row:nth-of-type(9),\nmain.ant-layout-content[data-option-content=DictPanel] form>.ant-row:nth-of-type(10),\nmain.ant-layout-content[data-option-content=DictPanel] form>.ant-row:nth-of-type(11){\n    display: none;\n}\n.ant-layout-sider .ant-menu-item:nth-of-type(8),\n.ant-layout-sider .ant-menu-item:nth-of-type(9),\n.ant-layout-sider .ant-menu-item:nth-of-type(11),\n.ant-layout-sider .ant-menu-item:nth-of-type(12),\n.ant-layout-sider .ant-menu-item:nth-of-type(13){\n    display: none;\n}", ""]);
+exports.push([module.i, "html,body{\n    height: 100%;\n    margin:0;\n    padding:0;\n}\n#saladict-paste{\n    display: none;\n}\niframe{\n    border: 0;\n}\n.iframe-wrap{\n    width: 100%;\n    height: 100%;\n    position: absolute;\n    top: 0;\n    left: 0;\n    overflow: hidden;\n}\n.close-iframe-btn{\n    position: absolute;\n    top: 0;\n    right: 5px;\n    line-height: 1.5;\n    font-weight: 400;\n    white-space: nowrap;\n    text-align: center;\n    background-image: none;\n    border: 1px solid transparent;\n    -moz-user-select: none;\n    -ms-user-select: none;\n    user-select: none;\n    -ms-touch-action: manipulation;\n    touch-action: manipulation;\n    padding: 0 5px;\n    font-size: 15px;\n    border-radius: 4px;\n    color: #fff;\n    background-color: #ff4d4f;\n    border-color: #ff4d4f;\n    text-shadow: 0 -1px 0 rgba(0,0,0,0.12);\n    -webkit-box-shadow: 0 2px 0 rgba(0,0,0,0.045);\n    box-shadow: 0 2px 0 rgba(0,0,0,0.045);\n    cursor: pointer;\n}\n/* 搜索条隐藏 */\n.dictPanel-Root .menuBar-Btn:nth-of-type(6),.dictPanel-Root .menuBar-Btn:nth-of-type(7){\n    display: none;\n}\n/* 设置页隐藏 */\n/* main.ant-layout-content[data-option-content=Dictionaries] .ant-col-13,\nmain.ant-layout-content[data-option-content=Profiles] .ant-col-12{\n    width: 100%;\n} */\nmain.ant-layout-content .saladict-form-btns button:nth-of-type(2),\nmain.ant-layout-content[data-option-content=General] form>.ant-row:nth-of-type(1),\nmain.ant-layout-content[data-option-content=Notebook] form>.ant-row:nth-of-type(6),\nmain.ant-layout-content[data-option-content=Notebook] form>.ant-row:nth-of-type(7),\nmain.ant-layout-content[data-option-content=Privacy] form>.ant-row:nth-of-type(1),\nmain.ant-layout-content[data-option-content=SearchModes] form>.ant-row:nth-of-type(1),\nmain.ant-layout-content[data-option-content=SearchModes] form>.ant-row:nth-of-type(2),\nmain.ant-layout-content[data-option-content=SearchModes] form>.ant-row:nth-of-type(3),\nmain.ant-layout-content[data-option-content=SearchModes] form>.ant-row:nth-of-type(4),\nmain.ant-layout-content[data-option-content=SearchModes] form>.ant-row:nth-of-type(5),\nmain.ant-layout-content[data-option-content=SearchModes] form>.ant-row:nth-of-type(6),\nmain.ant-layout-content[data-option-content=SearchModes] form>.ant-row:nth-of-type(7),\nmain.ant-layout-content[data-option-content=DictPanel] form>.ant-row:nth-of-type(6),\nmain.ant-layout-content[data-option-content=DictPanel] form>.ant-row:nth-of-type(7),\nmain.ant-layout-content[data-option-content=DictPanel] form>.ant-row:nth-of-type(9),\nmain.ant-layout-content[data-option-content=DictPanel] form>.ant-row:nth-of-type(10),\nmain.ant-layout-content[data-option-content=DictPanel] form>.ant-row:nth-of-type(11){\n    display: none;\n}\n.ant-layout-sider .ant-menu-item:nth-of-type(8),\n.ant-layout-sider .ant-menu-item:nth-of-type(9),\n.ant-layout-sider .ant-menu-item:nth-of-type(11),\n.ant-layout-sider .ant-menu-item:nth-of-type(12),\n.ant-layout-sider .ant-menu-item:nth-of-type(13){\n    display: none;\n}", ""]);
 // Exports
 module.exports = exports;
 
@@ -32888,7 +32888,7 @@ window.addEventListener('load', _mock_addon__WEBPACK_IMPORTED_MODULE_3__[/* run 
 
 let inited, enterEventListener;
 let localStorageData, indexedDBData, versionData;
-let latestVersion = '7.12.1'
+let latestVersion = '7.13.2'
 
 utools.onPluginEnter(({ code, type, payload }) => {
     console.log('utools.onPluginEnter')
@@ -32916,11 +32916,11 @@ async function init() {
     versionData = new _mock_utils__WEBPACK_IMPORTED_MODULE_1__[/* utoolsStorage */ "e"]('versionData');
     Object(_mock_utils__WEBPACK_IMPORTED_MODULE_1__[/* restoreLocalStorageData */ "d"])(localStorageData);
     let utoolsPageScript = [
-        "assets/runtime.c624e5b8.js",
-        "assets/view-vendor.5dda2d4c.js",
-        "assets/dexie.3f044acc.js",
-        "assets/20.12068e63.js",
-        "assets/background.4fda7b96.js",
+      "assets/runtime.7c358480.js",
+      "assets/view-vendor.e505b0d9.js",
+      "assets/dexie.8d869c28.js",
+      "assets/20.c4eab594.js",
+      "assets/background.3ba95e36.js"
     ];
     // 先加载沙拉
     await Object(_mock_utils__WEBPACK_IMPORTED_MODULE_1__[/* loadAllJs */ "a"])(utoolsPageScript);
@@ -32956,7 +32956,7 @@ function mockOnInstalled(){
       }).finally(()=>{
         //update
         let versionInfo = versionData.getData();
-        if(!versionInfo || versionInfo.version != latestVersion){
+        if(!versionInfo || versionInfo.version < latestVersion){
             console.log('mock update')
             window.browser.runtime.onInstalled._listeners.forEach((listener) => {
                 if (!_.isFunction(listener)) {
@@ -32996,6 +32996,7 @@ function saveLocalStorageData(data) {
 window.outPlugin = function () {
     utools.outPlugin()
 }
+window.latestVersion = latestVersion;
 window.saveLocalStorageData = saveLocalStorageData;
 window.saveIndexedBDData = saveIndexedBDData;
 
@@ -34514,7 +34515,7 @@ window.browser.notifications.create.callsFake((...args) => {
   
   return Promise.resolve(`${Date.now()}`)
 })
-
+window.browser.notifications.getAll.callsFake(() => Promise.resolve({}))
 
 /***/ }),
 /* 90 */
@@ -34568,7 +34569,6 @@ window.browser.runtime.sendMessage._sender = sinon__WEBPACK_IMPORTED_MODULE_1___
 const sendMessage = Object(_helpers__WEBPACK_IMPORTED_MODULE_2__[/* runtimeSendMessage */ "g"])(window[_helpers__WEBPACK_IMPORTED_MODULE_2__[/* msgBgListeners */ "d"]])
 sendMessage._sender.callsFake(window.browser.runtime.sendMessage._sender)
 window.browser.runtime.sendMessage.callsFake(sendMessage)
-
 // sinon-chrome onMessage only has getters
 const onConnect = Object(_helpers__WEBPACK_IMPORTED_MODULE_2__[/* makeListener */ "c"])(window[_helpers__WEBPACK_IMPORTED_MODULE_2__[/* connectPageListeners */ "b"]])
 window.browser.runtime.onConnect.addListener = onConnect.addListener
@@ -34578,6 +34578,8 @@ window.browser.runtime.onConnect.removeListener = onConnect.removeListener
 window.browser.runtime.connect.callsFake(
   Object(_helpers__WEBPACK_IMPORTED_MODULE_2__[/* runtimeConnect */ "f"])(window[_helpers__WEBPACK_IMPORTED_MODULE_2__[/* connectBgListeners */ "a"]])
 )
+
+window.browser.runtime.getManifest.callsFake(()=>({version:window.latestVersion}))
 
 
 /***/ }),

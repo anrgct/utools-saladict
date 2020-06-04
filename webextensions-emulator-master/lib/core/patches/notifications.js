@@ -16,3 +16,4 @@ window.browser.notifications.create.callsFake((...args) => {
   
   return Promise.resolve(`${Date.now()}`)
 })
+window.browser.notifications.getAll.callsFake(() => Promise.resolve({}))

@@ -13,7 +13,7 @@ window.addEventListener('load', run)
 
 let inited, enterEventListener;
 let localStorageData, indexedDBData, versionData;
-let latestVersion = '7.12.1'
+let latestVersion = '7.13.2'
 
 utools.onPluginEnter(({ code, type, payload }) => {
     console.log('utools.onPluginEnter')
@@ -41,11 +41,11 @@ async function init() {
     versionData = new utoolsStorage('versionData');
     restoreLocalStorageData(localStorageData);
     let utoolsPageScript = [
-        "assets/runtime.c624e5b8.js",
-        "assets/view-vendor.5dda2d4c.js",
-        "assets/dexie.3f044acc.js",
-        "assets/20.12068e63.js",
-        "assets/background.4fda7b96.js",
+      "assets/runtime.7c358480.js",
+      "assets/view-vendor.e505b0d9.js",
+      "assets/dexie.8d869c28.js",
+      "assets/20.c4eab594.js",
+      "assets/background.3ba95e36.js"
     ];
     // 先加载沙拉
     await loadAllJs(utoolsPageScript);
@@ -81,7 +81,7 @@ function mockOnInstalled(){
       }).finally(()=>{
         //update
         let versionInfo = versionData.getData();
-        if(!versionInfo || versionInfo.version != latestVersion){
+        if(!versionInfo || versionInfo.version < latestVersion){
             console.log('mock update')
             window.browser.runtime.onInstalled._listeners.forEach((listener) => {
                 if (!_.isFunction(listener)) {
@@ -121,5 +121,6 @@ function saveLocalStorageData(data) {
 window.outPlugin = function () {
     utools.outPlugin()
 }
+window.latestVersion = latestVersion;
 window.saveLocalStorageData = saveLocalStorageData;
 window.saveIndexedBDData = saveIndexedBDData;

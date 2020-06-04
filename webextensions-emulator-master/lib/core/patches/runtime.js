@@ -47,7 +47,6 @@ window.browser.runtime.sendMessage._sender = sinon.stub().callsFake(() => ({}))
 const sendMessage = runtimeSendMessage(window[msgBgListeners])
 sendMessage._sender.callsFake(window.browser.runtime.sendMessage._sender)
 window.browser.runtime.sendMessage.callsFake(sendMessage)
-
 // sinon-chrome onMessage only has getters
 const onConnect = makeListener(window[connectPageListeners])
 window.browser.runtime.onConnect.addListener = onConnect.addListener
@@ -57,3 +56,5 @@ window.browser.runtime.onConnect.removeListener = onConnect.removeListener
 window.browser.runtime.connect.callsFake(
   runtimeConnect(window[connectBgListeners])
 )
+
+window.browser.runtime.getManifest.callsFake(()=>({version:window.latestVersion}))
