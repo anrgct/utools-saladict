@@ -40,7 +40,10 @@
     "webpack-dev-server": "^3.1.14"
   },
   "dependencies": {
+    "css-loader": "^3.5.3",
     "lodash": "^4.17.11",
-    "sinon-chrome": "^2.3.2"
+    "replace-in-file": "^6.0.0",
+    "sinon-chrome": "^2.3.2",
+    "style-loader": "^1.2.1"
   }
 }
