@@ -26,6 +26,11 @@ const options = [
     to: 'qsAuto:!0'
   },
   {
+    files: '../ext-saladic/assets/*.js',
+    from: /browser.runtime.getURL\("\/audio-control.html"/g,
+    to: 'browser.runtime.getURL("audio-control.html"'
+  },
+  {
     files: '../ext-saladic/*.html',
     from: /src="\//g,
     to: 'src="./'

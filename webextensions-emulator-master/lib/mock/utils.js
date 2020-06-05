@@ -1,4 +1,4 @@
-import { importFromJson, clearDatabase } from './idb-backup-and-restore.js'
+import { importDatabase } from './idb-export-import'
 export function openIframe (url, opt = {}) {
   if (!(/^\.\//.test(url) || /^bolb/.test(url) || /^http/.test(url))) {
     url = `./${url}`
@@ -32,6 +32,7 @@ export function openIframe (url, opt = {}) {
   wrap.appendChild(iframe)
   document.body.appendChild(wrap)
 }
+// 加载js
 export async function loadAllJs (arr) {
   if(!Array.isArray(arr)){
     arr = [arr]
@@ -40,7 +41,6 @@ export async function loadAllJs (arr) {
     await loadJs(url)
   }
 }
-// 加载js
 function loadJs (url, callback) {
   return new Promise((res, rej) => {
     var script = document.createElement('script')
@@ -95,22 +95,24 @@ export class utoolsStorage {
   }
 }
 export function restoreIndexedBDData(indexedDBData) {
-  if (indexedDBData.getData() && indexedDBData.getData() != "{}") {
-      return new Promise((resolve, reject) => {
-          var request = indexedDB.open('SaladictWords')
-          request.onsuccess = async function (event) {
-              let db = request.result;
-              // console.log('数据库打开成功');
-              await clearDatabase(db)
-              await importFromJson(db, indexedDBData.getData())
-              db.close()
-              resolve()
-          };
-          request.onerror = function (event) {
-              // console.log('数据库打开报错', event);
-              reject()
-          };
-      })
+  let data = indexedDBData.getData();
+  if (data) {
+      return importDatabase(data)
+      // new Promise(async (resolve, reject) => {
+      //     var request = indexedDB.open('SaladictWords')
+      //     request.onsuccess = async function (event) {
+      //         let db = request.result;
+      //         // console.log('数据库打开成功');
+      //         await clearDatabase(db)
+      //         await importFromJson(db, indexedDBData.getData())
+      //         db.close()
+      //         resolve()
+      //     };
+      //     request.onerror = function (event) {
+      //         // console.log('数据库打开报错', event);
+      //         reject()
+      //     };
+      // })
   } else {
       return Promise.resolve()
   }

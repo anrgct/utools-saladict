@@ -81,7 +81,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 61);
+/******/ 	return __webpack_require__(__webpack_require__.s = 62);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -17193,7 +17193,7 @@
   else {}
 }.call(this));
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(2), __webpack_require__(32)(module)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(2), __webpack_require__(33)(module)))
 
 /***/ }),
 /* 1 */
@@ -17209,7 +17209,7 @@
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return makeListener; });
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(0);
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var sinon__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(10);
+/* harmony import */ var sinon__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(11);
 /* harmony import */ var sinon__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(sinon__WEBPACK_IMPORTED_MODULE_1__);
 
 
@@ -17219,6 +17219,7 @@ const msgBgListeners = ('fake_env_msgBackgroundListeners')
 
 function runtimeSendMessage (listenersArea) {
   function sendMessage (extensionId, message) {
+    // console.log('runtime.sendMessage:',extensionId && extensionId.type)
     // 监听WORD_SAVED保存indexedDB
     if (extensionId && extensionId.type && ['WORD_SAVED'].includes(extensionId.type)) {
       window.saveIndexedBDData && window.saveIndexedBDData()
@@ -17396,12 +17397,12 @@ module.exports = function (value) {
 "use strict";
 
 
-var deepEqual = __webpack_require__(8).use(match); // eslint-disable-line no-use-before-define
-var every = __webpack_require__(37);
-var functionName = __webpack_require__(11);
-var get = __webpack_require__(38);
-var iterableToString = __webpack_require__(39);
-var typeOf = __webpack_require__(21);
+var deepEqual = __webpack_require__(9).use(match); // eslint-disable-line no-use-before-define
+var every = __webpack_require__(38);
+var functionName = __webpack_require__(12);
+var get = __webpack_require__(39);
+var iterableToString = __webpack_require__(40);
+var typeOf = __webpack_require__(22);
 var valueToString = __webpack_require__(3);
 
 var indexOf = Array.prototype.indexOf;
@@ -17770,10 +17771,4396 @@ module.exports = match;
 /* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
+/* WEBPACK VAR INJECTION */(function(global, setImmediate) {/*
+ * Dexie.js - a minimalistic wrapper for IndexedDB
+ * ===============================================
+ *
+ * By David Fahlander, david.fahlander@gmail.com
+ *
+ * Version 3.0.1, Thu May 07 2020
+ *
+ * http://dexie.org
+ *
+ * Apache License Version 2.0, January 2004, http://www.apache.org/licenses/
+ */
+ 
+(function (global, factory) {
+	 true ? module.exports = factory() :
+	undefined;
+}(this, (function () { 'use strict';
+
+var __assign = function() {
+    __assign = Object.assign || function __assign(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
+
+
+
+
+
+
+
+
+
+
+function __spreadArrays() {
+    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
+    for (var r = Array(s), k = 0, i = 0; i < il; i++)
+        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
+            r[k] = a[j];
+    return r;
+}
+
+var keys = Object.keys;
+var isArray = Array.isArray;
+var _global = typeof self !== 'undefined' ? self :
+    typeof window !== 'undefined' ? window :
+        global;
+if (typeof Promise !== 'undefined' && !_global.Promise) {
+    _global.Promise = Promise;
+}
+function extend(obj, extension) {
+    if (typeof extension !== 'object')
+        return obj;
+    keys(extension).forEach(function (key) {
+        obj[key] = extension[key];
+    });
+    return obj;
+}
+var getProto = Object.getPrototypeOf;
+var _hasOwn = {}.hasOwnProperty;
+function hasOwn(obj, prop) {
+    return _hasOwn.call(obj, prop);
+}
+function props(proto, extension) {
+    if (typeof extension === 'function')
+        extension = extension(getProto(proto));
+    keys(extension).forEach(function (key) {
+        setProp(proto, key, extension[key]);
+    });
+}
+var defineProperty = Object.defineProperty;
+function setProp(obj, prop, functionOrGetSet, options) {
+    defineProperty(obj, prop, extend(functionOrGetSet && hasOwn(functionOrGetSet, "get") && typeof functionOrGetSet.get === 'function' ?
+        { get: functionOrGetSet.get, set: functionOrGetSet.set, configurable: true } :
+        { value: functionOrGetSet, configurable: true, writable: true }, options));
+}
+function derive(Child) {
+    return {
+        from: function (Parent) {
+            Child.prototype = Object.create(Parent.prototype);
+            setProp(Child.prototype, "constructor", Child);
+            return {
+                extend: props.bind(null, Child.prototype)
+            };
+        }
+    };
+}
+var getOwnPropertyDescriptor = Object.getOwnPropertyDescriptor;
+function getPropertyDescriptor(obj, prop) {
+    var pd = getOwnPropertyDescriptor(obj, prop);
+    var proto;
+    return pd || (proto = getProto(obj)) && getPropertyDescriptor(proto, prop);
+}
+var _slice = [].slice;
+function slice(args, start, end) {
+    return _slice.call(args, start, end);
+}
+function override(origFunc, overridedFactory) {
+    return overridedFactory(origFunc);
+}
+function assert(b) {
+    if (!b)
+        throw new Error("Assertion Failed");
+}
+function asap(fn) {
+    if (_global.setImmediate)
+        setImmediate(fn);
+    else
+        setTimeout(fn, 0);
+}
+
+function arrayToObject(array, extractor) {
+    return array.reduce(function (result, item, i) {
+        var nameAndValue = extractor(item, i);
+        if (nameAndValue)
+            result[nameAndValue[0]] = nameAndValue[1];
+        return result;
+    }, {});
+}
+
+function tryCatch(fn, onerror, args) {
+    try {
+        fn.apply(null, args);
+    }
+    catch (ex) {
+        onerror && onerror(ex);
+    }
+}
+function getByKeyPath(obj, keyPath) {
+    if (hasOwn(obj, keyPath))
+        return obj[keyPath];
+    if (!keyPath)
+        return obj;
+    if (typeof keyPath !== 'string') {
+        var rv = [];
+        for (var i = 0, l = keyPath.length; i < l; ++i) {
+            var val = getByKeyPath(obj, keyPath[i]);
+            rv.push(val);
+        }
+        return rv;
+    }
+    var period = keyPath.indexOf('.');
+    if (period !== -1) {
+        var innerObj = obj[keyPath.substr(0, period)];
+        return innerObj === undefined ? undefined : getByKeyPath(innerObj, keyPath.substr(period + 1));
+    }
+    return undefined;
+}
+function setByKeyPath(obj, keyPath, value) {
+    if (!obj || keyPath === undefined)
+        return;
+    if ('isFrozen' in Object && Object.isFrozen(obj))
+        return;
+    if (typeof keyPath !== 'string' && 'length' in keyPath) {
+        assert(typeof value !== 'string' && 'length' in value);
+        for (var i = 0, l = keyPath.length; i < l; ++i) {
+            setByKeyPath(obj, keyPath[i], value[i]);
+        }
+    }
+    else {
+        var period = keyPath.indexOf('.');
+        if (period !== -1) {
+            var currentKeyPath = keyPath.substr(0, period);
+            var remainingKeyPath = keyPath.substr(period + 1);
+            if (remainingKeyPath === "")
+                if (value === undefined) {
+                    if (isArray(obj) && !isNaN(parseInt(currentKeyPath)))
+                        obj.splice(currentKeyPath, 1);
+                    else
+                        delete obj[currentKeyPath];
+                }
+                else
+                    obj[currentKeyPath] = value;
+            else {
+                var innerObj = obj[currentKeyPath];
+                if (!innerObj)
+                    innerObj = (obj[currentKeyPath] = {});
+                setByKeyPath(innerObj, remainingKeyPath, value);
+            }
+        }
+        else {
+            if (value === undefined) {
+                if (isArray(obj) && !isNaN(parseInt(keyPath)))
+                    obj.splice(keyPath, 1);
+                else
+                    delete obj[keyPath];
+            }
+            else
+                obj[keyPath] = value;
+        }
+    }
+}
+function delByKeyPath(obj, keyPath) {
+    if (typeof keyPath === 'string')
+        setByKeyPath(obj, keyPath, undefined);
+    else if ('length' in keyPath)
+        [].map.call(keyPath, function (kp) {
+            setByKeyPath(obj, kp, undefined);
+        });
+}
+function shallowClone(obj) {
+    var rv = {};
+    for (var m in obj) {
+        if (hasOwn(obj, m))
+            rv[m] = obj[m];
+    }
+    return rv;
+}
+var concat = [].concat;
+function flatten(a) {
+    return concat.apply([], a);
+}
+var intrinsicTypeNames = "Boolean,String,Date,RegExp,Blob,File,FileList,ArrayBuffer,DataView,Uint8ClampedArray,ImageData,Map,Set"
+    .split(',').concat(flatten([8, 16, 32, 64].map(function (num) { return ["Int", "Uint", "Float"].map(function (t) { return t + num + "Array"; }); }))).filter(function (t) { return _global[t]; });
+var intrinsicTypes = intrinsicTypeNames.map(function (t) { return _global[t]; });
+var intrinsicTypeNameSet = arrayToObject(intrinsicTypeNames, function (x) { return [x, true]; });
+function deepClone(any) {
+    if (!any || typeof any !== 'object')
+        return any;
+    var rv;
+    if (isArray(any)) {
+        rv = [];
+        for (var i = 0, l = any.length; i < l; ++i) {
+            rv.push(deepClone(any[i]));
+        }
+    }
+    else if (intrinsicTypes.indexOf(any.constructor) >= 0) {
+        rv = any;
+    }
+    else {
+        rv = any.constructor ? Object.create(any.constructor.prototype) : {};
+        for (var prop in any) {
+            if (hasOwn(any, prop)) {
+                rv[prop] = deepClone(any[prop]);
+            }
+        }
+    }
+    return rv;
+}
+var toString = {}.toString;
+function toStringTag(o) {
+    return toString.call(o).slice(8, -1);
+}
+var getValueOf = function (val, type) {
+    return type === "Array" ? '' + val.map(function (v) { return getValueOf(v, toStringTag(v)); }) :
+        type === "ArrayBuffer" ? '' + new Uint8Array(val) :
+            type === "Date" ? val.getTime() :
+                ArrayBuffer.isView(val) ? '' + new Uint8Array(val.buffer) :
+                    val;
+};
+function getObjectDiff(a, b, rv, prfx) {
+    rv = rv || {};
+    prfx = prfx || '';
+    keys(a).forEach(function (prop) {
+        if (!hasOwn(b, prop))
+            rv[prfx + prop] = undefined;
+        else {
+            var ap = a[prop], bp = b[prop];
+            if (typeof ap === 'object' && typeof bp === 'object' && ap && bp) {
+                var apTypeName = toStringTag(ap);
+                var bpTypeName = toStringTag(bp);
+                if (apTypeName === bpTypeName) {
+                    if (intrinsicTypeNameSet[apTypeName]) {
+                        if (getValueOf(ap, apTypeName) !== getValueOf(bp, bpTypeName)) {
+                            rv[prfx + prop] = b[prop];
+                        }
+                    }
+                    else {
+                        getObjectDiff(ap, bp, rv, prfx + prop + ".");
+                    }
+                }
+                else {
+                    rv[prfx + prop] = b[prop];
+                }
+            }
+            else if (ap !== bp)
+                rv[prfx + prop] = b[prop];
+        }
+    });
+    keys(b).forEach(function (prop) {
+        if (!hasOwn(a, prop)) {
+            rv[prfx + prop] = b[prop];
+        }
+    });
+    return rv;
+}
+var iteratorSymbol = typeof Symbol !== 'undefined' && Symbol.iterator;
+var getIteratorOf = iteratorSymbol ? function (x) {
+    var i;
+    return x != null && (i = x[iteratorSymbol]) && i.apply(x);
+} : function () { return null; };
+var NO_CHAR_ARRAY = {};
+function getArrayOf(arrayLike) {
+    var i, a, x, it;
+    if (arguments.length === 1) {
+        if (isArray(arrayLike))
+            return arrayLike.slice();
+        if (this === NO_CHAR_ARRAY && typeof arrayLike === 'string')
+            return [arrayLike];
+        if ((it = getIteratorOf(arrayLike))) {
+            a = [];
+            while (x = it.next(), !x.done)
+                a.push(x.value);
+            return a;
+        }
+        if (arrayLike == null)
+            return [arrayLike];
+        i = arrayLike.length;
+        if (typeof i === 'number') {
+            a = new Array(i);
+            while (i--)
+                a[i] = arrayLike[i];
+            return a;
+        }
+        return [arrayLike];
+    }
+    i = arguments.length;
+    a = new Array(i);
+    while (i--)
+        a[i] = arguments[i];
+    return a;
+}
+var isAsyncFunction = typeof Symbol !== 'undefined'
+    ? function (fn) { return fn[Symbol.toStringTag] === 'AsyncFunction'; }
+    : function () { return false; };
+
+var debug = typeof location !== 'undefined' &&
+    /^(http|https):\/\/(localhost|127\.0\.0\.1)/.test(location.href);
+function setDebug(value, filter) {
+    debug = value;
+    libraryFilter = filter;
+}
+var libraryFilter = function () { return true; };
+var NEEDS_THROW_FOR_STACK = !new Error("").stack;
+function getErrorWithStack() {
+    if (NEEDS_THROW_FOR_STACK)
+        try {
+            throw new Error();
+        }
+        catch (e) {
+            return e;
+        }
+    return new Error();
+}
+function prettyStack(exception, numIgnoredFrames) {
+    var stack = exception.stack;
+    if (!stack)
+        return "";
+    numIgnoredFrames = (numIgnoredFrames || 0);
+    if (stack.indexOf(exception.name) === 0)
+        numIgnoredFrames += (exception.name + exception.message).split('\n').length;
+    return stack.split('\n')
+        .slice(numIgnoredFrames)
+        .filter(libraryFilter)
+        .map(function (frame) { return "\n" + frame; })
+        .join('');
+}
+
+var dexieErrorNames = [
+    'Modify',
+    'Bulk',
+    'OpenFailed',
+    'VersionChange',
+    'Schema',
+    'Upgrade',
+    'InvalidTable',
+    'MissingAPI',
+    'NoSuchDatabase',
+    'InvalidArgument',
+    'SubTransaction',
+    'Unsupported',
+    'Internal',
+    'DatabaseClosed',
+    'PrematureCommit',
+    'ForeignAwait'
+];
+var idbDomErrorNames = [
+    'Unknown',
+    'Constraint',
+    'Data',
+    'TransactionInactive',
+    'ReadOnly',
+    'Version',
+    'NotFound',
+    'InvalidState',
+    'InvalidAccess',
+    'Abort',
+    'Timeout',
+    'QuotaExceeded',
+    'Syntax',
+    'DataClone'
+];
+var errorList = dexieErrorNames.concat(idbDomErrorNames);
+var defaultTexts = {
+    VersionChanged: "Database version changed by other database connection",
+    DatabaseClosed: "Database has been closed",
+    Abort: "Transaction aborted",
+    TransactionInactive: "Transaction has already completed or failed"
+};
+function DexieError(name, msg) {
+    this._e = getErrorWithStack();
+    this.name = name;
+    this.message = msg;
+}
+derive(DexieError).from(Error).extend({
+    stack: {
+        get: function () {
+            return this._stack ||
+                (this._stack = this.name + ": " + this.message + prettyStack(this._e, 2));
+        }
+    },
+    toString: function () { return this.name + ": " + this.message; }
+});
+function getMultiErrorMessage(msg, failures) {
+    return msg + ". Errors: " + Object.keys(failures)
+        .map(function (key) { return failures[key].toString(); })
+        .filter(function (v, i, s) { return s.indexOf(v) === i; })
+        .join('\n');
+}
+function ModifyError(msg, failures, successCount, failedKeys) {
+    this._e = getErrorWithStack();
+    this.failures = failures;
+    this.failedKeys = failedKeys;
+    this.successCount = successCount;
+    this.message = getMultiErrorMessage(msg, failures);
+}
+derive(ModifyError).from(DexieError);
+function BulkError(msg, failures) {
+    this._e = getErrorWithStack();
+    this.name = "BulkError";
+    this.failures = failures;
+    this.message = getMultiErrorMessage(msg, failures);
+}
+derive(BulkError).from(DexieError);
+var errnames = errorList.reduce(function (obj, name) { return (obj[name] = name + "Error", obj); }, {});
+var BaseException = DexieError;
+var exceptions = errorList.reduce(function (obj, name) {
+    var fullName = name + "Error";
+    function DexieError(msgOrInner, inner) {
+        this._e = getErrorWithStack();
+        this.name = fullName;
+        if (!msgOrInner) {
+            this.message = defaultTexts[name] || fullName;
+            this.inner = null;
+        }
+        else if (typeof msgOrInner === 'string') {
+            this.message = "" + msgOrInner + (!inner ? '' : '\n ' + inner);
+            this.inner = inner || null;
+        }
+        else if (typeof msgOrInner === 'object') {
+            this.message = msgOrInner.name + " " + msgOrInner.message;
+            this.inner = msgOrInner;
+        }
+    }
+    derive(DexieError).from(BaseException);
+    obj[name] = DexieError;
+    return obj;
+}, {});
+exceptions.Syntax = SyntaxError;
+exceptions.Type = TypeError;
+exceptions.Range = RangeError;
+var exceptionMap = idbDomErrorNames.reduce(function (obj, name) {
+    obj[name + "Error"] = exceptions[name];
+    return obj;
+}, {});
+function mapError(domError, message) {
+    if (!domError || domError instanceof DexieError || domError instanceof TypeError || domError instanceof SyntaxError || !domError.name || !exceptionMap[domError.name])
+        return domError;
+    var rv = new exceptionMap[domError.name](message || domError.message, domError);
+    if ("stack" in domError) {
+        setProp(rv, "stack", { get: function () {
+                return this.inner.stack;
+            } });
+    }
+    return rv;
+}
+var fullNameExceptions = errorList.reduce(function (obj, name) {
+    if (["Syntax", "Type", "Range"].indexOf(name) === -1)
+        obj[name + "Error"] = exceptions[name];
+    return obj;
+}, {});
+fullNameExceptions.ModifyError = ModifyError;
+fullNameExceptions.DexieError = DexieError;
+fullNameExceptions.BulkError = BulkError;
+
+function nop() { }
+function mirror(val) { return val; }
+function pureFunctionChain(f1, f2) {
+    if (f1 == null || f1 === mirror)
+        return f2;
+    return function (val) {
+        return f2(f1(val));
+    };
+}
+function callBoth(on1, on2) {
+    return function () {
+        on1.apply(this, arguments);
+        on2.apply(this, arguments);
+    };
+}
+function hookCreatingChain(f1, f2) {
+    if (f1 === nop)
+        return f2;
+    return function () {
+        var res = f1.apply(this, arguments);
+        if (res !== undefined)
+            arguments[0] = res;
+        var onsuccess = this.onsuccess,
+        onerror = this.onerror;
+        this.onsuccess = null;
+        this.onerror = null;
+        var res2 = f2.apply(this, arguments);
+        if (onsuccess)
+            this.onsuccess = this.onsuccess ? callBoth(onsuccess, this.onsuccess) : onsuccess;
+        if (onerror)
+            this.onerror = this.onerror ? callBoth(onerror, this.onerror) : onerror;
+        return res2 !== undefined ? res2 : res;
+    };
+}
+function hookDeletingChain(f1, f2) {
+    if (f1 === nop)
+        return f2;
+    return function () {
+        f1.apply(this, arguments);
+        var onsuccess = this.onsuccess,
+        onerror = this.onerror;
+        this.onsuccess = this.onerror = null;
+        f2.apply(this, arguments);
+        if (onsuccess)
+            this.onsuccess = this.onsuccess ? callBoth(onsuccess, this.onsuccess) : onsuccess;
+        if (onerror)
+            this.onerror = this.onerror ? callBoth(onerror, this.onerror) : onerror;
+    };
+}
+function hookUpdatingChain(f1, f2) {
+    if (f1 === nop)
+        return f2;
+    return function (modifications) {
+        var res = f1.apply(this, arguments);
+        extend(modifications, res);
+        var onsuccess = this.onsuccess,
+        onerror = this.onerror;
+        this.onsuccess = null;
+        this.onerror = null;
+        var res2 = f2.apply(this, arguments);
+        if (onsuccess)
+            this.onsuccess = this.onsuccess ? callBoth(onsuccess, this.onsuccess) : onsuccess;
+        if (onerror)
+            this.onerror = this.onerror ? callBoth(onerror, this.onerror) : onerror;
+        return res === undefined ?
+            (res2 === undefined ? undefined : res2) :
+            (extend(res, res2));
+    };
+}
+function reverseStoppableEventChain(f1, f2) {
+    if (f1 === nop)
+        return f2;
+    return function () {
+        if (f2.apply(this, arguments) === false)
+            return false;
+        return f1.apply(this, arguments);
+    };
+}
+
+function promisableChain(f1, f2) {
+    if (f1 === nop)
+        return f2;
+    return function () {
+        var res = f1.apply(this, arguments);
+        if (res && typeof res.then === 'function') {
+            var thiz = this, i = arguments.length, args = new Array(i);
+            while (i--)
+                args[i] = arguments[i];
+            return res.then(function () {
+                return f2.apply(thiz, args);
+            });
+        }
+        return f2.apply(this, arguments);
+    };
+}
+
+var INTERNAL = {};
+var LONG_STACKS_CLIP_LIMIT = 100;
+var MAX_LONG_STACKS = 20;
+var ZONE_ECHO_LIMIT = 100;
+var _a = typeof Promise === 'undefined' ?
+    [] :
+    (function () {
+        var globalP = Promise.resolve();
+        if (typeof crypto === 'undefined' || !crypto.subtle)
+            return [globalP, globalP.__proto__, globalP];
+        var nativeP = crypto.subtle.digest("SHA-512", new Uint8Array([0]));
+        return [
+            nativeP,
+            nativeP.__proto__,
+            globalP
+        ];
+    })();
+var resolvedNativePromise = _a[0];
+var nativePromiseProto = _a[1];
+var resolvedGlobalPromise = _a[2];
+var nativePromiseThen = nativePromiseProto && nativePromiseProto.then;
+var NativePromise = resolvedNativePromise && resolvedNativePromise.constructor;
+var patchGlobalPromise = !!resolvedGlobalPromise;
+var stack_being_generated = false;
+var schedulePhysicalTick = resolvedGlobalPromise ?
+    function () { resolvedGlobalPromise.then(physicalTick); }
+    :
+        _global.setImmediate ?
+            setImmediate.bind(null, physicalTick) :
+            _global.MutationObserver ?
+                function () {
+                    var hiddenDiv = document.createElement("div");
+                    (new MutationObserver(function () {
+                        physicalTick();
+                        hiddenDiv = null;
+                    })).observe(hiddenDiv, { attributes: true });
+                    hiddenDiv.setAttribute('i', '1');
+                } :
+                function () { setTimeout(physicalTick, 0); };
+var asap$1 = function (callback, args) {
+    microtickQueue.push([callback, args]);
+    if (needsNewPhysicalTick) {
+        schedulePhysicalTick();
+        needsNewPhysicalTick = false;
+    }
+};
+var isOutsideMicroTick = true;
+var needsNewPhysicalTick = true;
+var unhandledErrors = [];
+var rejectingErrors = [];
+var currentFulfiller = null;
+var rejectionMapper = mirror;
+var globalPSD = {
+    id: 'global',
+    global: true,
+    ref: 0,
+    unhandleds: [],
+    onunhandled: globalError,
+    pgp: false,
+    env: {},
+    finalize: function () {
+        this.unhandleds.forEach(function (uh) {
+            try {
+                globalError(uh[0], uh[1]);
+            }
+            catch (e) { }
+        });
+    }
+};
+var PSD = globalPSD;
+var microtickQueue = [];
+var numScheduledCalls = 0;
+var tickFinalizers = [];
+function DexiePromise(fn) {
+    if (typeof this !== 'object')
+        throw new TypeError('Promises must be constructed via new');
+    this._listeners = [];
+    this.onuncatched = nop;
+    this._lib = false;
+    var psd = (this._PSD = PSD);
+    if (debug) {
+        this._stackHolder = getErrorWithStack();
+        this._prev = null;
+        this._numPrev = 0;
+    }
+    if (typeof fn !== 'function') {
+        if (fn !== INTERNAL)
+            throw new TypeError('Not a function');
+        this._state = arguments[1];
+        this._value = arguments[2];
+        if (this._state === false)
+            handleRejection(this, this._value);
+        return;
+    }
+    this._state = null;
+    this._value = null;
+    ++psd.ref;
+    executePromiseTask(this, fn);
+}
+var thenProp = {
+    get: function () {
+        var psd = PSD, microTaskId = totalEchoes;
+        function then(onFulfilled, onRejected) {
+            var _this = this;
+            var possibleAwait = !psd.global && (psd !== PSD || microTaskId !== totalEchoes);
+            if (possibleAwait)
+                decrementExpectedAwaits();
+            var rv = new DexiePromise(function (resolve, reject) {
+                propagateToListener(_this, new Listener(nativeAwaitCompatibleWrap(onFulfilled, psd, possibleAwait), nativeAwaitCompatibleWrap(onRejected, psd, possibleAwait), resolve, reject, psd));
+            });
+            debug && linkToPreviousPromise(rv, this);
+            return rv;
+        }
+        then.prototype = INTERNAL;
+        return then;
+    },
+    set: function (value) {
+        setProp(this, 'then', value && value.prototype === INTERNAL ?
+            thenProp :
+            {
+                get: function () {
+                    return value;
+                },
+                set: thenProp.set
+            });
+    }
+};
+props(DexiePromise.prototype, {
+    then: thenProp,
+    _then: function (onFulfilled, onRejected) {
+        propagateToListener(this, new Listener(null, null, onFulfilled, onRejected, PSD));
+    },
+    catch: function (onRejected) {
+        if (arguments.length === 1)
+            return this.then(null, onRejected);
+        var type = arguments[0], handler = arguments[1];
+        return typeof type === 'function' ? this.then(null, function (err) {
+            return err instanceof type ? handler(err) : PromiseReject(err);
+        })
+            : this.then(null, function (err) {
+                return err && err.name === type ? handler(err) : PromiseReject(err);
+            });
+    },
+    finally: function (onFinally) {
+        return this.then(function (value) {
+            onFinally();
+            return value;
+        }, function (err) {
+            onFinally();
+            return PromiseReject(err);
+        });
+    },
+    stack: {
+        get: function () {
+            if (this._stack)
+                return this._stack;
+            try {
+                stack_being_generated = true;
+                var stacks = getStack(this, [], MAX_LONG_STACKS);
+                var stack = stacks.join("\nFrom previous: ");
+                if (this._state !== null)
+                    this._stack = stack;
+                return stack;
+            }
+            finally {
+                stack_being_generated = false;
+            }
+        }
+    },
+    timeout: function (ms, msg) {
+        var _this = this;
+        return ms < Infinity ?
+            new DexiePromise(function (resolve, reject) {
+                var handle = setTimeout(function () { return reject(new exceptions.Timeout(msg)); }, ms);
+                _this.then(resolve, reject).finally(clearTimeout.bind(null, handle));
+            }) : this;
+    }
+});
+if (typeof Symbol !== 'undefined' && Symbol.toStringTag)
+    setProp(DexiePromise.prototype, Symbol.toStringTag, 'Dexie.Promise');
+globalPSD.env = snapShot();
+function Listener(onFulfilled, onRejected, resolve, reject, zone) {
+    this.onFulfilled = typeof onFulfilled === 'function' ? onFulfilled : null;
+    this.onRejected = typeof onRejected === 'function' ? onRejected : null;
+    this.resolve = resolve;
+    this.reject = reject;
+    this.psd = zone;
+}
+props(DexiePromise, {
+    all: function () {
+        var values = getArrayOf.apply(null, arguments)
+            .map(onPossibleParallellAsync);
+        return new DexiePromise(function (resolve, reject) {
+            if (values.length === 0)
+                resolve([]);
+            var remaining = values.length;
+            values.forEach(function (a, i) { return DexiePromise.resolve(a).then(function (x) {
+                values[i] = x;
+                if (!--remaining)
+                    resolve(values);
+            }, reject); });
+        });
+    },
+    resolve: function (value) {
+        if (value instanceof DexiePromise)
+            return value;
+        if (value && typeof value.then === 'function')
+            return new DexiePromise(function (resolve, reject) {
+                value.then(resolve, reject);
+            });
+        var rv = new DexiePromise(INTERNAL, true, value);
+        linkToPreviousPromise(rv, currentFulfiller);
+        return rv;
+    },
+    reject: PromiseReject,
+    race: function () {
+        var values = getArrayOf.apply(null, arguments).map(onPossibleParallellAsync);
+        return new DexiePromise(function (resolve, reject) {
+            values.map(function (value) { return DexiePromise.resolve(value).then(resolve, reject); });
+        });
+    },
+    PSD: {
+        get: function () { return PSD; },
+        set: function (value) { return PSD = value; }
+    },
+    newPSD: newScope,
+    usePSD: usePSD,
+    scheduler: {
+        get: function () { return asap$1; },
+        set: function (value) { asap$1 = value; }
+    },
+    rejectionMapper: {
+        get: function () { return rejectionMapper; },
+        set: function (value) { rejectionMapper = value; }
+    },
+    follow: function (fn, zoneProps) {
+        return new DexiePromise(function (resolve, reject) {
+            return newScope(function (resolve, reject) {
+                var psd = PSD;
+                psd.unhandleds = [];
+                psd.onunhandled = reject;
+                psd.finalize = callBoth(function () {
+                    var _this = this;
+                    run_at_end_of_this_or_next_physical_tick(function () {
+                        _this.unhandleds.length === 0 ? resolve() : reject(_this.unhandleds[0]);
+                    });
+                }, psd.finalize);
+                fn();
+            }, zoneProps, resolve, reject);
+        });
+    }
+});
+if (NativePromise) {
+    if (NativePromise.allSettled)
+        setProp(DexiePromise, "allSettled", function () {
+            var possiblePromises = getArrayOf.apply(null, arguments).map(onPossibleParallellAsync);
+            return new DexiePromise(function (resolve) {
+                if (possiblePromises.length === 0)
+                    resolve([]);
+                var remaining = possiblePromises.length;
+                var results = new Array(remaining);
+                possiblePromises.forEach(function (p, i) { return DexiePromise.resolve(p).then(function (value) { return results[i] = { status: "fulfilled", value: value }; }, function (reason) { return results[i] = { status: "rejected", reason: reason }; })
+                    .then(function () { return --remaining || resolve(results); }); });
+            });
+        });
+    if (NativePromise.any && typeof AggregateError !== 'undefined')
+        setProp(DexiePromise, "any", function () {
+            var possiblePromises = getArrayOf.apply(null, arguments).map(onPossibleParallellAsync);
+            return new DexiePromise(function (resolve, reject) {
+                if (possiblePromises.length === 0)
+                    reject(new AggregateError([]));
+                var remaining = possiblePromises.length;
+                var failures = new Array(remaining);
+                possiblePromises.forEach(function (p, i) { return DexiePromise.resolve(p).then(function (value) { return resolve(value); }, function (failure) {
+                    failures[i] = failure;
+                    if (!--remaining)
+                        reject(new AggregateError(failures));
+                }); });
+            });
+        });
+}
+function executePromiseTask(promise, fn) {
+    try {
+        fn(function (value) {
+            if (promise._state !== null)
+                return;
+            if (value === promise)
+                throw new TypeError('A promise cannot be resolved with itself.');
+            var shouldExecuteTick = promise._lib && beginMicroTickScope();
+            if (value && typeof value.then === 'function') {
+                executePromiseTask(promise, function (resolve, reject) {
+                    value instanceof DexiePromise ?
+                        value._then(resolve, reject) :
+                        value.then(resolve, reject);
+                });
+            }
+            else {
+                promise._state = true;
+                promise._value = value;
+                propagateAllListeners(promise);
+            }
+            if (shouldExecuteTick)
+                endMicroTickScope();
+        }, handleRejection.bind(null, promise));
+    }
+    catch (ex) {
+        handleRejection(promise, ex);
+    }
+}
+function handleRejection(promise, reason) {
+    rejectingErrors.push(reason);
+    if (promise._state !== null)
+        return;
+    var shouldExecuteTick = promise._lib && beginMicroTickScope();
+    reason = rejectionMapper(reason);
+    promise._state = false;
+    promise._value = reason;
+    debug && reason !== null && typeof reason === 'object' && !reason._promise && tryCatch(function () {
+        var origProp = getPropertyDescriptor(reason, "stack");
+        reason._promise = promise;
+        setProp(reason, "stack", {
+            get: function () {
+                return stack_being_generated ?
+                    origProp && (origProp.get ?
+                        origProp.get.apply(reason) :
+                        origProp.value) :
+                    promise.stack;
+            }
+        });
+    });
+    addPossiblyUnhandledError(promise);
+    propagateAllListeners(promise);
+    if (shouldExecuteTick)
+        endMicroTickScope();
+}
+function propagateAllListeners(promise) {
+    var listeners = promise._listeners;
+    promise._listeners = [];
+    for (var i = 0, len = listeners.length; i < len; ++i) {
+        propagateToListener(promise, listeners[i]);
+    }
+    var psd = promise._PSD;
+    --psd.ref || psd.finalize();
+    if (numScheduledCalls === 0) {
+        ++numScheduledCalls;
+        asap$1(function () {
+            if (--numScheduledCalls === 0)
+                finalizePhysicalTick();
+        }, []);
+    }
+}
+function propagateToListener(promise, listener) {
+    if (promise._state === null) {
+        promise._listeners.push(listener);
+        return;
+    }
+    var cb = promise._state ? listener.onFulfilled : listener.onRejected;
+    if (cb === null) {
+        return (promise._state ? listener.resolve : listener.reject)(promise._value);
+    }
+    ++listener.psd.ref;
+    ++numScheduledCalls;
+    asap$1(callListener, [cb, promise, listener]);
+}
+function callListener(cb, promise, listener) {
+    try {
+        currentFulfiller = promise;
+        var ret, value = promise._value;
+        if (promise._state) {
+            ret = cb(value);
+        }
+        else {
+            if (rejectingErrors.length)
+                rejectingErrors = [];
+            ret = cb(value);
+            if (rejectingErrors.indexOf(value) === -1)
+                markErrorAsHandled(promise);
+        }
+        listener.resolve(ret);
+    }
+    catch (e) {
+        listener.reject(e);
+    }
+    finally {
+        currentFulfiller = null;
+        if (--numScheduledCalls === 0)
+            finalizePhysicalTick();
+        --listener.psd.ref || listener.psd.finalize();
+    }
+}
+function getStack(promise, stacks, limit) {
+    if (stacks.length === limit)
+        return stacks;
+    var stack = "";
+    if (promise._state === false) {
+        var failure = promise._value, errorName, message;
+        if (failure != null) {
+            errorName = failure.name || "Error";
+            message = failure.message || failure;
+            stack = prettyStack(failure, 0);
+        }
+        else {
+            errorName = failure;
+            message = "";
+        }
+        stacks.push(errorName + (message ? ": " + message : "") + stack);
+    }
+    if (debug) {
+        stack = prettyStack(promise._stackHolder, 2);
+        if (stack && stacks.indexOf(stack) === -1)
+            stacks.push(stack);
+        if (promise._prev)
+            getStack(promise._prev, stacks, limit);
+    }
+    return stacks;
+}
+function linkToPreviousPromise(promise, prev) {
+    var numPrev = prev ? prev._numPrev + 1 : 0;
+    if (numPrev < LONG_STACKS_CLIP_LIMIT) {
+        promise._prev = prev;
+        promise._numPrev = numPrev;
+    }
+}
+function physicalTick() {
+    beginMicroTickScope() && endMicroTickScope();
+}
+function beginMicroTickScope() {
+    var wasRootExec = isOutsideMicroTick;
+    isOutsideMicroTick = false;
+    needsNewPhysicalTick = false;
+    return wasRootExec;
+}
+function endMicroTickScope() {
+    var callbacks, i, l;
+    do {
+        while (microtickQueue.length > 0) {
+            callbacks = microtickQueue;
+            microtickQueue = [];
+            l = callbacks.length;
+            for (i = 0; i < l; ++i) {
+                var item = callbacks[i];
+                item[0].apply(null, item[1]);
+            }
+        }
+    } while (microtickQueue.length > 0);
+    isOutsideMicroTick = true;
+    needsNewPhysicalTick = true;
+}
+function finalizePhysicalTick() {
+    var unhandledErrs = unhandledErrors;
+    unhandledErrors = [];
+    unhandledErrs.forEach(function (p) {
+        p._PSD.onunhandled.call(null, p._value, p);
+    });
+    var finalizers = tickFinalizers.slice(0);
+    var i = finalizers.length;
+    while (i)
+        finalizers[--i]();
+}
+function run_at_end_of_this_or_next_physical_tick(fn) {
+    function finalizer() {
+        fn();
+        tickFinalizers.splice(tickFinalizers.indexOf(finalizer), 1);
+    }
+    tickFinalizers.push(finalizer);
+    ++numScheduledCalls;
+    asap$1(function () {
+        if (--numScheduledCalls === 0)
+            finalizePhysicalTick();
+    }, []);
+}
+function addPossiblyUnhandledError(promise) {
+    if (!unhandledErrors.some(function (p) { return p._value === promise._value; }))
+        unhandledErrors.push(promise);
+}
+function markErrorAsHandled(promise) {
+    var i = unhandledErrors.length;
+    while (i)
+        if (unhandledErrors[--i]._value === promise._value) {
+            unhandledErrors.splice(i, 1);
+            return;
+        }
+}
+function PromiseReject(reason) {
+    return new DexiePromise(INTERNAL, false, reason);
+}
+function wrap(fn, errorCatcher) {
+    var psd = PSD;
+    return function () {
+        var wasRootExec = beginMicroTickScope(), outerScope = PSD;
+        try {
+            switchToZone(psd, true);
+            return fn.apply(this, arguments);
+        }
+        catch (e) {
+            errorCatcher && errorCatcher(e);
+        }
+        finally {
+            switchToZone(outerScope, false);
+            if (wasRootExec)
+                endMicroTickScope();
+        }
+    };
+}
+var task = { awaits: 0, echoes: 0, id: 0 };
+var taskCounter = 0;
+var zoneStack = [];
+var zoneEchoes = 0;
+var totalEchoes = 0;
+var zone_id_counter = 0;
+function newScope(fn, props$$1, a1, a2) {
+    var parent = PSD, psd = Object.create(parent);
+    psd.parent = parent;
+    psd.ref = 0;
+    psd.global = false;
+    psd.id = ++zone_id_counter;
+    var globalEnv = globalPSD.env;
+    psd.env = patchGlobalPromise ? {
+        Promise: DexiePromise,
+        PromiseProp: { value: DexiePromise, configurable: true, writable: true },
+        all: DexiePromise.all,
+        race: DexiePromise.race,
+        allSettled: DexiePromise.allSettled,
+        any: DexiePromise.any,
+        resolve: DexiePromise.resolve,
+        reject: DexiePromise.reject,
+        nthen: getPatchedPromiseThen(globalEnv.nthen, psd),
+        gthen: getPatchedPromiseThen(globalEnv.gthen, psd)
+    } : {};
+    if (props$$1)
+        extend(psd, props$$1);
+    ++parent.ref;
+    psd.finalize = function () {
+        --this.parent.ref || this.parent.finalize();
+    };
+    var rv = usePSD(psd, fn, a1, a2);
+    if (psd.ref === 0)
+        psd.finalize();
+    return rv;
+}
+function incrementExpectedAwaits() {
+    if (!task.id)
+        task.id = ++taskCounter;
+    ++task.awaits;
+    task.echoes += ZONE_ECHO_LIMIT;
+    return task.id;
+}
+function decrementExpectedAwaits(sourceTaskId) {
+    if (!task.awaits || (sourceTaskId && sourceTaskId !== task.id))
+        return;
+    if (--task.awaits === 0)
+        task.id = 0;
+    task.echoes = task.awaits * ZONE_ECHO_LIMIT;
+}
+if (('' + nativePromiseThen).indexOf('[native code]') === -1) {
+    incrementExpectedAwaits = decrementExpectedAwaits = nop;
+}
+function onPossibleParallellAsync(possiblePromise) {
+    if (task.echoes && possiblePromise && possiblePromise.constructor === NativePromise) {
+        incrementExpectedAwaits();
+        return possiblePromise.then(function (x) {
+            decrementExpectedAwaits();
+            return x;
+        }, function (e) {
+            decrementExpectedAwaits();
+            return rejection(e);
+        });
+    }
+    return possiblePromise;
+}
+function zoneEnterEcho(targetZone) {
+    ++totalEchoes;
+    if (!task.echoes || --task.echoes === 0) {
+        task.echoes = task.id = 0;
+    }
+    zoneStack.push(PSD);
+    switchToZone(targetZone, true);
+}
+function zoneLeaveEcho() {
+    var zone = zoneStack[zoneStack.length - 1];
+    zoneStack.pop();
+    switchToZone(zone, false);
+}
+function switchToZone(targetZone, bEnteringZone) {
+    var currentZone = PSD;
+    if (bEnteringZone ? task.echoes && (!zoneEchoes++ || targetZone !== PSD) : zoneEchoes && (!--zoneEchoes || targetZone !== PSD)) {
+        enqueueNativeMicroTask(bEnteringZone ? zoneEnterEcho.bind(null, targetZone) : zoneLeaveEcho);
+    }
+    if (targetZone === PSD)
+        return;
+    PSD = targetZone;
+    if (currentZone === globalPSD)
+        globalPSD.env = snapShot();
+    if (patchGlobalPromise) {
+        var GlobalPromise_1 = globalPSD.env.Promise;
+        var targetEnv = targetZone.env;
+        nativePromiseProto.then = targetEnv.nthen;
+        GlobalPromise_1.prototype.then = targetEnv.gthen;
+        if (currentZone.global || targetZone.global) {
+            Object.defineProperty(_global, 'Promise', targetEnv.PromiseProp);
+            GlobalPromise_1.all = targetEnv.all;
+            GlobalPromise_1.race = targetEnv.race;
+            GlobalPromise_1.resolve = targetEnv.resolve;
+            GlobalPromise_1.reject = targetEnv.reject;
+            if (targetEnv.allSettled)
+                GlobalPromise_1.allSettled = targetEnv.allSettled;
+            if (targetEnv.any)
+                GlobalPromise_1.any = targetEnv.any;
+        }
+    }
+}
+function snapShot() {
+    var GlobalPromise = _global.Promise;
+    return patchGlobalPromise ? {
+        Promise: GlobalPromise,
+        PromiseProp: Object.getOwnPropertyDescriptor(_global, "Promise"),
+        all: GlobalPromise.all,
+        race: GlobalPromise.race,
+        allSettled: GlobalPromise.allSettled,
+        any: GlobalPromise.any,
+        resolve: GlobalPromise.resolve,
+        reject: GlobalPromise.reject,
+        nthen: nativePromiseProto.then,
+        gthen: GlobalPromise.prototype.then
+    } : {};
+}
+function usePSD(psd, fn, a1, a2, a3) {
+    var outerScope = PSD;
+    try {
+        switchToZone(psd, true);
+        return fn(a1, a2, a3);
+    }
+    finally {
+        switchToZone(outerScope, false);
+    }
+}
+function enqueueNativeMicroTask(job) {
+    nativePromiseThen.call(resolvedNativePromise, job);
+}
+function nativeAwaitCompatibleWrap(fn, zone, possibleAwait) {
+    return typeof fn !== 'function' ? fn : function () {
+        var outerZone = PSD;
+        if (possibleAwait)
+            incrementExpectedAwaits();
+        switchToZone(zone, true);
+        try {
+            return fn.apply(this, arguments);
+        }
+        finally {
+            switchToZone(outerZone, false);
+        }
+    };
+}
+function getPatchedPromiseThen(origThen, zone) {
+    return function (onResolved, onRejected) {
+        return origThen.call(this, nativeAwaitCompatibleWrap(onResolved, zone, false), nativeAwaitCompatibleWrap(onRejected, zone, false));
+    };
+}
+var UNHANDLEDREJECTION = "unhandledrejection";
+function globalError(err, promise) {
+    var rv;
+    try {
+        rv = promise.onuncatched(err);
+    }
+    catch (e) { }
+    if (rv !== false)
+        try {
+            var event, eventData = { promise: promise, reason: err };
+            if (_global.document && document.createEvent) {
+                event = document.createEvent('Event');
+                event.initEvent(UNHANDLEDREJECTION, true, true);
+                extend(event, eventData);
+            }
+            else if (_global.CustomEvent) {
+                event = new CustomEvent(UNHANDLEDREJECTION, { detail: eventData });
+                extend(event, eventData);
+            }
+            if (event && _global.dispatchEvent) {
+                dispatchEvent(event);
+                if (!_global.PromiseRejectionEvent && _global.onunhandledrejection)
+                    try {
+                        _global.onunhandledrejection(event);
+                    }
+                    catch (_) { }
+            }
+            if (debug && event && !event.defaultPrevented) {
+                console.warn("Unhandled rejection: " + (err.stack || err));
+            }
+        }
+        catch (e) { }
+}
+var rejection = DexiePromise.reject;
+
+function tempTransaction(db, mode, storeNames, fn) {
+    if (!db._state.openComplete && (!PSD.letThrough)) {
+        if (!db._state.isBeingOpened) {
+            if (!db._options.autoOpen)
+                return rejection(new exceptions.DatabaseClosed());
+            db.open().catch(nop);
+        }
+        return db._state.dbReadyPromise.then(function () { return tempTransaction(db, mode, storeNames, fn); });
+    }
+    else {
+        var trans = db._createTransaction(mode, storeNames, db._dbSchema);
+        try {
+            trans.create();
+        }
+        catch (ex) {
+            return rejection(ex);
+        }
+        return trans._promise(mode, function (resolve, reject) {
+            return newScope(function () {
+                PSD.trans = trans;
+                return fn(resolve, reject, trans);
+            });
+        }).then(function (result) {
+            return trans._completion.then(function () { return result; });
+        });
+    }
+}
+
+var DEXIE_VERSION = '3.0.1';
+var maxString = String.fromCharCode(65535);
+var minKey = -Infinity;
+var INVALID_KEY_ARGUMENT = "Invalid key provided. Keys must be of type string, number, Date or Array<string | number | Date>.";
+var STRING_EXPECTED = "String expected.";
+var connections = [];
+var isIEOrEdge = typeof navigator !== 'undefined' && /(MSIE|Trident|Edge)/.test(navigator.userAgent);
+var hasIEDeleteObjectStoreBug = isIEOrEdge;
+var hangsOnDeleteLargeKeyRange = isIEOrEdge;
+var dexieStackFrameFilter = function (frame) { return !/(dexie\.js|dexie\.min\.js)/.test(frame); };
+var DBNAMES_DB = '__dbnames';
+var READONLY = 'readonly';
+var READWRITE = 'readwrite';
+
+function combine(filter1, filter2) {
+    return filter1 ?
+        filter2 ?
+            function () { return filter1.apply(this, arguments) && filter2.apply(this, arguments); } :
+            filter1 :
+        filter2;
+}
+
+var AnyRange = {
+    type: 3          ,
+    lower: -Infinity,
+    lowerOpen: false,
+    upper: [[]],
+    upperOpen: false
+};
+
+var Table =               (function () {
+    function Table() {
+    }
+    Table.prototype._trans = function (mode, fn, writeLocked) {
+        var trans = this._tx || PSD.trans;
+        var tableName = this.name;
+        function checkTableInTransaction(resolve, reject, trans) {
+            if (!trans.schema[tableName])
+                throw new exceptions.NotFound("Table " + tableName + " not part of transaction");
+            return fn(trans.idbtrans, trans);
+        }
+        var wasRootExec = beginMicroTickScope();
+        try {
+            return trans && trans.db === this.db ?
+                trans === PSD.trans ?
+                    trans._promise(mode, checkTableInTransaction, writeLocked) :
+                    newScope(function () { return trans._promise(mode, checkTableInTransaction, writeLocked); }, { trans: trans, transless: PSD.transless || PSD }) :
+                tempTransaction(this.db, mode, [this.name], checkTableInTransaction);
+        }
+        finally {
+            if (wasRootExec)
+                endMicroTickScope();
+        }
+    };
+    Table.prototype.get = function (keyOrCrit, cb) {
+        var _this = this;
+        if (keyOrCrit && keyOrCrit.constructor === Object)
+            return this.where(keyOrCrit).first(cb);
+        return this._trans('readonly', function (trans) {
+            return _this.core.get({ trans: trans, key: keyOrCrit })
+                .then(function (res) { return _this.hook.reading.fire(res); });
+        }).then(cb);
+    };
+    Table.prototype.where = function (indexOrCrit) {
+        if (typeof indexOrCrit === 'string')
+            return new this.db.WhereClause(this, indexOrCrit);
+        if (isArray(indexOrCrit))
+            return new this.db.WhereClause(this, "[" + indexOrCrit.join('+') + "]");
+        var keyPaths = keys(indexOrCrit);
+        if (keyPaths.length === 1)
+            return this
+                .where(keyPaths[0])
+                .equals(indexOrCrit[keyPaths[0]]);
+        var compoundIndex = this.schema.indexes.concat(this.schema.primKey).filter(function (ix) {
+            return ix.compound &&
+                keyPaths.every(function (keyPath) { return ix.keyPath.indexOf(keyPath) >= 0; }) &&
+                ix.keyPath.every(function (keyPath) { return keyPaths.indexOf(keyPath) >= 0; });
+        })[0];
+        if (compoundIndex && this.db._maxKey !== maxString)
+            return this
+                .where(compoundIndex.name)
+                .equals(compoundIndex.keyPath.map(function (kp) { return indexOrCrit[kp]; }));
+        if (!compoundIndex && debug)
+            console.warn("The query " + JSON.stringify(indexOrCrit) + " on " + this.name + " would benefit of a " +
+                ("compound index [" + keyPaths.join('+') + "]"));
+        var idxByName = this.schema.idxByName;
+        var idb = this.db._deps.indexedDB;
+        function equals(a, b) {
+            try {
+                return idb.cmp(a, b) === 0;
+            }
+            catch (e) {
+                return false;
+            }
+        }
+        var _a = keyPaths.reduce(function (_a, keyPath) {
+            var prevIndex = _a[0], prevFilterFn = _a[1];
+            var index = idxByName[keyPath];
+            var value = indexOrCrit[keyPath];
+            return [
+                prevIndex || index,
+                prevIndex || !index ?
+                    combine(prevFilterFn, index && index.multi ?
+                        function (x) {
+                            var prop = getByKeyPath(x, keyPath);
+                            return isArray(prop) && prop.some(function (item) { return equals(value, item); });
+                        } : function (x) { return equals(value, getByKeyPath(x, keyPath)); })
+                    : prevFilterFn
+            ];
+        }, [null, null]), idx = _a[0], filterFunction = _a[1];
+        return idx ?
+            this.where(idx.name).equals(indexOrCrit[idx.keyPath])
+                .filter(filterFunction) :
+            compoundIndex ?
+                this.filter(filterFunction) :
+                this.where(keyPaths).equals('');
+    };
+    Table.prototype.filter = function (filterFunction) {
+        return this.toCollection().and(filterFunction);
+    };
+    Table.prototype.count = function (thenShortcut) {
+        return this.toCollection().count(thenShortcut);
+    };
+    Table.prototype.offset = function (offset) {
+        return this.toCollection().offset(offset);
+    };
+    Table.prototype.limit = function (numRows) {
+        return this.toCollection().limit(numRows);
+    };
+    Table.prototype.each = function (callback) {
+        return this.toCollection().each(callback);
+    };
+    Table.prototype.toArray = function (thenShortcut) {
+        return this.toCollection().toArray(thenShortcut);
+    };
+    Table.prototype.toCollection = function () {
+        return new this.db.Collection(new this.db.WhereClause(this));
+    };
+    Table.prototype.orderBy = function (index) {
+        return new this.db.Collection(new this.db.WhereClause(this, isArray(index) ?
+            "[" + index.join('+') + "]" :
+            index));
+    };
+    Table.prototype.reverse = function () {
+        return this.toCollection().reverse();
+    };
+    Table.prototype.mapToClass = function (constructor) {
+        this.schema.mappedClass = constructor;
+        var readHook = function (obj) {
+            if (!obj)
+                return obj;
+            var res = Object.create(constructor.prototype);
+            for (var m in obj)
+                if (hasOwn(obj, m))
+                    try {
+                        res[m] = obj[m];
+                    }
+                    catch (_) { }
+            return res;
+        };
+        if (this.schema.readHook) {
+            this.hook.reading.unsubscribe(this.schema.readHook);
+        }
+        this.schema.readHook = readHook;
+        this.hook("reading", readHook);
+        return constructor;
+    };
+    Table.prototype.defineClass = function () {
+        function Class(content) {
+            extend(this, content);
+        }
+        
+        return this.mapToClass(Class);
+    };
+    Table.prototype.add = function (obj, key) {
+        var _this = this;
+        return this._trans('readwrite', function (trans) {
+            return _this.core.mutate({ trans: trans, type: 'add', keys: key != null ? [key] : null, values: [obj] });
+        }).then(function (res) { return res.numFailures ? DexiePromise.reject(res.failures[0]) : res.lastResult; })
+            .then(function (lastResult) {
+            if (!_this.core.schema.primaryKey.outbound) {
+                try {
+                    setByKeyPath(obj, _this.core.schema.primaryKey.keyPath, lastResult);
+                }
+                catch (_) { }
+                
+            }
+            return lastResult;
+        });
+    };
+    Table.prototype.update = function (keyOrObject, modifications) {
+        if (typeof modifications !== 'object' || isArray(modifications))
+            throw new exceptions.InvalidArgument("Modifications must be an object.");
+        if (typeof keyOrObject === 'object' && !isArray(keyOrObject)) {
+            keys(modifications).forEach(function (keyPath) {
+                setByKeyPath(keyOrObject, keyPath, modifications[keyPath]);
+            });
+            var key = getByKeyPath(keyOrObject, this.schema.primKey.keyPath);
+            if (key === undefined)
+                return rejection(new exceptions.InvalidArgument("Given object does not contain its primary key"));
+            return this.where(":id").equals(key).modify(modifications);
+        }
+        else {
+            return this.where(":id").equals(keyOrObject).modify(modifications);
+        }
+    };
+    Table.prototype.put = function (obj, key) {
+        var _this = this;
+        return this._trans('readwrite', function (trans) { return _this.core.mutate({ trans: trans, type: 'put', values: [obj], keys: key != null ? [key] : null }); })
+            .then(function (res) { return res.numFailures ? DexiePromise.reject(res.failures[0]) : res.lastResult; })
+            .then(function (lastResult) {
+            if (!_this.core.schema.primaryKey.outbound) {
+                try {
+                    setByKeyPath(obj, _this.core.schema.primaryKey.keyPath, lastResult);
+                }
+                catch (_) { }
+                
+            }
+            return lastResult;
+        });
+    };
+    Table.prototype.delete = function (key) {
+        var _this = this;
+        return this._trans('readwrite', function (trans) { return _this.core.mutate({ trans: trans, type: 'delete', keys: [key] }); })
+            .then(function (res) { return res.numFailures ? DexiePromise.reject(res.failures[0]) : undefined; });
+    };
+    Table.prototype.clear = function () {
+        var _this = this;
+        return this._trans('readwrite', function (trans) { return _this.core.mutate({ trans: trans, type: 'deleteRange', range: AnyRange }); })
+            .then(function (res) { return res.numFailures ? DexiePromise.reject(res.failures[0]) : undefined; });
+    };
+    Table.prototype.bulkGet = function (keys$$1) {
+        var _this = this;
+        return this._trans('readonly', function (trans) {
+            return _this.core.getMany({
+                keys: keys$$1,
+                trans: trans
+            });
+        });
+    };
+    Table.prototype.bulkAdd = function (objects, keysOrOptions, options) {
+        var _this = this;
+        var keys$$1 = Array.isArray(keysOrOptions) ? keysOrOptions : undefined;
+        options = options || (keys$$1 ? undefined : keysOrOptions);
+        var wantResults = options ? options.allKeys : undefined;
+        return this._trans('readwrite', function (trans) {
+            var outbound = _this.core.schema.primaryKey.outbound;
+            if (!outbound && keys$$1)
+                throw new exceptions.InvalidArgument("bulkAdd(): keys argument invalid on tables with inbound keys");
+            if (keys$$1 && keys$$1.length !== objects.length)
+                throw new exceptions.InvalidArgument("Arguments objects and keys must have the same length");
+            var numObjects = objects.length;
+            return _this.core.mutate({ trans: trans, type: 'add', keys: keys$$1, values: objects, wantResults: wantResults })
+                .then(function (_a) {
+                var numFailures = _a.numFailures, results = _a.results, lastResult = _a.lastResult, failures = _a.failures;
+                var result = wantResults ? results : lastResult;
+                if (numFailures === 0)
+                    return result;
+                throw new BulkError(_this.name + ".bulkAdd(): " + numFailures + " of " + numObjects + " operations failed", Object.keys(failures).map(function (pos) { return failures[pos]; }));
+            });
+        });
+    };
+    Table.prototype.bulkPut = function (objects, keysOrOptions, options) {
+        var _this = this;
+        var keys$$1 = Array.isArray(keysOrOptions) ? keysOrOptions : undefined;
+        options = options || (keys$$1 ? undefined : keysOrOptions);
+        var wantResults = options ? options.allKeys : undefined;
+        return this._trans('readwrite', function (trans) {
+            var outbound = _this.core.schema.primaryKey.outbound;
+            if (!outbound && keys$$1)
+                throw new exceptions.InvalidArgument("bulkPut(): keys argument invalid on tables with inbound keys");
+            if (keys$$1 && keys$$1.length !== objects.length)
+                throw new exceptions.InvalidArgument("Arguments objects and keys must have the same length");
+            var numObjects = objects.length;
+            return _this.core.mutate({ trans: trans, type: 'put', keys: keys$$1, values: objects, wantResults: wantResults })
+                .then(function (_a) {
+                var numFailures = _a.numFailures, results = _a.results, lastResult = _a.lastResult, failures = _a.failures;
+                var result = wantResults ? results : lastResult;
+                if (numFailures === 0)
+                    return result;
+                throw new BulkError(_this.name + ".bulkPut(): " + numFailures + " of " + numObjects + " operations failed", Object.keys(failures).map(function (pos) { return failures[pos]; }));
+            });
+        });
+    };
+    Table.prototype.bulkDelete = function (keys$$1) {
+        var _this = this;
+        var numKeys = keys$$1.length;
+        return this._trans('readwrite', function (trans) {
+            return _this.core.mutate({ trans: trans, type: 'delete', keys: keys$$1 });
+        }).then(function (_a) {
+            var numFailures = _a.numFailures, lastResult = _a.lastResult, failures = _a.failures;
+            if (numFailures === 0)
+                return lastResult;
+            throw new BulkError(_this.name + ".bulkDelete(): " + numFailures + " of " + numKeys + " operations failed", failures);
+        });
+    };
+    return Table;
+}());
+
+function Events(ctx) {
+    var evs = {};
+    var rv = function (eventName, subscriber) {
+        if (subscriber) {
+            var i = arguments.length, args = new Array(i - 1);
+            while (--i)
+                args[i - 1] = arguments[i];
+            evs[eventName].subscribe.apply(null, args);
+            return ctx;
+        }
+        else if (typeof (eventName) === 'string') {
+            return evs[eventName];
+        }
+    };
+    rv.addEventType = add;
+    for (var i = 1, l = arguments.length; i < l; ++i) {
+        add(arguments[i]);
+    }
+    return rv;
+    function add(eventName, chainFunction, defaultFunction) {
+        if (typeof eventName === 'object')
+            return addConfiguredEvents(eventName);
+        if (!chainFunction)
+            chainFunction = reverseStoppableEventChain;
+        if (!defaultFunction)
+            defaultFunction = nop;
+        var context = {
+            subscribers: [],
+            fire: defaultFunction,
+            subscribe: function (cb) {
+                if (context.subscribers.indexOf(cb) === -1) {
+                    context.subscribers.push(cb);
+                    context.fire = chainFunction(context.fire, cb);
+                }
+            },
+            unsubscribe: function (cb) {
+                context.subscribers = context.subscribers.filter(function (fn) { return fn !== cb; });
+                context.fire = context.subscribers.reduce(chainFunction, defaultFunction);
+            }
+        };
+        evs[eventName] = rv[eventName] = context;
+        return context;
+    }
+    function addConfiguredEvents(cfg) {
+        keys(cfg).forEach(function (eventName) {
+            var args = cfg[eventName];
+            if (isArray(args)) {
+                add(eventName, cfg[eventName][0], cfg[eventName][1]);
+            }
+            else if (args === 'asap') {
+                var context = add(eventName, mirror, function fire() {
+                    var i = arguments.length, args = new Array(i);
+                    while (i--)
+                        args[i] = arguments[i];
+                    context.subscribers.forEach(function (fn) {
+                        asap(function fireEvent() {
+                            fn.apply(null, args);
+                        });
+                    });
+                });
+            }
+            else
+                throw new exceptions.InvalidArgument("Invalid event config");
+        });
+    }
+}
+
+function makeClassConstructor(prototype, constructor) {
+    derive(constructor).from({ prototype: prototype });
+    return constructor;
+}
+
+function createTableConstructor(db) {
+    return makeClassConstructor(Table.prototype, function Table$$1(name, tableSchema, trans) {
+        this.db = db;
+        this._tx = trans;
+        this.name = name;
+        this.schema = tableSchema;
+        this.hook = db._allTables[name] ? db._allTables[name].hook : Events(null, {
+            "creating": [hookCreatingChain, nop],
+            "reading": [pureFunctionChain, mirror],
+            "updating": [hookUpdatingChain, nop],
+            "deleting": [hookDeletingChain, nop]
+        });
+    });
+}
+
+function isPlainKeyRange(ctx, ignoreLimitFilter) {
+    return !(ctx.filter || ctx.algorithm || ctx.or) &&
+        (ignoreLimitFilter ? ctx.justLimit : !ctx.replayFilter);
+}
+function addFilter(ctx, fn) {
+    ctx.filter = combine(ctx.filter, fn);
+}
+function addReplayFilter(ctx, factory, isLimitFilter) {
+    var curr = ctx.replayFilter;
+    ctx.replayFilter = curr ? function () { return combine(curr(), factory()); } : factory;
+    ctx.justLimit = isLimitFilter && !curr;
+}
+function addMatchFilter(ctx, fn) {
+    ctx.isMatch = combine(ctx.isMatch, fn);
+}
+function getIndexOrStore(ctx, coreSchema) {
+    if (ctx.isPrimKey)
+        return coreSchema.primaryKey;
+    var index = coreSchema.getIndexByKeyPath(ctx.index);
+    if (!index)
+        throw new exceptions.Schema("KeyPath " + ctx.index + " on object store " + coreSchema.name + " is not indexed");
+    return index;
+}
+function openCursor(ctx, coreTable, trans) {
+    var index = getIndexOrStore(ctx, coreTable.schema);
+    return coreTable.openCursor({
+        trans: trans,
+        values: !ctx.keysOnly,
+        reverse: ctx.dir === 'prev',
+        unique: !!ctx.unique,
+        query: {
+            index: index,
+            range: ctx.range
+        }
+    });
+}
+function iter(ctx, fn, coreTrans, coreTable) {
+    var filter = ctx.replayFilter ? combine(ctx.filter, ctx.replayFilter()) : ctx.filter;
+    if (!ctx.or) {
+        return iterate(openCursor(ctx, coreTable, coreTrans), combine(ctx.algorithm, filter), fn, !ctx.keysOnly && ctx.valueMapper);
+    }
+    else {
+        var set_1 = {};
+        var union = function (item, cursor, advance) {
+            if (!filter || filter(cursor, advance, function (result) { return cursor.stop(result); }, function (err) { return cursor.fail(err); })) {
+                var primaryKey = cursor.primaryKey;
+                var key = '' + primaryKey;
+                if (key === '[object ArrayBuffer]')
+                    key = '' + new Uint8Array(primaryKey);
+                if (!hasOwn(set_1, key)) {
+                    set_1[key] = true;
+                    fn(item, cursor, advance);
+                }
+            }
+        };
+        return Promise.all([
+            ctx.or._iterate(union, coreTrans),
+            iterate(openCursor(ctx, coreTable, coreTrans), ctx.algorithm, union, !ctx.keysOnly && ctx.valueMapper)
+        ]);
+    }
+}
+function iterate(cursorPromise, filter, fn, valueMapper) {
+    var mappedFn = valueMapper ? function (x, c, a) { return fn(valueMapper(x), c, a); } : fn;
+    var wrappedFn = wrap(mappedFn);
+    return cursorPromise.then(function (cursor) {
+        if (cursor) {
+            return cursor.start(function () {
+                var c = function () { return cursor.continue(); };
+                if (!filter || filter(cursor, function (advancer) { return c = advancer; }, function (val) { cursor.stop(val); c = nop; }, function (e) { cursor.fail(e); c = nop; }))
+                    wrappedFn(cursor.value, cursor, function (advancer) { return c = advancer; });
+                c();
+            });
+        }
+    });
+}
+
+var Collection =               (function () {
+    function Collection() {
+    }
+    Collection.prototype._read = function (fn, cb) {
+        var ctx = this._ctx;
+        return ctx.error ?
+            ctx.table._trans(null, rejection.bind(null, ctx.error)) :
+            ctx.table._trans('readonly', fn).then(cb);
+    };
+    Collection.prototype._write = function (fn) {
+        var ctx = this._ctx;
+        return ctx.error ?
+            ctx.table._trans(null, rejection.bind(null, ctx.error)) :
+            ctx.table._trans('readwrite', fn, "locked");
+    };
+    Collection.prototype._addAlgorithm = function (fn) {
+        var ctx = this._ctx;
+        ctx.algorithm = combine(ctx.algorithm, fn);
+    };
+    Collection.prototype._iterate = function (fn, coreTrans) {
+        return iter(this._ctx, fn, coreTrans, this._ctx.table.core);
+    };
+    Collection.prototype.clone = function (props$$1) {
+        var rv = Object.create(this.constructor.prototype), ctx = Object.create(this._ctx);
+        if (props$$1)
+            extend(ctx, props$$1);
+        rv._ctx = ctx;
+        return rv;
+    };
+    Collection.prototype.raw = function () {
+        this._ctx.valueMapper = null;
+        return this;
+    };
+    Collection.prototype.each = function (fn) {
+        var ctx = this._ctx;
+        return this._read(function (trans) { return iter(ctx, fn, trans, ctx.table.core); });
+    };
+    Collection.prototype.count = function (cb) {
+        var _this = this;
+        return this._read(function (trans) {
+            var ctx = _this._ctx;
+            var coreTable = ctx.table.core;
+            if (isPlainKeyRange(ctx, true)) {
+                return coreTable.count({
+                    trans: trans,
+                    query: {
+                        index: getIndexOrStore(ctx, coreTable.schema),
+                        range: ctx.range
+                    }
+                }).then(function (count) { return Math.min(count, ctx.limit); });
+            }
+            else {
+                var count = 0;
+                return iter(ctx, function () { ++count; return false; }, trans, coreTable)
+                    .then(function () { return count; });
+            }
+        }).then(cb);
+    };
+    Collection.prototype.sortBy = function (keyPath, cb) {
+        var parts = keyPath.split('.').reverse(), lastPart = parts[0], lastIndex = parts.length - 1;
+        function getval(obj, i) {
+            if (i)
+                return getval(obj[parts[i]], i - 1);
+            return obj[lastPart];
+        }
+        var order = this._ctx.dir === "next" ? 1 : -1;
+        function sorter(a, b) {
+            var aVal = getval(a, lastIndex), bVal = getval(b, lastIndex);
+            return aVal < bVal ? -order : aVal > bVal ? order : 0;
+        }
+        return this.toArray(function (a) {
+            return a.sort(sorter);
+        }).then(cb);
+    };
+    Collection.prototype.toArray = function (cb) {
+        var _this = this;
+        return this._read(function (trans) {
+            var ctx = _this._ctx;
+            if (ctx.dir === 'next' && isPlainKeyRange(ctx, true) && ctx.limit > 0) {
+                var valueMapper_1 = ctx.valueMapper;
+                var index = getIndexOrStore(ctx, ctx.table.core.schema);
+                return ctx.table.core.query({
+                    trans: trans,
+                    limit: ctx.limit,
+                    values: true,
+                    query: {
+                        index: index,
+                        range: ctx.range
+                    }
+                }).then(function (_a) {
+                    var result = _a.result;
+                    return valueMapper_1 ? result.map(valueMapper_1) : result;
+                });
+            }
+            else {
+                var a_1 = [];
+                return iter(ctx, function (item) { return a_1.push(item); }, trans, ctx.table.core).then(function () { return a_1; });
+            }
+        }, cb);
+    };
+    Collection.prototype.offset = function (offset) {
+        var ctx = this._ctx;
+        if (offset <= 0)
+            return this;
+        ctx.offset += offset;
+        if (isPlainKeyRange(ctx)) {
+            addReplayFilter(ctx, function () {
+                var offsetLeft = offset;
+                return function (cursor, advance) {
+                    if (offsetLeft === 0)
+                        return true;
+                    if (offsetLeft === 1) {
+                        --offsetLeft;
+                        return false;
+                    }
+                    advance(function () {
+                        cursor.advance(offsetLeft);
+                        offsetLeft = 0;
+                    });
+                    return false;
+                };
+            });
+        }
+        else {
+            addReplayFilter(ctx, function () {
+                var offsetLeft = offset;
+                return function () { return (--offsetLeft < 0); };
+            });
+        }
+        return this;
+    };
+    Collection.prototype.limit = function (numRows) {
+        this._ctx.limit = Math.min(this._ctx.limit, numRows);
+        addReplayFilter(this._ctx, function () {
+            var rowsLeft = numRows;
+            return function (cursor, advance, resolve) {
+                if (--rowsLeft <= 0)
+                    advance(resolve);
+                return rowsLeft >= 0;
+            };
+        }, true);
+        return this;
+    };
+    Collection.prototype.until = function (filterFunction, bIncludeStopEntry) {
+        addFilter(this._ctx, function (cursor, advance, resolve) {
+            if (filterFunction(cursor.value)) {
+                advance(resolve);
+                return bIncludeStopEntry;
+            }
+            else {
+                return true;
+            }
+        });
+        return this;
+    };
+    Collection.prototype.first = function (cb) {
+        return this.limit(1).toArray(function (a) { return a[0]; }).then(cb);
+    };
+    Collection.prototype.last = function (cb) {
+        return this.reverse().first(cb);
+    };
+    Collection.prototype.filter = function (filterFunction) {
+        addFilter(this._ctx, function (cursor) {
+            return filterFunction(cursor.value);
+        });
+        addMatchFilter(this._ctx, filterFunction);
+        return this;
+    };
+    Collection.prototype.and = function (filter) {
+        return this.filter(filter);
+    };
+    Collection.prototype.or = function (indexName) {
+        return new this.db.WhereClause(this._ctx.table, indexName, this);
+    };
+    Collection.prototype.reverse = function () {
+        this._ctx.dir = (this._ctx.dir === "prev" ? "next" : "prev");
+        if (this._ondirectionchange)
+            this._ondirectionchange(this._ctx.dir);
+        return this;
+    };
+    Collection.prototype.desc = function () {
+        return this.reverse();
+    };
+    Collection.prototype.eachKey = function (cb) {
+        var ctx = this._ctx;
+        ctx.keysOnly = !ctx.isMatch;
+        return this.each(function (val, cursor) { cb(cursor.key, cursor); });
+    };
+    Collection.prototype.eachUniqueKey = function (cb) {
+        this._ctx.unique = "unique";
+        return this.eachKey(cb);
+    };
+    Collection.prototype.eachPrimaryKey = function (cb) {
+        var ctx = this._ctx;
+        ctx.keysOnly = !ctx.isMatch;
+        return this.each(function (val, cursor) { cb(cursor.primaryKey, cursor); });
+    };
+    Collection.prototype.keys = function (cb) {
+        var ctx = this._ctx;
+        ctx.keysOnly = !ctx.isMatch;
+        var a = [];
+        return this.each(function (item, cursor) {
+            a.push(cursor.key);
+        }).then(function () {
+            return a;
+        }).then(cb);
+    };
+    Collection.prototype.primaryKeys = function (cb) {
+        var ctx = this._ctx;
+        if (ctx.dir === 'next' && isPlainKeyRange(ctx, true) && ctx.limit > 0) {
+            return this._read(function (trans) {
+                var index = getIndexOrStore(ctx, ctx.table.core.schema);
+                return ctx.table.core.query({
+                    trans: trans,
+                    values: false,
+                    limit: ctx.limit,
+                    query: {
+                        index: index,
+                        range: ctx.range
+                    }
+                });
+            }).then(function (_a) {
+                var result = _a.result;
+                return result;
+            }).then(cb);
+        }
+        ctx.keysOnly = !ctx.isMatch;
+        var a = [];
+        return this.each(function (item, cursor) {
+            a.push(cursor.primaryKey);
+        }).then(function () {
+            return a;
+        }).then(cb);
+    };
+    Collection.prototype.uniqueKeys = function (cb) {
+        this._ctx.unique = "unique";
+        return this.keys(cb);
+    };
+    Collection.prototype.firstKey = function (cb) {
+        return this.limit(1).keys(function (a) { return a[0]; }).then(cb);
+    };
+    Collection.prototype.lastKey = function (cb) {
+        return this.reverse().firstKey(cb);
+    };
+    Collection.prototype.distinct = function () {
+        var ctx = this._ctx, idx = ctx.index && ctx.table.schema.idxByName[ctx.index];
+        if (!idx || !idx.multi)
+            return this;
+        var set = {};
+        addFilter(this._ctx, function (cursor) {
+            var strKey = cursor.primaryKey.toString();
+            var found = hasOwn(set, strKey);
+            set[strKey] = true;
+            return !found;
+        });
+        return this;
+    };
+    Collection.prototype.modify = function (changes) {
+        var _this = this;
+        var ctx = this._ctx;
+        return this._write(function (trans) {
+            var modifyer;
+            if (typeof changes === 'function') {
+                modifyer = changes;
+            }
+            else {
+                var keyPaths = keys(changes);
+                var numKeys = keyPaths.length;
+                modifyer = function (item) {
+                    var anythingModified = false;
+                    for (var i = 0; i < numKeys; ++i) {
+                        var keyPath = keyPaths[i], val = changes[keyPath];
+                        if (getByKeyPath(item, keyPath) !== val) {
+                            setByKeyPath(item, keyPath, val);
+                            anythingModified = true;
+                        }
+                    }
+                    return anythingModified;
+                };
+            }
+            var coreTable = ctx.table.core;
+            var _a = coreTable.schema.primaryKey, outbound = _a.outbound, extractKey = _a.extractKey;
+            var limit = 'testmode' in Dexie ? 1 : 2000;
+            var cmp = _this.db.core.cmp;
+            var totalFailures = [];
+            var successCount = 0;
+            var failedKeys = [];
+            var applyMutateResult = function (expectedCount, res) {
+                var failures = res.failures, numFailures = res.numFailures;
+                successCount += expectedCount - numFailures;
+                for (var _i = 0, _a = keys(failures); _i < _a.length; _i++) {
+                    var pos = _a[_i];
+                    totalFailures.push(failures[pos]);
+                }
+            };
+            return _this.clone().primaryKeys().then(function (keys$$1) {
+                var nextChunk = function (offset) {
+                    var count = Math.min(limit, keys$$1.length - offset);
+                    return coreTable.getMany({ trans: trans, keys: keys$$1.slice(offset, offset + count) }).then(function (values) {
+                        var addValues = [];
+                        var putValues = [];
+                        var putKeys = outbound ? [] : null;
+                        var deleteKeys = [];
+                        for (var i = 0; i < count; ++i) {
+                            var origValue = values[i];
+                            var ctx_1 = {
+                                value: deepClone(origValue),
+                                primKey: keys$$1[offset + i]
+                            };
+                            if (modifyer.call(ctx_1, ctx_1.value, ctx_1) !== false) {
+                                if (ctx_1.value == null) {
+                                    deleteKeys.push(keys$$1[offset + i]);
+                                }
+                                else if (!outbound && cmp(extractKey(origValue), extractKey(ctx_1.value)) !== 0) {
+                                    deleteKeys.push(keys$$1[offset + i]);
+                                    addValues.push(ctx_1.value);
+                                }
+                                else {
+                                    putValues.push(ctx_1.value);
+                                    if (outbound)
+                                        putKeys.push(keys$$1[offset + i]);
+                                }
+                            }
+                        }
+                        return Promise.resolve(addValues.length > 0 &&
+                            coreTable.mutate({ trans: trans, type: 'add', values: addValues })
+                                .then(function (res) {
+                                for (var pos in res.failures) {
+                                    deleteKeys.splice(parseInt(pos), 1);
+                                }
+                                applyMutateResult(addValues.length, res);
+                            })).then(function (res) { return putValues.length > 0 &&
+                            coreTable.mutate({ trans: trans, type: 'put', keys: putKeys, values: putValues })
+                                .then(function (res) { return applyMutateResult(putValues.length, res); }); }).then(function () { return deleteKeys.length > 0 &&
+                            coreTable.mutate({ trans: trans, type: 'delete', keys: deleteKeys })
+                                .then(function (res) { return applyMutateResult(deleteKeys.length, res); }); }).then(function () {
+                            return keys$$1.length > offset + count && nextChunk(offset + limit);
+                        });
+                    });
+                };
+                return nextChunk(0).then(function () {
+                    if (totalFailures.length > 0)
+                        throw new ModifyError("Error modifying one or more objects", totalFailures, successCount, failedKeys);
+                    return keys$$1.length;
+                });
+            });
+        });
+    };
+    Collection.prototype.delete = function () {
+        var ctx = this._ctx, range = ctx.range;
+        if (isPlainKeyRange(ctx) &&
+            ((ctx.isPrimKey && !hangsOnDeleteLargeKeyRange) || range.type === 3          ))
+         {
+            return this._write(function (trans) {
+                var primaryKey = ctx.table.core.schema.primaryKey;
+                var coreRange = range;
+                return ctx.table.core.count({ trans: trans, query: { index: primaryKey, range: coreRange } }).then(function (count) {
+                    return ctx.table.core.mutate({ trans: trans, type: 'deleteRange', range: coreRange })
+                        .then(function (_a) {
+                        var failures = _a.failures, lastResult = _a.lastResult, results = _a.results, numFailures = _a.numFailures;
+                        if (numFailures)
+                            throw new ModifyError("Could not delete some values", Object.keys(failures).map(function (pos) { return failures[pos]; }), count - numFailures);
+                        return count - numFailures;
+                    });
+                });
+            });
+        }
+        return this.modify(function (value, ctx) { return ctx.value = null; });
+    };
+    return Collection;
+}());
+
+function createCollectionConstructor(db) {
+    return makeClassConstructor(Collection.prototype, function Collection$$1(whereClause, keyRangeGenerator) {
+        this.db = db;
+        var keyRange = AnyRange, error = null;
+        if (keyRangeGenerator)
+            try {
+                keyRange = keyRangeGenerator();
+            }
+            catch (ex) {
+                error = ex;
+            }
+        var whereCtx = whereClause._ctx;
+        var table = whereCtx.table;
+        var readingHook = table.hook.reading.fire;
+        this._ctx = {
+            table: table,
+            index: whereCtx.index,
+            isPrimKey: (!whereCtx.index || (table.schema.primKey.keyPath && whereCtx.index === table.schema.primKey.name)),
+            range: keyRange,
+            keysOnly: false,
+            dir: "next",
+            unique: "",
+            algorithm: null,
+            filter: null,
+            replayFilter: null,
+            justLimit: true,
+            isMatch: null,
+            offset: 0,
+            limit: Infinity,
+            error: error,
+            or: whereCtx.or,
+            valueMapper: readingHook !== mirror ? readingHook : null
+        };
+    });
+}
+
+function simpleCompare(a, b) {
+    return a < b ? -1 : a === b ? 0 : 1;
+}
+function simpleCompareReverse(a, b) {
+    return a > b ? -1 : a === b ? 0 : 1;
+}
+
+function fail(collectionOrWhereClause, err, T) {
+    var collection = collectionOrWhereClause instanceof WhereClause ?
+        new collectionOrWhereClause.Collection(collectionOrWhereClause) :
+        collectionOrWhereClause;
+    collection._ctx.error = T ? new T(err) : new TypeError(err);
+    return collection;
+}
+function emptyCollection(whereClause) {
+    return new whereClause.Collection(whereClause, function () { return rangeEqual(""); }).limit(0);
+}
+function upperFactory(dir) {
+    return dir === "next" ?
+        function (s) { return s.toUpperCase(); } :
+        function (s) { return s.toLowerCase(); };
+}
+function lowerFactory(dir) {
+    return dir === "next" ?
+        function (s) { return s.toLowerCase(); } :
+        function (s) { return s.toUpperCase(); };
+}
+function nextCasing(key, lowerKey, upperNeedle, lowerNeedle, cmp, dir) {
+    var length = Math.min(key.length, lowerNeedle.length);
+    var llp = -1;
+    for (var i = 0; i < length; ++i) {
+        var lwrKeyChar = lowerKey[i];
+        if (lwrKeyChar !== lowerNeedle[i]) {
+            if (cmp(key[i], upperNeedle[i]) < 0)
+                return key.substr(0, i) + upperNeedle[i] + upperNeedle.substr(i + 1);
+            if (cmp(key[i], lowerNeedle[i]) < 0)
+                return key.substr(0, i) + lowerNeedle[i] + upperNeedle.substr(i + 1);
+            if (llp >= 0)
+                return key.substr(0, llp) + lowerKey[llp] + upperNeedle.substr(llp + 1);
+            return null;
+        }
+        if (cmp(key[i], lwrKeyChar) < 0)
+            llp = i;
+    }
+    if (length < lowerNeedle.length && dir === "next")
+        return key + upperNeedle.substr(key.length);
+    if (length < key.length && dir === "prev")
+        return key.substr(0, upperNeedle.length);
+    return (llp < 0 ? null : key.substr(0, llp) + lowerNeedle[llp] + upperNeedle.substr(llp + 1));
+}
+function addIgnoreCaseAlgorithm(whereClause, match, needles, suffix) {
+    var upper, lower, compare, upperNeedles, lowerNeedles, direction, nextKeySuffix, needlesLen = needles.length;
+    if (!needles.every(function (s) { return typeof s === 'string'; })) {
+        return fail(whereClause, STRING_EXPECTED);
+    }
+    function initDirection(dir) {
+        upper = upperFactory(dir);
+        lower = lowerFactory(dir);
+        compare = (dir === "next" ? simpleCompare : simpleCompareReverse);
+        var needleBounds = needles.map(function (needle) {
+            return { lower: lower(needle), upper: upper(needle) };
+        }).sort(function (a, b) {
+            return compare(a.lower, b.lower);
+        });
+        upperNeedles = needleBounds.map(function (nb) { return nb.upper; });
+        lowerNeedles = needleBounds.map(function (nb) { return nb.lower; });
+        direction = dir;
+        nextKeySuffix = (dir === "next" ? "" : suffix);
+    }
+    initDirection("next");
+    var c = new whereClause.Collection(whereClause, function () { return createRange(upperNeedles[0], lowerNeedles[needlesLen - 1] + suffix); });
+    c._ondirectionchange = function (direction) {
+        initDirection(direction);
+    };
+    var firstPossibleNeedle = 0;
+    c._addAlgorithm(function (cursor, advance, resolve) {
+        var key = cursor.key;
+        if (typeof key !== 'string')
+            return false;
+        var lowerKey = lower(key);
+        if (match(lowerKey, lowerNeedles, firstPossibleNeedle)) {
+            return true;
+        }
+        else {
+            var lowestPossibleCasing = null;
+            for (var i = firstPossibleNeedle; i < needlesLen; ++i) {
+                var casing = nextCasing(key, lowerKey, upperNeedles[i], lowerNeedles[i], compare, direction);
+                if (casing === null && lowestPossibleCasing === null)
+                    firstPossibleNeedle = i + 1;
+                else if (lowestPossibleCasing === null || compare(lowestPossibleCasing, casing) > 0) {
+                    lowestPossibleCasing = casing;
+                }
+            }
+            if (lowestPossibleCasing !== null) {
+                advance(function () { cursor.continue(lowestPossibleCasing + nextKeySuffix); });
+            }
+            else {
+                advance(resolve);
+            }
+            return false;
+        }
+    });
+    return c;
+}
+function createRange(lower, upper, lowerOpen, upperOpen) {
+    return {
+        type: 2            ,
+        lower: lower,
+        upper: upper,
+        lowerOpen: lowerOpen,
+        upperOpen: upperOpen
+    };
+}
+function rangeEqual(value) {
+    return {
+        type: 1            ,
+        lower: value,
+        upper: value
+    };
+}
+
+var WhereClause =               (function () {
+    function WhereClause() {
+    }
+    Object.defineProperty(WhereClause.prototype, "Collection", {
+        get: function () {
+            return this._ctx.table.db.Collection;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    WhereClause.prototype.between = function (lower, upper, includeLower, includeUpper) {
+        includeLower = includeLower !== false;
+        includeUpper = includeUpper === true;
+        try {
+            if ((this._cmp(lower, upper) > 0) ||
+                (this._cmp(lower, upper) === 0 && (includeLower || includeUpper) && !(includeLower && includeUpper)))
+                return emptyCollection(this);
+            return new this.Collection(this, function () { return createRange(lower, upper, !includeLower, !includeUpper); });
+        }
+        catch (e) {
+            return fail(this, INVALID_KEY_ARGUMENT);
+        }
+    };
+    WhereClause.prototype.equals = function (value) {
+        return new this.Collection(this, function () { return rangeEqual(value); });
+    };
+    WhereClause.prototype.above = function (value) {
+        if (value == null)
+            return fail(this, INVALID_KEY_ARGUMENT);
+        return new this.Collection(this, function () { return createRange(value, undefined, true); });
+    };
+    WhereClause.prototype.aboveOrEqual = function (value) {
+        if (value == null)
+            return fail(this, INVALID_KEY_ARGUMENT);
+        return new this.Collection(this, function () { return createRange(value, undefined, false); });
+    };
+    WhereClause.prototype.below = function (value) {
+        if (value == null)
+            return fail(this, INVALID_KEY_ARGUMENT);
+        return new this.Collection(this, function () { return createRange(undefined, value, false, true); });
+    };
+    WhereClause.prototype.belowOrEqual = function (value) {
+        if (value == null)
+            return fail(this, INVALID_KEY_ARGUMENT);
+        return new this.Collection(this, function () { return createRange(undefined, value); });
+    };
+    WhereClause.prototype.startsWith = function (str) {
+        if (typeof str !== 'string')
+            return fail(this, STRING_EXPECTED);
+        return this.between(str, str + maxString, true, true);
+    };
+    WhereClause.prototype.startsWithIgnoreCase = function (str) {
+        if (str === "")
+            return this.startsWith(str);
+        return addIgnoreCaseAlgorithm(this, function (x, a) { return x.indexOf(a[0]) === 0; }, [str], maxString);
+    };
+    WhereClause.prototype.equalsIgnoreCase = function (str) {
+        return addIgnoreCaseAlgorithm(this, function (x, a) { return x === a[0]; }, [str], "");
+    };
+    WhereClause.prototype.anyOfIgnoreCase = function () {
+        var set = getArrayOf.apply(NO_CHAR_ARRAY, arguments);
+        if (set.length === 0)
+            return emptyCollection(this);
+        return addIgnoreCaseAlgorithm(this, function (x, a) { return a.indexOf(x) !== -1; }, set, "");
+    };
+    WhereClause.prototype.startsWithAnyOfIgnoreCase = function () {
+        var set = getArrayOf.apply(NO_CHAR_ARRAY, arguments);
+        if (set.length === 0)
+            return emptyCollection(this);
+        return addIgnoreCaseAlgorithm(this, function (x, a) { return a.some(function (n) { return x.indexOf(n) === 0; }); }, set, maxString);
+    };
+    WhereClause.prototype.anyOf = function () {
+        var _this = this;
+        var set = getArrayOf.apply(NO_CHAR_ARRAY, arguments);
+        var compare = this._cmp;
+        try {
+            set.sort(compare);
+        }
+        catch (e) {
+            return fail(this, INVALID_KEY_ARGUMENT);
+        }
+        if (set.length === 0)
+            return emptyCollection(this);
+        var c = new this.Collection(this, function () { return createRange(set[0], set[set.length - 1]); });
+        c._ondirectionchange = function (direction) {
+            compare = (direction === "next" ?
+                _this._ascending :
+                _this._descending);
+            set.sort(compare);
+        };
+        var i = 0;
+        c._addAlgorithm(function (cursor, advance, resolve) {
+            var key = cursor.key;
+            while (compare(key, set[i]) > 0) {
+                ++i;
+                if (i === set.length) {
+                    advance(resolve);
+                    return false;
+                }
+            }
+            if (compare(key, set[i]) === 0) {
+                return true;
+            }
+            else {
+                advance(function () { cursor.continue(set[i]); });
+                return false;
+            }
+        });
+        return c;
+    };
+    WhereClause.prototype.notEqual = function (value) {
+        return this.inAnyRange([[minKey, value], [value, this.db._maxKey]], { includeLowers: false, includeUppers: false });
+    };
+    WhereClause.prototype.noneOf = function () {
+        var set = getArrayOf.apply(NO_CHAR_ARRAY, arguments);
+        if (set.length === 0)
+            return new this.Collection(this);
+        try {
+            set.sort(this._ascending);
+        }
+        catch (e) {
+            return fail(this, INVALID_KEY_ARGUMENT);
+        }
+        var ranges = set.reduce(function (res, val) { return res ?
+            res.concat([[res[res.length - 1][1], val]]) :
+            [[minKey, val]]; }, null);
+        ranges.push([set[set.length - 1], this.db._maxKey]);
+        return this.inAnyRange(ranges, { includeLowers: false, includeUppers: false });
+    };
+    WhereClause.prototype.inAnyRange = function (ranges, options) {
+        var _this = this;
+        var cmp = this._cmp, ascending = this._ascending, descending = this._descending, min = this._min, max = this._max;
+        if (ranges.length === 0)
+            return emptyCollection(this);
+        if (!ranges.every(function (range) {
+            return range[0] !== undefined &&
+                range[1] !== undefined &&
+                ascending(range[0], range[1]) <= 0;
+        })) {
+            return fail(this, "First argument to inAnyRange() must be an Array of two-value Arrays [lower,upper] where upper must not be lower than lower", exceptions.InvalidArgument);
+        }
+        var includeLowers = !options || options.includeLowers !== false;
+        var includeUppers = options && options.includeUppers === true;
+        function addRange(ranges, newRange) {
+            var i = 0, l = ranges.length;
+            for (; i < l; ++i) {
+                var range = ranges[i];
+                if (cmp(newRange[0], range[1]) < 0 && cmp(newRange[1], range[0]) > 0) {
+                    range[0] = min(range[0], newRange[0]);
+                    range[1] = max(range[1], newRange[1]);
+                    break;
+                }
+            }
+            if (i === l)
+                ranges.push(newRange);
+            return ranges;
+        }
+        var sortDirection = ascending;
+        function rangeSorter(a, b) { return sortDirection(a[0], b[0]); }
+        var set;
+        try {
+            set = ranges.reduce(addRange, []);
+            set.sort(rangeSorter);
+        }
+        catch (ex) {
+            return fail(this, INVALID_KEY_ARGUMENT);
+        }
+        var rangePos = 0;
+        var keyIsBeyondCurrentEntry = includeUppers ?
+            function (key) { return ascending(key, set[rangePos][1]) > 0; } :
+            function (key) { return ascending(key, set[rangePos][1]) >= 0; };
+        var keyIsBeforeCurrentEntry = includeLowers ?
+            function (key) { return descending(key, set[rangePos][0]) > 0; } :
+            function (key) { return descending(key, set[rangePos][0]) >= 0; };
+        function keyWithinCurrentRange(key) {
+            return !keyIsBeyondCurrentEntry(key) && !keyIsBeforeCurrentEntry(key);
+        }
+        var checkKey = keyIsBeyondCurrentEntry;
+        var c = new this.Collection(this, function () { return createRange(set[0][0], set[set.length - 1][1], !includeLowers, !includeUppers); });
+        c._ondirectionchange = function (direction) {
+            if (direction === "next") {
+                checkKey = keyIsBeyondCurrentEntry;
+                sortDirection = ascending;
+            }
+            else {
+                checkKey = keyIsBeforeCurrentEntry;
+                sortDirection = descending;
+            }
+            set.sort(rangeSorter);
+        };
+        c._addAlgorithm(function (cursor, advance, resolve) {
+            var key = cursor.key;
+            while (checkKey(key)) {
+                ++rangePos;
+                if (rangePos === set.length) {
+                    advance(resolve);
+                    return false;
+                }
+            }
+            if (keyWithinCurrentRange(key)) {
+                return true;
+            }
+            else if (_this._cmp(key, set[rangePos][1]) === 0 || _this._cmp(key, set[rangePos][0]) === 0) {
+                return false;
+            }
+            else {
+                advance(function () {
+                    if (sortDirection === ascending)
+                        cursor.continue(set[rangePos][0]);
+                    else
+                        cursor.continue(set[rangePos][1]);
+                });
+                return false;
+            }
+        });
+        return c;
+    };
+    WhereClause.prototype.startsWithAnyOf = function () {
+        var set = getArrayOf.apply(NO_CHAR_ARRAY, arguments);
+        if (!set.every(function (s) { return typeof s === 'string'; })) {
+            return fail(this, "startsWithAnyOf() only works with strings");
+        }
+        if (set.length === 0)
+            return emptyCollection(this);
+        return this.inAnyRange(set.map(function (str) { return [str, str + maxString]; }));
+    };
+    return WhereClause;
+}());
+
+function createWhereClauseConstructor(db) {
+    return makeClassConstructor(WhereClause.prototype, function WhereClause$$1(table, index, orCollection) {
+        this.db = db;
+        this._ctx = {
+            table: table,
+            index: index === ":id" ? null : index,
+            or: orCollection
+        };
+        var indexedDB = db._deps.indexedDB;
+        if (!indexedDB)
+            throw new exceptions.MissingAPI("indexedDB API missing");
+        this._cmp = this._ascending = indexedDB.cmp.bind(indexedDB);
+        this._descending = function (a, b) { return indexedDB.cmp(b, a); };
+        this._max = function (a, b) { return indexedDB.cmp(a, b) > 0 ? a : b; };
+        this._min = function (a, b) { return indexedDB.cmp(a, b) < 0 ? a : b; };
+        this._IDBKeyRange = db._deps.IDBKeyRange;
+    });
+}
+
+function safariMultiStoreFix(storeNames) {
+    return storeNames.length === 1 ? storeNames[0] : storeNames;
+}
+
+function getMaxKey(IdbKeyRange) {
+    try {
+        IdbKeyRange.only([[]]);
+        return [[]];
+    }
+    catch (e) {
+        return maxString;
+    }
+}
+
+function eventRejectHandler(reject) {
+    return wrap(function (event) {
+        preventDefault(event);
+        reject(event.target.error);
+        return false;
+    });
+}
+
+
+
+function preventDefault(event) {
+    if (event.stopPropagation)
+        event.stopPropagation();
+    if (event.preventDefault)
+        event.preventDefault();
+}
+
+var Transaction =               (function () {
+    function Transaction() {
+    }
+    Transaction.prototype._lock = function () {
+        assert(!PSD.global);
+        ++this._reculock;
+        if (this._reculock === 1 && !PSD.global)
+            PSD.lockOwnerFor = this;
+        return this;
+    };
+    Transaction.prototype._unlock = function () {
+        assert(!PSD.global);
+        if (--this._reculock === 0) {
+            if (!PSD.global)
+                PSD.lockOwnerFor = null;
+            while (this._blockedFuncs.length > 0 && !this._locked()) {
+                var fnAndPSD = this._blockedFuncs.shift();
+                try {
+                    usePSD(fnAndPSD[1], fnAndPSD[0]);
+                }
+                catch (e) { }
+            }
+        }
+        return this;
+    };
+    Transaction.prototype._locked = function () {
+        return this._reculock && PSD.lockOwnerFor !== this;
+    };
+    Transaction.prototype.create = function (idbtrans) {
+        var _this = this;
+        if (!this.mode)
+            return this;
+        var idbdb = this.db.idbdb;
+        var dbOpenError = this.db._state.dbOpenError;
+        assert(!this.idbtrans);
+        if (!idbtrans && !idbdb) {
+            switch (dbOpenError && dbOpenError.name) {
+                case "DatabaseClosedError":
+                    throw new exceptions.DatabaseClosed(dbOpenError);
+                case "MissingAPIError":
+                    throw new exceptions.MissingAPI(dbOpenError.message, dbOpenError);
+                default:
+                    throw new exceptions.OpenFailed(dbOpenError);
+            }
+        }
+        if (!this.active)
+            throw new exceptions.TransactionInactive();
+        assert(this._completion._state === null);
+        idbtrans = this.idbtrans = idbtrans || idbdb.transaction(safariMultiStoreFix(this.storeNames), this.mode);
+        idbtrans.onerror = wrap(function (ev) {
+            preventDefault(ev);
+            _this._reject(idbtrans.error);
+        });
+        idbtrans.onabort = wrap(function (ev) {
+            preventDefault(ev);
+            _this.active && _this._reject(new exceptions.Abort(idbtrans.error));
+            _this.active = false;
+            _this.on("abort").fire(ev);
+        });
+        idbtrans.oncomplete = wrap(function () {
+            _this.active = false;
+            _this._resolve();
+        });
+        return this;
+    };
+    Transaction.prototype._promise = function (mode, fn, bWriteLock) {
+        var _this = this;
+        if (mode === 'readwrite' && this.mode !== 'readwrite')
+            return rejection(new exceptions.ReadOnly("Transaction is readonly"));
+        if (!this.active)
+            return rejection(new exceptions.TransactionInactive());
+        if (this._locked()) {
+            return new DexiePromise(function (resolve, reject) {
+                _this._blockedFuncs.push([function () {
+                        _this._promise(mode, fn, bWriteLock).then(resolve, reject);
+                    }, PSD]);
+            });
+        }
+        else if (bWriteLock) {
+            return newScope(function () {
+                var p = new DexiePromise(function (resolve, reject) {
+                    _this._lock();
+                    var rv = fn(resolve, reject, _this);
+                    if (rv && rv.then)
+                        rv.then(resolve, reject);
+                });
+                p.finally(function () { return _this._unlock(); });
+                p._lib = true;
+                return p;
+            });
+        }
+        else {
+            var p = new DexiePromise(function (resolve, reject) {
+                var rv = fn(resolve, reject, _this);
+                if (rv && rv.then)
+                    rv.then(resolve, reject);
+            });
+            p._lib = true;
+            return p;
+        }
+    };
+    Transaction.prototype._root = function () {
+        return this.parent ? this.parent._root() : this;
+    };
+    Transaction.prototype.waitFor = function (promiseLike) {
+        var root = this._root();
+        var promise = DexiePromise.resolve(promiseLike);
+        if (root._waitingFor) {
+            root._waitingFor = root._waitingFor.then(function () { return promise; });
+        }
+        else {
+            root._waitingFor = promise;
+            root._waitingQueue = [];
+            var store = root.idbtrans.objectStore(root.storeNames[0]);
+            (function spin() {
+                ++root._spinCount;
+                while (root._waitingQueue.length)
+                    (root._waitingQueue.shift())();
+                if (root._waitingFor)
+                    store.get(-Infinity).onsuccess = spin;
+            }());
+        }
+        var currentWaitPromise = root._waitingFor;
+        return new DexiePromise(function (resolve, reject) {
+            promise.then(function (res) { return root._waitingQueue.push(wrap(resolve.bind(null, res))); }, function (err) { return root._waitingQueue.push(wrap(reject.bind(null, err))); }).finally(function () {
+                if (root._waitingFor === currentWaitPromise) {
+                    root._waitingFor = null;
+                }
+            });
+        });
+    };
+    Transaction.prototype.abort = function () {
+        this.active && this._reject(new exceptions.Abort());
+        this.active = false;
+    };
+    Transaction.prototype.table = function (tableName) {
+        var memoizedTables = (this._memoizedTables || (this._memoizedTables = {}));
+        if (hasOwn(memoizedTables, tableName))
+            return memoizedTables[tableName];
+        var tableSchema = this.schema[tableName];
+        if (!tableSchema) {
+            throw new exceptions.NotFound("Table " + tableName + " not part of transaction");
+        }
+        var transactionBoundTable = new this.db.Table(tableName, tableSchema, this);
+        transactionBoundTable.core = this.db.core.table(tableName);
+        memoizedTables[tableName] = transactionBoundTable;
+        return transactionBoundTable;
+    };
+    return Transaction;
+}());
+
+function createTransactionConstructor(db) {
+    return makeClassConstructor(Transaction.prototype, function Transaction$$1(mode, storeNames, dbschema, parent) {
+        var _this = this;
+        this.db = db;
+        this.mode = mode;
+        this.storeNames = storeNames;
+        this.schema = dbschema;
+        this.idbtrans = null;
+        this.on = Events(this, "complete", "error", "abort");
+        this.parent = parent || null;
+        this.active = true;
+        this._reculock = 0;
+        this._blockedFuncs = [];
+        this._resolve = null;
+        this._reject = null;
+        this._waitingFor = null;
+        this._waitingQueue = null;
+        this._spinCount = 0;
+        this._completion = new DexiePromise(function (resolve, reject) {
+            _this._resolve = resolve;
+            _this._reject = reject;
+        });
+        this._completion.then(function () {
+            _this.active = false;
+            _this.on.complete.fire();
+        }, function (e) {
+            var wasActive = _this.active;
+            _this.active = false;
+            _this.on.error.fire(e);
+            _this.parent ?
+                _this.parent._reject(e) :
+                wasActive && _this.idbtrans && _this.idbtrans.abort();
+            return rejection(e);
+        });
+    });
+}
+
+function createIndexSpec(name, keyPath, unique, multi, auto, compound, isPrimKey) {
+    return {
+        name: name,
+        keyPath: keyPath,
+        unique: unique,
+        multi: multi,
+        auto: auto,
+        compound: compound,
+        src: (unique && !isPrimKey ? '&' : '') + (multi ? '*' : '') + (auto ? "++" : "") + nameFromKeyPath(keyPath)
+    };
+}
+function nameFromKeyPath(keyPath) {
+    return typeof keyPath === 'string' ?
+        keyPath :
+        keyPath ? ('[' + [].join.call(keyPath, '+') + ']') : "";
+}
+
+function createTableSchema(name, primKey, indexes) {
+    return {
+        name: name,
+        primKey: primKey,
+        indexes: indexes,
+        mappedClass: null,
+        idxByName: arrayToObject(indexes, function (index) { return [index.name, index]; })
+    };
+}
+
+function getKeyExtractor(keyPath) {
+    if (keyPath == null) {
+        return function () { return undefined; };
+    }
+    else if (typeof keyPath === 'string') {
+        return getSinglePathKeyExtractor(keyPath);
+    }
+    else {
+        return function (obj) { return getByKeyPath(obj, keyPath); };
+    }
+}
+function getSinglePathKeyExtractor(keyPath) {
+    var split = keyPath.split('.');
+    if (split.length === 1) {
+        return function (obj) { return obj[keyPath]; };
+    }
+    else {
+        return function (obj) { return getByKeyPath(obj, keyPath); };
+    }
+}
+
+function getEffectiveKeys(primaryKey, req) {
+    if (req.type === 'delete')
+        return req.keys;
+    return req.keys || req.values.map(primaryKey.extractKey);
+}
+function getExistingValues(table, req, effectiveKeys) {
+    return req.type === 'add' ? Promise.resolve(new Array(req.values.length)) :
+        table.getMany({ trans: req.trans, keys: effectiveKeys });
+}
+
+function arrayify(arrayLike) {
+    return [].slice.call(arrayLike);
+}
+
+var _id_counter = 0;
+function getKeyPathAlias(keyPath) {
+    return keyPath == null ?
+        ":id" :
+        typeof keyPath === 'string' ?
+            keyPath :
+            "[" + keyPath.join('+') + "]";
+}
+function createDBCore(db, indexedDB, IdbKeyRange, tmpTrans) {
+    var cmp = indexedDB.cmp.bind(indexedDB);
+    function extractSchema(db, trans) {
+        var tables = arrayify(db.objectStoreNames);
+        return {
+            schema: {
+                name: db.name,
+                tables: tables.map(function (table) { return trans.objectStore(table); }).map(function (store) {
+                    var keyPath = store.keyPath, autoIncrement = store.autoIncrement;
+                    var compound = isArray(keyPath);
+                    var outbound = keyPath == null;
+                    var indexByKeyPath = {};
+                    var result = {
+                        name: store.name,
+                        primaryKey: {
+                            name: null,
+                            isPrimaryKey: true,
+                            outbound: outbound,
+                            compound: compound,
+                            keyPath: keyPath,
+                            autoIncrement: autoIncrement,
+                            unique: true,
+                            extractKey: getKeyExtractor(keyPath)
+                        },
+                        indexes: arrayify(store.indexNames).map(function (indexName) { return store.index(indexName); })
+                            .map(function (index) {
+                            var name = index.name, unique = index.unique, multiEntry = index.multiEntry, keyPath = index.keyPath;
+                            var compound = isArray(keyPath);
+                            var result = {
+                                name: name,
+                                compound: compound,
+                                keyPath: keyPath,
+                                unique: unique,
+                                multiEntry: multiEntry,
+                                extractKey: getKeyExtractor(keyPath)
+                            };
+                            indexByKeyPath[getKeyPathAlias(keyPath)] = result;
+                            return result;
+                        }),
+                        getIndexByKeyPath: function (keyPath) { return indexByKeyPath[getKeyPathAlias(keyPath)]; }
+                    };
+                    indexByKeyPath[":id"] = result.primaryKey;
+                    if (keyPath != null) {
+                        indexByKeyPath[getKeyPathAlias(keyPath)] = result.primaryKey;
+                    }
+                    return result;
+                })
+            },
+            hasGetAll: tables.length > 0 && ('getAll' in trans.objectStore(tables[0])) &&
+                !(typeof navigator !== 'undefined' && /Safari/.test(navigator.userAgent) &&
+                    !/(Chrome\/|Edge\/)/.test(navigator.userAgent) &&
+                    [].concat(navigator.userAgent.match(/Safari\/(\d*)/))[1] < 604)
+        };
+    }
+    function makeIDBKeyRange(range) {
+        if (range.type === 3          )
+            return null;
+        if (range.type === 4            )
+            throw new Error("Cannot convert never type to IDBKeyRange");
+        var lower = range.lower, upper = range.upper, lowerOpen = range.lowerOpen, upperOpen = range.upperOpen;
+        var idbRange = lower === undefined ?
+            upper === undefined ?
+                null :
+                IdbKeyRange.upperBound(upper, !!upperOpen) :
+            upper === undefined ?
+                IdbKeyRange.lowerBound(lower, !!lowerOpen) :
+                IdbKeyRange.bound(lower, upper, !!lowerOpen, !!upperOpen);
+        return idbRange;
+    }
+    function createDbCoreTable(tableSchema) {
+        var tableName = tableSchema.name;
+        function mutate(_a) {
+            var trans = _a.trans, type = _a.type, keys$$1 = _a.keys, values = _a.values, range = _a.range, wantResults = _a.wantResults;
+            return new Promise(function (resolve, reject) {
+                resolve = wrap(resolve);
+                var store = trans.objectStore(tableName);
+                var outbound = store.keyPath == null;
+                var isAddOrPut = type === "put" || type === "add";
+                if (!isAddOrPut && type !== 'delete' && type !== 'deleteRange')
+                    throw new Error("Invalid operation type: " + type);
+                var length = (keys$$1 || values || { length: 1 }).length;
+                if (keys$$1 && values && keys$$1.length !== values.length) {
+                    throw new Error("Given keys array must have same length as given values array.");
+                }
+                if (length === 0)
+                    return resolve({ numFailures: 0, failures: {}, results: [], lastResult: undefined });
+                var results = wantResults && __spreadArrays((keys$$1 ?
+                    keys$$1 :
+                    getEffectiveKeys(tableSchema.primaryKey, { type: type, keys: keys$$1, values: values })));
+                var req;
+                var failures = [];
+                var numFailures = 0;
+                var errorHandler = function (event) {
+                    ++numFailures;
+                    preventDefault(event);
+                    if (results)
+                        results[event.target._reqno] = undefined;
+                    failures[event.target._reqno] = event.target.error;
+                };
+                var setResult = function (_a) {
+                    var target = _a.target;
+                    results[target._reqno] = target.result;
+                };
+                if (type === 'deleteRange') {
+                    if (range.type === 4            )
+                        return resolve({ numFailures: numFailures, failures: failures, results: results, lastResult: undefined });
+                    if (range.type === 3          )
+                        req = store.clear();
+                    else
+                        req = store.delete(makeIDBKeyRange(range));
+                }
+                else {
+                    var _a = isAddOrPut ?
+                        outbound ?
+                            [values, keys$$1] :
+                            [values, null] :
+                        [keys$$1, null], args1 = _a[0], args2 = _a[1];
+                    if (isAddOrPut) {
+                        for (var i = 0; i < length; ++i) {
+                            req = (args2 && args2[i] !== undefined ?
+                                store[type](args1[i], args2[i]) :
+                                store[type](args1[i]));
+                            req._reqno = i;
+                            if (results && results[i] === undefined) {
+                                req.onsuccess = setResult;
+                            }
+                            req.onerror = errorHandler;
+                        }
+                    }
+                    else {
+                        for (var i = 0; i < length; ++i) {
+                            req = store[type](args1[i]);
+                            req._reqno = i;
+                            req.onerror = errorHandler;
+                        }
+                    }
+                }
+                var done = function (event) {
+                    var lastResult = event.target.result;
+                    if (results)
+                        results[length - 1] = lastResult;
+                    resolve({
+                        numFailures: numFailures,
+                        failures: failures,
+                        results: results,
+                        lastResult: lastResult
+                    });
+                };
+                req.onerror = function (event) {
+                    errorHandler(event);
+                    done(event);
+                };
+                req.onsuccess = done;
+            });
+        }
+        function openCursor(_a) {
+            var trans = _a.trans, values = _a.values, query = _a.query, reverse = _a.reverse, unique = _a.unique;
+            return new Promise(function (resolve, reject) {
+                resolve = wrap(resolve);
+                var index = query.index, range = query.range;
+                var store = trans.objectStore(tableName);
+                var source = index.isPrimaryKey ?
+                    store :
+                    store.index(index.name);
+                var direction = reverse ?
+                    unique ?
+                        "prevunique" :
+                        "prev" :
+                    unique ?
+                        "nextunique" :
+                        "next";
+                var req = values || !('openKeyCursor' in source) ?
+                    source.openCursor(makeIDBKeyRange(range), direction) :
+                    source.openKeyCursor(makeIDBKeyRange(range), direction);
+                req.onerror = eventRejectHandler(reject);
+                req.onsuccess = wrap(function (ev) {
+                    var cursor = req.result;
+                    if (!cursor) {
+                        resolve(null);
+                        return;
+                    }
+                    cursor.___id = ++_id_counter;
+                    cursor.done = false;
+                    var _cursorContinue = cursor.continue.bind(cursor);
+                    var _cursorContinuePrimaryKey = cursor.continuePrimaryKey;
+                    if (_cursorContinuePrimaryKey)
+                        _cursorContinuePrimaryKey = _cursorContinuePrimaryKey.bind(cursor);
+                    var _cursorAdvance = cursor.advance.bind(cursor);
+                    var doThrowCursorIsNotStarted = function () { throw new Error("Cursor not started"); };
+                    var doThrowCursorIsStopped = function () { throw new Error("Cursor not stopped"); };
+                    cursor.trans = trans;
+                    cursor.stop = cursor.continue = cursor.continuePrimaryKey = cursor.advance = doThrowCursorIsNotStarted;
+                    cursor.fail = wrap(reject);
+                    cursor.next = function () {
+                        var _this = this;
+                        var gotOne = 1;
+                        return this.start(function () { return gotOne-- ? _this.continue() : _this.stop(); }).then(function () { return _this; });
+                    };
+                    cursor.start = function (callback) {
+                        var iterationPromise = new Promise(function (resolveIteration, rejectIteration) {
+                            resolveIteration = wrap(resolveIteration);
+                            req.onerror = eventRejectHandler(rejectIteration);
+                            cursor.fail = rejectIteration;
+                            cursor.stop = function (value) {
+                                cursor.stop = cursor.continue = cursor.continuePrimaryKey = cursor.advance = doThrowCursorIsStopped;
+                                resolveIteration(value);
+                            };
+                        });
+                        var guardedCallback = function () {
+                            if (req.result) {
+                                try {
+                                    callback();
+                                }
+                                catch (err) {
+                                    cursor.fail(err);
+                                }
+                            }
+                            else {
+                                cursor.done = true;
+                                cursor.start = function () { throw new Error("Cursor behind last entry"); };
+                                cursor.stop();
+                            }
+                        };
+                        req.onsuccess = wrap(function (ev) {
+                            req.onsuccess = guardedCallback;
+                            guardedCallback();
+                        });
+                        cursor.continue = _cursorContinue;
+                        cursor.continuePrimaryKey = _cursorContinuePrimaryKey;
+                        cursor.advance = _cursorAdvance;
+                        guardedCallback();
+                        return iterationPromise;
+                    };
+                    resolve(cursor);
+                }, reject);
+            });
+        }
+        function query(hasGetAll) {
+            return function (request) {
+                return new Promise(function (resolve, reject) {
+                    resolve = wrap(resolve);
+                    var trans = request.trans, values = request.values, limit = request.limit, query = request.query;
+                    var nonInfinitLimit = limit === Infinity ? undefined : limit;
+                    var index = query.index, range = query.range;
+                    var store = trans.objectStore(tableName);
+                    var source = index.isPrimaryKey ? store : store.index(index.name);
+                    var idbKeyRange = makeIDBKeyRange(range);
+                    if (limit === 0)
+                        return resolve({ result: [] });
+                    if (hasGetAll) {
+                        var req = values ?
+                            source.getAll(idbKeyRange, nonInfinitLimit) :
+                            source.getAllKeys(idbKeyRange, nonInfinitLimit);
+                        req.onsuccess = function (event) { return resolve({ result: event.target.result }); };
+                        req.onerror = eventRejectHandler(reject);
+                    }
+                    else {
+                        var count_1 = 0;
+                        var req_1 = values || !('openKeyCursor' in source) ?
+                            source.openCursor(idbKeyRange) :
+                            source.openKeyCursor(idbKeyRange);
+                        var result_1 = [];
+                        req_1.onsuccess = function (event) {
+                            var cursor = req_1.result;
+                            if (!cursor)
+                                return resolve({ result: result_1 });
+                            result_1.push(values ? cursor.value : cursor.primaryKey);
+                            if (++count_1 === limit)
+                                return resolve({ result: result_1 });
+                            cursor.continue();
+                        };
+                        req_1.onerror = eventRejectHandler(reject);
+                    }
+                });
+            };
+        }
+        return {
+            name: tableName,
+            schema: tableSchema,
+            mutate: mutate,
+            getMany: function (_a) {
+                var trans = _a.trans, keys$$1 = _a.keys;
+                return new Promise(function (resolve, reject) {
+                    resolve = wrap(resolve);
+                    var store = trans.objectStore(tableName);
+                    var length = keys$$1.length;
+                    var result = new Array(length);
+                    var keyCount = 0;
+                    var callbackCount = 0;
+                    var valueCount = 0;
+                    var req;
+                    var successHandler = function (event) {
+                        var req = event.target;
+                        if ((result[req._pos] = req.result) != null)
+                            ++valueCount;
+                        if (++callbackCount === keyCount)
+                            resolve(result);
+                    };
+                    var errorHandler = eventRejectHandler(reject);
+                    for (var i = 0; i < length; ++i) {
+                        var key = keys$$1[i];
+                        if (key != null) {
+                            req = store.get(keys$$1[i]);
+                            req._pos = i;
+                            req.onsuccess = successHandler;
+                            req.onerror = errorHandler;
+                            ++keyCount;
+                        }
+                    }
+                    if (keyCount === 0)
+                        resolve(result);
+                });
+            },
+            get: function (_a) {
+                var trans = _a.trans, key = _a.key;
+                return new Promise(function (resolve, reject) {
+                    resolve = wrap(resolve);
+                    var store = trans.objectStore(tableName);
+                    var req = store.get(key);
+                    req.onsuccess = function (event) { return resolve(event.target.result); };
+                    req.onerror = eventRejectHandler(reject);
+                });
+            },
+            query: query(hasGetAll),
+            openCursor: openCursor,
+            count: function (_a) {
+                var query = _a.query, trans = _a.trans;
+                var index = query.index, range = query.range;
+                return new Promise(function (resolve, reject) {
+                    var store = trans.objectStore(tableName);
+                    var source = index.isPrimaryKey ? store : store.index(index.name);
+                    var idbKeyRange = makeIDBKeyRange(range);
+                    var req = idbKeyRange ? source.count(idbKeyRange) : source.count();
+                    req.onsuccess = wrap(function (ev) { return resolve(ev.target.result); });
+                    req.onerror = eventRejectHandler(reject);
+                });
+            }
+        };
+    }
+    var _a = extractSchema(db, tmpTrans), schema = _a.schema, hasGetAll = _a.hasGetAll;
+    var tables = schema.tables.map(function (tableSchema) { return createDbCoreTable(tableSchema); });
+    var tableMap = {};
+    tables.forEach(function (table) { return tableMap[table.name] = table; });
+    return {
+        stack: "dbcore",
+        transaction: db.transaction.bind(db),
+        table: function (name) {
+            var result = tableMap[name];
+            if (!result)
+                throw new Error("Table '" + name + "' not found");
+            return tableMap[name];
+        },
+        cmp: cmp,
+        MIN_KEY: -Infinity,
+        MAX_KEY: getMaxKey(IdbKeyRange),
+        schema: schema
+    };
+}
+
+function createMiddlewareStack(stackImpl, middlewares) {
+    return middlewares.reduce(function (down, _a) {
+        var create = _a.create;
+        return (__assign(__assign({}, down), create(down)));
+    }, stackImpl);
+}
+function createMiddlewareStacks(middlewares, idbdb, _a, tmpTrans) {
+    var IDBKeyRange = _a.IDBKeyRange, indexedDB = _a.indexedDB;
+    var dbcore = createMiddlewareStack(createDBCore(idbdb, indexedDB, IDBKeyRange, tmpTrans), middlewares.dbcore);
+    return {
+        dbcore: dbcore
+    };
+}
+function generateMiddlewareStacks(db, tmpTrans) {
+    var idbdb = tmpTrans.db;
+    var stacks = createMiddlewareStacks(db._middlewares, idbdb, db._deps, tmpTrans);
+    db.core = stacks.dbcore;
+    db.tables.forEach(function (table) {
+        var tableName = table.name;
+        if (db.core.schema.tables.some(function (tbl) { return tbl.name === tableName; })) {
+            table.core = db.core.table(tableName);
+            if (db[tableName] instanceof db.Table) {
+                db[tableName].core = table.core;
+            }
+        }
+    });
+}
+
+function setApiOnPlace(db, objs, tableNames, dbschema) {
+    tableNames.forEach(function (tableName) {
+        var schema = dbschema[tableName];
+        objs.forEach(function (obj) {
+            if (!(tableName in obj)) {
+                if (obj === db.Transaction.prototype || obj instanceof db.Transaction) {
+                    setProp(obj, tableName, {
+                        get: function () { return this.table(tableName); },
+                        set: function (value) {
+                            defineProperty(this, tableName, { value: value, writable: true, configurable: true, enumerable: true });
+                        }
+                    });
+                }
+                else {
+                    obj[tableName] = new db.Table(tableName, schema);
+                }
+            }
+        });
+    });
+}
+function removeTablesApi(db, objs) {
+    objs.forEach(function (obj) {
+        for (var key in obj) {
+            if (obj[key] instanceof db.Table)
+                delete obj[key];
+        }
+    });
+}
+function lowerVersionFirst(a, b) {
+    return a._cfg.version - b._cfg.version;
+}
+function runUpgraders(db, oldVersion, idbUpgradeTrans, reject) {
+    var globalSchema = db._dbSchema;
+    var trans = db._createTransaction('readwrite', db._storeNames, globalSchema);
+    trans.create(idbUpgradeTrans);
+    trans._completion.catch(reject);
+    var rejectTransaction = trans._reject.bind(trans);
+    var transless = PSD.transless || PSD;
+    newScope(function () {
+        PSD.trans = trans;
+        PSD.transless = transless;
+        if (oldVersion === 0) {
+            keys(globalSchema).forEach(function (tableName) {
+                createTable(idbUpgradeTrans, tableName, globalSchema[tableName].primKey, globalSchema[tableName].indexes);
+            });
+            generateMiddlewareStacks(db, idbUpgradeTrans);
+            DexiePromise.follow(function () { return db.on.populate.fire(trans); }).catch(rejectTransaction);
+        }
+        else
+            updateTablesAndIndexes(db, oldVersion, trans, idbUpgradeTrans).catch(rejectTransaction);
+    });
+}
+function updateTablesAndIndexes(db, oldVersion, trans, idbUpgradeTrans) {
+    var queue = [];
+    var versions = db._versions;
+    var globalSchema = db._dbSchema = buildGlobalSchema(db, db.idbdb, idbUpgradeTrans);
+    var anyContentUpgraderHasRun = false;
+    var versToRun = versions.filter(function (v) { return v._cfg.version >= oldVersion; });
+    versToRun.forEach(function (version) {
+        queue.push(function () {
+            var oldSchema = globalSchema;
+            var newSchema = version._cfg.dbschema;
+            adjustToExistingIndexNames(db, oldSchema, idbUpgradeTrans);
+            adjustToExistingIndexNames(db, newSchema, idbUpgradeTrans);
+            globalSchema = db._dbSchema = newSchema;
+            var diff = getSchemaDiff(oldSchema, newSchema);
+            diff.add.forEach(function (tuple) {
+                createTable(idbUpgradeTrans, tuple[0], tuple[1].primKey, tuple[1].indexes);
+            });
+            diff.change.forEach(function (change) {
+                if (change.recreate) {
+                    throw new exceptions.Upgrade("Not yet support for changing primary key");
+                }
+                else {
+                    var store_1 = idbUpgradeTrans.objectStore(change.name);
+                    change.add.forEach(function (idx) { return addIndex(store_1, idx); });
+                    change.change.forEach(function (idx) {
+                        store_1.deleteIndex(idx.name);
+                        addIndex(store_1, idx);
+                    });
+                    change.del.forEach(function (idxName) { return store_1.deleteIndex(idxName); });
+                }
+            });
+            var contentUpgrade = version._cfg.contentUpgrade;
+            if (contentUpgrade && version._cfg.version > oldVersion) {
+                generateMiddlewareStacks(db, idbUpgradeTrans);
+                anyContentUpgraderHasRun = true;
+                var upgradeSchema_1 = shallowClone(newSchema);
+                diff.del.forEach(function (table) {
+                    upgradeSchema_1[table] = oldSchema[table];
+                });
+                removeTablesApi(db, [db.Transaction.prototype]);
+                setApiOnPlace(db, [db.Transaction.prototype], keys(upgradeSchema_1), upgradeSchema_1);
+                trans.schema = upgradeSchema_1;
+                var contentUpgradeIsAsync_1 = isAsyncFunction(contentUpgrade);
+                if (contentUpgradeIsAsync_1) {
+                    incrementExpectedAwaits();
+                }
+                var returnValue_1;
+                var promiseFollowed = DexiePromise.follow(function () {
+                    returnValue_1 = contentUpgrade(trans);
+                    if (returnValue_1) {
+                        if (contentUpgradeIsAsync_1) {
+                            var decrementor = decrementExpectedAwaits.bind(null, null);
+                            returnValue_1.then(decrementor, decrementor);
+                        }
+                    }
+                });
+                return (returnValue_1 && typeof returnValue_1.then === 'function' ?
+                    DexiePromise.resolve(returnValue_1) : promiseFollowed.then(function () { return returnValue_1; }));
+            }
+        });
+        queue.push(function (idbtrans) {
+            if (!anyContentUpgraderHasRun || !hasIEDeleteObjectStoreBug) {
+                var newSchema = version._cfg.dbschema;
+                deleteRemovedTables(newSchema, idbtrans);
+            }
+            removeTablesApi(db, [db.Transaction.prototype]);
+            setApiOnPlace(db, [db.Transaction.prototype], db._storeNames, db._dbSchema);
+            trans.schema = db._dbSchema;
+        });
+    });
+    function runQueue() {
+        return queue.length ? DexiePromise.resolve(queue.shift()(trans.idbtrans)).then(runQueue) :
+            DexiePromise.resolve();
+    }
+    return runQueue().then(function () {
+        createMissingTables(globalSchema, idbUpgradeTrans);
+    });
+}
+function getSchemaDiff(oldSchema, newSchema) {
+    var diff = {
+        del: [],
+        add: [],
+        change: []
+    };
+    var table;
+    for (table in oldSchema) {
+        if (!newSchema[table])
+            diff.del.push(table);
+    }
+    for (table in newSchema) {
+        var oldDef = oldSchema[table], newDef = newSchema[table];
+        if (!oldDef) {
+            diff.add.push([table, newDef]);
+        }
+        else {
+            var change = {
+                name: table,
+                def: newDef,
+                recreate: false,
+                del: [],
+                add: [],
+                change: []
+            };
+            if (oldDef.primKey.src !== newDef.primKey.src &&
+                !isIEOrEdge
+            ) {
+                change.recreate = true;
+                diff.change.push(change);
+            }
+            else {
+                var oldIndexes = oldDef.idxByName;
+                var newIndexes = newDef.idxByName;
+                var idxName = void 0;
+                for (idxName in oldIndexes) {
+                    if (!newIndexes[idxName])
+                        change.del.push(idxName);
+                }
+                for (idxName in newIndexes) {
+                    var oldIdx = oldIndexes[idxName], newIdx = newIndexes[idxName];
+                    if (!oldIdx)
+                        change.add.push(newIdx);
+                    else if (oldIdx.src !== newIdx.src)
+                        change.change.push(newIdx);
+                }
+                if (change.del.length > 0 || change.add.length > 0 || change.change.length > 0) {
+                    diff.change.push(change);
+                }
+            }
+        }
+    }
+    return diff;
+}
+function createTable(idbtrans, tableName, primKey, indexes) {
+    var store = idbtrans.db.createObjectStore(tableName, primKey.keyPath ?
+        { keyPath: primKey.keyPath, autoIncrement: primKey.auto } :
+        { autoIncrement: primKey.auto });
+    indexes.forEach(function (idx) { return addIndex(store, idx); });
+    return store;
+}
+function createMissingTables(newSchema, idbtrans) {
+    keys(newSchema).forEach(function (tableName) {
+        if (!idbtrans.db.objectStoreNames.contains(tableName)) {
+            createTable(idbtrans, tableName, newSchema[tableName].primKey, newSchema[tableName].indexes);
+        }
+    });
+}
+function deleteRemovedTables(newSchema, idbtrans) {
+    for (var i = 0; i < idbtrans.db.objectStoreNames.length; ++i) {
+        var storeName = idbtrans.db.objectStoreNames[i];
+        if (newSchema[storeName] == null) {
+            idbtrans.db.deleteObjectStore(storeName);
+        }
+    }
+}
+function addIndex(store, idx) {
+    store.createIndex(idx.name, idx.keyPath, { unique: idx.unique, multiEntry: idx.multi });
+}
+function buildGlobalSchema(db, idbdb, tmpTrans) {
+    var globalSchema = {};
+    var dbStoreNames = slice(idbdb.objectStoreNames, 0);
+    dbStoreNames.forEach(function (storeName) {
+        var store = tmpTrans.objectStore(storeName);
+        var keyPath = store.keyPath;
+        var primKey = createIndexSpec(nameFromKeyPath(keyPath), keyPath || "", false, false, !!store.autoIncrement, keyPath && typeof keyPath !== "string", true);
+        var indexes = [];
+        for (var j = 0; j < store.indexNames.length; ++j) {
+            var idbindex = store.index(store.indexNames[j]);
+            keyPath = idbindex.keyPath;
+            var index = createIndexSpec(idbindex.name, keyPath, !!idbindex.unique, !!idbindex.multiEntry, false, keyPath && typeof keyPath !== "string", false);
+            indexes.push(index);
+        }
+        globalSchema[storeName] = createTableSchema(storeName, primKey, indexes);
+    });
+    return globalSchema;
+}
+function readGlobalSchema(db, idbdb, tmpTrans) {
+    db.verno = idbdb.version / 10;
+    var globalSchema = db._dbSchema = buildGlobalSchema(db, idbdb, tmpTrans);
+    db._storeNames = slice(idbdb.objectStoreNames, 0);
+    setApiOnPlace(db, [db._allTables], keys(globalSchema), globalSchema);
+}
+function adjustToExistingIndexNames(db, schema, idbtrans) {
+    var storeNames = idbtrans.db.objectStoreNames;
+    for (var i = 0; i < storeNames.length; ++i) {
+        var storeName = storeNames[i];
+        var store = idbtrans.objectStore(storeName);
+        db._hasGetAll = 'getAll' in store;
+        for (var j = 0; j < store.indexNames.length; ++j) {
+            var indexName = store.indexNames[j];
+            var keyPath = store.index(indexName).keyPath;
+            var dexieName = typeof keyPath === 'string' ? keyPath : "[" + slice(keyPath).join('+') + "]";
+            if (schema[storeName]) {
+                var indexSpec = schema[storeName].idxByName[dexieName];
+                if (indexSpec) {
+                    indexSpec.name = indexName;
+                    delete schema[storeName].idxByName[dexieName];
+                    schema[storeName].idxByName[indexName] = indexSpec;
+                }
+            }
+        }
+    }
+    if (typeof navigator !== 'undefined' && /Safari/.test(navigator.userAgent) &&
+        !/(Chrome\/|Edge\/)/.test(navigator.userAgent) &&
+        _global.WorkerGlobalScope && _global instanceof _global.WorkerGlobalScope &&
+        [].concat(navigator.userAgent.match(/Safari\/(\d*)/))[1] < 604) {
+        db._hasGetAll = false;
+    }
+}
+function parseIndexSyntax(primKeyAndIndexes) {
+    return primKeyAndIndexes.split(',').map(function (index, indexNum) {
+        index = index.trim();
+        var name = index.replace(/([&*]|\+\+)/g, "");
+        var keyPath = /^\[/.test(name) ? name.match(/^\[(.*)\]$/)[1].split('+') : name;
+        return createIndexSpec(name, keyPath || null, /\&/.test(index), /\*/.test(index), /\+\+/.test(index), isArray(keyPath), indexNum === 0);
+    });
+}
+
+var Version =               (function () {
+    function Version() {
+    }
+    Version.prototype._parseStoresSpec = function (stores, outSchema) {
+        keys(stores).forEach(function (tableName) {
+            if (stores[tableName] !== null) {
+                var indexes = parseIndexSyntax(stores[tableName]);
+                var primKey = indexes.shift();
+                if (primKey.multi)
+                    throw new exceptions.Schema("Primary key cannot be multi-valued");
+                indexes.forEach(function (idx) {
+                    if (idx.auto)
+                        throw new exceptions.Schema("Only primary key can be marked as autoIncrement (++)");
+                    if (!idx.keyPath)
+                        throw new exceptions.Schema("Index must have a name and cannot be an empty string");
+                });
+                outSchema[tableName] = createTableSchema(tableName, primKey, indexes);
+            }
+        });
+    };
+    Version.prototype.stores = function (stores) {
+        var db = this.db;
+        this._cfg.storesSource = this._cfg.storesSource ?
+            extend(this._cfg.storesSource, stores) :
+            stores;
+        var versions = db._versions;
+        var storesSpec = {};
+        var dbschema = {};
+        versions.forEach(function (version) {
+            extend(storesSpec, version._cfg.storesSource);
+            dbschema = (version._cfg.dbschema = {});
+            version._parseStoresSpec(storesSpec, dbschema);
+        });
+        db._dbSchema = dbschema;
+        removeTablesApi(db, [db._allTables, db, db.Transaction.prototype]);
+        setApiOnPlace(db, [db._allTables, db, db.Transaction.prototype, this._cfg.tables], keys(dbschema), dbschema);
+        db._storeNames = keys(dbschema);
+        return this;
+    };
+    Version.prototype.upgrade = function (upgradeFunction) {
+        this._cfg.contentUpgrade = upgradeFunction;
+        return this;
+    };
+    return Version;
+}());
+
+function createVersionConstructor(db) {
+    return makeClassConstructor(Version.prototype, function Version$$1(versionNumber) {
+        this.db = db;
+        this._cfg = {
+            version: versionNumber,
+            storesSource: null,
+            dbschema: {},
+            tables: {},
+            contentUpgrade: null
+        };
+    });
+}
+
+var databaseEnumerator;
+function DatabaseEnumerator(indexedDB) {
+    var hasDatabasesNative = indexedDB && typeof indexedDB.databases === 'function';
+    var dbNamesTable;
+    if (!hasDatabasesNative) {
+        var db = new Dexie(DBNAMES_DB, { addons: [] });
+        db.version(1).stores({ dbnames: 'name' });
+        dbNamesTable = db.table('dbnames');
+    }
+    return {
+        getDatabaseNames: function () {
+            return hasDatabasesNative
+                ?
+                    DexiePromise.resolve(indexedDB.databases()).then(function (infos) { return infos
+                        .map(function (info) { return info.name; })
+                        .filter(function (name) { return name !== DBNAMES_DB; }); })
+                :
+                    dbNamesTable.toCollection().primaryKeys();
+        },
+        add: function (name) {
+            return !hasDatabasesNative && name !== DBNAMES_DB && dbNamesTable.put({ name: name }).catch(nop);
+        },
+        remove: function (name) {
+            return !hasDatabasesNative && name !== DBNAMES_DB && dbNamesTable.delete(name).catch(nop);
+        }
+    };
+}
+function initDatabaseEnumerator(indexedDB) {
+    try {
+        databaseEnumerator = DatabaseEnumerator(indexedDB);
+    }
+    catch (e) { }
+}
+
+function vip(fn) {
+    return newScope(function () {
+        PSD.letThrough = true;
+        return fn();
+    });
+}
+
+function dexieOpen(db) {
+    var state = db._state;
+    var indexedDB = db._deps.indexedDB;
+    if (state.isBeingOpened || db.idbdb)
+        return state.dbReadyPromise.then(function () { return state.dbOpenError ?
+            rejection(state.dbOpenError) :
+            db; });
+    debug && (state.openCanceller._stackHolder = getErrorWithStack());
+    state.isBeingOpened = true;
+    state.dbOpenError = null;
+    state.openComplete = false;
+    var resolveDbReady = state.dbReadyResolve,
+    upgradeTransaction = null;
+    return DexiePromise.race([state.openCanceller, new DexiePromise(function (resolve, reject) {
+            if (!indexedDB)
+                throw new exceptions.MissingAPI("indexedDB API not found. If using IE10+, make sure to run your code on a server URL " +
+                    "(not locally). If using old Safari versions, make sure to include indexedDB polyfill.");
+            var dbName = db.name;
+            var req = state.autoSchema ?
+                indexedDB.open(dbName) :
+                indexedDB.open(dbName, Math.round(db.verno * 10));
+            if (!req)
+                throw new exceptions.MissingAPI("IndexedDB API not available");
+            req.onerror = eventRejectHandler(reject);
+            req.onblocked = wrap(db._fireOnBlocked);
+            req.onupgradeneeded = wrap(function (e) {
+                upgradeTransaction = req.transaction;
+                if (state.autoSchema && !db._options.allowEmptyDB) {
+                    req.onerror = preventDefault;
+                    upgradeTransaction.abort();
+                    req.result.close();
+                    var delreq = indexedDB.deleteDatabase(dbName);
+                    delreq.onsuccess = delreq.onerror = wrap(function () {
+                        reject(new exceptions.NoSuchDatabase("Database " + dbName + " doesnt exist"));
+                    });
+                }
+                else {
+                    upgradeTransaction.onerror = eventRejectHandler(reject);
+                    var oldVer = e.oldVersion > Math.pow(2, 62) ? 0 : e.oldVersion;
+                    db.idbdb = req.result;
+                    runUpgraders(db, oldVer / 10, upgradeTransaction, reject);
+                }
+            }, reject);
+            req.onsuccess = wrap(function () {
+                upgradeTransaction = null;
+                var idbdb = db.idbdb = req.result;
+                var objectStoreNames = slice(idbdb.objectStoreNames);
+                if (objectStoreNames.length > 0)
+                    try {
+                        var tmpTrans = idbdb.transaction(safariMultiStoreFix(objectStoreNames), 'readonly');
+                        if (state.autoSchema)
+                            readGlobalSchema(db, idbdb, tmpTrans);
+                        else
+                            adjustToExistingIndexNames(db, db._dbSchema, tmpTrans);
+                        generateMiddlewareStacks(db, tmpTrans);
+                    }
+                    catch (e) {
+                    }
+                connections.push(db);
+                idbdb.onversionchange = wrap(function (ev) {
+                    state.vcFired = true;
+                    db.on("versionchange").fire(ev);
+                });
+                databaseEnumerator.add(dbName);
+                resolve();
+            }, reject);
+        })]).then(function () {
+        state.onReadyBeingFired = [];
+        return DexiePromise.resolve(vip(db.on.ready.fire)).then(function fireRemainders() {
+            if (state.onReadyBeingFired.length > 0) {
+                var remainders = state.onReadyBeingFired.reduce(promisableChain, nop);
+                state.onReadyBeingFired = [];
+                return DexiePromise.resolve(vip(remainders)).then(fireRemainders);
+            }
+        });
+    }).finally(function () {
+        state.onReadyBeingFired = null;
+    }).then(function () {
+        state.isBeingOpened = false;
+        return db;
+    }).catch(function (err) {
+        try {
+            upgradeTransaction && upgradeTransaction.abort();
+        }
+        catch (e) { }
+        state.isBeingOpened = false;
+        db.close();
+        state.dbOpenError = err;
+        return rejection(state.dbOpenError);
+    }).finally(function () {
+        state.openComplete = true;
+        resolveDbReady();
+    });
+}
+
+function awaitIterator(iterator) {
+    var callNext = function (result) { return iterator.next(result); }, doThrow = function (error) { return iterator.throw(error); }, onSuccess = step(callNext), onError = step(doThrow);
+    function step(getNext) {
+        return function (val) {
+            var next = getNext(val), value = next.value;
+            return next.done ? value :
+                (!value || typeof value.then !== 'function' ?
+                    isArray(value) ? Promise.all(value).then(onSuccess, onError) : onSuccess(value) :
+                    value.then(onSuccess, onError));
+        };
+    }
+    return step(callNext)();
+}
+
+function extractTransactionArgs(mode, _tableArgs_, scopeFunc) {
+    var i = arguments.length;
+    if (i < 2)
+        throw new exceptions.InvalidArgument("Too few arguments");
+    var args = new Array(i - 1);
+    while (--i)
+        args[i - 1] = arguments[i];
+    scopeFunc = args.pop();
+    var tables = flatten(args);
+    return [mode, tables, scopeFunc];
+}
+function enterTransactionScope(db, mode, storeNames, parentTransaction, scopeFunc) {
+    return DexiePromise.resolve().then(function () {
+        var transless = PSD.transless || PSD;
+        var trans = db._createTransaction(mode, storeNames, db._dbSchema, parentTransaction);
+        var zoneProps = {
+            trans: trans,
+            transless: transless
+        };
+        if (parentTransaction) {
+            trans.idbtrans = parentTransaction.idbtrans;
+        }
+        else {
+            trans.create();
+        }
+        var scopeFuncIsAsync = isAsyncFunction(scopeFunc);
+        if (scopeFuncIsAsync) {
+            incrementExpectedAwaits();
+        }
+        var returnValue;
+        var promiseFollowed = DexiePromise.follow(function () {
+            returnValue = scopeFunc.call(trans, trans);
+            if (returnValue) {
+                if (scopeFuncIsAsync) {
+                    var decrementor = decrementExpectedAwaits.bind(null, null);
+                    returnValue.then(decrementor, decrementor);
+                }
+                else if (typeof returnValue.next === 'function' && typeof returnValue.throw === 'function') {
+                    returnValue = awaitIterator(returnValue);
+                }
+            }
+        }, zoneProps);
+        return (returnValue && typeof returnValue.then === 'function' ?
+            DexiePromise.resolve(returnValue).then(function (x) { return trans.active ?
+                x
+                : rejection(new exceptions.PrematureCommit("Transaction committed too early. See http://bit.ly/2kdckMn")); })
+            : promiseFollowed.then(function () { return returnValue; })).then(function (x) {
+            if (parentTransaction)
+                trans._resolve();
+            return trans._completion.then(function () { return x; });
+        }).catch(function (e) {
+            trans._reject(e);
+            return rejection(e);
+        });
+    });
+}
+
+function pad(a, value, count) {
+    var result = isArray(a) ? a.slice() : [a];
+    for (var i = 0; i < count; ++i)
+        result.push(value);
+    return result;
+}
+function createVirtualIndexMiddleware(down) {
+    return __assign(__assign({}, down), { table: function (tableName) {
+            var table = down.table(tableName);
+            var schema = table.schema;
+            var indexLookup = {};
+            var allVirtualIndexes = [];
+            function addVirtualIndexes(keyPath, keyTail, lowLevelIndex) {
+                var keyPathAlias = getKeyPathAlias(keyPath);
+                var indexList = (indexLookup[keyPathAlias] = indexLookup[keyPathAlias] || []);
+                var keyLength = keyPath == null ? 0 : typeof keyPath === 'string' ? 1 : keyPath.length;
+                var isVirtual = keyTail > 0;
+                var virtualIndex = __assign(__assign({}, lowLevelIndex), { isVirtual: isVirtual, isPrimaryKey: !isVirtual && lowLevelIndex.isPrimaryKey, keyTail: keyTail,
+                    keyLength: keyLength, extractKey: getKeyExtractor(keyPath), unique: !isVirtual && lowLevelIndex.unique });
+                indexList.push(virtualIndex);
+                if (!virtualIndex.isPrimaryKey) {
+                    allVirtualIndexes.push(virtualIndex);
+                }
+                if (keyLength > 1) {
+                    var virtualKeyPath = keyLength === 2 ?
+                        keyPath[0] :
+                        keyPath.slice(0, keyLength - 1);
+                    addVirtualIndexes(virtualKeyPath, keyTail + 1, lowLevelIndex);
+                }
+                indexList.sort(function (a, b) { return a.keyTail - b.keyTail; });
+                return virtualIndex;
+            }
+            var primaryKey = addVirtualIndexes(schema.primaryKey.keyPath, 0, schema.primaryKey);
+            indexLookup[":id"] = [primaryKey];
+            for (var _i = 0, _a = schema.indexes; _i < _a.length; _i++) {
+                var index = _a[_i];
+                addVirtualIndexes(index.keyPath, 0, index);
+            }
+            function findBestIndex(keyPath) {
+                var result = indexLookup[getKeyPathAlias(keyPath)];
+                return result && result[0];
+            }
+            function translateRange(range, keyTail) {
+                return {
+                    type: range.type === 1             ?
+                        2             :
+                        range.type,
+                    lower: pad(range.lower, range.lowerOpen ? down.MAX_KEY : down.MIN_KEY, keyTail),
+                    lowerOpen: true,
+                    upper: pad(range.upper, range.upperOpen ? down.MIN_KEY : down.MAX_KEY, keyTail),
+                    upperOpen: true
+                };
+            }
+            function translateRequest(req) {
+                var index = req.query.index;
+                return index.isVirtual ? __assign(__assign({}, req), { query: {
+                        index: index,
+                        range: translateRange(req.query.range, index.keyTail)
+                    } }) : req;
+            }
+            var result = __assign(__assign({}, table), { schema: __assign(__assign({}, schema), { primaryKey: primaryKey, indexes: allVirtualIndexes, getIndexByKeyPath: findBestIndex }), count: function (req) {
+                    return table.count(translateRequest(req));
+                },
+                query: function (req) {
+                    return table.query(translateRequest(req));
+                },
+                openCursor: function (req) {
+                    var _a = req.query.index, keyTail = _a.keyTail, isVirtual = _a.isVirtual, keyLength = _a.keyLength;
+                    if (!isVirtual)
+                        return table.openCursor(req);
+                    function createVirtualCursor(cursor) {
+                        function _continue(key) {
+                            key != null ?
+                                cursor.continue(pad(key, req.reverse ? down.MAX_KEY : down.MIN_KEY, keyTail)) :
+                                req.unique ?
+                                    cursor.continue(pad(cursor.key, req.reverse ? down.MIN_KEY : down.MAX_KEY, keyTail)) :
+                                    cursor.continue();
+                        }
+                        var virtualCursor = Object.create(cursor, {
+                            continue: { value: _continue },
+                            continuePrimaryKey: {
+                                value: function (key, primaryKey) {
+                                    cursor.continuePrimaryKey(pad(key, down.MAX_KEY, keyTail), primaryKey);
+                                }
+                            },
+                            key: {
+                                get: function () {
+                                    var key = cursor.key;
+                                    return keyLength === 1 ?
+                                        key[0] :
+                                        key.slice(0, keyLength);
+                                }
+                            },
+                            value: {
+                                get: function () {
+                                    return cursor.value;
+                                }
+                            }
+                        });
+                        return virtualCursor;
+                    }
+                    return table.openCursor(translateRequest(req))
+                        .then(function (cursor) { return cursor && createVirtualCursor(cursor); });
+                } });
+            return result;
+        } });
+}
+var virtualIndexMiddleware = {
+    stack: "dbcore",
+    name: "VirtualIndexMiddleware",
+    level: 1,
+    create: createVirtualIndexMiddleware
+};
+
+var hooksMiddleware = {
+    stack: "dbcore",
+    name: "HooksMiddleware",
+    level: 2,
+    create: function (downCore) { return (__assign(__assign({}, downCore), { table: function (tableName) {
+            var downTable = downCore.table(tableName);
+            var primaryKey = downTable.schema.primaryKey;
+            var tableMiddleware = __assign(__assign({}, downTable), { mutate: function (req) {
+                    var dxTrans = PSD.trans;
+                    var _a = dxTrans.table(tableName).hook, deleting = _a.deleting, creating = _a.creating, updating = _a.updating;
+                    switch (req.type) {
+                        case 'add':
+                            if (creating.fire === nop)
+                                break;
+                            return dxTrans._promise('readwrite', function () { return addPutOrDelete(req); }, true);
+                        case 'put':
+                            if (creating.fire === nop && updating.fire === nop)
+                                break;
+                            return dxTrans._promise('readwrite', function () { return addPutOrDelete(req); }, true);
+                        case 'delete':
+                            if (deleting.fire === nop)
+                                break;
+                            return dxTrans._promise('readwrite', function () { return addPutOrDelete(req); }, true);
+                        case 'deleteRange':
+                            if (deleting.fire === nop)
+                                break;
+                            return dxTrans._promise('readwrite', function () { return deleteRange(req); }, true);
+                    }
+                    return downTable.mutate(req);
+                    function addPutOrDelete(req) {
+                        var dxTrans = PSD.trans;
+                        var keys$$1 = req.keys || getEffectiveKeys(primaryKey, req);
+                        if (!keys$$1)
+                            throw new Error("Keys missing");
+                        req = req.type === 'add' || req.type === 'put' ? __assign(__assign({}, req), { keys: keys$$1, wantResults: true }) :
+                         __assign({}, req);
+                        if (req.type !== 'delete')
+                            req.values = __spreadArrays(req.values);
+                        if (req.keys)
+                            req.keys = __spreadArrays(req.keys);
+                        return getExistingValues(downTable, req, keys$$1).then(function (existingValues) {
+                            var contexts = keys$$1.map(function (key, i) {
+                                var existingValue = existingValues[i];
+                                var ctx = { onerror: null, onsuccess: null };
+                                if (req.type === 'delete') {
+                                    deleting.fire.call(ctx, key, existingValue, dxTrans);
+                                }
+                                else if (req.type === 'add' || existingValue === undefined) {
+                                    var generatedPrimaryKey = creating.fire.call(ctx, key, req.values[i], dxTrans);
+                                    if (key == null && generatedPrimaryKey != null) {
+                                        key = generatedPrimaryKey;
+                                        req.keys[i] = key;
+                                        if (!primaryKey.outbound) {
+                                            setByKeyPath(req.values[i], primaryKey.keyPath, key);
+                                        }
+                                    }
+                                }
+                                else {
+                                    var objectDiff = getObjectDiff(existingValue, req.values[i]);
+                                    var additionalChanges_1 = updating.fire.call(ctx, objectDiff, key, existingValue, dxTrans);
+                                    if (additionalChanges_1) {
+                                        var requestedValue_1 = req.values[i];
+                                        Object.keys(additionalChanges_1).forEach(function (keyPath) {
+                                            setByKeyPath(requestedValue_1, keyPath, additionalChanges_1[keyPath]);
+                                        });
+                                    }
+                                }
+                                return ctx;
+                            });
+                            return downTable.mutate(req).then(function (_a) {
+                                var failures = _a.failures, results = _a.results, numFailures = _a.numFailures, lastResult = _a.lastResult;
+                                for (var i = 0; i < keys$$1.length; ++i) {
+                                    var primKey = results ? results[i] : keys$$1[i];
+                                    var ctx = contexts[i];
+                                    if (primKey == null) {
+                                        ctx.onerror && ctx.onerror(failures[i]);
+                                    }
+                                    else {
+                                        ctx.onsuccess && ctx.onsuccess(req.type === 'put' && existingValues[i] ?
+                                            req.values[i] :
+                                            primKey
+                                        );
+                                    }
+                                }
+                                return { failures: failures, results: results, numFailures: numFailures, lastResult: lastResult };
+                            }).catch(function (error) {
+                                contexts.forEach(function (ctx) { return ctx.onerror && ctx.onerror(error); });
+                                return Promise.reject(error);
+                            });
+                        });
+                    }
+                    function deleteRange(req) {
+                        return deleteNextChunk(req.trans, req.range, 10000);
+                    }
+                    function deleteNextChunk(trans, range, limit) {
+                        return downTable.query({ trans: trans, values: false, query: { index: primaryKey, range: range }, limit: limit })
+                            .then(function (_a) {
+                            var result = _a.result;
+                            return addPutOrDelete({ type: 'delete', keys: result, trans: trans }).then(function (res) {
+                                if (res.numFailures > 0)
+                                    return Promise.reject(res.failures[0]);
+                                if (result.length < limit) {
+                                    return { failures: [], numFailures: 0, lastResult: undefined };
+                                }
+                                else {
+                                    return deleteNextChunk(trans, __assign(__assign({}, range), { lower: result[result.length - 1], lowerOpen: true }), limit);
+                                }
+                            });
+                        });
+                    }
+                } });
+            return tableMiddleware;
+        } })); }
+};
+
+var Dexie =               (function () {
+    function Dexie(name, options) {
+        var _this = this;
+        this._middlewares = {};
+        this.verno = 0;
+        var deps = Dexie.dependencies;
+        this._options = options = __assign({
+            addons: Dexie.addons, autoOpen: true,
+            indexedDB: deps.indexedDB, IDBKeyRange: deps.IDBKeyRange }, options);
+        this._deps = {
+            indexedDB: options.indexedDB,
+            IDBKeyRange: options.IDBKeyRange
+        };
+        var addons = options.addons;
+        this._dbSchema = {};
+        this._versions = [];
+        this._storeNames = [];
+        this._allTables = {};
+        this.idbdb = null;
+        var state = {
+            dbOpenError: null,
+            isBeingOpened: false,
+            onReadyBeingFired: null,
+            openComplete: false,
+            dbReadyResolve: nop,
+            dbReadyPromise: null,
+            cancelOpen: nop,
+            openCanceller: null,
+            autoSchema: true
+        };
+        state.dbReadyPromise = new DexiePromise(function (resolve) {
+            state.dbReadyResolve = resolve;
+        });
+        state.openCanceller = new DexiePromise(function (_, reject) {
+            state.cancelOpen = reject;
+        });
+        this._state = state;
+        this.name = name;
+        this.on = Events(this, "populate", "blocked", "versionchange", { ready: [promisableChain, nop] });
+        this.on.ready.subscribe = override(this.on.ready.subscribe, function (subscribe) {
+            return function (subscriber, bSticky) {
+                Dexie.vip(function () {
+                    var state = _this._state;
+                    if (state.openComplete) {
+                        if (!state.dbOpenError)
+                            DexiePromise.resolve().then(subscriber);
+                        if (bSticky)
+                            subscribe(subscriber);
+                    }
+                    else if (state.onReadyBeingFired) {
+                        state.onReadyBeingFired.push(subscriber);
+                        if (bSticky)
+                            subscribe(subscriber);
+                    }
+                    else {
+                        subscribe(subscriber);
+                        var db_1 = _this;
+                        if (!bSticky)
+                            subscribe(function unsubscribe() {
+                                db_1.on.ready.unsubscribe(subscriber);
+                                db_1.on.ready.unsubscribe(unsubscribe);
+                            });
+                    }
+                });
+            };
+        });
+        this.Collection = createCollectionConstructor(this);
+        this.Table = createTableConstructor(this);
+        this.Transaction = createTransactionConstructor(this);
+        this.Version = createVersionConstructor(this);
+        this.WhereClause = createWhereClauseConstructor(this);
+        this.on("versionchange", function (ev) {
+            if (ev.newVersion > 0)
+                console.warn("Another connection wants to upgrade database '" + _this.name + "'. Closing db now to resume the upgrade.");
+            else
+                console.warn("Another connection wants to delete database '" + _this.name + "'. Closing db now to resume the delete request.");
+            _this.close();
+        });
+        this.on("blocked", function (ev) {
+            if (!ev.newVersion || ev.newVersion < ev.oldVersion)
+                console.warn("Dexie.delete('" + _this.name + "') was blocked");
+            else
+                console.warn("Upgrade '" + _this.name + "' blocked by other connection holding version " + ev.oldVersion / 10);
+        });
+        this._maxKey = getMaxKey(options.IDBKeyRange);
+        this._createTransaction = function (mode, storeNames, dbschema, parentTransaction) { return new _this.Transaction(mode, storeNames, dbschema, parentTransaction); };
+        this._fireOnBlocked = function (ev) {
+            _this.on("blocked").fire(ev);
+            connections
+                .filter(function (c) { return c.name === _this.name && c !== _this && !c._state.vcFired; })
+                .map(function (c) { return c.on("versionchange").fire(ev); });
+        };
+        this.use(virtualIndexMiddleware);
+        this.use(hooksMiddleware);
+        addons.forEach(function (addon) { return addon(_this); });
+    }
+    Dexie.prototype.version = function (versionNumber) {
+        if (isNaN(versionNumber) || versionNumber < 0.1)
+            throw new exceptions.Type("Given version is not a positive number");
+        versionNumber = Math.round(versionNumber * 10) / 10;
+        if (this.idbdb || this._state.isBeingOpened)
+            throw new exceptions.Schema("Cannot add version when database is open");
+        this.verno = Math.max(this.verno, versionNumber);
+        var versions = this._versions;
+        var versionInstance = versions.filter(function (v) { return v._cfg.version === versionNumber; })[0];
+        if (versionInstance)
+            return versionInstance;
+        versionInstance = new this.Version(versionNumber);
+        versions.push(versionInstance);
+        versions.sort(lowerVersionFirst);
+        versionInstance.stores({});
+        this._state.autoSchema = false;
+        return versionInstance;
+    };
+    Dexie.prototype._whenReady = function (fn) {
+        var _this = this;
+        return this._state.openComplete || PSD.letThrough ? fn() : new DexiePromise(function (resolve, reject) {
+            if (!_this._state.isBeingOpened) {
+                if (!_this._options.autoOpen) {
+                    reject(new exceptions.DatabaseClosed());
+                    return;
+                }
+                _this.open().catch(nop);
+            }
+            _this._state.dbReadyPromise.then(resolve, reject);
+        }).then(fn);
+    };
+    Dexie.prototype.use = function (_a) {
+        var stack = _a.stack, create = _a.create, level = _a.level, name = _a.name;
+        if (name)
+            this.unuse({ stack: stack, name: name });
+        var middlewares = this._middlewares[stack] || (this._middlewares[stack] = []);
+        middlewares.push({ stack: stack, create: create, level: level == null ? 10 : level, name: name });
+        middlewares.sort(function (a, b) { return a.level - b.level; });
+        return this;
+    };
+    Dexie.prototype.unuse = function (_a) {
+        var stack = _a.stack, name = _a.name, create = _a.create;
+        if (stack && this._middlewares[stack]) {
+            this._middlewares[stack] = this._middlewares[stack].filter(function (mw) {
+                return create ? mw.create !== create :
+                    name ? mw.name !== name :
+                        false;
+            });
+        }
+        return this;
+    };
+    Dexie.prototype.open = function () {
+        return dexieOpen(this);
+    };
+    Dexie.prototype.close = function () {
+        var idx = connections.indexOf(this), state = this._state;
+        if (idx >= 0)
+            connections.splice(idx, 1);
+        if (this.idbdb) {
+            try {
+                this.idbdb.close();
+            }
+            catch (e) { }
+            this.idbdb = null;
+        }
+        this._options.autoOpen = false;
+        state.dbOpenError = new exceptions.DatabaseClosed();
+        if (state.isBeingOpened)
+            state.cancelOpen(state.dbOpenError);
+        state.dbReadyPromise = new DexiePromise(function (resolve) {
+            state.dbReadyResolve = resolve;
+        });
+        state.openCanceller = new DexiePromise(function (_, reject) {
+            state.cancelOpen = reject;
+        });
+    };
+    Dexie.prototype.delete = function () {
+        var _this = this;
+        var hasArguments = arguments.length > 0;
+        var state = this._state;
+        return new DexiePromise(function (resolve, reject) {
+            var doDelete = function () {
+                _this.close();
+                var req = _this._deps.indexedDB.deleteDatabase(_this.name);
+                req.onsuccess = wrap(function () {
+                    databaseEnumerator.remove(_this.name);
+                    resolve();
+                });
+                req.onerror = eventRejectHandler(reject);
+                req.onblocked = _this._fireOnBlocked;
+            };
+            if (hasArguments)
+                throw new exceptions.InvalidArgument("Arguments not allowed in db.delete()");
+            if (state.isBeingOpened) {
+                state.dbReadyPromise.then(doDelete);
+            }
+            else {
+                doDelete();
+            }
+        });
+    };
+    Dexie.prototype.backendDB = function () {
+        return this.idbdb;
+    };
+    Dexie.prototype.isOpen = function () {
+        return this.idbdb !== null;
+    };
+    Dexie.prototype.hasBeenClosed = function () {
+        var dbOpenError = this._state.dbOpenError;
+        return dbOpenError && (dbOpenError.name === 'DatabaseClosed');
+    };
+    Dexie.prototype.hasFailed = function () {
+        return this._state.dbOpenError !== null;
+    };
+    Dexie.prototype.dynamicallyOpened = function () {
+        return this._state.autoSchema;
+    };
+    Object.defineProperty(Dexie.prototype, "tables", {
+        get: function () {
+            var _this = this;
+            return keys(this._allTables).map(function (name) { return _this._allTables[name]; });
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Dexie.prototype.transaction = function () {
+        var args = extractTransactionArgs.apply(this, arguments);
+        return this._transaction.apply(this, args);
+    };
+    Dexie.prototype._transaction = function (mode, tables, scopeFunc) {
+        var _this = this;
+        var parentTransaction = PSD.trans;
+        if (!parentTransaction || parentTransaction.db !== this || mode.indexOf('!') !== -1)
+            parentTransaction = null;
+        var onlyIfCompatible = mode.indexOf('?') !== -1;
+        mode = mode.replace('!', '').replace('?', '');
+        var idbMode, storeNames;
+        try {
+            storeNames = tables.map(function (table) {
+                var storeName = table instanceof _this.Table ? table.name : table;
+                if (typeof storeName !== 'string')
+                    throw new TypeError("Invalid table argument to Dexie.transaction(). Only Table or String are allowed");
+                return storeName;
+            });
+            if (mode == "r" || mode === READONLY)
+                idbMode = READONLY;
+            else if (mode == "rw" || mode == READWRITE)
+                idbMode = READWRITE;
+            else
+                throw new exceptions.InvalidArgument("Invalid transaction mode: " + mode);
+            if (parentTransaction) {
+                if (parentTransaction.mode === READONLY && idbMode === READWRITE) {
+                    if (onlyIfCompatible) {
+                        parentTransaction = null;
+                    }
+                    else
+                        throw new exceptions.SubTransaction("Cannot enter a sub-transaction with READWRITE mode when parent transaction is READONLY");
+                }
+                if (parentTransaction) {
+                    storeNames.forEach(function (storeName) {
+                        if (parentTransaction && parentTransaction.storeNames.indexOf(storeName) === -1) {
+                            if (onlyIfCompatible) {
+                                parentTransaction = null;
+                            }
+                            else
+                                throw new exceptions.SubTransaction("Table " + storeName +
+                                    " not included in parent transaction.");
+                        }
+                    });
+                }
+                if (onlyIfCompatible && parentTransaction && !parentTransaction.active) {
+                    parentTransaction = null;
+                }
+            }
+        }
+        catch (e) {
+            return parentTransaction ?
+                parentTransaction._promise(null, function (_, reject) { reject(e); }) :
+                rejection(e);
+        }
+        var enterTransaction = enterTransactionScope.bind(null, this, idbMode, storeNames, parentTransaction, scopeFunc);
+        return (parentTransaction ?
+            parentTransaction._promise(idbMode, enterTransaction, "lock") :
+            PSD.trans ?
+                usePSD(PSD.transless, function () { return _this._whenReady(enterTransaction); }) :
+                this._whenReady(enterTransaction));
+    };
+    Dexie.prototype.table = function (tableName) {
+        if (!hasOwn(this._allTables, tableName)) {
+            throw new exceptions.InvalidTable("Table " + tableName + " does not exist");
+        }
+        return this._allTables[tableName];
+    };
+    return Dexie;
+}());
+
+var Dexie$1 = Dexie;
+props(Dexie$1, __assign(__assign({}, fullNameExceptions), {
+    delete: function (databaseName) {
+        var db = new Dexie$1(databaseName);
+        return db.delete();
+    },
+    exists: function (name) {
+        return new Dexie$1(name, { addons: [] }).open().then(function (db) {
+            db.close();
+            return true;
+        }).catch('NoSuchDatabaseError', function () { return false; });
+    },
+    getDatabaseNames: function (cb) {
+        return databaseEnumerator ?
+            databaseEnumerator.getDatabaseNames().then(cb) :
+            DexiePromise.resolve([]);
+    },
+    defineClass: function () {
+        function Class(content) {
+            extend(this, content);
+        }
+        return Class;
+    },
+    ignoreTransaction: function (scopeFunc) {
+        return PSD.trans ?
+            usePSD(PSD.transless, scopeFunc) :
+            scopeFunc();
+    },
+    vip: vip, async: function (generatorFn) {
+        return function () {
+            try {
+                var rv = awaitIterator(generatorFn.apply(this, arguments));
+                if (!rv || typeof rv.then !== 'function')
+                    return DexiePromise.resolve(rv);
+                return rv;
+            }
+            catch (e) {
+                return rejection(e);
+            }
+        };
+    }, spawn: function (generatorFn, args, thiz) {
+        try {
+            var rv = awaitIterator(generatorFn.apply(thiz, args || []));
+            if (!rv || typeof rv.then !== 'function')
+                return DexiePromise.resolve(rv);
+            return rv;
+        }
+        catch (e) {
+            return rejection(e);
+        }
+    },
+    currentTransaction: {
+        get: function () { return PSD.trans || null; }
+    }, waitFor: function (promiseOrFunction, optionalTimeout) {
+        var promise = DexiePromise.resolve(typeof promiseOrFunction === 'function' ?
+            Dexie$1.ignoreTransaction(promiseOrFunction) :
+            promiseOrFunction)
+            .timeout(optionalTimeout || 60000);
+        return PSD.trans ?
+            PSD.trans.waitFor(promise) :
+            promise;
+    },
+    Promise: DexiePromise,
+    debug: {
+        get: function () { return debug; },
+        set: function (value) {
+            setDebug(value, value === 'dexie' ? function () { return true; } : dexieStackFrameFilter);
+        }
+    },
+    derive: derive, extend: extend, props: props, override: override,
+    Events: Events,
+    getByKeyPath: getByKeyPath, setByKeyPath: setByKeyPath, delByKeyPath: delByKeyPath, shallowClone: shallowClone, deepClone: deepClone, getObjectDiff: getObjectDiff, asap: asap,
+    minKey: minKey,
+    addons: [],
+    connections: connections,
+    errnames: errnames,
+    dependencies: (function () {
+        try {
+            return {
+                indexedDB: _global.indexedDB || _global.mozIndexedDB || _global.webkitIndexedDB || _global.msIndexedDB,
+                IDBKeyRange: _global.IDBKeyRange || _global.webkitIDBKeyRange
+            };
+        }
+        catch (e) {
+            return { indexedDB: null, IDBKeyRange: null };
+        }
+    })(),
+    semVer: DEXIE_VERSION, version: DEXIE_VERSION.split('.')
+        .map(function (n) { return parseInt(n); })
+        .reduce(function (p, c, i) { return p + (c / Math.pow(10, i * 2)); }),
+    default: Dexie$1,
+    Dexie: Dexie$1 }));
+Dexie$1.maxKey = getMaxKey(Dexie$1.dependencies.IDBKeyRange);
+
+initDatabaseEnumerator(Dexie.dependencies.indexedDB);
+DexiePromise.rejectionMapper = mapError;
+setDebug(debug, dexieStackFrameFilter);
+
+return Dexie;
+
+})));
+//# sourceMappingURL=dexie.js.map
+
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(2), __webpack_require__(16).setImmediate))
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports, __webpack_require__) {
+
 "use strict";
 
 
-var formatio = __webpack_require__(35);
+var formatio = __webpack_require__(36);
 
 var formatter = formatio.configure({
     quoteStrings: false,
@@ -17802,7 +22189,7 @@ module.exports = format;
 
 
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -17885,7 +22272,7 @@ module.exports = function extend(target /*, sources */) {
 
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -17903,7 +22290,7 @@ module.exports = function getPropertyDescriptor(object, property) {
 
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -18023,7 +22410,7 @@ deepEqual.use = function (match) {
 
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -18032,8 +22419,7 @@ deepEqual.use = function (match) {
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return utoolsStorage; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return restoreIndexedBDData; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return restoreLocalStorageData; });
-/* harmony import */ var _idb_backup_and_restore_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(31);
-/* harmony import */ var _idb_backup_and_restore_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_idb_backup_and_restore_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _idb_export_import__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(32);
 
 function openIframe (url, opt = {}) {
   if (!(/^\.\//.test(url) || /^bolb/.test(url) || /^http/.test(url))) {
@@ -18068,6 +22454,7 @@ function openIframe (url, opt = {}) {
   wrap.appendChild(iframe)
   document.body.appendChild(wrap)
 }
+// 加载js
 async function loadAllJs (arr) {
   if(!Array.isArray(arr)){
     arr = [arr]
@@ -18076,7 +22463,6 @@ async function loadAllJs (arr) {
     await loadJs(url)
   }
 }
-// 加载js
 function loadJs (url, callback) {
   return new Promise((res, rej) => {
     var script = document.createElement('script')
@@ -18131,22 +22517,24 @@ class utoolsStorage {
   }
 }
 function restoreIndexedBDData(indexedDBData) {
-  if (indexedDBData.getData() && indexedDBData.getData() != "{}") {
-      return new Promise((resolve, reject) => {
-          var request = indexedDB.open('SaladictWords')
-          request.onsuccess = async function (event) {
-              let db = request.result;
-              // console.log('数据库打开成功');
-              await Object(_idb_backup_and_restore_js__WEBPACK_IMPORTED_MODULE_0__["clearDatabase"])(db)
-              await Object(_idb_backup_and_restore_js__WEBPACK_IMPORTED_MODULE_0__["importFromJson"])(db, indexedDBData.getData())
-              db.close()
-              resolve()
-          };
-          request.onerror = function (event) {
-              // console.log('数据库打开报错', event);
-              reject()
-          };
-      })
+  let data = indexedDBData.getData();
+  if (data) {
+      return Object(_idb_export_import__WEBPACK_IMPORTED_MODULE_0__[/* importDatabase */ "b"])(data)
+      // new Promise(async (resolve, reject) => {
+      //     var request = indexedDB.open('SaladictWords')
+      //     request.onsuccess = async function (event) {
+      //         let db = request.result;
+      //         // console.log('数据库打开成功');
+      //         await clearDatabase(db)
+      //         await importFromJson(db, indexedDBData.getData())
+      //         db.close()
+      //         resolve()
+      //     };
+      //     request.onerror = function (event) {
+      //         // console.log('数据库打开报错', event);
+      //         reject()
+      //     };
+      // })
   } else {
       return Promise.resolve()
   }
@@ -18160,33 +22548,33 @@ function restoreLocalStorageData(localStorageData) {
 }
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-exports.assert = __webpack_require__(15);
-exports.collection = __webpack_require__(22);
+exports.assert = __webpack_require__(17);
+exports.collection = __webpack_require__(23);
 exports.match = __webpack_require__(4);
-exports.spy = __webpack_require__(12);
-exports.spyCall = __webpack_require__(13);
-exports.stub = __webpack_require__(14);
-exports.mock = __webpack_require__(27);
+exports.spy = __webpack_require__(13);
+exports.spyCall = __webpack_require__(14);
+exports.stub = __webpack_require__(15);
+exports.mock = __webpack_require__(28);
 
-var sandbox = __webpack_require__(51);
+var sandbox = __webpack_require__(52);
 exports.sandbox = sandbox;
-exports.expectation = __webpack_require__(28);
-exports.createStubInstance = __webpack_require__(14).createStubInstance;
+exports.expectation = __webpack_require__(29);
+exports.createStubInstance = __webpack_require__(15).createStubInstance;
 
-exports.defaultConfig = __webpack_require__(53);
+exports.defaultConfig = __webpack_require__(54);
 
-var fakeTimers = __webpack_require__(29);
+var fakeTimers = __webpack_require__(30);
 exports.useFakeTimers = fakeTimers.useFakeTimers;
 exports.clock = fakeTimers.clock;
 exports.timers = fakeTimers.timers;
 
-var nise = __webpack_require__(20);
+var nise = __webpack_require__(21);
 exports.xhr = nise.fakeXhr.xhr;
 exports.FakeXMLHttpRequest = nise.fakeXhr.FakeXMLHttpRequest;
 exports.useFakeXMLHttpRequest = nise.fakeXhr.useFakeXMLHttpRequest;
@@ -18198,18 +22586,18 @@ exports.createSandbox = sandbox.create;
 exports.createFakeServer = nise.fakeServer.create.bind(nise.fakeServer);
 exports.createFakeServerWithClock = nise.fakeServerWithClock.create.bind(nise.fakeServerWithClock);
 
-var behavior = __webpack_require__(17);
+var behavior = __webpack_require__(19);
 
 exports.addBehavior = function (name, fn) {
     behavior.addBehavior(exports.stub, name, fn);
 };
 
-var format = __webpack_require__(5);
+var format = __webpack_require__(6);
 exports.setFormatter = format.setFormatter;
 
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -18233,24 +22621,24 @@ module.exports = function functionName(func) {
 
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var createBehavior = __webpack_require__(17).create;
-var extend = __webpack_require__(6);
-var deprecated = __webpack_require__(42);
-var functionName = __webpack_require__(11);
-var functionToString = __webpack_require__(24);
-var getPropertyDescriptor = __webpack_require__(7);
+var createBehavior = __webpack_require__(19).create;
+var extend = __webpack_require__(7);
+var deprecated = __webpack_require__(43);
+var functionName = __webpack_require__(12);
+var functionToString = __webpack_require__(25);
+var getPropertyDescriptor = __webpack_require__(8);
 var sinonMatch = __webpack_require__(4);
-var deepEqual = __webpack_require__(8).use(sinonMatch);
-var isEsModule = __webpack_require__(25);
-var spyCall = __webpack_require__(13);
-var wrapMethod = __webpack_require__(19);
-var sinonFormat = __webpack_require__(5);
+var deepEqual = __webpack_require__(9).use(sinonMatch);
+var isEsModule = __webpack_require__(26);
+var spyCall = __webpack_require__(14);
+var wrapMethod = __webpack_require__(20);
+var sinonFormat = __webpack_require__(6);
 var valueToString = __webpack_require__(3);
 
 /* cache references to library methods so that they also can be stubbed without problems */
@@ -18343,7 +22731,7 @@ var uuid = 0;
 
 // Public API
 var spyApi = {
-    formatters: __webpack_require__(43),
+    formatters: __webpack_require__(44),
 
     resetHistory: function () {
         if (this.invoking) {
@@ -18725,16 +23113,16 @@ module.exports = spy;
 
 
 /***/ }),
-/* 13 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
 var sinonMatch = __webpack_require__(4);
-var deepEqual = __webpack_require__(8).use(sinonMatch);
-var functionName = __webpack_require__(11);
-var sinonFormat = __webpack_require__(5);
+var deepEqual = __webpack_require__(9).use(sinonMatch);
+var functionName = __webpack_require__(12);
+var sinonFormat = __webpack_require__(6);
 var valueToString = __webpack_require__(3);
 var slice = Array.prototype.slice;
 var filter = Array.prototype.filter;
@@ -18976,22 +23364,22 @@ module.exports = createSpyCall;
 
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var behavior = __webpack_require__(17);
-var behaviors = __webpack_require__(47);
-var spy = __webpack_require__(12);
-var extend = __webpack_require__(6);
-var functionToString = __webpack_require__(24);
-var getPropertyDescriptor = __webpack_require__(7);
-var isEsModule = __webpack_require__(25);
-var wrapMethod = __webpack_require__(19);
-var stubEntireObject = __webpack_require__(48);
-var throwOnFalsyObject = __webpack_require__(49);
+var behavior = __webpack_require__(19);
+var behaviors = __webpack_require__(48);
+var spy = __webpack_require__(13);
+var extend = __webpack_require__(7);
+var functionToString = __webpack_require__(25);
+var getPropertyDescriptor = __webpack_require__(8);
+var isEsModule = __webpack_require__(26);
+var wrapMethod = __webpack_require__(20);
+var stubEntireObject = __webpack_require__(49);
+var throwOnFalsyObject = __webpack_require__(50);
 var valueToString = __webpack_require__(3);
 
 var slice = Array.prototype.slice;
@@ -19168,16 +23556,86 @@ module.exports = stub;
 
 
 /***/ }),
-/* 15 */
+/* 16 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/* WEBPACK VAR INJECTION */(function(global) {var scope = (typeof global !== "undefined" && global) ||
+            (typeof self !== "undefined" && self) ||
+            window;
+var apply = Function.prototype.apply;
+
+// DOM APIs, for completeness
+
+exports.setTimeout = function() {
+  return new Timeout(apply.call(setTimeout, scope, arguments), clearTimeout);
+};
+exports.setInterval = function() {
+  return new Timeout(apply.call(setInterval, scope, arguments), clearInterval);
+};
+exports.clearTimeout =
+exports.clearInterval = function(timeout) {
+  if (timeout) {
+    timeout.close();
+  }
+};
+
+function Timeout(id, clearFn) {
+  this._id = id;
+  this._clearFn = clearFn;
+}
+Timeout.prototype.unref = Timeout.prototype.ref = function() {};
+Timeout.prototype.close = function() {
+  this._clearFn.call(scope, this._id);
+};
+
+// Does not start the time, just sets up the members needed.
+exports.enroll = function(item, msecs) {
+  clearTimeout(item._idleTimeoutId);
+  item._idleTimeout = msecs;
+};
+
+exports.unenroll = function(item) {
+  clearTimeout(item._idleTimeoutId);
+  item._idleTimeout = -1;
+};
+
+exports._unrefActive = exports.active = function(item) {
+  clearTimeout(item._idleTimeoutId);
+
+  var msecs = item._idleTimeout;
+  if (msecs >= 0) {
+    item._idleTimeoutId = setTimeout(function onTimeout() {
+      if (item._onTimeout)
+        item._onTimeout();
+    }, msecs);
+  }
+};
+
+// setimmediate attaches itself to the global object
+__webpack_require__(42);
+// On some exotic environments, it's not clear which object `setimmediate` was
+// able to install onto.  Search each possibility in the same order as the
+// `setimmediate` library.
+exports.setImmediate = (typeof self !== "undefined" && self.setImmediate) ||
+                       (typeof global !== "undefined" && global.setImmediate) ||
+                       (this && this.setImmediate);
+exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
+                         (typeof global !== "undefined" && global.clearImmediate) ||
+                         (this && this.clearImmediate);
+
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(2)))
+
+/***/ }),
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function(global) {
 
-var calledInOrder = __webpack_require__(33);
-var orderByFirstCall = __webpack_require__(34);
-var timesInWords = __webpack_require__(16);
-var format = __webpack_require__(5);
+var calledInOrder = __webpack_require__(34);
+var orderByFirstCall = __webpack_require__(35);
+var timesInWords = __webpack_require__(18);
+var format = __webpack_require__(6);
 var sinonMatch = __webpack_require__(4);
 
 var slice = Array.prototype.slice;
@@ -19379,7 +23837,7 @@ module.exports = assert;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(2)))
 
 /***/ }),
-/* 16 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -19393,14 +23851,14 @@ module.exports = function timesInWords(count) {
 
 
 /***/ }),
-/* 17 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function(process, setImmediate) {
 
-var extend = __webpack_require__(6);
-var functionName = __webpack_require__(11);
+var extend = __webpack_require__(7);
+var functionName = __webpack_require__(12);
 var valueToString = __webpack_require__(3);
 
 var slice = Array.prototype.slice;
@@ -19628,86 +24086,16 @@ proto.addBehavior = addBehavior;
 proto.createBehavior = createBehavior;
 module.exports = proto;
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(23), __webpack_require__(18).setImmediate))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(24), __webpack_require__(16).setImmediate))
 
 /***/ }),
-/* 18 */
-/***/ (function(module, exports, __webpack_require__) {
-
-/* WEBPACK VAR INJECTION */(function(global) {var scope = (typeof global !== "undefined" && global) ||
-            (typeof self !== "undefined" && self) ||
-            window;
-var apply = Function.prototype.apply;
-
-// DOM APIs, for completeness
-
-exports.setTimeout = function() {
-  return new Timeout(apply.call(setTimeout, scope, arguments), clearTimeout);
-};
-exports.setInterval = function() {
-  return new Timeout(apply.call(setInterval, scope, arguments), clearInterval);
-};
-exports.clearTimeout =
-exports.clearInterval = function(timeout) {
-  if (timeout) {
-    timeout.close();
-  }
-};
-
-function Timeout(id, clearFn) {
-  this._id = id;
-  this._clearFn = clearFn;
-}
-Timeout.prototype.unref = Timeout.prototype.ref = function() {};
-Timeout.prototype.close = function() {
-  this._clearFn.call(scope, this._id);
-};
-
-// Does not start the time, just sets up the members needed.
-exports.enroll = function(item, msecs) {
-  clearTimeout(item._idleTimeoutId);
-  item._idleTimeout = msecs;
-};
-
-exports.unenroll = function(item) {
-  clearTimeout(item._idleTimeoutId);
-  item._idleTimeout = -1;
-};
-
-exports._unrefActive = exports.active = function(item) {
-  clearTimeout(item._idleTimeoutId);
-
-  var msecs = item._idleTimeout;
-  if (msecs >= 0) {
-    item._idleTimeoutId = setTimeout(function onTimeout() {
-      if (item._onTimeout)
-        item._onTimeout();
-    }, msecs);
-  }
-};
-
-// setimmediate attaches itself to the global object
-__webpack_require__(41);
-// On some exotic environments, it's not clear which object `setimmediate` was
-// able to install onto.  Search each possibility in the same order as the
-// `setimmediate` library.
-exports.setImmediate = (typeof self !== "undefined" && self.setImmediate) ||
-                       (typeof global !== "undefined" && global.setImmediate) ||
-                       (this && this.setImmediate);
-exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
-                         (typeof global !== "undefined" && global.clearImmediate) ||
-                         (this && this.clearImmediate);
-
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(2)))
-
-/***/ }),
-/* 19 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var getPropertyDescriptor = __webpack_require__(7);
+var getPropertyDescriptor = __webpack_require__(8);
 var valueToString = __webpack_require__(3);
 
 var hasOwn = Object.prototype.hasOwnProperty;
@@ -19859,7 +24247,7 @@ module.exports = function wrapMethod(object, property, method) {
 
 
 /***/ }),
-/* 20 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {var require;var require;(function(f){if(true){module.exports=f()}else { var g; }})(function(){var define,module,exports;return (function(){function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return require(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s}return e})()({1:[function(require,module,exports){
@@ -25352,13 +29740,13 @@ return typeDetect;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(2)))
 
 /***/ }),
-/* 21 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var type = __webpack_require__(40);
+var type = __webpack_require__(41);
 
 module.exports = function typeOf(value) {
     return type(value).toLowerCase();
@@ -25366,16 +29754,16 @@ module.exports = function typeOf(value) {
 
 
 /***/ }),
-/* 22 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var sinonSpy = __webpack_require__(12);
-var sinonStub = __webpack_require__(14);
-var sinonMock = __webpack_require__(27);
-var collectOwnMethods = __webpack_require__(50);
+var sinonSpy = __webpack_require__(13);
+var sinonStub = __webpack_require__(15);
+var sinonMock = __webpack_require__(28);
+var collectOwnMethods = __webpack_require__(51);
 var valueToString = __webpack_require__(3);
 
 var push = Array.prototype.push;
@@ -25534,7 +29922,7 @@ module.exports = collection;
 
 
 /***/ }),
-/* 23 */
+/* 24 */
 /***/ (function(module, exports) {
 
 // shim for using process in browser
@@ -25724,7 +30112,7 @@ process.umask = function() { return 0; };
 
 
 /***/ }),
-/* 24 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -25751,7 +30139,7 @@ module.exports = function toString() {
 
 
 /***/ }),
-/* 25 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -25774,7 +30162,7 @@ module.exports = function (object) {
 
 
 /***/ }),
-/* 26 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -25826,18 +30214,18 @@ module.exports = function walk(obj, iterator, context) {
 
 
 /***/ }),
-/* 27 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var mockExpectation = __webpack_require__(28);
-var spyCallToString = __webpack_require__(13).toString;
-var extend = __webpack_require__(6);
+var mockExpectation = __webpack_require__(29);
+var spyCallToString = __webpack_require__(14).toString;
+var extend = __webpack_require__(7);
 var match = __webpack_require__(4);
-var deepEqual = __webpack_require__(8).use(match);
-var wrapMethod = __webpack_require__(19);
+var deepEqual = __webpack_require__(9).use(match);
+var wrapMethod = __webpack_require__(20);
 
 var push = Array.prototype.push;
 var filter = Array.prototype.filter;
@@ -26011,21 +30399,21 @@ module.exports = mock;
 
 
 /***/ }),
-/* 28 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var spyInvoke = __webpack_require__(12).invoke;
-var spyCallToString = __webpack_require__(13).toString;
-var timesInWords = __webpack_require__(16);
-var extend = __webpack_require__(6);
+var spyInvoke = __webpack_require__(13).invoke;
+var spyCallToString = __webpack_require__(14).toString;
+var timesInWords = __webpack_require__(18);
+var extend = __webpack_require__(7);
 var match = __webpack_require__(4);
-var stub = __webpack_require__(14);
-var assert = __webpack_require__(15);
-var deepEqual = __webpack_require__(8).use(match);
-var format = __webpack_require__(5);
+var stub = __webpack_require__(15);
+var assert = __webpack_require__(17);
+var deepEqual = __webpack_require__(9).use(match);
+var format = __webpack_require__(6);
 var valueToString = __webpack_require__(3);
 
 var slice = Array.prototype.slice;
@@ -26306,13 +30694,13 @@ module.exports = mockExpectation;
 
 
 /***/ }),
-/* 29 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function(setImmediate, clearImmediate) {
 
-var llx = __webpack_require__(52);
+var llx = __webpack_require__(53);
 
 /**
  * @param config {number|Date|Object} the unix epoch value to install with (default 0) or
@@ -26356,10 +30744,10 @@ exports.timers = {
     Date: Date
 };
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(18).setImmediate, __webpack_require__(18).clearImmediate))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(16).setImmediate, __webpack_require__(16).clearImmediate))
 
 /***/ }),
-/* 30 */
+/* 31 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -26425,138 +30813,6090 @@ function run () {
 
 
 /***/ }),
-/* 31 */
-/***/ (function(module, exports) {
+/* 32 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
-/**
- * Export all data from an IndexedDB database
+"use strict";
+
+// CONCATENATED MODULE: ./node_modules/dexie/dist/dexie.mjs
+/*
+ * Dexie.js - a minimalistic wrapper for IndexedDB
+ * ===============================================
  *
- * @param {IDBDatabase} idbDatabase The database to export from
- * @return {Promise<string>}
+ * By David Fahlander, david.fahlander@gmail.com
+ *
+ * Version 3.0.1, Thu May 07 2020
+ *
+ * http://dexie.org
+ *
+ * Apache License Version 2.0, January 2004, http://www.apache.org/licenses/
  */
-function exportToJson (idbDatabase) {
-  return new Promise((resolve, reject) => {
-    const exportObject = {}
-    if (idbDatabase.objectStoreNames.length === 0) {
-      resolve(JSON.stringify(exportObject))
-    } else {
-      const transaction = idbDatabase.transaction(
-        idbDatabase.objectStoreNames,
-        'readonly'
-      )
+ 
+var __assign = function() {
+    __assign = Object.assign || function __assign(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 
-      transaction.addEventListener('error', reject)
 
-      for (const storeName of idbDatabase.objectStoreNames) {
-        const allObjects = []
-        transaction
-          .objectStore(storeName)
-          .openCursor()
-          .addEventListener('success', event => {
-            const cursor = event.target.result
-            if (cursor) {
-              // Cursor holds value, put it into store data
-              allObjects.push(cursor.value)
-              cursor.continue()
-            } else {
-              // No more values, store is done
-              exportObject[storeName] = allObjects
 
-              // Last store was handled
-              if (
-                idbDatabase.objectStoreNames.length ===
-                  Object.keys(exportObject).length
-              ) {
-                resolve(JSON.stringify(exportObject))
-              }
-            }
-          })
-      }
-    }
-  })
+
+
+
+
+
+
+
+function __spreadArrays() {
+    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
+    for (var r = Array(s), k = 0, i = 0; i < il; i++)
+        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
+            r[k] = a[j];
+    return r;
 }
 
-/**
-   * Import data from JSON into an IndexedDB database.
-   * This does not delete any existing data from the database, so keys may clash.
-   *
-   * @param {IDBDatabase} idbDatabase Database to import into
-   * @param {string}      json        Data to import, one key per object store
-   * @return {Promise<void>}
-   */
-function importFromJson (idbDatabase, json) {
-  return new Promise((resolve, reject) => {
-    const transaction = idbDatabase.transaction(
-      idbDatabase.objectStoreNames,
-      'readwrite'
-    )
-    transaction.addEventListener('error', reject)
-
-    var importObject = JSON.parse(json)
-    for (const storeName of idbDatabase.objectStoreNames) {
-      let count = 0
-      if (importObject[storeName] && importObject[storeName].length) {
-        for (const toAdd of importObject[storeName]) {
-          const request = transaction.objectStore(storeName).put(toAdd)
-          request.addEventListener('success', () => {
-            count++
-            if (count === importObject[storeName].length) {
-              // Added all objects for this store
-              delete importObject[storeName]
-              if (Object.keys(importObject).length === 0) {
-                // Added all object stores
-                resolve()
-              }
-            }
-          })
+var dexie_keys = Object.keys;
+var isArray = Array.isArray;
+var _global = typeof self !== 'undefined' ? self :
+    typeof window !== 'undefined' ? window :
+        global;
+if (typeof Promise !== 'undefined' && !_global.Promise) {
+    _global.Promise = Promise;
+}
+function extend(obj, extension) {
+    if (typeof extension !== 'object')
+        return obj;
+    dexie_keys(extension).forEach(function (key) {
+        obj[key] = extension[key];
+    });
+    return obj;
+}
+var getProto = Object.getPrototypeOf;
+var _hasOwn = {}.hasOwnProperty;
+function hasOwn(obj, prop) {
+    return _hasOwn.call(obj, prop);
+}
+function props(proto, extension) {
+    if (typeof extension === 'function')
+        extension = extension(getProto(proto));
+    dexie_keys(extension).forEach(function (key) {
+        setProp(proto, key, extension[key]);
+    });
+}
+var defineProperty = Object.defineProperty;
+function setProp(obj, prop, functionOrGetSet, options) {
+    defineProperty(obj, prop, extend(functionOrGetSet && hasOwn(functionOrGetSet, "get") && typeof functionOrGetSet.get === 'function' ?
+        { get: functionOrGetSet.get, set: functionOrGetSet.set, configurable: true } :
+        { value: functionOrGetSet, configurable: true, writable: true }, options));
+}
+function derive(Child) {
+    return {
+        from: function (Parent) {
+            Child.prototype = Object.create(Parent.prototype);
+            setProp(Child.prototype, "constructor", Child);
+            return {
+                extend: props.bind(null, Child.prototype)
+            };
         }
-      } else {
-        delete importObject[storeName]
-        if (Object.keys(importObject).length === 0) {
-          // Added all object stores
-          resolve()
-        }
-      }
-    }
-  })
+    };
+}
+var getOwnPropertyDescriptor = Object.getOwnPropertyDescriptor;
+function getPropertyDescriptor(obj, prop) {
+    var pd = getOwnPropertyDescriptor(obj, prop);
+    var proto;
+    return pd || (proto = getProto(obj)) && getPropertyDescriptor(proto, prop);
+}
+var _slice = [].slice;
+function slice(args, start, end) {
+    return _slice.call(args, start, end);
+}
+function override(origFunc, overridedFactory) {
+    return overridedFactory(origFunc);
+}
+function assert(b) {
+    if (!b)
+        throw new Error("Assertion Failed");
+}
+function asap(fn) {
+    if (_global.setImmediate)
+        setImmediate(fn);
+    else
+        setTimeout(fn, 0);
 }
 
-/**
-   * Clear a database
-   *
-   * @param {IDBDatabase} idbDatabase The database to delete all data from
-   * @return {Promise<void>}
-   */
-function clearDatabase (idbDatabase) {
-  return new Promise((resolve, reject) => {
-    const transaction = idbDatabase.transaction(
-      idbDatabase.objectStoreNames,
-      'readwrite'
-    )
-    transaction.addEventListener('error', reject)
+function arrayToObject(array, extractor) {
+    return array.reduce(function (result, item, i) {
+        var nameAndValue = extractor(item, i);
+        if (nameAndValue)
+            result[nameAndValue[0]] = nameAndValue[1];
+        return result;
+    }, {});
+}
 
-    let count = 0
-    for (const storeName of idbDatabase.objectStoreNames) {
-      transaction
-        .objectStore(storeName)
-        .clear()
-        .addEventListener('success', () => {
-          count++
-          if (count === idbDatabase.objectStoreNames.length) {
-            // Cleared all object stores
-            resolve()
-          }
+function tryCatch(fn, onerror, args) {
+    try {
+        fn.apply(null, args);
+    }
+    catch (ex) {
+        onerror && onerror(ex);
+    }
+}
+function getByKeyPath(obj, keyPath) {
+    if (hasOwn(obj, keyPath))
+        return obj[keyPath];
+    if (!keyPath)
+        return obj;
+    if (typeof keyPath !== 'string') {
+        var rv = [];
+        for (var i = 0, l = keyPath.length; i < l; ++i) {
+            var val = getByKeyPath(obj, keyPath[i]);
+            rv.push(val);
+        }
+        return rv;
+    }
+    var period = keyPath.indexOf('.');
+    if (period !== -1) {
+        var innerObj = obj[keyPath.substr(0, period)];
+        return innerObj === undefined ? undefined : getByKeyPath(innerObj, keyPath.substr(period + 1));
+    }
+    return undefined;
+}
+function setByKeyPath(obj, keyPath, value) {
+    if (!obj || keyPath === undefined)
+        return;
+    if ('isFrozen' in Object && Object.isFrozen(obj))
+        return;
+    if (typeof keyPath !== 'string' && 'length' in keyPath) {
+        assert(typeof value !== 'string' && 'length' in value);
+        for (var i = 0, l = keyPath.length; i < l; ++i) {
+            setByKeyPath(obj, keyPath[i], value[i]);
+        }
+    }
+    else {
+        var period = keyPath.indexOf('.');
+        if (period !== -1) {
+            var currentKeyPath = keyPath.substr(0, period);
+            var remainingKeyPath = keyPath.substr(period + 1);
+            if (remainingKeyPath === "")
+                if (value === undefined) {
+                    if (isArray(obj) && !isNaN(parseInt(currentKeyPath)))
+                        obj.splice(currentKeyPath, 1);
+                    else
+                        delete obj[currentKeyPath];
+                }
+                else
+                    obj[currentKeyPath] = value;
+            else {
+                var innerObj = obj[currentKeyPath];
+                if (!innerObj)
+                    innerObj = (obj[currentKeyPath] = {});
+                setByKeyPath(innerObj, remainingKeyPath, value);
+            }
+        }
+        else {
+            if (value === undefined) {
+                if (isArray(obj) && !isNaN(parseInt(keyPath)))
+                    obj.splice(keyPath, 1);
+                else
+                    delete obj[keyPath];
+            }
+            else
+                obj[keyPath] = value;
+        }
+    }
+}
+function delByKeyPath(obj, keyPath) {
+    if (typeof keyPath === 'string')
+        setByKeyPath(obj, keyPath, undefined);
+    else if ('length' in keyPath)
+        [].map.call(keyPath, function (kp) {
+            setByKeyPath(obj, kp, undefined);
+        });
+}
+function shallowClone(obj) {
+    var rv = {};
+    for (var m in obj) {
+        if (hasOwn(obj, m))
+            rv[m] = obj[m];
+    }
+    return rv;
+}
+var concat = [].concat;
+function flatten(a) {
+    return concat.apply([], a);
+}
+var intrinsicTypeNames = "Boolean,String,Date,RegExp,Blob,File,FileList,ArrayBuffer,DataView,Uint8ClampedArray,ImageData,Map,Set"
+    .split(',').concat(flatten([8, 16, 32, 64].map(function (num) { return ["Int", "Uint", "Float"].map(function (t) { return t + num + "Array"; }); }))).filter(function (t) { return _global[t]; });
+var intrinsicTypes = intrinsicTypeNames.map(function (t) { return _global[t]; });
+var intrinsicTypeNameSet = arrayToObject(intrinsicTypeNames, function (x) { return [x, true]; });
+function deepClone(any) {
+    if (!any || typeof any !== 'object')
+        return any;
+    var rv;
+    if (isArray(any)) {
+        rv = [];
+        for (var i = 0, l = any.length; i < l; ++i) {
+            rv.push(deepClone(any[i]));
+        }
+    }
+    else if (intrinsicTypes.indexOf(any.constructor) >= 0) {
+        rv = any;
+    }
+    else {
+        rv = any.constructor ? Object.create(any.constructor.prototype) : {};
+        for (var prop in any) {
+            if (hasOwn(any, prop)) {
+                rv[prop] = deepClone(any[prop]);
+            }
+        }
+    }
+    return rv;
+}
+var dexie_toString = {}.toString;
+function toStringTag(o) {
+    return dexie_toString.call(o).slice(8, -1);
+}
+var getValueOf = function (val, type) {
+    return type === "Array" ? '' + val.map(function (v) { return getValueOf(v, toStringTag(v)); }) :
+        type === "ArrayBuffer" ? '' + new Uint8Array(val) :
+            type === "Date" ? val.getTime() :
+                ArrayBuffer.isView(val) ? '' + new Uint8Array(val.buffer) :
+                    val;
+};
+function getObjectDiff(a, b, rv, prfx) {
+    rv = rv || {};
+    prfx = prfx || '';
+    dexie_keys(a).forEach(function (prop) {
+        if (!hasOwn(b, prop))
+            rv[prfx + prop] = undefined;
+        else {
+            var ap = a[prop], bp = b[prop];
+            if (typeof ap === 'object' && typeof bp === 'object' && ap && bp) {
+                var apTypeName = toStringTag(ap);
+                var bpTypeName = toStringTag(bp);
+                if (apTypeName === bpTypeName) {
+                    if (intrinsicTypeNameSet[apTypeName]) {
+                        if (getValueOf(ap, apTypeName) !== getValueOf(bp, bpTypeName)) {
+                            rv[prfx + prop] = b[prop];
+                        }
+                    }
+                    else {
+                        getObjectDiff(ap, bp, rv, prfx + prop + ".");
+                    }
+                }
+                else {
+                    rv[prfx + prop] = b[prop];
+                }
+            }
+            else if (ap !== bp)
+                rv[prfx + prop] = b[prop];
+        }
+    });
+    dexie_keys(b).forEach(function (prop) {
+        if (!hasOwn(a, prop)) {
+            rv[prfx + prop] = b[prop];
+        }
+    });
+    return rv;
+}
+var iteratorSymbol = typeof Symbol !== 'undefined' && Symbol.iterator;
+var getIteratorOf = iteratorSymbol ? function (x) {
+    var i;
+    return x != null && (i = x[iteratorSymbol]) && i.apply(x);
+} : function () { return null; };
+var NO_CHAR_ARRAY = {};
+function getArrayOf(arrayLike) {
+    var i, a, x, it;
+    if (arguments.length === 1) {
+        if (isArray(arrayLike))
+            return arrayLike.slice();
+        if (this === NO_CHAR_ARRAY && typeof arrayLike === 'string')
+            return [arrayLike];
+        if ((it = getIteratorOf(arrayLike))) {
+            a = [];
+            while (x = it.next(), !x.done)
+                a.push(x.value);
+            return a;
+        }
+        if (arrayLike == null)
+            return [arrayLike];
+        i = arrayLike.length;
+        if (typeof i === 'number') {
+            a = new Array(i);
+            while (i--)
+                a[i] = arrayLike[i];
+            return a;
+        }
+        return [arrayLike];
+    }
+    i = arguments.length;
+    a = new Array(i);
+    while (i--)
+        a[i] = arguments[i];
+    return a;
+}
+var isAsyncFunction = typeof Symbol !== 'undefined'
+    ? function (fn) { return fn[Symbol.toStringTag] === 'AsyncFunction'; }
+    : function () { return false; };
+
+var debug = typeof location !== 'undefined' &&
+    /^(http|https):\/\/(localhost|127\.0\.0\.1)/.test(location.href);
+function setDebug(value, filter) {
+    debug = value;
+    libraryFilter = filter;
+}
+var libraryFilter = function () { return true; };
+var NEEDS_THROW_FOR_STACK = !new Error("").stack;
+function getErrorWithStack() {
+    if (NEEDS_THROW_FOR_STACK)
+        try {
+            throw new Error();
+        }
+        catch (e) {
+            return e;
+        }
+    return new Error();
+}
+function prettyStack(exception, numIgnoredFrames) {
+    var stack = exception.stack;
+    if (!stack)
+        return "";
+    numIgnoredFrames = (numIgnoredFrames || 0);
+    if (stack.indexOf(exception.name) === 0)
+        numIgnoredFrames += (exception.name + exception.message).split('\n').length;
+    return stack.split('\n')
+        .slice(numIgnoredFrames)
+        .filter(libraryFilter)
+        .map(function (frame) { return "\n" + frame; })
+        .join('');
+}
+
+var dexieErrorNames = [
+    'Modify',
+    'Bulk',
+    'OpenFailed',
+    'VersionChange',
+    'Schema',
+    'Upgrade',
+    'InvalidTable',
+    'MissingAPI',
+    'NoSuchDatabase',
+    'InvalidArgument',
+    'SubTransaction',
+    'Unsupported',
+    'Internal',
+    'DatabaseClosed',
+    'PrematureCommit',
+    'ForeignAwait'
+];
+var idbDomErrorNames = [
+    'Unknown',
+    'Constraint',
+    'Data',
+    'TransactionInactive',
+    'ReadOnly',
+    'Version',
+    'NotFound',
+    'InvalidState',
+    'InvalidAccess',
+    'Abort',
+    'Timeout',
+    'QuotaExceeded',
+    'Syntax',
+    'DataClone'
+];
+var errorList = dexieErrorNames.concat(idbDomErrorNames);
+var defaultTexts = {
+    VersionChanged: "Database version changed by other database connection",
+    DatabaseClosed: "Database has been closed",
+    Abort: "Transaction aborted",
+    TransactionInactive: "Transaction has already completed or failed"
+};
+function DexieError(name, msg) {
+    this._e = getErrorWithStack();
+    this.name = name;
+    this.message = msg;
+}
+derive(DexieError).from(Error).extend({
+    stack: {
+        get: function () {
+            return this._stack ||
+                (this._stack = this.name + ": " + this.message + prettyStack(this._e, 2));
+        }
+    },
+    toString: function () { return this.name + ": " + this.message; }
+});
+function getMultiErrorMessage(msg, failures) {
+    return msg + ". Errors: " + Object.keys(failures)
+        .map(function (key) { return failures[key].toString(); })
+        .filter(function (v, i, s) { return s.indexOf(v) === i; })
+        .join('\n');
+}
+function ModifyError(msg, failures, successCount, failedKeys) {
+    this._e = getErrorWithStack();
+    this.failures = failures;
+    this.failedKeys = failedKeys;
+    this.successCount = successCount;
+    this.message = getMultiErrorMessage(msg, failures);
+}
+derive(ModifyError).from(DexieError);
+function BulkError(msg, failures) {
+    this._e = getErrorWithStack();
+    this.name = "BulkError";
+    this.failures = failures;
+    this.message = getMultiErrorMessage(msg, failures);
+}
+derive(BulkError).from(DexieError);
+var errnames = errorList.reduce(function (obj, name) { return (obj[name] = name + "Error", obj); }, {});
+var BaseException = DexieError;
+var exceptions = errorList.reduce(function (obj, name) {
+    var fullName = name + "Error";
+    function DexieError(msgOrInner, inner) {
+        this._e = getErrorWithStack();
+        this.name = fullName;
+        if (!msgOrInner) {
+            this.message = defaultTexts[name] || fullName;
+            this.inner = null;
+        }
+        else if (typeof msgOrInner === 'string') {
+            this.message = "" + msgOrInner + (!inner ? '' : '\n ' + inner);
+            this.inner = inner || null;
+        }
+        else if (typeof msgOrInner === 'object') {
+            this.message = msgOrInner.name + " " + msgOrInner.message;
+            this.inner = msgOrInner;
+        }
+    }
+    derive(DexieError).from(BaseException);
+    obj[name] = DexieError;
+    return obj;
+}, {});
+exceptions.Syntax = SyntaxError;
+exceptions.Type = TypeError;
+exceptions.Range = RangeError;
+var exceptionMap = idbDomErrorNames.reduce(function (obj, name) {
+    obj[name + "Error"] = exceptions[name];
+    return obj;
+}, {});
+function mapError(domError, message) {
+    if (!domError || domError instanceof DexieError || domError instanceof TypeError || domError instanceof SyntaxError || !domError.name || !exceptionMap[domError.name])
+        return domError;
+    var rv = new exceptionMap[domError.name](message || domError.message, domError);
+    if ("stack" in domError) {
+        setProp(rv, "stack", { get: function () {
+                return this.inner.stack;
+            } });
+    }
+    return rv;
+}
+var fullNameExceptions = errorList.reduce(function (obj, name) {
+    if (["Syntax", "Type", "Range"].indexOf(name) === -1)
+        obj[name + "Error"] = exceptions[name];
+    return obj;
+}, {});
+fullNameExceptions.ModifyError = ModifyError;
+fullNameExceptions.DexieError = DexieError;
+fullNameExceptions.BulkError = BulkError;
+
+function nop() { }
+function mirror(val) { return val; }
+function pureFunctionChain(f1, f2) {
+    if (f1 == null || f1 === mirror)
+        return f2;
+    return function (val) {
+        return f2(f1(val));
+    };
+}
+function callBoth(on1, on2) {
+    return function () {
+        on1.apply(this, arguments);
+        on2.apply(this, arguments);
+    };
+}
+function hookCreatingChain(f1, f2) {
+    if (f1 === nop)
+        return f2;
+    return function () {
+        var res = f1.apply(this, arguments);
+        if (res !== undefined)
+            arguments[0] = res;
+        var onsuccess = this.onsuccess,
+        onerror = this.onerror;
+        this.onsuccess = null;
+        this.onerror = null;
+        var res2 = f2.apply(this, arguments);
+        if (onsuccess)
+            this.onsuccess = this.onsuccess ? callBoth(onsuccess, this.onsuccess) : onsuccess;
+        if (onerror)
+            this.onerror = this.onerror ? callBoth(onerror, this.onerror) : onerror;
+        return res2 !== undefined ? res2 : res;
+    };
+}
+function hookDeletingChain(f1, f2) {
+    if (f1 === nop)
+        return f2;
+    return function () {
+        f1.apply(this, arguments);
+        var onsuccess = this.onsuccess,
+        onerror = this.onerror;
+        this.onsuccess = this.onerror = null;
+        f2.apply(this, arguments);
+        if (onsuccess)
+            this.onsuccess = this.onsuccess ? callBoth(onsuccess, this.onsuccess) : onsuccess;
+        if (onerror)
+            this.onerror = this.onerror ? callBoth(onerror, this.onerror) : onerror;
+    };
+}
+function hookUpdatingChain(f1, f2) {
+    if (f1 === nop)
+        return f2;
+    return function (modifications) {
+        var res = f1.apply(this, arguments);
+        extend(modifications, res);
+        var onsuccess = this.onsuccess,
+        onerror = this.onerror;
+        this.onsuccess = null;
+        this.onerror = null;
+        var res2 = f2.apply(this, arguments);
+        if (onsuccess)
+            this.onsuccess = this.onsuccess ? callBoth(onsuccess, this.onsuccess) : onsuccess;
+        if (onerror)
+            this.onerror = this.onerror ? callBoth(onerror, this.onerror) : onerror;
+        return res === undefined ?
+            (res2 === undefined ? undefined : res2) :
+            (extend(res, res2));
+    };
+}
+function reverseStoppableEventChain(f1, f2) {
+    if (f1 === nop)
+        return f2;
+    return function () {
+        if (f2.apply(this, arguments) === false)
+            return false;
+        return f1.apply(this, arguments);
+    };
+}
+
+function promisableChain(f1, f2) {
+    if (f1 === nop)
+        return f2;
+    return function () {
+        var res = f1.apply(this, arguments);
+        if (res && typeof res.then === 'function') {
+            var thiz = this, i = arguments.length, args = new Array(i);
+            while (i--)
+                args[i] = arguments[i];
+            return res.then(function () {
+                return f2.apply(thiz, args);
+            });
+        }
+        return f2.apply(this, arguments);
+    };
+}
+
+var INTERNAL = {};
+var LONG_STACKS_CLIP_LIMIT = 100;
+var MAX_LONG_STACKS = 20;
+var ZONE_ECHO_LIMIT = 100;
+var dexie_a = typeof Promise === 'undefined' ?
+    [] :
+    (function () {
+        var globalP = Promise.resolve();
+        if (typeof crypto === 'undefined' || !crypto.subtle)
+            return [globalP, globalP.__proto__, globalP];
+        var nativeP = crypto.subtle.digest("SHA-512", new Uint8Array([0]));
+        return [
+            nativeP,
+            nativeP.__proto__,
+            globalP
+        ];
+    })();
+var resolvedNativePromise = dexie_a[0];
+var nativePromiseProto = dexie_a[1];
+var resolvedGlobalPromise = dexie_a[2];
+var nativePromiseThen = nativePromiseProto && nativePromiseProto.then;
+var NativePromise = resolvedNativePromise && resolvedNativePromise.constructor;
+var patchGlobalPromise = !!resolvedGlobalPromise;
+var stack_being_generated = false;
+var schedulePhysicalTick = resolvedGlobalPromise ?
+    function () { resolvedGlobalPromise.then(physicalTick); }
+    :
+        _global.setImmediate ?
+            setImmediate.bind(null, physicalTick) :
+            _global.MutationObserver ?
+                function () {
+                    var hiddenDiv = document.createElement("div");
+                    (new MutationObserver(function () {
+                        physicalTick();
+                        hiddenDiv = null;
+                    })).observe(hiddenDiv, { attributes: true });
+                    hiddenDiv.setAttribute('i', '1');
+                } :
+                function () { setTimeout(physicalTick, 0); };
+var asap$1 = function (callback, args) {
+    microtickQueue.push([callback, args]);
+    if (needsNewPhysicalTick) {
+        schedulePhysicalTick();
+        needsNewPhysicalTick = false;
+    }
+};
+var isOutsideMicroTick = true;
+var needsNewPhysicalTick = true;
+var unhandledErrors = [];
+var rejectingErrors = [];
+var currentFulfiller = null;
+var rejectionMapper = mirror;
+var globalPSD = {
+    id: 'global',
+    global: true,
+    ref: 0,
+    unhandleds: [],
+    onunhandled: globalError,
+    pgp: false,
+    env: {},
+    finalize: function () {
+        this.unhandleds.forEach(function (uh) {
+            try {
+                globalError(uh[0], uh[1]);
+            }
+            catch (e) { }
+        });
+    }
+};
+var PSD = globalPSD;
+var microtickQueue = [];
+var numScheduledCalls = 0;
+var tickFinalizers = [];
+function DexiePromise(fn) {
+    if (typeof this !== 'object')
+        throw new TypeError('Promises must be constructed via new');
+    this._listeners = [];
+    this.onuncatched = nop;
+    this._lib = false;
+    var psd = (this._PSD = PSD);
+    if (debug) {
+        this._stackHolder = getErrorWithStack();
+        this._prev = null;
+        this._numPrev = 0;
+    }
+    if (typeof fn !== 'function') {
+        if (fn !== INTERNAL)
+            throw new TypeError('Not a function');
+        this._state = arguments[1];
+        this._value = arguments[2];
+        if (this._state === false)
+            handleRejection(this, this._value);
+        return;
+    }
+    this._state = null;
+    this._value = null;
+    ++psd.ref;
+    executePromiseTask(this, fn);
+}
+var thenProp = {
+    get: function () {
+        var psd = PSD, microTaskId = totalEchoes;
+        function then(onFulfilled, onRejected) {
+            var _this = this;
+            var possibleAwait = !psd.global && (psd !== PSD || microTaskId !== totalEchoes);
+            if (possibleAwait)
+                decrementExpectedAwaits();
+            var rv = new DexiePromise(function (resolve, reject) {
+                propagateToListener(_this, new Listener(nativeAwaitCompatibleWrap(onFulfilled, psd, possibleAwait), nativeAwaitCompatibleWrap(onRejected, psd, possibleAwait), resolve, reject, psd));
+            });
+            debug && linkToPreviousPromise(rv, this);
+            return rv;
+        }
+        then.prototype = INTERNAL;
+        return then;
+    },
+    set: function (value) {
+        setProp(this, 'then', value && value.prototype === INTERNAL ?
+            thenProp :
+            {
+                get: function () {
+                    return value;
+                },
+                set: thenProp.set
+            });
+    }
+};
+props(DexiePromise.prototype, {
+    then: thenProp,
+    _then: function (onFulfilled, onRejected) {
+        propagateToListener(this, new Listener(null, null, onFulfilled, onRejected, PSD));
+    },
+    catch: function (onRejected) {
+        if (arguments.length === 1)
+            return this.then(null, onRejected);
+        var type = arguments[0], handler = arguments[1];
+        return typeof type === 'function' ? this.then(null, function (err) {
+            return err instanceof type ? handler(err) : PromiseReject(err);
         })
+            : this.then(null, function (err) {
+                return err && err.name === type ? handler(err) : PromiseReject(err);
+            });
+    },
+    finally: function (onFinally) {
+        return this.then(function (value) {
+            onFinally();
+            return value;
+        }, function (err) {
+            onFinally();
+            return PromiseReject(err);
+        });
+    },
+    stack: {
+        get: function () {
+            if (this._stack)
+                return this._stack;
+            try {
+                stack_being_generated = true;
+                var stacks = getStack(this, [], MAX_LONG_STACKS);
+                var stack = stacks.join("\nFrom previous: ");
+                if (this._state !== null)
+                    this._stack = stack;
+                return stack;
+            }
+            finally {
+                stack_being_generated = false;
+            }
+        }
+    },
+    timeout: function (ms, msg) {
+        var _this = this;
+        return ms < Infinity ?
+            new DexiePromise(function (resolve, reject) {
+                var handle = setTimeout(function () { return reject(new exceptions.Timeout(msg)); }, ms);
+                _this.then(resolve, reject).finally(clearTimeout.bind(null, handle));
+            }) : this;
     }
-  })
+});
+if (typeof Symbol !== 'undefined' && Symbol.toStringTag)
+    setProp(DexiePromise.prototype, Symbol.toStringTag, 'Dexie.Promise');
+globalPSD.env = snapShot();
+function Listener(onFulfilled, onRejected, resolve, reject, zone) {
+    this.onFulfilled = typeof onFulfilled === 'function' ? onFulfilled : null;
+    this.onRejected = typeof onRejected === 'function' ? onRejected : null;
+    this.resolve = resolve;
+    this.reject = reject;
+    this.psd = zone;
 }
-module.exports = {
-  exportToJson, importFromJson, clearDatabase
+props(DexiePromise, {
+    all: function () {
+        var values = getArrayOf.apply(null, arguments)
+            .map(onPossibleParallellAsync);
+        return new DexiePromise(function (resolve, reject) {
+            if (values.length === 0)
+                resolve([]);
+            var remaining = values.length;
+            values.forEach(function (a, i) { return DexiePromise.resolve(a).then(function (x) {
+                values[i] = x;
+                if (!--remaining)
+                    resolve(values);
+            }, reject); });
+        });
+    },
+    resolve: function (value) {
+        if (value instanceof DexiePromise)
+            return value;
+        if (value && typeof value.then === 'function')
+            return new DexiePromise(function (resolve, reject) {
+                value.then(resolve, reject);
+            });
+        var rv = new DexiePromise(INTERNAL, true, value);
+        linkToPreviousPromise(rv, currentFulfiller);
+        return rv;
+    },
+    reject: PromiseReject,
+    race: function () {
+        var values = getArrayOf.apply(null, arguments).map(onPossibleParallellAsync);
+        return new DexiePromise(function (resolve, reject) {
+            values.map(function (value) { return DexiePromise.resolve(value).then(resolve, reject); });
+        });
+    },
+    PSD: {
+        get: function () { return PSD; },
+        set: function (value) { return PSD = value; }
+    },
+    newPSD: newScope,
+    usePSD: usePSD,
+    scheduler: {
+        get: function () { return asap$1; },
+        set: function (value) { asap$1 = value; }
+    },
+    rejectionMapper: {
+        get: function () { return rejectionMapper; },
+        set: function (value) { rejectionMapper = value; }
+    },
+    follow: function (fn, zoneProps) {
+        return new DexiePromise(function (resolve, reject) {
+            return newScope(function (resolve, reject) {
+                var psd = PSD;
+                psd.unhandleds = [];
+                psd.onunhandled = reject;
+                psd.finalize = callBoth(function () {
+                    var _this = this;
+                    run_at_end_of_this_or_next_physical_tick(function () {
+                        _this.unhandleds.length === 0 ? resolve() : reject(_this.unhandleds[0]);
+                    });
+                }, psd.finalize);
+                fn();
+            }, zoneProps, resolve, reject);
+        });
+    }
+});
+if (NativePromise) {
+    if (NativePromise.allSettled)
+        setProp(DexiePromise, "allSettled", function () {
+            var possiblePromises = getArrayOf.apply(null, arguments).map(onPossibleParallellAsync);
+            return new DexiePromise(function (resolve) {
+                if (possiblePromises.length === 0)
+                    resolve([]);
+                var remaining = possiblePromises.length;
+                var results = new Array(remaining);
+                possiblePromises.forEach(function (p, i) { return DexiePromise.resolve(p).then(function (value) { return results[i] = { status: "fulfilled", value: value }; }, function (reason) { return results[i] = { status: "rejected", reason: reason }; })
+                    .then(function () { return --remaining || resolve(results); }); });
+            });
+        });
+    if (NativePromise.any && typeof AggregateError !== 'undefined')
+        setProp(DexiePromise, "any", function () {
+            var possiblePromises = getArrayOf.apply(null, arguments).map(onPossibleParallellAsync);
+            return new DexiePromise(function (resolve, reject) {
+                if (possiblePromises.length === 0)
+                    reject(new AggregateError([]));
+                var remaining = possiblePromises.length;
+                var failures = new Array(remaining);
+                possiblePromises.forEach(function (p, i) { return DexiePromise.resolve(p).then(function (value) { return resolve(value); }, function (failure) {
+                    failures[i] = failure;
+                    if (!--remaining)
+                        reject(new AggregateError(failures));
+                }); });
+            });
+        });
+}
+function executePromiseTask(promise, fn) {
+    try {
+        fn(function (value) {
+            if (promise._state !== null)
+                return;
+            if (value === promise)
+                throw new TypeError('A promise cannot be resolved with itself.');
+            var shouldExecuteTick = promise._lib && beginMicroTickScope();
+            if (value && typeof value.then === 'function') {
+                executePromiseTask(promise, function (resolve, reject) {
+                    value instanceof DexiePromise ?
+                        value._then(resolve, reject) :
+                        value.then(resolve, reject);
+                });
+            }
+            else {
+                promise._state = true;
+                promise._value = value;
+                propagateAllListeners(promise);
+            }
+            if (shouldExecuteTick)
+                endMicroTickScope();
+        }, handleRejection.bind(null, promise));
+    }
+    catch (ex) {
+        handleRejection(promise, ex);
+    }
+}
+function handleRejection(promise, reason) {
+    rejectingErrors.push(reason);
+    if (promise._state !== null)
+        return;
+    var shouldExecuteTick = promise._lib && beginMicroTickScope();
+    reason = rejectionMapper(reason);
+    promise._state = false;
+    promise._value = reason;
+    debug && reason !== null && typeof reason === 'object' && !reason._promise && tryCatch(function () {
+        var origProp = getPropertyDescriptor(reason, "stack");
+        reason._promise = promise;
+        setProp(reason, "stack", {
+            get: function () {
+                return stack_being_generated ?
+                    origProp && (origProp.get ?
+                        origProp.get.apply(reason) :
+                        origProp.value) :
+                    promise.stack;
+            }
+        });
+    });
+    addPossiblyUnhandledError(promise);
+    propagateAllListeners(promise);
+    if (shouldExecuteTick)
+        endMicroTickScope();
+}
+function propagateAllListeners(promise) {
+    var listeners = promise._listeners;
+    promise._listeners = [];
+    for (var i = 0, len = listeners.length; i < len; ++i) {
+        propagateToListener(promise, listeners[i]);
+    }
+    var psd = promise._PSD;
+    --psd.ref || psd.finalize();
+    if (numScheduledCalls === 0) {
+        ++numScheduledCalls;
+        asap$1(function () {
+            if (--numScheduledCalls === 0)
+                finalizePhysicalTick();
+        }, []);
+    }
+}
+function propagateToListener(promise, listener) {
+    if (promise._state === null) {
+        promise._listeners.push(listener);
+        return;
+    }
+    var cb = promise._state ? listener.onFulfilled : listener.onRejected;
+    if (cb === null) {
+        return (promise._state ? listener.resolve : listener.reject)(promise._value);
+    }
+    ++listener.psd.ref;
+    ++numScheduledCalls;
+    asap$1(callListener, [cb, promise, listener]);
+}
+function callListener(cb, promise, listener) {
+    try {
+        currentFulfiller = promise;
+        var ret, value = promise._value;
+        if (promise._state) {
+            ret = cb(value);
+        }
+        else {
+            if (rejectingErrors.length)
+                rejectingErrors = [];
+            ret = cb(value);
+            if (rejectingErrors.indexOf(value) === -1)
+                markErrorAsHandled(promise);
+        }
+        listener.resolve(ret);
+    }
+    catch (e) {
+        listener.reject(e);
+    }
+    finally {
+        currentFulfiller = null;
+        if (--numScheduledCalls === 0)
+            finalizePhysicalTick();
+        --listener.psd.ref || listener.psd.finalize();
+    }
+}
+function getStack(promise, stacks, limit) {
+    if (stacks.length === limit)
+        return stacks;
+    var stack = "";
+    if (promise._state === false) {
+        var failure = promise._value, errorName, message;
+        if (failure != null) {
+            errorName = failure.name || "Error";
+            message = failure.message || failure;
+            stack = prettyStack(failure, 0);
+        }
+        else {
+            errorName = failure;
+            message = "";
+        }
+        stacks.push(errorName + (message ? ": " + message : "") + stack);
+    }
+    if (debug) {
+        stack = prettyStack(promise._stackHolder, 2);
+        if (stack && stacks.indexOf(stack) === -1)
+            stacks.push(stack);
+        if (promise._prev)
+            getStack(promise._prev, stacks, limit);
+    }
+    return stacks;
+}
+function linkToPreviousPromise(promise, prev) {
+    var numPrev = prev ? prev._numPrev + 1 : 0;
+    if (numPrev < LONG_STACKS_CLIP_LIMIT) {
+        promise._prev = prev;
+        promise._numPrev = numPrev;
+    }
+}
+function physicalTick() {
+    beginMicroTickScope() && endMicroTickScope();
+}
+function beginMicroTickScope() {
+    var wasRootExec = isOutsideMicroTick;
+    isOutsideMicroTick = false;
+    needsNewPhysicalTick = false;
+    return wasRootExec;
+}
+function endMicroTickScope() {
+    var callbacks, i, l;
+    do {
+        while (microtickQueue.length > 0) {
+            callbacks = microtickQueue;
+            microtickQueue = [];
+            l = callbacks.length;
+            for (i = 0; i < l; ++i) {
+                var item = callbacks[i];
+                item[0].apply(null, item[1]);
+            }
+        }
+    } while (microtickQueue.length > 0);
+    isOutsideMicroTick = true;
+    needsNewPhysicalTick = true;
+}
+function finalizePhysicalTick() {
+    var unhandledErrs = unhandledErrors;
+    unhandledErrors = [];
+    unhandledErrs.forEach(function (p) {
+        p._PSD.onunhandled.call(null, p._value, p);
+    });
+    var finalizers = tickFinalizers.slice(0);
+    var i = finalizers.length;
+    while (i)
+        finalizers[--i]();
+}
+function run_at_end_of_this_or_next_physical_tick(fn) {
+    function finalizer() {
+        fn();
+        tickFinalizers.splice(tickFinalizers.indexOf(finalizer), 1);
+    }
+    tickFinalizers.push(finalizer);
+    ++numScheduledCalls;
+    asap$1(function () {
+        if (--numScheduledCalls === 0)
+            finalizePhysicalTick();
+    }, []);
+}
+function addPossiblyUnhandledError(promise) {
+    if (!unhandledErrors.some(function (p) { return p._value === promise._value; }))
+        unhandledErrors.push(promise);
+}
+function markErrorAsHandled(promise) {
+    var i = unhandledErrors.length;
+    while (i)
+        if (unhandledErrors[--i]._value === promise._value) {
+            unhandledErrors.splice(i, 1);
+            return;
+        }
+}
+function PromiseReject(reason) {
+    return new DexiePromise(INTERNAL, false, reason);
+}
+function wrap(fn, errorCatcher) {
+    var psd = PSD;
+    return function () {
+        var wasRootExec = beginMicroTickScope(), outerScope = PSD;
+        try {
+            switchToZone(psd, true);
+            return fn.apply(this, arguments);
+        }
+        catch (e) {
+            errorCatcher && errorCatcher(e);
+        }
+        finally {
+            switchToZone(outerScope, false);
+            if (wasRootExec)
+                endMicroTickScope();
+        }
+    };
+}
+var task = { awaits: 0, echoes: 0, id: 0 };
+var taskCounter = 0;
+var zoneStack = [];
+var zoneEchoes = 0;
+var totalEchoes = 0;
+var zone_id_counter = 0;
+function newScope(fn, props$$1, a1, a2) {
+    var parent = PSD, psd = Object.create(parent);
+    psd.parent = parent;
+    psd.ref = 0;
+    psd.global = false;
+    psd.id = ++zone_id_counter;
+    var globalEnv = globalPSD.env;
+    psd.env = patchGlobalPromise ? {
+        Promise: DexiePromise,
+        PromiseProp: { value: DexiePromise, configurable: true, writable: true },
+        all: DexiePromise.all,
+        race: DexiePromise.race,
+        allSettled: DexiePromise.allSettled,
+        any: DexiePromise.any,
+        resolve: DexiePromise.resolve,
+        reject: DexiePromise.reject,
+        nthen: getPatchedPromiseThen(globalEnv.nthen, psd),
+        gthen: getPatchedPromiseThen(globalEnv.gthen, psd)
+    } : {};
+    if (props$$1)
+        extend(psd, props$$1);
+    ++parent.ref;
+    psd.finalize = function () {
+        --this.parent.ref || this.parent.finalize();
+    };
+    var rv = usePSD(psd, fn, a1, a2);
+    if (psd.ref === 0)
+        psd.finalize();
+    return rv;
+}
+function incrementExpectedAwaits() {
+    if (!task.id)
+        task.id = ++taskCounter;
+    ++task.awaits;
+    task.echoes += ZONE_ECHO_LIMIT;
+    return task.id;
+}
+function decrementExpectedAwaits(sourceTaskId) {
+    if (!task.awaits || (sourceTaskId && sourceTaskId !== task.id))
+        return;
+    if (--task.awaits === 0)
+        task.id = 0;
+    task.echoes = task.awaits * ZONE_ECHO_LIMIT;
+}
+if (('' + nativePromiseThen).indexOf('[native code]') === -1) {
+    incrementExpectedAwaits = decrementExpectedAwaits = nop;
+}
+function onPossibleParallellAsync(possiblePromise) {
+    if (task.echoes && possiblePromise && possiblePromise.constructor === NativePromise) {
+        incrementExpectedAwaits();
+        return possiblePromise.then(function (x) {
+            decrementExpectedAwaits();
+            return x;
+        }, function (e) {
+            decrementExpectedAwaits();
+            return rejection(e);
+        });
+    }
+    return possiblePromise;
+}
+function zoneEnterEcho(targetZone) {
+    ++totalEchoes;
+    if (!task.echoes || --task.echoes === 0) {
+        task.echoes = task.id = 0;
+    }
+    zoneStack.push(PSD);
+    switchToZone(targetZone, true);
+}
+function zoneLeaveEcho() {
+    var zone = zoneStack[zoneStack.length - 1];
+    zoneStack.pop();
+    switchToZone(zone, false);
+}
+function switchToZone(targetZone, bEnteringZone) {
+    var currentZone = PSD;
+    if (bEnteringZone ? task.echoes && (!zoneEchoes++ || targetZone !== PSD) : zoneEchoes && (!--zoneEchoes || targetZone !== PSD)) {
+        enqueueNativeMicroTask(bEnteringZone ? zoneEnterEcho.bind(null, targetZone) : zoneLeaveEcho);
+    }
+    if (targetZone === PSD)
+        return;
+    PSD = targetZone;
+    if (currentZone === globalPSD)
+        globalPSD.env = snapShot();
+    if (patchGlobalPromise) {
+        var GlobalPromise_1 = globalPSD.env.Promise;
+        var targetEnv = targetZone.env;
+        nativePromiseProto.then = targetEnv.nthen;
+        GlobalPromise_1.prototype.then = targetEnv.gthen;
+        if (currentZone.global || targetZone.global) {
+            Object.defineProperty(_global, 'Promise', targetEnv.PromiseProp);
+            GlobalPromise_1.all = targetEnv.all;
+            GlobalPromise_1.race = targetEnv.race;
+            GlobalPromise_1.resolve = targetEnv.resolve;
+            GlobalPromise_1.reject = targetEnv.reject;
+            if (targetEnv.allSettled)
+                GlobalPromise_1.allSettled = targetEnv.allSettled;
+            if (targetEnv.any)
+                GlobalPromise_1.any = targetEnv.any;
+        }
+    }
+}
+function snapShot() {
+    var GlobalPromise = _global.Promise;
+    return patchGlobalPromise ? {
+        Promise: GlobalPromise,
+        PromiseProp: Object.getOwnPropertyDescriptor(_global, "Promise"),
+        all: GlobalPromise.all,
+        race: GlobalPromise.race,
+        allSettled: GlobalPromise.allSettled,
+        any: GlobalPromise.any,
+        resolve: GlobalPromise.resolve,
+        reject: GlobalPromise.reject,
+        nthen: nativePromiseProto.then,
+        gthen: GlobalPromise.prototype.then
+    } : {};
+}
+function usePSD(psd, fn, a1, a2, a3) {
+    var outerScope = PSD;
+    try {
+        switchToZone(psd, true);
+        return fn(a1, a2, a3);
+    }
+    finally {
+        switchToZone(outerScope, false);
+    }
+}
+function enqueueNativeMicroTask(job) {
+    nativePromiseThen.call(resolvedNativePromise, job);
+}
+function nativeAwaitCompatibleWrap(fn, zone, possibleAwait) {
+    return typeof fn !== 'function' ? fn : function () {
+        var outerZone = PSD;
+        if (possibleAwait)
+            incrementExpectedAwaits();
+        switchToZone(zone, true);
+        try {
+            return fn.apply(this, arguments);
+        }
+        finally {
+            switchToZone(outerZone, false);
+        }
+    };
+}
+function getPatchedPromiseThen(origThen, zone) {
+    return function (onResolved, onRejected) {
+        return origThen.call(this, nativeAwaitCompatibleWrap(onResolved, zone, false), nativeAwaitCompatibleWrap(onRejected, zone, false));
+    };
+}
+var UNHANDLEDREJECTION = "unhandledrejection";
+function globalError(err, promise) {
+    var rv;
+    try {
+        rv = promise.onuncatched(err);
+    }
+    catch (e) { }
+    if (rv !== false)
+        try {
+            var event, eventData = { promise: promise, reason: err };
+            if (_global.document && document.createEvent) {
+                event = document.createEvent('Event');
+                event.initEvent(UNHANDLEDREJECTION, true, true);
+                extend(event, eventData);
+            }
+            else if (_global.CustomEvent) {
+                event = new CustomEvent(UNHANDLEDREJECTION, { detail: eventData });
+                extend(event, eventData);
+            }
+            if (event && _global.dispatchEvent) {
+                dispatchEvent(event);
+                if (!_global.PromiseRejectionEvent && _global.onunhandledrejection)
+                    try {
+                        _global.onunhandledrejection(event);
+                    }
+                    catch (_) { }
+            }
+            if (debug && event && !event.defaultPrevented) {
+                console.warn("Unhandled rejection: " + (err.stack || err));
+            }
+        }
+        catch (e) { }
+}
+var rejection = DexiePromise.reject;
+
+function tempTransaction(db, mode, storeNames, fn) {
+    if (!db._state.openComplete && (!PSD.letThrough)) {
+        if (!db._state.isBeingOpened) {
+            if (!db._options.autoOpen)
+                return rejection(new exceptions.DatabaseClosed());
+            db.open().catch(nop);
+        }
+        return db._state.dbReadyPromise.then(function () { return tempTransaction(db, mode, storeNames, fn); });
+    }
+    else {
+        var trans = db._createTransaction(mode, storeNames, db._dbSchema);
+        try {
+            trans.create();
+        }
+        catch (ex) {
+            return rejection(ex);
+        }
+        return trans._promise(mode, function (resolve, reject) {
+            return newScope(function () {
+                PSD.trans = trans;
+                return fn(resolve, reject, trans);
+            });
+        }).then(function (result) {
+            return trans._completion.then(function () { return result; });
+        });
+    }
+}
+
+var DEXIE_VERSION = '3.0.1';
+var maxString = String.fromCharCode(65535);
+var minKey = -Infinity;
+var INVALID_KEY_ARGUMENT = "Invalid key provided. Keys must be of type string, number, Date or Array<string | number | Date>.";
+var STRING_EXPECTED = "String expected.";
+var connections = [];
+var isIEOrEdge = typeof navigator !== 'undefined' && /(MSIE|Trident|Edge)/.test(navigator.userAgent);
+var hasIEDeleteObjectStoreBug = isIEOrEdge;
+var hangsOnDeleteLargeKeyRange = isIEOrEdge;
+var dexieStackFrameFilter = function (frame) { return !/(dexie\.js|dexie\.min\.js)/.test(frame); };
+var DBNAMES_DB = '__dbnames';
+var READONLY = 'readonly';
+var READWRITE = 'readwrite';
+
+function combine(filter1, filter2) {
+    return filter1 ?
+        filter2 ?
+            function () { return filter1.apply(this, arguments) && filter2.apply(this, arguments); } :
+            filter1 :
+        filter2;
+}
+
+var AnyRange = {
+    type: 3          ,
+    lower: -Infinity,
+    lowerOpen: false,
+    upper: [[]],
+    upperOpen: false
+};
+
+var Table =               (function () {
+    function Table() {
+    }
+    Table.prototype._trans = function (mode, fn, writeLocked) {
+        var trans = this._tx || PSD.trans;
+        var tableName = this.name;
+        function checkTableInTransaction(resolve, reject, trans) {
+            if (!trans.schema[tableName])
+                throw new exceptions.NotFound("Table " + tableName + " not part of transaction");
+            return fn(trans.idbtrans, trans);
+        }
+        var wasRootExec = beginMicroTickScope();
+        try {
+            return trans && trans.db === this.db ?
+                trans === PSD.trans ?
+                    trans._promise(mode, checkTableInTransaction, writeLocked) :
+                    newScope(function () { return trans._promise(mode, checkTableInTransaction, writeLocked); }, { trans: trans, transless: PSD.transless || PSD }) :
+                tempTransaction(this.db, mode, [this.name], checkTableInTransaction);
+        }
+        finally {
+            if (wasRootExec)
+                endMicroTickScope();
+        }
+    };
+    Table.prototype.get = function (keyOrCrit, cb) {
+        var _this = this;
+        if (keyOrCrit && keyOrCrit.constructor === Object)
+            return this.where(keyOrCrit).first(cb);
+        return this._trans('readonly', function (trans) {
+            return _this.core.get({ trans: trans, key: keyOrCrit })
+                .then(function (res) { return _this.hook.reading.fire(res); });
+        }).then(cb);
+    };
+    Table.prototype.where = function (indexOrCrit) {
+        if (typeof indexOrCrit === 'string')
+            return new this.db.WhereClause(this, indexOrCrit);
+        if (isArray(indexOrCrit))
+            return new this.db.WhereClause(this, "[" + indexOrCrit.join('+') + "]");
+        var keyPaths = dexie_keys(indexOrCrit);
+        if (keyPaths.length === 1)
+            return this
+                .where(keyPaths[0])
+                .equals(indexOrCrit[keyPaths[0]]);
+        var compoundIndex = this.schema.indexes.concat(this.schema.primKey).filter(function (ix) {
+            return ix.compound &&
+                keyPaths.every(function (keyPath) { return ix.keyPath.indexOf(keyPath) >= 0; }) &&
+                ix.keyPath.every(function (keyPath) { return keyPaths.indexOf(keyPath) >= 0; });
+        })[0];
+        if (compoundIndex && this.db._maxKey !== maxString)
+            return this
+                .where(compoundIndex.name)
+                .equals(compoundIndex.keyPath.map(function (kp) { return indexOrCrit[kp]; }));
+        if (!compoundIndex && debug)
+            console.warn("The query " + JSON.stringify(indexOrCrit) + " on " + this.name + " would benefit of a " +
+                ("compound index [" + keyPaths.join('+') + "]"));
+        var idxByName = this.schema.idxByName;
+        var idb = this.db._deps.indexedDB;
+        function equals(a, b) {
+            try {
+                return idb.cmp(a, b) === 0;
+            }
+            catch (e) {
+                return false;
+            }
+        }
+        var _a = keyPaths.reduce(function (_a, keyPath) {
+            var prevIndex = _a[0], prevFilterFn = _a[1];
+            var index = idxByName[keyPath];
+            var value = indexOrCrit[keyPath];
+            return [
+                prevIndex || index,
+                prevIndex || !index ?
+                    combine(prevFilterFn, index && index.multi ?
+                        function (x) {
+                            var prop = getByKeyPath(x, keyPath);
+                            return isArray(prop) && prop.some(function (item) { return equals(value, item); });
+                        } : function (x) { return equals(value, getByKeyPath(x, keyPath)); })
+                    : prevFilterFn
+            ];
+        }, [null, null]), idx = _a[0], filterFunction = _a[1];
+        return idx ?
+            this.where(idx.name).equals(indexOrCrit[idx.keyPath])
+                .filter(filterFunction) :
+            compoundIndex ?
+                this.filter(filterFunction) :
+                this.where(keyPaths).equals('');
+    };
+    Table.prototype.filter = function (filterFunction) {
+        return this.toCollection().and(filterFunction);
+    };
+    Table.prototype.count = function (thenShortcut) {
+        return this.toCollection().count(thenShortcut);
+    };
+    Table.prototype.offset = function (offset) {
+        return this.toCollection().offset(offset);
+    };
+    Table.prototype.limit = function (numRows) {
+        return this.toCollection().limit(numRows);
+    };
+    Table.prototype.each = function (callback) {
+        return this.toCollection().each(callback);
+    };
+    Table.prototype.toArray = function (thenShortcut) {
+        return this.toCollection().toArray(thenShortcut);
+    };
+    Table.prototype.toCollection = function () {
+        return new this.db.Collection(new this.db.WhereClause(this));
+    };
+    Table.prototype.orderBy = function (index) {
+        return new this.db.Collection(new this.db.WhereClause(this, isArray(index) ?
+            "[" + index.join('+') + "]" :
+            index));
+    };
+    Table.prototype.reverse = function () {
+        return this.toCollection().reverse();
+    };
+    Table.prototype.mapToClass = function (constructor) {
+        this.schema.mappedClass = constructor;
+        var readHook = function (obj) {
+            if (!obj)
+                return obj;
+            var res = Object.create(constructor.prototype);
+            for (var m in obj)
+                if (hasOwn(obj, m))
+                    try {
+                        res[m] = obj[m];
+                    }
+                    catch (_) { }
+            return res;
+        };
+        if (this.schema.readHook) {
+            this.hook.reading.unsubscribe(this.schema.readHook);
+        }
+        this.schema.readHook = readHook;
+        this.hook("reading", readHook);
+        return constructor;
+    };
+    Table.prototype.defineClass = function () {
+        function Class(content) {
+            extend(this, content);
+        }
+        
+        return this.mapToClass(Class);
+    };
+    Table.prototype.add = function (obj, key) {
+        var _this = this;
+        return this._trans('readwrite', function (trans) {
+            return _this.core.mutate({ trans: trans, type: 'add', keys: key != null ? [key] : null, values: [obj] });
+        }).then(function (res) { return res.numFailures ? DexiePromise.reject(res.failures[0]) : res.lastResult; })
+            .then(function (lastResult) {
+            if (!_this.core.schema.primaryKey.outbound) {
+                try {
+                    setByKeyPath(obj, _this.core.schema.primaryKey.keyPath, lastResult);
+                }
+                catch (_) { }
+                
+            }
+            return lastResult;
+        });
+    };
+    Table.prototype.update = function (keyOrObject, modifications) {
+        if (typeof modifications !== 'object' || isArray(modifications))
+            throw new exceptions.InvalidArgument("Modifications must be an object.");
+        if (typeof keyOrObject === 'object' && !isArray(keyOrObject)) {
+            dexie_keys(modifications).forEach(function (keyPath) {
+                setByKeyPath(keyOrObject, keyPath, modifications[keyPath]);
+            });
+            var key = getByKeyPath(keyOrObject, this.schema.primKey.keyPath);
+            if (key === undefined)
+                return rejection(new exceptions.InvalidArgument("Given object does not contain its primary key"));
+            return this.where(":id").equals(key).modify(modifications);
+        }
+        else {
+            return this.where(":id").equals(keyOrObject).modify(modifications);
+        }
+    };
+    Table.prototype.put = function (obj, key) {
+        var _this = this;
+        return this._trans('readwrite', function (trans) { return _this.core.mutate({ trans: trans, type: 'put', values: [obj], keys: key != null ? [key] : null }); })
+            .then(function (res) { return res.numFailures ? DexiePromise.reject(res.failures[0]) : res.lastResult; })
+            .then(function (lastResult) {
+            if (!_this.core.schema.primaryKey.outbound) {
+                try {
+                    setByKeyPath(obj, _this.core.schema.primaryKey.keyPath, lastResult);
+                }
+                catch (_) { }
+                
+            }
+            return lastResult;
+        });
+    };
+    Table.prototype.delete = function (key) {
+        var _this = this;
+        return this._trans('readwrite', function (trans) { return _this.core.mutate({ trans: trans, type: 'delete', keys: [key] }); })
+            .then(function (res) { return res.numFailures ? DexiePromise.reject(res.failures[0]) : undefined; });
+    };
+    Table.prototype.clear = function () {
+        var _this = this;
+        return this._trans('readwrite', function (trans) { return _this.core.mutate({ trans: trans, type: 'deleteRange', range: AnyRange }); })
+            .then(function (res) { return res.numFailures ? DexiePromise.reject(res.failures[0]) : undefined; });
+    };
+    Table.prototype.bulkGet = function (keys$$1) {
+        var _this = this;
+        return this._trans('readonly', function (trans) {
+            return _this.core.getMany({
+                keys: keys$$1,
+                trans: trans
+            });
+        });
+    };
+    Table.prototype.bulkAdd = function (objects, keysOrOptions, options) {
+        var _this = this;
+        var keys$$1 = Array.isArray(keysOrOptions) ? keysOrOptions : undefined;
+        options = options || (keys$$1 ? undefined : keysOrOptions);
+        var wantResults = options ? options.allKeys : undefined;
+        return this._trans('readwrite', function (trans) {
+            var outbound = _this.core.schema.primaryKey.outbound;
+            if (!outbound && keys$$1)
+                throw new exceptions.InvalidArgument("bulkAdd(): keys argument invalid on tables with inbound keys");
+            if (keys$$1 && keys$$1.length !== objects.length)
+                throw new exceptions.InvalidArgument("Arguments objects and keys must have the same length");
+            var numObjects = objects.length;
+            return _this.core.mutate({ trans: trans, type: 'add', keys: keys$$1, values: objects, wantResults: wantResults })
+                .then(function (_a) {
+                var numFailures = _a.numFailures, results = _a.results, lastResult = _a.lastResult, failures = _a.failures;
+                var result = wantResults ? results : lastResult;
+                if (numFailures === 0)
+                    return result;
+                throw new BulkError(_this.name + ".bulkAdd(): " + numFailures + " of " + numObjects + " operations failed", Object.keys(failures).map(function (pos) { return failures[pos]; }));
+            });
+        });
+    };
+    Table.prototype.bulkPut = function (objects, keysOrOptions, options) {
+        var _this = this;
+        var keys$$1 = Array.isArray(keysOrOptions) ? keysOrOptions : undefined;
+        options = options || (keys$$1 ? undefined : keysOrOptions);
+        var wantResults = options ? options.allKeys : undefined;
+        return this._trans('readwrite', function (trans) {
+            var outbound = _this.core.schema.primaryKey.outbound;
+            if (!outbound && keys$$1)
+                throw new exceptions.InvalidArgument("bulkPut(): keys argument invalid on tables with inbound keys");
+            if (keys$$1 && keys$$1.length !== objects.length)
+                throw new exceptions.InvalidArgument("Arguments objects and keys must have the same length");
+            var numObjects = objects.length;
+            return _this.core.mutate({ trans: trans, type: 'put', keys: keys$$1, values: objects, wantResults: wantResults })
+                .then(function (_a) {
+                var numFailures = _a.numFailures, results = _a.results, lastResult = _a.lastResult, failures = _a.failures;
+                var result = wantResults ? results : lastResult;
+                if (numFailures === 0)
+                    return result;
+                throw new BulkError(_this.name + ".bulkPut(): " + numFailures + " of " + numObjects + " operations failed", Object.keys(failures).map(function (pos) { return failures[pos]; }));
+            });
+        });
+    };
+    Table.prototype.bulkDelete = function (keys$$1) {
+        var _this = this;
+        var numKeys = keys$$1.length;
+        return this._trans('readwrite', function (trans) {
+            return _this.core.mutate({ trans: trans, type: 'delete', keys: keys$$1 });
+        }).then(function (_a) {
+            var numFailures = _a.numFailures, lastResult = _a.lastResult, failures = _a.failures;
+            if (numFailures === 0)
+                return lastResult;
+            throw new BulkError(_this.name + ".bulkDelete(): " + numFailures + " of " + numKeys + " operations failed", failures);
+        });
+    };
+    return Table;
+}());
+
+function Events(ctx) {
+    var evs = {};
+    var rv = function (eventName, subscriber) {
+        if (subscriber) {
+            var i = arguments.length, args = new Array(i - 1);
+            while (--i)
+                args[i - 1] = arguments[i];
+            evs[eventName].subscribe.apply(null, args);
+            return ctx;
+        }
+        else if (typeof (eventName) === 'string') {
+            return evs[eventName];
+        }
+    };
+    rv.addEventType = add;
+    for (var i = 1, l = arguments.length; i < l; ++i) {
+        add(arguments[i]);
+    }
+    return rv;
+    function add(eventName, chainFunction, defaultFunction) {
+        if (typeof eventName === 'object')
+            return addConfiguredEvents(eventName);
+        if (!chainFunction)
+            chainFunction = reverseStoppableEventChain;
+        if (!defaultFunction)
+            defaultFunction = nop;
+        var context = {
+            subscribers: [],
+            fire: defaultFunction,
+            subscribe: function (cb) {
+                if (context.subscribers.indexOf(cb) === -1) {
+                    context.subscribers.push(cb);
+                    context.fire = chainFunction(context.fire, cb);
+                }
+            },
+            unsubscribe: function (cb) {
+                context.subscribers = context.subscribers.filter(function (fn) { return fn !== cb; });
+                context.fire = context.subscribers.reduce(chainFunction, defaultFunction);
+            }
+        };
+        evs[eventName] = rv[eventName] = context;
+        return context;
+    }
+    function addConfiguredEvents(cfg) {
+        dexie_keys(cfg).forEach(function (eventName) {
+            var args = cfg[eventName];
+            if (isArray(args)) {
+                add(eventName, cfg[eventName][0], cfg[eventName][1]);
+            }
+            else if (args === 'asap') {
+                var context = add(eventName, mirror, function fire() {
+                    var i = arguments.length, args = new Array(i);
+                    while (i--)
+                        args[i] = arguments[i];
+                    context.subscribers.forEach(function (fn) {
+                        asap(function fireEvent() {
+                            fn.apply(null, args);
+                        });
+                    });
+                });
+            }
+            else
+                throw new exceptions.InvalidArgument("Invalid event config");
+        });
+    }
+}
+
+function makeClassConstructor(prototype, constructor) {
+    derive(constructor).from({ prototype: prototype });
+    return constructor;
+}
+
+function createTableConstructor(db) {
+    return makeClassConstructor(Table.prototype, function Table$$1(name, tableSchema, trans) {
+        this.db = db;
+        this._tx = trans;
+        this.name = name;
+        this.schema = tableSchema;
+        this.hook = db._allTables[name] ? db._allTables[name].hook : Events(null, {
+            "creating": [hookCreatingChain, nop],
+            "reading": [pureFunctionChain, mirror],
+            "updating": [hookUpdatingChain, nop],
+            "deleting": [hookDeletingChain, nop]
+        });
+    });
+}
+
+function isPlainKeyRange(ctx, ignoreLimitFilter) {
+    return !(ctx.filter || ctx.algorithm || ctx.or) &&
+        (ignoreLimitFilter ? ctx.justLimit : !ctx.replayFilter);
+}
+function addFilter(ctx, fn) {
+    ctx.filter = combine(ctx.filter, fn);
+}
+function addReplayFilter(ctx, factory, isLimitFilter) {
+    var curr = ctx.replayFilter;
+    ctx.replayFilter = curr ? function () { return combine(curr(), factory()); } : factory;
+    ctx.justLimit = isLimitFilter && !curr;
+}
+function addMatchFilter(ctx, fn) {
+    ctx.isMatch = combine(ctx.isMatch, fn);
+}
+function getIndexOrStore(ctx, coreSchema) {
+    if (ctx.isPrimKey)
+        return coreSchema.primaryKey;
+    var index = coreSchema.getIndexByKeyPath(ctx.index);
+    if (!index)
+        throw new exceptions.Schema("KeyPath " + ctx.index + " on object store " + coreSchema.name + " is not indexed");
+    return index;
+}
+function openCursor(ctx, coreTable, trans) {
+    var index = getIndexOrStore(ctx, coreTable.schema);
+    return coreTable.openCursor({
+        trans: trans,
+        values: !ctx.keysOnly,
+        reverse: ctx.dir === 'prev',
+        unique: !!ctx.unique,
+        query: {
+            index: index,
+            range: ctx.range
+        }
+    });
+}
+function iter(ctx, fn, coreTrans, coreTable) {
+    var filter = ctx.replayFilter ? combine(ctx.filter, ctx.replayFilter()) : ctx.filter;
+    if (!ctx.or) {
+        return iterate(openCursor(ctx, coreTable, coreTrans), combine(ctx.algorithm, filter), fn, !ctx.keysOnly && ctx.valueMapper);
+    }
+    else {
+        var set_1 = {};
+        var union = function (item, cursor, advance) {
+            if (!filter || filter(cursor, advance, function (result) { return cursor.stop(result); }, function (err) { return cursor.fail(err); })) {
+                var primaryKey = cursor.primaryKey;
+                var key = '' + primaryKey;
+                if (key === '[object ArrayBuffer]')
+                    key = '' + new Uint8Array(primaryKey);
+                if (!hasOwn(set_1, key)) {
+                    set_1[key] = true;
+                    fn(item, cursor, advance);
+                }
+            }
+        };
+        return Promise.all([
+            ctx.or._iterate(union, coreTrans),
+            iterate(openCursor(ctx, coreTable, coreTrans), ctx.algorithm, union, !ctx.keysOnly && ctx.valueMapper)
+        ]);
+    }
+}
+function iterate(cursorPromise, filter, fn, valueMapper) {
+    var mappedFn = valueMapper ? function (x, c, a) { return fn(valueMapper(x), c, a); } : fn;
+    var wrappedFn = wrap(mappedFn);
+    return cursorPromise.then(function (cursor) {
+        if (cursor) {
+            return cursor.start(function () {
+                var c = function () { return cursor.continue(); };
+                if (!filter || filter(cursor, function (advancer) { return c = advancer; }, function (val) { cursor.stop(val); c = nop; }, function (e) { cursor.fail(e); c = nop; }))
+                    wrappedFn(cursor.value, cursor, function (advancer) { return c = advancer; });
+                c();
+            });
+        }
+    });
+}
+
+var Collection =               (function () {
+    function Collection() {
+    }
+    Collection.prototype._read = function (fn, cb) {
+        var ctx = this._ctx;
+        return ctx.error ?
+            ctx.table._trans(null, rejection.bind(null, ctx.error)) :
+            ctx.table._trans('readonly', fn).then(cb);
+    };
+    Collection.prototype._write = function (fn) {
+        var ctx = this._ctx;
+        return ctx.error ?
+            ctx.table._trans(null, rejection.bind(null, ctx.error)) :
+            ctx.table._trans('readwrite', fn, "locked");
+    };
+    Collection.prototype._addAlgorithm = function (fn) {
+        var ctx = this._ctx;
+        ctx.algorithm = combine(ctx.algorithm, fn);
+    };
+    Collection.prototype._iterate = function (fn, coreTrans) {
+        return iter(this._ctx, fn, coreTrans, this._ctx.table.core);
+    };
+    Collection.prototype.clone = function (props$$1) {
+        var rv = Object.create(this.constructor.prototype), ctx = Object.create(this._ctx);
+        if (props$$1)
+            extend(ctx, props$$1);
+        rv._ctx = ctx;
+        return rv;
+    };
+    Collection.prototype.raw = function () {
+        this._ctx.valueMapper = null;
+        return this;
+    };
+    Collection.prototype.each = function (fn) {
+        var ctx = this._ctx;
+        return this._read(function (trans) { return iter(ctx, fn, trans, ctx.table.core); });
+    };
+    Collection.prototype.count = function (cb) {
+        var _this = this;
+        return this._read(function (trans) {
+            var ctx = _this._ctx;
+            var coreTable = ctx.table.core;
+            if (isPlainKeyRange(ctx, true)) {
+                return coreTable.count({
+                    trans: trans,
+                    query: {
+                        index: getIndexOrStore(ctx, coreTable.schema),
+                        range: ctx.range
+                    }
+                }).then(function (count) { return Math.min(count, ctx.limit); });
+            }
+            else {
+                var count = 0;
+                return iter(ctx, function () { ++count; return false; }, trans, coreTable)
+                    .then(function () { return count; });
+            }
+        }).then(cb);
+    };
+    Collection.prototype.sortBy = function (keyPath, cb) {
+        var parts = keyPath.split('.').reverse(), lastPart = parts[0], lastIndex = parts.length - 1;
+        function getval(obj, i) {
+            if (i)
+                return getval(obj[parts[i]], i - 1);
+            return obj[lastPart];
+        }
+        var order = this._ctx.dir === "next" ? 1 : -1;
+        function sorter(a, b) {
+            var aVal = getval(a, lastIndex), bVal = getval(b, lastIndex);
+            return aVal < bVal ? -order : aVal > bVal ? order : 0;
+        }
+        return this.toArray(function (a) {
+            return a.sort(sorter);
+        }).then(cb);
+    };
+    Collection.prototype.toArray = function (cb) {
+        var _this = this;
+        return this._read(function (trans) {
+            var ctx = _this._ctx;
+            if (ctx.dir === 'next' && isPlainKeyRange(ctx, true) && ctx.limit > 0) {
+                var valueMapper_1 = ctx.valueMapper;
+                var index = getIndexOrStore(ctx, ctx.table.core.schema);
+                return ctx.table.core.query({
+                    trans: trans,
+                    limit: ctx.limit,
+                    values: true,
+                    query: {
+                        index: index,
+                        range: ctx.range
+                    }
+                }).then(function (_a) {
+                    var result = _a.result;
+                    return valueMapper_1 ? result.map(valueMapper_1) : result;
+                });
+            }
+            else {
+                var a_1 = [];
+                return iter(ctx, function (item) { return a_1.push(item); }, trans, ctx.table.core).then(function () { return a_1; });
+            }
+        }, cb);
+    };
+    Collection.prototype.offset = function (offset) {
+        var ctx = this._ctx;
+        if (offset <= 0)
+            return this;
+        ctx.offset += offset;
+        if (isPlainKeyRange(ctx)) {
+            addReplayFilter(ctx, function () {
+                var offsetLeft = offset;
+                return function (cursor, advance) {
+                    if (offsetLeft === 0)
+                        return true;
+                    if (offsetLeft === 1) {
+                        --offsetLeft;
+                        return false;
+                    }
+                    advance(function () {
+                        cursor.advance(offsetLeft);
+                        offsetLeft = 0;
+                    });
+                    return false;
+                };
+            });
+        }
+        else {
+            addReplayFilter(ctx, function () {
+                var offsetLeft = offset;
+                return function () { return (--offsetLeft < 0); };
+            });
+        }
+        return this;
+    };
+    Collection.prototype.limit = function (numRows) {
+        this._ctx.limit = Math.min(this._ctx.limit, numRows);
+        addReplayFilter(this._ctx, function () {
+            var rowsLeft = numRows;
+            return function (cursor, advance, resolve) {
+                if (--rowsLeft <= 0)
+                    advance(resolve);
+                return rowsLeft >= 0;
+            };
+        }, true);
+        return this;
+    };
+    Collection.prototype.until = function (filterFunction, bIncludeStopEntry) {
+        addFilter(this._ctx, function (cursor, advance, resolve) {
+            if (filterFunction(cursor.value)) {
+                advance(resolve);
+                return bIncludeStopEntry;
+            }
+            else {
+                return true;
+            }
+        });
+        return this;
+    };
+    Collection.prototype.first = function (cb) {
+        return this.limit(1).toArray(function (a) { return a[0]; }).then(cb);
+    };
+    Collection.prototype.last = function (cb) {
+        return this.reverse().first(cb);
+    };
+    Collection.prototype.filter = function (filterFunction) {
+        addFilter(this._ctx, function (cursor) {
+            return filterFunction(cursor.value);
+        });
+        addMatchFilter(this._ctx, filterFunction);
+        return this;
+    };
+    Collection.prototype.and = function (filter) {
+        return this.filter(filter);
+    };
+    Collection.prototype.or = function (indexName) {
+        return new this.db.WhereClause(this._ctx.table, indexName, this);
+    };
+    Collection.prototype.reverse = function () {
+        this._ctx.dir = (this._ctx.dir === "prev" ? "next" : "prev");
+        if (this._ondirectionchange)
+            this._ondirectionchange(this._ctx.dir);
+        return this;
+    };
+    Collection.prototype.desc = function () {
+        return this.reverse();
+    };
+    Collection.prototype.eachKey = function (cb) {
+        var ctx = this._ctx;
+        ctx.keysOnly = !ctx.isMatch;
+        return this.each(function (val, cursor) { cb(cursor.key, cursor); });
+    };
+    Collection.prototype.eachUniqueKey = function (cb) {
+        this._ctx.unique = "unique";
+        return this.eachKey(cb);
+    };
+    Collection.prototype.eachPrimaryKey = function (cb) {
+        var ctx = this._ctx;
+        ctx.keysOnly = !ctx.isMatch;
+        return this.each(function (val, cursor) { cb(cursor.primaryKey, cursor); });
+    };
+    Collection.prototype.keys = function (cb) {
+        var ctx = this._ctx;
+        ctx.keysOnly = !ctx.isMatch;
+        var a = [];
+        return this.each(function (item, cursor) {
+            a.push(cursor.key);
+        }).then(function () {
+            return a;
+        }).then(cb);
+    };
+    Collection.prototype.primaryKeys = function (cb) {
+        var ctx = this._ctx;
+        if (ctx.dir === 'next' && isPlainKeyRange(ctx, true) && ctx.limit > 0) {
+            return this._read(function (trans) {
+                var index = getIndexOrStore(ctx, ctx.table.core.schema);
+                return ctx.table.core.query({
+                    trans: trans,
+                    values: false,
+                    limit: ctx.limit,
+                    query: {
+                        index: index,
+                        range: ctx.range
+                    }
+                });
+            }).then(function (_a) {
+                var result = _a.result;
+                return result;
+            }).then(cb);
+        }
+        ctx.keysOnly = !ctx.isMatch;
+        var a = [];
+        return this.each(function (item, cursor) {
+            a.push(cursor.primaryKey);
+        }).then(function () {
+            return a;
+        }).then(cb);
+    };
+    Collection.prototype.uniqueKeys = function (cb) {
+        this._ctx.unique = "unique";
+        return this.keys(cb);
+    };
+    Collection.prototype.firstKey = function (cb) {
+        return this.limit(1).keys(function (a) { return a[0]; }).then(cb);
+    };
+    Collection.prototype.lastKey = function (cb) {
+        return this.reverse().firstKey(cb);
+    };
+    Collection.prototype.distinct = function () {
+        var ctx = this._ctx, idx = ctx.index && ctx.table.schema.idxByName[ctx.index];
+        if (!idx || !idx.multi)
+            return this;
+        var set = {};
+        addFilter(this._ctx, function (cursor) {
+            var strKey = cursor.primaryKey.toString();
+            var found = hasOwn(set, strKey);
+            set[strKey] = true;
+            return !found;
+        });
+        return this;
+    };
+    Collection.prototype.modify = function (changes) {
+        var _this = this;
+        var ctx = this._ctx;
+        return this._write(function (trans) {
+            var modifyer;
+            if (typeof changes === 'function') {
+                modifyer = changes;
+            }
+            else {
+                var keyPaths = dexie_keys(changes);
+                var numKeys = keyPaths.length;
+                modifyer = function (item) {
+                    var anythingModified = false;
+                    for (var i = 0; i < numKeys; ++i) {
+                        var keyPath = keyPaths[i], val = changes[keyPath];
+                        if (getByKeyPath(item, keyPath) !== val) {
+                            setByKeyPath(item, keyPath, val);
+                            anythingModified = true;
+                        }
+                    }
+                    return anythingModified;
+                };
+            }
+            var coreTable = ctx.table.core;
+            var _a = coreTable.schema.primaryKey, outbound = _a.outbound, extractKey = _a.extractKey;
+            var limit = 'testmode' in Dexie ? 1 : 2000;
+            var cmp = _this.db.core.cmp;
+            var totalFailures = [];
+            var successCount = 0;
+            var failedKeys = [];
+            var applyMutateResult = function (expectedCount, res) {
+                var failures = res.failures, numFailures = res.numFailures;
+                successCount += expectedCount - numFailures;
+                for (var _i = 0, _a = dexie_keys(failures); _i < _a.length; _i++) {
+                    var pos = _a[_i];
+                    totalFailures.push(failures[pos]);
+                }
+            };
+            return _this.clone().primaryKeys().then(function (keys$$1) {
+                var nextChunk = function (offset) {
+                    var count = Math.min(limit, keys$$1.length - offset);
+                    return coreTable.getMany({ trans: trans, keys: keys$$1.slice(offset, offset + count) }).then(function (values) {
+                        var addValues = [];
+                        var putValues = [];
+                        var putKeys = outbound ? [] : null;
+                        var deleteKeys = [];
+                        for (var i = 0; i < count; ++i) {
+                            var origValue = values[i];
+                            var ctx_1 = {
+                                value: deepClone(origValue),
+                                primKey: keys$$1[offset + i]
+                            };
+                            if (modifyer.call(ctx_1, ctx_1.value, ctx_1) !== false) {
+                                if (ctx_1.value == null) {
+                                    deleteKeys.push(keys$$1[offset + i]);
+                                }
+                                else if (!outbound && cmp(extractKey(origValue), extractKey(ctx_1.value)) !== 0) {
+                                    deleteKeys.push(keys$$1[offset + i]);
+                                    addValues.push(ctx_1.value);
+                                }
+                                else {
+                                    putValues.push(ctx_1.value);
+                                    if (outbound)
+                                        putKeys.push(keys$$1[offset + i]);
+                                }
+                            }
+                        }
+                        return Promise.resolve(addValues.length > 0 &&
+                            coreTable.mutate({ trans: trans, type: 'add', values: addValues })
+                                .then(function (res) {
+                                for (var pos in res.failures) {
+                                    deleteKeys.splice(parseInt(pos), 1);
+                                }
+                                applyMutateResult(addValues.length, res);
+                            })).then(function (res) { return putValues.length > 0 &&
+                            coreTable.mutate({ trans: trans, type: 'put', keys: putKeys, values: putValues })
+                                .then(function (res) { return applyMutateResult(putValues.length, res); }); }).then(function () { return deleteKeys.length > 0 &&
+                            coreTable.mutate({ trans: trans, type: 'delete', keys: deleteKeys })
+                                .then(function (res) { return applyMutateResult(deleteKeys.length, res); }); }).then(function () {
+                            return keys$$1.length > offset + count && nextChunk(offset + limit);
+                        });
+                    });
+                };
+                return nextChunk(0).then(function () {
+                    if (totalFailures.length > 0)
+                        throw new ModifyError("Error modifying one or more objects", totalFailures, successCount, failedKeys);
+                    return keys$$1.length;
+                });
+            });
+        });
+    };
+    Collection.prototype.delete = function () {
+        var ctx = this._ctx, range = ctx.range;
+        if (isPlainKeyRange(ctx) &&
+            ((ctx.isPrimKey && !hangsOnDeleteLargeKeyRange) || range.type === 3          ))
+         {
+            return this._write(function (trans) {
+                var primaryKey = ctx.table.core.schema.primaryKey;
+                var coreRange = range;
+                return ctx.table.core.count({ trans: trans, query: { index: primaryKey, range: coreRange } }).then(function (count) {
+                    return ctx.table.core.mutate({ trans: trans, type: 'deleteRange', range: coreRange })
+                        .then(function (_a) {
+                        var failures = _a.failures, lastResult = _a.lastResult, results = _a.results, numFailures = _a.numFailures;
+                        if (numFailures)
+                            throw new ModifyError("Could not delete some values", Object.keys(failures).map(function (pos) { return failures[pos]; }), count - numFailures);
+                        return count - numFailures;
+                    });
+                });
+            });
+        }
+        return this.modify(function (value, ctx) { return ctx.value = null; });
+    };
+    return Collection;
+}());
+
+function createCollectionConstructor(db) {
+    return makeClassConstructor(Collection.prototype, function Collection$$1(whereClause, keyRangeGenerator) {
+        this.db = db;
+        var keyRange = AnyRange, error = null;
+        if (keyRangeGenerator)
+            try {
+                keyRange = keyRangeGenerator();
+            }
+            catch (ex) {
+                error = ex;
+            }
+        var whereCtx = whereClause._ctx;
+        var table = whereCtx.table;
+        var readingHook = table.hook.reading.fire;
+        this._ctx = {
+            table: table,
+            index: whereCtx.index,
+            isPrimKey: (!whereCtx.index || (table.schema.primKey.keyPath && whereCtx.index === table.schema.primKey.name)),
+            range: keyRange,
+            keysOnly: false,
+            dir: "next",
+            unique: "",
+            algorithm: null,
+            filter: null,
+            replayFilter: null,
+            justLimit: true,
+            isMatch: null,
+            offset: 0,
+            limit: Infinity,
+            error: error,
+            or: whereCtx.or,
+            valueMapper: readingHook !== mirror ? readingHook : null
+        };
+    });
+}
+
+function simpleCompare(a, b) {
+    return a < b ? -1 : a === b ? 0 : 1;
+}
+function simpleCompareReverse(a, b) {
+    return a > b ? -1 : a === b ? 0 : 1;
+}
+
+function fail(collectionOrWhereClause, err, T) {
+    var collection = collectionOrWhereClause instanceof WhereClause ?
+        new collectionOrWhereClause.Collection(collectionOrWhereClause) :
+        collectionOrWhereClause;
+    collection._ctx.error = T ? new T(err) : new TypeError(err);
+    return collection;
+}
+function emptyCollection(whereClause) {
+    return new whereClause.Collection(whereClause, function () { return rangeEqual(""); }).limit(0);
+}
+function upperFactory(dir) {
+    return dir === "next" ?
+        function (s) { return s.toUpperCase(); } :
+        function (s) { return s.toLowerCase(); };
+}
+function lowerFactory(dir) {
+    return dir === "next" ?
+        function (s) { return s.toLowerCase(); } :
+        function (s) { return s.toUpperCase(); };
+}
+function nextCasing(key, lowerKey, upperNeedle, lowerNeedle, cmp, dir) {
+    var length = Math.min(key.length, lowerNeedle.length);
+    var llp = -1;
+    for (var i = 0; i < length; ++i) {
+        var lwrKeyChar = lowerKey[i];
+        if (lwrKeyChar !== lowerNeedle[i]) {
+            if (cmp(key[i], upperNeedle[i]) < 0)
+                return key.substr(0, i) + upperNeedle[i] + upperNeedle.substr(i + 1);
+            if (cmp(key[i], lowerNeedle[i]) < 0)
+                return key.substr(0, i) + lowerNeedle[i] + upperNeedle.substr(i + 1);
+            if (llp >= 0)
+                return key.substr(0, llp) + lowerKey[llp] + upperNeedle.substr(llp + 1);
+            return null;
+        }
+        if (cmp(key[i], lwrKeyChar) < 0)
+            llp = i;
+    }
+    if (length < lowerNeedle.length && dir === "next")
+        return key + upperNeedle.substr(key.length);
+    if (length < key.length && dir === "prev")
+        return key.substr(0, upperNeedle.length);
+    return (llp < 0 ? null : key.substr(0, llp) + lowerNeedle[llp] + upperNeedle.substr(llp + 1));
+}
+function addIgnoreCaseAlgorithm(whereClause, match, needles, suffix) {
+    var upper, lower, compare, upperNeedles, lowerNeedles, direction, nextKeySuffix, needlesLen = needles.length;
+    if (!needles.every(function (s) { return typeof s === 'string'; })) {
+        return fail(whereClause, STRING_EXPECTED);
+    }
+    function initDirection(dir) {
+        upper = upperFactory(dir);
+        lower = lowerFactory(dir);
+        compare = (dir === "next" ? simpleCompare : simpleCompareReverse);
+        var needleBounds = needles.map(function (needle) {
+            return { lower: lower(needle), upper: upper(needle) };
+        }).sort(function (a, b) {
+            return compare(a.lower, b.lower);
+        });
+        upperNeedles = needleBounds.map(function (nb) { return nb.upper; });
+        lowerNeedles = needleBounds.map(function (nb) { return nb.lower; });
+        direction = dir;
+        nextKeySuffix = (dir === "next" ? "" : suffix);
+    }
+    initDirection("next");
+    var c = new whereClause.Collection(whereClause, function () { return createRange(upperNeedles[0], lowerNeedles[needlesLen - 1] + suffix); });
+    c._ondirectionchange = function (direction) {
+        initDirection(direction);
+    };
+    var firstPossibleNeedle = 0;
+    c._addAlgorithm(function (cursor, advance, resolve) {
+        var key = cursor.key;
+        if (typeof key !== 'string')
+            return false;
+        var lowerKey = lower(key);
+        if (match(lowerKey, lowerNeedles, firstPossibleNeedle)) {
+            return true;
+        }
+        else {
+            var lowestPossibleCasing = null;
+            for (var i = firstPossibleNeedle; i < needlesLen; ++i) {
+                var casing = nextCasing(key, lowerKey, upperNeedles[i], lowerNeedles[i], compare, direction);
+                if (casing === null && lowestPossibleCasing === null)
+                    firstPossibleNeedle = i + 1;
+                else if (lowestPossibleCasing === null || compare(lowestPossibleCasing, casing) > 0) {
+                    lowestPossibleCasing = casing;
+                }
+            }
+            if (lowestPossibleCasing !== null) {
+                advance(function () { cursor.continue(lowestPossibleCasing + nextKeySuffix); });
+            }
+            else {
+                advance(resolve);
+            }
+            return false;
+        }
+    });
+    return c;
+}
+function createRange(lower, upper, lowerOpen, upperOpen) {
+    return {
+        type: 2            ,
+        lower: lower,
+        upper: upper,
+        lowerOpen: lowerOpen,
+        upperOpen: upperOpen
+    };
+}
+function rangeEqual(value) {
+    return {
+        type: 1            ,
+        lower: value,
+        upper: value
+    };
+}
+
+var WhereClause =               (function () {
+    function WhereClause() {
+    }
+    Object.defineProperty(WhereClause.prototype, "Collection", {
+        get: function () {
+            return this._ctx.table.db.Collection;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    WhereClause.prototype.between = function (lower, upper, includeLower, includeUpper) {
+        includeLower = includeLower !== false;
+        includeUpper = includeUpper === true;
+        try {
+            if ((this._cmp(lower, upper) > 0) ||
+                (this._cmp(lower, upper) === 0 && (includeLower || includeUpper) && !(includeLower && includeUpper)))
+                return emptyCollection(this);
+            return new this.Collection(this, function () { return createRange(lower, upper, !includeLower, !includeUpper); });
+        }
+        catch (e) {
+            return fail(this, INVALID_KEY_ARGUMENT);
+        }
+    };
+    WhereClause.prototype.equals = function (value) {
+        return new this.Collection(this, function () { return rangeEqual(value); });
+    };
+    WhereClause.prototype.above = function (value) {
+        if (value == null)
+            return fail(this, INVALID_KEY_ARGUMENT);
+        return new this.Collection(this, function () { return createRange(value, undefined, true); });
+    };
+    WhereClause.prototype.aboveOrEqual = function (value) {
+        if (value == null)
+            return fail(this, INVALID_KEY_ARGUMENT);
+        return new this.Collection(this, function () { return createRange(value, undefined, false); });
+    };
+    WhereClause.prototype.below = function (value) {
+        if (value == null)
+            return fail(this, INVALID_KEY_ARGUMENT);
+        return new this.Collection(this, function () { return createRange(undefined, value, false, true); });
+    };
+    WhereClause.prototype.belowOrEqual = function (value) {
+        if (value == null)
+            return fail(this, INVALID_KEY_ARGUMENT);
+        return new this.Collection(this, function () { return createRange(undefined, value); });
+    };
+    WhereClause.prototype.startsWith = function (str) {
+        if (typeof str !== 'string')
+            return fail(this, STRING_EXPECTED);
+        return this.between(str, str + maxString, true, true);
+    };
+    WhereClause.prototype.startsWithIgnoreCase = function (str) {
+        if (str === "")
+            return this.startsWith(str);
+        return addIgnoreCaseAlgorithm(this, function (x, a) { return x.indexOf(a[0]) === 0; }, [str], maxString);
+    };
+    WhereClause.prototype.equalsIgnoreCase = function (str) {
+        return addIgnoreCaseAlgorithm(this, function (x, a) { return x === a[0]; }, [str], "");
+    };
+    WhereClause.prototype.anyOfIgnoreCase = function () {
+        var set = getArrayOf.apply(NO_CHAR_ARRAY, arguments);
+        if (set.length === 0)
+            return emptyCollection(this);
+        return addIgnoreCaseAlgorithm(this, function (x, a) { return a.indexOf(x) !== -1; }, set, "");
+    };
+    WhereClause.prototype.startsWithAnyOfIgnoreCase = function () {
+        var set = getArrayOf.apply(NO_CHAR_ARRAY, arguments);
+        if (set.length === 0)
+            return emptyCollection(this);
+        return addIgnoreCaseAlgorithm(this, function (x, a) { return a.some(function (n) { return x.indexOf(n) === 0; }); }, set, maxString);
+    };
+    WhereClause.prototype.anyOf = function () {
+        var _this = this;
+        var set = getArrayOf.apply(NO_CHAR_ARRAY, arguments);
+        var compare = this._cmp;
+        try {
+            set.sort(compare);
+        }
+        catch (e) {
+            return fail(this, INVALID_KEY_ARGUMENT);
+        }
+        if (set.length === 0)
+            return emptyCollection(this);
+        var c = new this.Collection(this, function () { return createRange(set[0], set[set.length - 1]); });
+        c._ondirectionchange = function (direction) {
+            compare = (direction === "next" ?
+                _this._ascending :
+                _this._descending);
+            set.sort(compare);
+        };
+        var i = 0;
+        c._addAlgorithm(function (cursor, advance, resolve) {
+            var key = cursor.key;
+            while (compare(key, set[i]) > 0) {
+                ++i;
+                if (i === set.length) {
+                    advance(resolve);
+                    return false;
+                }
+            }
+            if (compare(key, set[i]) === 0) {
+                return true;
+            }
+            else {
+                advance(function () { cursor.continue(set[i]); });
+                return false;
+            }
+        });
+        return c;
+    };
+    WhereClause.prototype.notEqual = function (value) {
+        return this.inAnyRange([[minKey, value], [value, this.db._maxKey]], { includeLowers: false, includeUppers: false });
+    };
+    WhereClause.prototype.noneOf = function () {
+        var set = getArrayOf.apply(NO_CHAR_ARRAY, arguments);
+        if (set.length === 0)
+            return new this.Collection(this);
+        try {
+            set.sort(this._ascending);
+        }
+        catch (e) {
+            return fail(this, INVALID_KEY_ARGUMENT);
+        }
+        var ranges = set.reduce(function (res, val) { return res ?
+            res.concat([[res[res.length - 1][1], val]]) :
+            [[minKey, val]]; }, null);
+        ranges.push([set[set.length - 1], this.db._maxKey]);
+        return this.inAnyRange(ranges, { includeLowers: false, includeUppers: false });
+    };
+    WhereClause.prototype.inAnyRange = function (ranges, options) {
+        var _this = this;
+        var cmp = this._cmp, ascending = this._ascending, descending = this._descending, min = this._min, max = this._max;
+        if (ranges.length === 0)
+            return emptyCollection(this);
+        if (!ranges.every(function (range) {
+            return range[0] !== undefined &&
+                range[1] !== undefined &&
+                ascending(range[0], range[1]) <= 0;
+        })) {
+            return fail(this, "First argument to inAnyRange() must be an Array of two-value Arrays [lower,upper] where upper must not be lower than lower", exceptions.InvalidArgument);
+        }
+        var includeLowers = !options || options.includeLowers !== false;
+        var includeUppers = options && options.includeUppers === true;
+        function addRange(ranges, newRange) {
+            var i = 0, l = ranges.length;
+            for (; i < l; ++i) {
+                var range = ranges[i];
+                if (cmp(newRange[0], range[1]) < 0 && cmp(newRange[1], range[0]) > 0) {
+                    range[0] = min(range[0], newRange[0]);
+                    range[1] = max(range[1], newRange[1]);
+                    break;
+                }
+            }
+            if (i === l)
+                ranges.push(newRange);
+            return ranges;
+        }
+        var sortDirection = ascending;
+        function rangeSorter(a, b) { return sortDirection(a[0], b[0]); }
+        var set;
+        try {
+            set = ranges.reduce(addRange, []);
+            set.sort(rangeSorter);
+        }
+        catch (ex) {
+            return fail(this, INVALID_KEY_ARGUMENT);
+        }
+        var rangePos = 0;
+        var keyIsBeyondCurrentEntry = includeUppers ?
+            function (key) { return ascending(key, set[rangePos][1]) > 0; } :
+            function (key) { return ascending(key, set[rangePos][1]) >= 0; };
+        var keyIsBeforeCurrentEntry = includeLowers ?
+            function (key) { return descending(key, set[rangePos][0]) > 0; } :
+            function (key) { return descending(key, set[rangePos][0]) >= 0; };
+        function keyWithinCurrentRange(key) {
+            return !keyIsBeyondCurrentEntry(key) && !keyIsBeforeCurrentEntry(key);
+        }
+        var checkKey = keyIsBeyondCurrentEntry;
+        var c = new this.Collection(this, function () { return createRange(set[0][0], set[set.length - 1][1], !includeLowers, !includeUppers); });
+        c._ondirectionchange = function (direction) {
+            if (direction === "next") {
+                checkKey = keyIsBeyondCurrentEntry;
+                sortDirection = ascending;
+            }
+            else {
+                checkKey = keyIsBeforeCurrentEntry;
+                sortDirection = descending;
+            }
+            set.sort(rangeSorter);
+        };
+        c._addAlgorithm(function (cursor, advance, resolve) {
+            var key = cursor.key;
+            while (checkKey(key)) {
+                ++rangePos;
+                if (rangePos === set.length) {
+                    advance(resolve);
+                    return false;
+                }
+            }
+            if (keyWithinCurrentRange(key)) {
+                return true;
+            }
+            else if (_this._cmp(key, set[rangePos][1]) === 0 || _this._cmp(key, set[rangePos][0]) === 0) {
+                return false;
+            }
+            else {
+                advance(function () {
+                    if (sortDirection === ascending)
+                        cursor.continue(set[rangePos][0]);
+                    else
+                        cursor.continue(set[rangePos][1]);
+                });
+                return false;
+            }
+        });
+        return c;
+    };
+    WhereClause.prototype.startsWithAnyOf = function () {
+        var set = getArrayOf.apply(NO_CHAR_ARRAY, arguments);
+        if (!set.every(function (s) { return typeof s === 'string'; })) {
+            return fail(this, "startsWithAnyOf() only works with strings");
+        }
+        if (set.length === 0)
+            return emptyCollection(this);
+        return this.inAnyRange(set.map(function (str) { return [str, str + maxString]; }));
+    };
+    return WhereClause;
+}());
+
+function createWhereClauseConstructor(db) {
+    return makeClassConstructor(WhereClause.prototype, function WhereClause$$1(table, index, orCollection) {
+        this.db = db;
+        this._ctx = {
+            table: table,
+            index: index === ":id" ? null : index,
+            or: orCollection
+        };
+        var indexedDB = db._deps.indexedDB;
+        if (!indexedDB)
+            throw new exceptions.MissingAPI("indexedDB API missing");
+        this._cmp = this._ascending = indexedDB.cmp.bind(indexedDB);
+        this._descending = function (a, b) { return indexedDB.cmp(b, a); };
+        this._max = function (a, b) { return indexedDB.cmp(a, b) > 0 ? a : b; };
+        this._min = function (a, b) { return indexedDB.cmp(a, b) < 0 ? a : b; };
+        this._IDBKeyRange = db._deps.IDBKeyRange;
+    });
+}
+
+function safariMultiStoreFix(storeNames) {
+    return storeNames.length === 1 ? storeNames[0] : storeNames;
+}
+
+function getMaxKey(IdbKeyRange) {
+    try {
+        IdbKeyRange.only([[]]);
+        return [[]];
+    }
+    catch (e) {
+        return maxString;
+    }
+}
+
+function eventRejectHandler(reject) {
+    return wrap(function (event) {
+        preventDefault(event);
+        reject(event.target.error);
+        return false;
+    });
+}
+
+
+
+function preventDefault(event) {
+    if (event.stopPropagation)
+        event.stopPropagation();
+    if (event.preventDefault)
+        event.preventDefault();
+}
+
+var Transaction =               (function () {
+    function Transaction() {
+    }
+    Transaction.prototype._lock = function () {
+        assert(!PSD.global);
+        ++this._reculock;
+        if (this._reculock === 1 && !PSD.global)
+            PSD.lockOwnerFor = this;
+        return this;
+    };
+    Transaction.prototype._unlock = function () {
+        assert(!PSD.global);
+        if (--this._reculock === 0) {
+            if (!PSD.global)
+                PSD.lockOwnerFor = null;
+            while (this._blockedFuncs.length > 0 && !this._locked()) {
+                var fnAndPSD = this._blockedFuncs.shift();
+                try {
+                    usePSD(fnAndPSD[1], fnAndPSD[0]);
+                }
+                catch (e) { }
+            }
+        }
+        return this;
+    };
+    Transaction.prototype._locked = function () {
+        return this._reculock && PSD.lockOwnerFor !== this;
+    };
+    Transaction.prototype.create = function (idbtrans) {
+        var _this = this;
+        if (!this.mode)
+            return this;
+        var idbdb = this.db.idbdb;
+        var dbOpenError = this.db._state.dbOpenError;
+        assert(!this.idbtrans);
+        if (!idbtrans && !idbdb) {
+            switch (dbOpenError && dbOpenError.name) {
+                case "DatabaseClosedError":
+                    throw new exceptions.DatabaseClosed(dbOpenError);
+                case "MissingAPIError":
+                    throw new exceptions.MissingAPI(dbOpenError.message, dbOpenError);
+                default:
+                    throw new exceptions.OpenFailed(dbOpenError);
+            }
+        }
+        if (!this.active)
+            throw new exceptions.TransactionInactive();
+        assert(this._completion._state === null);
+        idbtrans = this.idbtrans = idbtrans || idbdb.transaction(safariMultiStoreFix(this.storeNames), this.mode);
+        idbtrans.onerror = wrap(function (ev) {
+            preventDefault(ev);
+            _this._reject(idbtrans.error);
+        });
+        idbtrans.onabort = wrap(function (ev) {
+            preventDefault(ev);
+            _this.active && _this._reject(new exceptions.Abort(idbtrans.error));
+            _this.active = false;
+            _this.on("abort").fire(ev);
+        });
+        idbtrans.oncomplete = wrap(function () {
+            _this.active = false;
+            _this._resolve();
+        });
+        return this;
+    };
+    Transaction.prototype._promise = function (mode, fn, bWriteLock) {
+        var _this = this;
+        if (mode === 'readwrite' && this.mode !== 'readwrite')
+            return rejection(new exceptions.ReadOnly("Transaction is readonly"));
+        if (!this.active)
+            return rejection(new exceptions.TransactionInactive());
+        if (this._locked()) {
+            return new DexiePromise(function (resolve, reject) {
+                _this._blockedFuncs.push([function () {
+                        _this._promise(mode, fn, bWriteLock).then(resolve, reject);
+                    }, PSD]);
+            });
+        }
+        else if (bWriteLock) {
+            return newScope(function () {
+                var p = new DexiePromise(function (resolve, reject) {
+                    _this._lock();
+                    var rv = fn(resolve, reject, _this);
+                    if (rv && rv.then)
+                        rv.then(resolve, reject);
+                });
+                p.finally(function () { return _this._unlock(); });
+                p._lib = true;
+                return p;
+            });
+        }
+        else {
+            var p = new DexiePromise(function (resolve, reject) {
+                var rv = fn(resolve, reject, _this);
+                if (rv && rv.then)
+                    rv.then(resolve, reject);
+            });
+            p._lib = true;
+            return p;
+        }
+    };
+    Transaction.prototype._root = function () {
+        return this.parent ? this.parent._root() : this;
+    };
+    Transaction.prototype.waitFor = function (promiseLike) {
+        var root = this._root();
+        var promise = DexiePromise.resolve(promiseLike);
+        if (root._waitingFor) {
+            root._waitingFor = root._waitingFor.then(function () { return promise; });
+        }
+        else {
+            root._waitingFor = promise;
+            root._waitingQueue = [];
+            var store = root.idbtrans.objectStore(root.storeNames[0]);
+            (function spin() {
+                ++root._spinCount;
+                while (root._waitingQueue.length)
+                    (root._waitingQueue.shift())();
+                if (root._waitingFor)
+                    store.get(-Infinity).onsuccess = spin;
+            }());
+        }
+        var currentWaitPromise = root._waitingFor;
+        return new DexiePromise(function (resolve, reject) {
+            promise.then(function (res) { return root._waitingQueue.push(wrap(resolve.bind(null, res))); }, function (err) { return root._waitingQueue.push(wrap(reject.bind(null, err))); }).finally(function () {
+                if (root._waitingFor === currentWaitPromise) {
+                    root._waitingFor = null;
+                }
+            });
+        });
+    };
+    Transaction.prototype.abort = function () {
+        this.active && this._reject(new exceptions.Abort());
+        this.active = false;
+    };
+    Transaction.prototype.table = function (tableName) {
+        var memoizedTables = (this._memoizedTables || (this._memoizedTables = {}));
+        if (hasOwn(memoizedTables, tableName))
+            return memoizedTables[tableName];
+        var tableSchema = this.schema[tableName];
+        if (!tableSchema) {
+            throw new exceptions.NotFound("Table " + tableName + " not part of transaction");
+        }
+        var transactionBoundTable = new this.db.Table(tableName, tableSchema, this);
+        transactionBoundTable.core = this.db.core.table(tableName);
+        memoizedTables[tableName] = transactionBoundTable;
+        return transactionBoundTable;
+    };
+    return Transaction;
+}());
+
+function createTransactionConstructor(db) {
+    return makeClassConstructor(Transaction.prototype, function Transaction$$1(mode, storeNames, dbschema, parent) {
+        var _this = this;
+        this.db = db;
+        this.mode = mode;
+        this.storeNames = storeNames;
+        this.schema = dbschema;
+        this.idbtrans = null;
+        this.on = Events(this, "complete", "error", "abort");
+        this.parent = parent || null;
+        this.active = true;
+        this._reculock = 0;
+        this._blockedFuncs = [];
+        this._resolve = null;
+        this._reject = null;
+        this._waitingFor = null;
+        this._waitingQueue = null;
+        this._spinCount = 0;
+        this._completion = new DexiePromise(function (resolve, reject) {
+            _this._resolve = resolve;
+            _this._reject = reject;
+        });
+        this._completion.then(function () {
+            _this.active = false;
+            _this.on.complete.fire();
+        }, function (e) {
+            var wasActive = _this.active;
+            _this.active = false;
+            _this.on.error.fire(e);
+            _this.parent ?
+                _this.parent._reject(e) :
+                wasActive && _this.idbtrans && _this.idbtrans.abort();
+            return rejection(e);
+        });
+    });
+}
+
+function createIndexSpec(name, keyPath, unique, multi, auto, compound, isPrimKey) {
+    return {
+        name: name,
+        keyPath: keyPath,
+        unique: unique,
+        multi: multi,
+        auto: auto,
+        compound: compound,
+        src: (unique && !isPrimKey ? '&' : '') + (multi ? '*' : '') + (auto ? "++" : "") + nameFromKeyPath(keyPath)
+    };
+}
+function nameFromKeyPath(keyPath) {
+    return typeof keyPath === 'string' ?
+        keyPath :
+        keyPath ? ('[' + [].join.call(keyPath, '+') + ']') : "";
+}
+
+function createTableSchema(name, primKey, indexes) {
+    return {
+        name: name,
+        primKey: primKey,
+        indexes: indexes,
+        mappedClass: null,
+        idxByName: arrayToObject(indexes, function (index) { return [index.name, index]; })
+    };
+}
+
+function getKeyExtractor(keyPath) {
+    if (keyPath == null) {
+        return function () { return undefined; };
+    }
+    else if (typeof keyPath === 'string') {
+        return getSinglePathKeyExtractor(keyPath);
+    }
+    else {
+        return function (obj) { return getByKeyPath(obj, keyPath); };
+    }
+}
+function getSinglePathKeyExtractor(keyPath) {
+    var split = keyPath.split('.');
+    if (split.length === 1) {
+        return function (obj) { return obj[keyPath]; };
+    }
+    else {
+        return function (obj) { return getByKeyPath(obj, keyPath); };
+    }
+}
+
+function getEffectiveKeys(primaryKey, req) {
+    if (req.type === 'delete')
+        return req.keys;
+    return req.keys || req.values.map(primaryKey.extractKey);
+}
+function getExistingValues(table, req, effectiveKeys) {
+    return req.type === 'add' ? Promise.resolve(new Array(req.values.length)) :
+        table.getMany({ trans: req.trans, keys: effectiveKeys });
+}
+
+function arrayify(arrayLike) {
+    return [].slice.call(arrayLike);
+}
+
+var _id_counter = 0;
+function getKeyPathAlias(keyPath) {
+    return keyPath == null ?
+        ":id" :
+        typeof keyPath === 'string' ?
+            keyPath :
+            "[" + keyPath.join('+') + "]";
+}
+function createDBCore(db, indexedDB, IdbKeyRange, tmpTrans) {
+    var cmp = indexedDB.cmp.bind(indexedDB);
+    function extractSchema(db, trans) {
+        var tables = arrayify(db.objectStoreNames);
+        return {
+            schema: {
+                name: db.name,
+                tables: tables.map(function (table) { return trans.objectStore(table); }).map(function (store) {
+                    var keyPath = store.keyPath, autoIncrement = store.autoIncrement;
+                    var compound = isArray(keyPath);
+                    var outbound = keyPath == null;
+                    var indexByKeyPath = {};
+                    var result = {
+                        name: store.name,
+                        primaryKey: {
+                            name: null,
+                            isPrimaryKey: true,
+                            outbound: outbound,
+                            compound: compound,
+                            keyPath: keyPath,
+                            autoIncrement: autoIncrement,
+                            unique: true,
+                            extractKey: getKeyExtractor(keyPath)
+                        },
+                        indexes: arrayify(store.indexNames).map(function (indexName) { return store.index(indexName); })
+                            .map(function (index) {
+                            var name = index.name, unique = index.unique, multiEntry = index.multiEntry, keyPath = index.keyPath;
+                            var compound = isArray(keyPath);
+                            var result = {
+                                name: name,
+                                compound: compound,
+                                keyPath: keyPath,
+                                unique: unique,
+                                multiEntry: multiEntry,
+                                extractKey: getKeyExtractor(keyPath)
+                            };
+                            indexByKeyPath[getKeyPathAlias(keyPath)] = result;
+                            return result;
+                        }),
+                        getIndexByKeyPath: function (keyPath) { return indexByKeyPath[getKeyPathAlias(keyPath)]; }
+                    };
+                    indexByKeyPath[":id"] = result.primaryKey;
+                    if (keyPath != null) {
+                        indexByKeyPath[getKeyPathAlias(keyPath)] = result.primaryKey;
+                    }
+                    return result;
+                })
+            },
+            hasGetAll: tables.length > 0 && ('getAll' in trans.objectStore(tables[0])) &&
+                !(typeof navigator !== 'undefined' && /Safari/.test(navigator.userAgent) &&
+                    !/(Chrome\/|Edge\/)/.test(navigator.userAgent) &&
+                    [].concat(navigator.userAgent.match(/Safari\/(\d*)/))[1] < 604)
+        };
+    }
+    function makeIDBKeyRange(range) {
+        if (range.type === 3          )
+            return null;
+        if (range.type === 4            )
+            throw new Error("Cannot convert never type to IDBKeyRange");
+        var lower = range.lower, upper = range.upper, lowerOpen = range.lowerOpen, upperOpen = range.upperOpen;
+        var idbRange = lower === undefined ?
+            upper === undefined ?
+                null :
+                IdbKeyRange.upperBound(upper, !!upperOpen) :
+            upper === undefined ?
+                IdbKeyRange.lowerBound(lower, !!lowerOpen) :
+                IdbKeyRange.bound(lower, upper, !!lowerOpen, !!upperOpen);
+        return idbRange;
+    }
+    function createDbCoreTable(tableSchema) {
+        var tableName = tableSchema.name;
+        function mutate(_a) {
+            var trans = _a.trans, type = _a.type, keys$$1 = _a.keys, values = _a.values, range = _a.range, wantResults = _a.wantResults;
+            return new Promise(function (resolve, reject) {
+                resolve = wrap(resolve);
+                var store = trans.objectStore(tableName);
+                var outbound = store.keyPath == null;
+                var isAddOrPut = type === "put" || type === "add";
+                if (!isAddOrPut && type !== 'delete' && type !== 'deleteRange')
+                    throw new Error("Invalid operation type: " + type);
+                var length = (keys$$1 || values || { length: 1 }).length;
+                if (keys$$1 && values && keys$$1.length !== values.length) {
+                    throw new Error("Given keys array must have same length as given values array.");
+                }
+                if (length === 0)
+                    return resolve({ numFailures: 0, failures: {}, results: [], lastResult: undefined });
+                var results = wantResults && __spreadArrays((keys$$1 ?
+                    keys$$1 :
+                    getEffectiveKeys(tableSchema.primaryKey, { type: type, keys: keys$$1, values: values })));
+                var req;
+                var failures = [];
+                var numFailures = 0;
+                var errorHandler = function (event) {
+                    ++numFailures;
+                    preventDefault(event);
+                    if (results)
+                        results[event.target._reqno] = undefined;
+                    failures[event.target._reqno] = event.target.error;
+                };
+                var setResult = function (_a) {
+                    var target = _a.target;
+                    results[target._reqno] = target.result;
+                };
+                if (type === 'deleteRange') {
+                    if (range.type === 4            )
+                        return resolve({ numFailures: numFailures, failures: failures, results: results, lastResult: undefined });
+                    if (range.type === 3          )
+                        req = store.clear();
+                    else
+                        req = store.delete(makeIDBKeyRange(range));
+                }
+                else {
+                    var _a = isAddOrPut ?
+                        outbound ?
+                            [values, keys$$1] :
+                            [values, null] :
+                        [keys$$1, null], args1 = _a[0], args2 = _a[1];
+                    if (isAddOrPut) {
+                        for (var i = 0; i < length; ++i) {
+                            req = (args2 && args2[i] !== undefined ?
+                                store[type](args1[i], args2[i]) :
+                                store[type](args1[i]));
+                            req._reqno = i;
+                            if (results && results[i] === undefined) {
+                                req.onsuccess = setResult;
+                            }
+                            req.onerror = errorHandler;
+                        }
+                    }
+                    else {
+                        for (var i = 0; i < length; ++i) {
+                            req = store[type](args1[i]);
+                            req._reqno = i;
+                            req.onerror = errorHandler;
+                        }
+                    }
+                }
+                var done = function (event) {
+                    var lastResult = event.target.result;
+                    if (results)
+                        results[length - 1] = lastResult;
+                    resolve({
+                        numFailures: numFailures,
+                        failures: failures,
+                        results: results,
+                        lastResult: lastResult
+                    });
+                };
+                req.onerror = function (event) {
+                    errorHandler(event);
+                    done(event);
+                };
+                req.onsuccess = done;
+            });
+        }
+        function openCursor(_a) {
+            var trans = _a.trans, values = _a.values, query = _a.query, reverse = _a.reverse, unique = _a.unique;
+            return new Promise(function (resolve, reject) {
+                resolve = wrap(resolve);
+                var index = query.index, range = query.range;
+                var store = trans.objectStore(tableName);
+                var source = index.isPrimaryKey ?
+                    store :
+                    store.index(index.name);
+                var direction = reverse ?
+                    unique ?
+                        "prevunique" :
+                        "prev" :
+                    unique ?
+                        "nextunique" :
+                        "next";
+                var req = values || !('openKeyCursor' in source) ?
+                    source.openCursor(makeIDBKeyRange(range), direction) :
+                    source.openKeyCursor(makeIDBKeyRange(range), direction);
+                req.onerror = eventRejectHandler(reject);
+                req.onsuccess = wrap(function (ev) {
+                    var cursor = req.result;
+                    if (!cursor) {
+                        resolve(null);
+                        return;
+                    }
+                    cursor.___id = ++_id_counter;
+                    cursor.done = false;
+                    var _cursorContinue = cursor.continue.bind(cursor);
+                    var _cursorContinuePrimaryKey = cursor.continuePrimaryKey;
+                    if (_cursorContinuePrimaryKey)
+                        _cursorContinuePrimaryKey = _cursorContinuePrimaryKey.bind(cursor);
+                    var _cursorAdvance = cursor.advance.bind(cursor);
+                    var doThrowCursorIsNotStarted = function () { throw new Error("Cursor not started"); };
+                    var doThrowCursorIsStopped = function () { throw new Error("Cursor not stopped"); };
+                    cursor.trans = trans;
+                    cursor.stop = cursor.continue = cursor.continuePrimaryKey = cursor.advance = doThrowCursorIsNotStarted;
+                    cursor.fail = wrap(reject);
+                    cursor.next = function () {
+                        var _this = this;
+                        var gotOne = 1;
+                        return this.start(function () { return gotOne-- ? _this.continue() : _this.stop(); }).then(function () { return _this; });
+                    };
+                    cursor.start = function (callback) {
+                        var iterationPromise = new Promise(function (resolveIteration, rejectIteration) {
+                            resolveIteration = wrap(resolveIteration);
+                            req.onerror = eventRejectHandler(rejectIteration);
+                            cursor.fail = rejectIteration;
+                            cursor.stop = function (value) {
+                                cursor.stop = cursor.continue = cursor.continuePrimaryKey = cursor.advance = doThrowCursorIsStopped;
+                                resolveIteration(value);
+                            };
+                        });
+                        var guardedCallback = function () {
+                            if (req.result) {
+                                try {
+                                    callback();
+                                }
+                                catch (err) {
+                                    cursor.fail(err);
+                                }
+                            }
+                            else {
+                                cursor.done = true;
+                                cursor.start = function () { throw new Error("Cursor behind last entry"); };
+                                cursor.stop();
+                            }
+                        };
+                        req.onsuccess = wrap(function (ev) {
+                            req.onsuccess = guardedCallback;
+                            guardedCallback();
+                        });
+                        cursor.continue = _cursorContinue;
+                        cursor.continuePrimaryKey = _cursorContinuePrimaryKey;
+                        cursor.advance = _cursorAdvance;
+                        guardedCallback();
+                        return iterationPromise;
+                    };
+                    resolve(cursor);
+                }, reject);
+            });
+        }
+        function query(hasGetAll) {
+            return function (request) {
+                return new Promise(function (resolve, reject) {
+                    resolve = wrap(resolve);
+                    var trans = request.trans, values = request.values, limit = request.limit, query = request.query;
+                    var nonInfinitLimit = limit === Infinity ? undefined : limit;
+                    var index = query.index, range = query.range;
+                    var store = trans.objectStore(tableName);
+                    var source = index.isPrimaryKey ? store : store.index(index.name);
+                    var idbKeyRange = makeIDBKeyRange(range);
+                    if (limit === 0)
+                        return resolve({ result: [] });
+                    if (hasGetAll) {
+                        var req = values ?
+                            source.getAll(idbKeyRange, nonInfinitLimit) :
+                            source.getAllKeys(idbKeyRange, nonInfinitLimit);
+                        req.onsuccess = function (event) { return resolve({ result: event.target.result }); };
+                        req.onerror = eventRejectHandler(reject);
+                    }
+                    else {
+                        var count_1 = 0;
+                        var req_1 = values || !('openKeyCursor' in source) ?
+                            source.openCursor(idbKeyRange) :
+                            source.openKeyCursor(idbKeyRange);
+                        var result_1 = [];
+                        req_1.onsuccess = function (event) {
+                            var cursor = req_1.result;
+                            if (!cursor)
+                                return resolve({ result: result_1 });
+                            result_1.push(values ? cursor.value : cursor.primaryKey);
+                            if (++count_1 === limit)
+                                return resolve({ result: result_1 });
+                            cursor.continue();
+                        };
+                        req_1.onerror = eventRejectHandler(reject);
+                    }
+                });
+            };
+        }
+        return {
+            name: tableName,
+            schema: tableSchema,
+            mutate: mutate,
+            getMany: function (_a) {
+                var trans = _a.trans, keys$$1 = _a.keys;
+                return new Promise(function (resolve, reject) {
+                    resolve = wrap(resolve);
+                    var store = trans.objectStore(tableName);
+                    var length = keys$$1.length;
+                    var result = new Array(length);
+                    var keyCount = 0;
+                    var callbackCount = 0;
+                    var valueCount = 0;
+                    var req;
+                    var successHandler = function (event) {
+                        var req = event.target;
+                        if ((result[req._pos] = req.result) != null)
+                            ++valueCount;
+                        if (++callbackCount === keyCount)
+                            resolve(result);
+                    };
+                    var errorHandler = eventRejectHandler(reject);
+                    for (var i = 0; i < length; ++i) {
+                        var key = keys$$1[i];
+                        if (key != null) {
+                            req = store.get(keys$$1[i]);
+                            req._pos = i;
+                            req.onsuccess = successHandler;
+                            req.onerror = errorHandler;
+                            ++keyCount;
+                        }
+                    }
+                    if (keyCount === 0)
+                        resolve(result);
+                });
+            },
+            get: function (_a) {
+                var trans = _a.trans, key = _a.key;
+                return new Promise(function (resolve, reject) {
+                    resolve = wrap(resolve);
+                    var store = trans.objectStore(tableName);
+                    var req = store.get(key);
+                    req.onsuccess = function (event) { return resolve(event.target.result); };
+                    req.onerror = eventRejectHandler(reject);
+                });
+            },
+            query: query(hasGetAll),
+            openCursor: openCursor,
+            count: function (_a) {
+                var query = _a.query, trans = _a.trans;
+                var index = query.index, range = query.range;
+                return new Promise(function (resolve, reject) {
+                    var store = trans.objectStore(tableName);
+                    var source = index.isPrimaryKey ? store : store.index(index.name);
+                    var idbKeyRange = makeIDBKeyRange(range);
+                    var req = idbKeyRange ? source.count(idbKeyRange) : source.count();
+                    req.onsuccess = wrap(function (ev) { return resolve(ev.target.result); });
+                    req.onerror = eventRejectHandler(reject);
+                });
+            }
+        };
+    }
+    var _a = extractSchema(db, tmpTrans), schema = _a.schema, hasGetAll = _a.hasGetAll;
+    var tables = schema.tables.map(function (tableSchema) { return createDbCoreTable(tableSchema); });
+    var tableMap = {};
+    tables.forEach(function (table) { return tableMap[table.name] = table; });
+    return {
+        stack: "dbcore",
+        transaction: db.transaction.bind(db),
+        table: function (name) {
+            var result = tableMap[name];
+            if (!result)
+                throw new Error("Table '" + name + "' not found");
+            return tableMap[name];
+        },
+        cmp: cmp,
+        MIN_KEY: -Infinity,
+        MAX_KEY: getMaxKey(IdbKeyRange),
+        schema: schema
+    };
+}
+
+function createMiddlewareStack(stackImpl, middlewares) {
+    return middlewares.reduce(function (down, _a) {
+        var create = _a.create;
+        return (__assign(__assign({}, down), create(down)));
+    }, stackImpl);
+}
+function createMiddlewareStacks(middlewares, idbdb, _a, tmpTrans) {
+    var IDBKeyRange = _a.IDBKeyRange, indexedDB = _a.indexedDB;
+    var dbcore = createMiddlewareStack(createDBCore(idbdb, indexedDB, IDBKeyRange, tmpTrans), middlewares.dbcore);
+    return {
+        dbcore: dbcore
+    };
+}
+function generateMiddlewareStacks(db, tmpTrans) {
+    var idbdb = tmpTrans.db;
+    var stacks = createMiddlewareStacks(db._middlewares, idbdb, db._deps, tmpTrans);
+    db.core = stacks.dbcore;
+    db.tables.forEach(function (table) {
+        var tableName = table.name;
+        if (db.core.schema.tables.some(function (tbl) { return tbl.name === tableName; })) {
+            table.core = db.core.table(tableName);
+            if (db[tableName] instanceof db.Table) {
+                db[tableName].core = table.core;
+            }
+        }
+    });
+}
+
+function setApiOnPlace(db, objs, tableNames, dbschema) {
+    tableNames.forEach(function (tableName) {
+        var schema = dbschema[tableName];
+        objs.forEach(function (obj) {
+            if (!(tableName in obj)) {
+                if (obj === db.Transaction.prototype || obj instanceof db.Transaction) {
+                    setProp(obj, tableName, {
+                        get: function () { return this.table(tableName); },
+                        set: function (value) {
+                            defineProperty(this, tableName, { value: value, writable: true, configurable: true, enumerable: true });
+                        }
+                    });
+                }
+                else {
+                    obj[tableName] = new db.Table(tableName, schema);
+                }
+            }
+        });
+    });
+}
+function removeTablesApi(db, objs) {
+    objs.forEach(function (obj) {
+        for (var key in obj) {
+            if (obj[key] instanceof db.Table)
+                delete obj[key];
+        }
+    });
+}
+function lowerVersionFirst(a, b) {
+    return a._cfg.version - b._cfg.version;
+}
+function runUpgraders(db, oldVersion, idbUpgradeTrans, reject) {
+    var globalSchema = db._dbSchema;
+    var trans = db._createTransaction('readwrite', db._storeNames, globalSchema);
+    trans.create(idbUpgradeTrans);
+    trans._completion.catch(reject);
+    var rejectTransaction = trans._reject.bind(trans);
+    var transless = PSD.transless || PSD;
+    newScope(function () {
+        PSD.trans = trans;
+        PSD.transless = transless;
+        if (oldVersion === 0) {
+            dexie_keys(globalSchema).forEach(function (tableName) {
+                createTable(idbUpgradeTrans, tableName, globalSchema[tableName].primKey, globalSchema[tableName].indexes);
+            });
+            generateMiddlewareStacks(db, idbUpgradeTrans);
+            DexiePromise.follow(function () { return db.on.populate.fire(trans); }).catch(rejectTransaction);
+        }
+        else
+            updateTablesAndIndexes(db, oldVersion, trans, idbUpgradeTrans).catch(rejectTransaction);
+    });
+}
+function updateTablesAndIndexes(db, oldVersion, trans, idbUpgradeTrans) {
+    var queue = [];
+    var versions = db._versions;
+    var globalSchema = db._dbSchema = buildGlobalSchema(db, db.idbdb, idbUpgradeTrans);
+    var anyContentUpgraderHasRun = false;
+    var versToRun = versions.filter(function (v) { return v._cfg.version >= oldVersion; });
+    versToRun.forEach(function (version) {
+        queue.push(function () {
+            var oldSchema = globalSchema;
+            var newSchema = version._cfg.dbschema;
+            adjustToExistingIndexNames(db, oldSchema, idbUpgradeTrans);
+            adjustToExistingIndexNames(db, newSchema, idbUpgradeTrans);
+            globalSchema = db._dbSchema = newSchema;
+            var diff = getSchemaDiff(oldSchema, newSchema);
+            diff.add.forEach(function (tuple) {
+                createTable(idbUpgradeTrans, tuple[0], tuple[1].primKey, tuple[1].indexes);
+            });
+            diff.change.forEach(function (change) {
+                if (change.recreate) {
+                    throw new exceptions.Upgrade("Not yet support for changing primary key");
+                }
+                else {
+                    var store_1 = idbUpgradeTrans.objectStore(change.name);
+                    change.add.forEach(function (idx) { return addIndex(store_1, idx); });
+                    change.change.forEach(function (idx) {
+                        store_1.deleteIndex(idx.name);
+                        addIndex(store_1, idx);
+                    });
+                    change.del.forEach(function (idxName) { return store_1.deleteIndex(idxName); });
+                }
+            });
+            var contentUpgrade = version._cfg.contentUpgrade;
+            if (contentUpgrade && version._cfg.version > oldVersion) {
+                generateMiddlewareStacks(db, idbUpgradeTrans);
+                anyContentUpgraderHasRun = true;
+                var upgradeSchema_1 = shallowClone(newSchema);
+                diff.del.forEach(function (table) {
+                    upgradeSchema_1[table] = oldSchema[table];
+                });
+                removeTablesApi(db, [db.Transaction.prototype]);
+                setApiOnPlace(db, [db.Transaction.prototype], dexie_keys(upgradeSchema_1), upgradeSchema_1);
+                trans.schema = upgradeSchema_1;
+                var contentUpgradeIsAsync_1 = isAsyncFunction(contentUpgrade);
+                if (contentUpgradeIsAsync_1) {
+                    incrementExpectedAwaits();
+                }
+                var returnValue_1;
+                var promiseFollowed = DexiePromise.follow(function () {
+                    returnValue_1 = contentUpgrade(trans);
+                    if (returnValue_1) {
+                        if (contentUpgradeIsAsync_1) {
+                            var decrementor = decrementExpectedAwaits.bind(null, null);
+                            returnValue_1.then(decrementor, decrementor);
+                        }
+                    }
+                });
+                return (returnValue_1 && typeof returnValue_1.then === 'function' ?
+                    DexiePromise.resolve(returnValue_1) : promiseFollowed.then(function () { return returnValue_1; }));
+            }
+        });
+        queue.push(function (idbtrans) {
+            if (!anyContentUpgraderHasRun || !hasIEDeleteObjectStoreBug) {
+                var newSchema = version._cfg.dbschema;
+                deleteRemovedTables(newSchema, idbtrans);
+            }
+            removeTablesApi(db, [db.Transaction.prototype]);
+            setApiOnPlace(db, [db.Transaction.prototype], db._storeNames, db._dbSchema);
+            trans.schema = db._dbSchema;
+        });
+    });
+    function runQueue() {
+        return queue.length ? DexiePromise.resolve(queue.shift()(trans.idbtrans)).then(runQueue) :
+            DexiePromise.resolve();
+    }
+    return runQueue().then(function () {
+        createMissingTables(globalSchema, idbUpgradeTrans);
+    });
+}
+function getSchemaDiff(oldSchema, newSchema) {
+    var diff = {
+        del: [],
+        add: [],
+        change: []
+    };
+    var table;
+    for (table in oldSchema) {
+        if (!newSchema[table])
+            diff.del.push(table);
+    }
+    for (table in newSchema) {
+        var oldDef = oldSchema[table], newDef = newSchema[table];
+        if (!oldDef) {
+            diff.add.push([table, newDef]);
+        }
+        else {
+            var change = {
+                name: table,
+                def: newDef,
+                recreate: false,
+                del: [],
+                add: [],
+                change: []
+            };
+            if (oldDef.primKey.src !== newDef.primKey.src &&
+                !isIEOrEdge
+            ) {
+                change.recreate = true;
+                diff.change.push(change);
+            }
+            else {
+                var oldIndexes = oldDef.idxByName;
+                var newIndexes = newDef.idxByName;
+                var idxName = void 0;
+                for (idxName in oldIndexes) {
+                    if (!newIndexes[idxName])
+                        change.del.push(idxName);
+                }
+                for (idxName in newIndexes) {
+                    var oldIdx = oldIndexes[idxName], newIdx = newIndexes[idxName];
+                    if (!oldIdx)
+                        change.add.push(newIdx);
+                    else if (oldIdx.src !== newIdx.src)
+                        change.change.push(newIdx);
+                }
+                if (change.del.length > 0 || change.add.length > 0 || change.change.length > 0) {
+                    diff.change.push(change);
+                }
+            }
+        }
+    }
+    return diff;
+}
+function createTable(idbtrans, tableName, primKey, indexes) {
+    var store = idbtrans.db.createObjectStore(tableName, primKey.keyPath ?
+        { keyPath: primKey.keyPath, autoIncrement: primKey.auto } :
+        { autoIncrement: primKey.auto });
+    indexes.forEach(function (idx) { return addIndex(store, idx); });
+    return store;
+}
+function createMissingTables(newSchema, idbtrans) {
+    dexie_keys(newSchema).forEach(function (tableName) {
+        if (!idbtrans.db.objectStoreNames.contains(tableName)) {
+            createTable(idbtrans, tableName, newSchema[tableName].primKey, newSchema[tableName].indexes);
+        }
+    });
+}
+function deleteRemovedTables(newSchema, idbtrans) {
+    for (var i = 0; i < idbtrans.db.objectStoreNames.length; ++i) {
+        var storeName = idbtrans.db.objectStoreNames[i];
+        if (newSchema[storeName] == null) {
+            idbtrans.db.deleteObjectStore(storeName);
+        }
+    }
+}
+function addIndex(store, idx) {
+    store.createIndex(idx.name, idx.keyPath, { unique: idx.unique, multiEntry: idx.multi });
+}
+function buildGlobalSchema(db, idbdb, tmpTrans) {
+    var globalSchema = {};
+    var dbStoreNames = slice(idbdb.objectStoreNames, 0);
+    dbStoreNames.forEach(function (storeName) {
+        var store = tmpTrans.objectStore(storeName);
+        var keyPath = store.keyPath;
+        var primKey = createIndexSpec(nameFromKeyPath(keyPath), keyPath || "", false, false, !!store.autoIncrement, keyPath && typeof keyPath !== "string", true);
+        var indexes = [];
+        for (var j = 0; j < store.indexNames.length; ++j) {
+            var idbindex = store.index(store.indexNames[j]);
+            keyPath = idbindex.keyPath;
+            var index = createIndexSpec(idbindex.name, keyPath, !!idbindex.unique, !!idbindex.multiEntry, false, keyPath && typeof keyPath !== "string", false);
+            indexes.push(index);
+        }
+        globalSchema[storeName] = createTableSchema(storeName, primKey, indexes);
+    });
+    return globalSchema;
+}
+function readGlobalSchema(db, idbdb, tmpTrans) {
+    db.verno = idbdb.version / 10;
+    var globalSchema = db._dbSchema = buildGlobalSchema(db, idbdb, tmpTrans);
+    db._storeNames = slice(idbdb.objectStoreNames, 0);
+    setApiOnPlace(db, [db._allTables], dexie_keys(globalSchema), globalSchema);
+}
+function adjustToExistingIndexNames(db, schema, idbtrans) {
+    var storeNames = idbtrans.db.objectStoreNames;
+    for (var i = 0; i < storeNames.length; ++i) {
+        var storeName = storeNames[i];
+        var store = idbtrans.objectStore(storeName);
+        db._hasGetAll = 'getAll' in store;
+        for (var j = 0; j < store.indexNames.length; ++j) {
+            var indexName = store.indexNames[j];
+            var keyPath = store.index(indexName).keyPath;
+            var dexieName = typeof keyPath === 'string' ? keyPath : "[" + slice(keyPath).join('+') + "]";
+            if (schema[storeName]) {
+                var indexSpec = schema[storeName].idxByName[dexieName];
+                if (indexSpec) {
+                    indexSpec.name = indexName;
+                    delete schema[storeName].idxByName[dexieName];
+                    schema[storeName].idxByName[indexName] = indexSpec;
+                }
+            }
+        }
+    }
+    if (typeof navigator !== 'undefined' && /Safari/.test(navigator.userAgent) &&
+        !/(Chrome\/|Edge\/)/.test(navigator.userAgent) &&
+        _global.WorkerGlobalScope && _global instanceof _global.WorkerGlobalScope &&
+        [].concat(navigator.userAgent.match(/Safari\/(\d*)/))[1] < 604) {
+        db._hasGetAll = false;
+    }
+}
+function parseIndexSyntax(primKeyAndIndexes) {
+    return primKeyAndIndexes.split(',').map(function (index, indexNum) {
+        index = index.trim();
+        var name = index.replace(/([&*]|\+\+)/g, "");
+        var keyPath = /^\[/.test(name) ? name.match(/^\[(.*)\]$/)[1].split('+') : name;
+        return createIndexSpec(name, keyPath || null, /\&/.test(index), /\*/.test(index), /\+\+/.test(index), isArray(keyPath), indexNum === 0);
+    });
+}
+
+var Version =               (function () {
+    function Version() {
+    }
+    Version.prototype._parseStoresSpec = function (stores, outSchema) {
+        dexie_keys(stores).forEach(function (tableName) {
+            if (stores[tableName] !== null) {
+                var indexes = parseIndexSyntax(stores[tableName]);
+                var primKey = indexes.shift();
+                if (primKey.multi)
+                    throw new exceptions.Schema("Primary key cannot be multi-valued");
+                indexes.forEach(function (idx) {
+                    if (idx.auto)
+                        throw new exceptions.Schema("Only primary key can be marked as autoIncrement (++)");
+                    if (!idx.keyPath)
+                        throw new exceptions.Schema("Index must have a name and cannot be an empty string");
+                });
+                outSchema[tableName] = createTableSchema(tableName, primKey, indexes);
+            }
+        });
+    };
+    Version.prototype.stores = function (stores) {
+        var db = this.db;
+        this._cfg.storesSource = this._cfg.storesSource ?
+            extend(this._cfg.storesSource, stores) :
+            stores;
+        var versions = db._versions;
+        var storesSpec = {};
+        var dbschema = {};
+        versions.forEach(function (version) {
+            extend(storesSpec, version._cfg.storesSource);
+            dbschema = (version._cfg.dbschema = {});
+            version._parseStoresSpec(storesSpec, dbschema);
+        });
+        db._dbSchema = dbschema;
+        removeTablesApi(db, [db._allTables, db, db.Transaction.prototype]);
+        setApiOnPlace(db, [db._allTables, db, db.Transaction.prototype, this._cfg.tables], dexie_keys(dbschema), dbschema);
+        db._storeNames = dexie_keys(dbschema);
+        return this;
+    };
+    Version.prototype.upgrade = function (upgradeFunction) {
+        this._cfg.contentUpgrade = upgradeFunction;
+        return this;
+    };
+    return Version;
+}());
+
+function createVersionConstructor(db) {
+    return makeClassConstructor(Version.prototype, function Version$$1(versionNumber) {
+        this.db = db;
+        this._cfg = {
+            version: versionNumber,
+            storesSource: null,
+            dbschema: {},
+            tables: {},
+            contentUpgrade: null
+        };
+    });
+}
+
+var databaseEnumerator;
+function DatabaseEnumerator(indexedDB) {
+    var hasDatabasesNative = indexedDB && typeof indexedDB.databases === 'function';
+    var dbNamesTable;
+    if (!hasDatabasesNative) {
+        var db = new Dexie(DBNAMES_DB, { addons: [] });
+        db.version(1).stores({ dbnames: 'name' });
+        dbNamesTable = db.table('dbnames');
+    }
+    return {
+        getDatabaseNames: function () {
+            return hasDatabasesNative
+                ?
+                    DexiePromise.resolve(indexedDB.databases()).then(function (infos) { return infos
+                        .map(function (info) { return info.name; })
+                        .filter(function (name) { return name !== DBNAMES_DB; }); })
+                :
+                    dbNamesTable.toCollection().primaryKeys();
+        },
+        add: function (name) {
+            return !hasDatabasesNative && name !== DBNAMES_DB && dbNamesTable.put({ name: name }).catch(nop);
+        },
+        remove: function (name) {
+            return !hasDatabasesNative && name !== DBNAMES_DB && dbNamesTable.delete(name).catch(nop);
+        }
+    };
+}
+function initDatabaseEnumerator(indexedDB) {
+    try {
+        databaseEnumerator = DatabaseEnumerator(indexedDB);
+    }
+    catch (e) { }
+}
+
+function vip(fn) {
+    return newScope(function () {
+        PSD.letThrough = true;
+        return fn();
+    });
+}
+
+function dexieOpen(db) {
+    var state = db._state;
+    var indexedDB = db._deps.indexedDB;
+    if (state.isBeingOpened || db.idbdb)
+        return state.dbReadyPromise.then(function () { return state.dbOpenError ?
+            rejection(state.dbOpenError) :
+            db; });
+    debug && (state.openCanceller._stackHolder = getErrorWithStack());
+    state.isBeingOpened = true;
+    state.dbOpenError = null;
+    state.openComplete = false;
+    var resolveDbReady = state.dbReadyResolve,
+    upgradeTransaction = null;
+    return DexiePromise.race([state.openCanceller, new DexiePromise(function (resolve, reject) {
+            if (!indexedDB)
+                throw new exceptions.MissingAPI("indexedDB API not found. If using IE10+, make sure to run your code on a server URL " +
+                    "(not locally). If using old Safari versions, make sure to include indexedDB polyfill.");
+            var dbName = db.name;
+            var req = state.autoSchema ?
+                indexedDB.open(dbName) :
+                indexedDB.open(dbName, Math.round(db.verno * 10));
+            if (!req)
+                throw new exceptions.MissingAPI("IndexedDB API not available");
+            req.onerror = eventRejectHandler(reject);
+            req.onblocked = wrap(db._fireOnBlocked);
+            req.onupgradeneeded = wrap(function (e) {
+                upgradeTransaction = req.transaction;
+                if (state.autoSchema && !db._options.allowEmptyDB) {
+                    req.onerror = preventDefault;
+                    upgradeTransaction.abort();
+                    req.result.close();
+                    var delreq = indexedDB.deleteDatabase(dbName);
+                    delreq.onsuccess = delreq.onerror = wrap(function () {
+                        reject(new exceptions.NoSuchDatabase("Database " + dbName + " doesnt exist"));
+                    });
+                }
+                else {
+                    upgradeTransaction.onerror = eventRejectHandler(reject);
+                    var oldVer = e.oldVersion > Math.pow(2, 62) ? 0 : e.oldVersion;
+                    db.idbdb = req.result;
+                    runUpgraders(db, oldVer / 10, upgradeTransaction, reject);
+                }
+            }, reject);
+            req.onsuccess = wrap(function () {
+                upgradeTransaction = null;
+                var idbdb = db.idbdb = req.result;
+                var objectStoreNames = slice(idbdb.objectStoreNames);
+                if (objectStoreNames.length > 0)
+                    try {
+                        var tmpTrans = idbdb.transaction(safariMultiStoreFix(objectStoreNames), 'readonly');
+                        if (state.autoSchema)
+                            readGlobalSchema(db, idbdb, tmpTrans);
+                        else
+                            adjustToExistingIndexNames(db, db._dbSchema, tmpTrans);
+                        generateMiddlewareStacks(db, tmpTrans);
+                    }
+                    catch (e) {
+                    }
+                connections.push(db);
+                idbdb.onversionchange = wrap(function (ev) {
+                    state.vcFired = true;
+                    db.on("versionchange").fire(ev);
+                });
+                databaseEnumerator.add(dbName);
+                resolve();
+            }, reject);
+        })]).then(function () {
+        state.onReadyBeingFired = [];
+        return DexiePromise.resolve(vip(db.on.ready.fire)).then(function fireRemainders() {
+            if (state.onReadyBeingFired.length > 0) {
+                var remainders = state.onReadyBeingFired.reduce(promisableChain, nop);
+                state.onReadyBeingFired = [];
+                return DexiePromise.resolve(vip(remainders)).then(fireRemainders);
+            }
+        });
+    }).finally(function () {
+        state.onReadyBeingFired = null;
+    }).then(function () {
+        state.isBeingOpened = false;
+        return db;
+    }).catch(function (err) {
+        try {
+            upgradeTransaction && upgradeTransaction.abort();
+        }
+        catch (e) { }
+        state.isBeingOpened = false;
+        db.close();
+        state.dbOpenError = err;
+        return rejection(state.dbOpenError);
+    }).finally(function () {
+        state.openComplete = true;
+        resolveDbReady();
+    });
+}
+
+function awaitIterator(iterator) {
+    var callNext = function (result) { return iterator.next(result); }, doThrow = function (error) { return iterator.throw(error); }, onSuccess = step(callNext), onError = step(doThrow);
+    function step(getNext) {
+        return function (val) {
+            var next = getNext(val), value = next.value;
+            return next.done ? value :
+                (!value || typeof value.then !== 'function' ?
+                    isArray(value) ? Promise.all(value).then(onSuccess, onError) : onSuccess(value) :
+                    value.then(onSuccess, onError));
+        };
+    }
+    return step(callNext)();
+}
+
+function extractTransactionArgs(mode, _tableArgs_, scopeFunc) {
+    var i = arguments.length;
+    if (i < 2)
+        throw new exceptions.InvalidArgument("Too few arguments");
+    var args = new Array(i - 1);
+    while (--i)
+        args[i - 1] = arguments[i];
+    scopeFunc = args.pop();
+    var tables = flatten(args);
+    return [mode, tables, scopeFunc];
+}
+function enterTransactionScope(db, mode, storeNames, parentTransaction, scopeFunc) {
+    return DexiePromise.resolve().then(function () {
+        var transless = PSD.transless || PSD;
+        var trans = db._createTransaction(mode, storeNames, db._dbSchema, parentTransaction);
+        var zoneProps = {
+            trans: trans,
+            transless: transless
+        };
+        if (parentTransaction) {
+            trans.idbtrans = parentTransaction.idbtrans;
+        }
+        else {
+            trans.create();
+        }
+        var scopeFuncIsAsync = isAsyncFunction(scopeFunc);
+        if (scopeFuncIsAsync) {
+            incrementExpectedAwaits();
+        }
+        var returnValue;
+        var promiseFollowed = DexiePromise.follow(function () {
+            returnValue = scopeFunc.call(trans, trans);
+            if (returnValue) {
+                if (scopeFuncIsAsync) {
+                    var decrementor = decrementExpectedAwaits.bind(null, null);
+                    returnValue.then(decrementor, decrementor);
+                }
+                else if (typeof returnValue.next === 'function' && typeof returnValue.throw === 'function') {
+                    returnValue = awaitIterator(returnValue);
+                }
+            }
+        }, zoneProps);
+        return (returnValue && typeof returnValue.then === 'function' ?
+            DexiePromise.resolve(returnValue).then(function (x) { return trans.active ?
+                x
+                : rejection(new exceptions.PrematureCommit("Transaction committed too early. See http://bit.ly/2kdckMn")); })
+            : promiseFollowed.then(function () { return returnValue; })).then(function (x) {
+            if (parentTransaction)
+                trans._resolve();
+            return trans._completion.then(function () { return x; });
+        }).catch(function (e) {
+            trans._reject(e);
+            return rejection(e);
+        });
+    });
+}
+
+function pad(a, value, count) {
+    var result = isArray(a) ? a.slice() : [a];
+    for (var i = 0; i < count; ++i)
+        result.push(value);
+    return result;
+}
+function createVirtualIndexMiddleware(down) {
+    return __assign(__assign({}, down), { table: function (tableName) {
+            var table = down.table(tableName);
+            var schema = table.schema;
+            var indexLookup = {};
+            var allVirtualIndexes = [];
+            function addVirtualIndexes(keyPath, keyTail, lowLevelIndex) {
+                var keyPathAlias = getKeyPathAlias(keyPath);
+                var indexList = (indexLookup[keyPathAlias] = indexLookup[keyPathAlias] || []);
+                var keyLength = keyPath == null ? 0 : typeof keyPath === 'string' ? 1 : keyPath.length;
+                var isVirtual = keyTail > 0;
+                var virtualIndex = __assign(__assign({}, lowLevelIndex), { isVirtual: isVirtual, isPrimaryKey: !isVirtual && lowLevelIndex.isPrimaryKey, keyTail: keyTail,
+                    keyLength: keyLength, extractKey: getKeyExtractor(keyPath), unique: !isVirtual && lowLevelIndex.unique });
+                indexList.push(virtualIndex);
+                if (!virtualIndex.isPrimaryKey) {
+                    allVirtualIndexes.push(virtualIndex);
+                }
+                if (keyLength > 1) {
+                    var virtualKeyPath = keyLength === 2 ?
+                        keyPath[0] :
+                        keyPath.slice(0, keyLength - 1);
+                    addVirtualIndexes(virtualKeyPath, keyTail + 1, lowLevelIndex);
+                }
+                indexList.sort(function (a, b) { return a.keyTail - b.keyTail; });
+                return virtualIndex;
+            }
+            var primaryKey = addVirtualIndexes(schema.primaryKey.keyPath, 0, schema.primaryKey);
+            indexLookup[":id"] = [primaryKey];
+            for (var _i = 0, _a = schema.indexes; _i < _a.length; _i++) {
+                var index = _a[_i];
+                addVirtualIndexes(index.keyPath, 0, index);
+            }
+            function findBestIndex(keyPath) {
+                var result = indexLookup[getKeyPathAlias(keyPath)];
+                return result && result[0];
+            }
+            function translateRange(range, keyTail) {
+                return {
+                    type: range.type === 1             ?
+                        2             :
+                        range.type,
+                    lower: pad(range.lower, range.lowerOpen ? down.MAX_KEY : down.MIN_KEY, keyTail),
+                    lowerOpen: true,
+                    upper: pad(range.upper, range.upperOpen ? down.MIN_KEY : down.MAX_KEY, keyTail),
+                    upperOpen: true
+                };
+            }
+            function translateRequest(req) {
+                var index = req.query.index;
+                return index.isVirtual ? __assign(__assign({}, req), { query: {
+                        index: index,
+                        range: translateRange(req.query.range, index.keyTail)
+                    } }) : req;
+            }
+            var result = __assign(__assign({}, table), { schema: __assign(__assign({}, schema), { primaryKey: primaryKey, indexes: allVirtualIndexes, getIndexByKeyPath: findBestIndex }), count: function (req) {
+                    return table.count(translateRequest(req));
+                },
+                query: function (req) {
+                    return table.query(translateRequest(req));
+                },
+                openCursor: function (req) {
+                    var _a = req.query.index, keyTail = _a.keyTail, isVirtual = _a.isVirtual, keyLength = _a.keyLength;
+                    if (!isVirtual)
+                        return table.openCursor(req);
+                    function createVirtualCursor(cursor) {
+                        function _continue(key) {
+                            key != null ?
+                                cursor.continue(pad(key, req.reverse ? down.MAX_KEY : down.MIN_KEY, keyTail)) :
+                                req.unique ?
+                                    cursor.continue(pad(cursor.key, req.reverse ? down.MIN_KEY : down.MAX_KEY, keyTail)) :
+                                    cursor.continue();
+                        }
+                        var virtualCursor = Object.create(cursor, {
+                            continue: { value: _continue },
+                            continuePrimaryKey: {
+                                value: function (key, primaryKey) {
+                                    cursor.continuePrimaryKey(pad(key, down.MAX_KEY, keyTail), primaryKey);
+                                }
+                            },
+                            key: {
+                                get: function () {
+                                    var key = cursor.key;
+                                    return keyLength === 1 ?
+                                        key[0] :
+                                        key.slice(0, keyLength);
+                                }
+                            },
+                            value: {
+                                get: function () {
+                                    return cursor.value;
+                                }
+                            }
+                        });
+                        return virtualCursor;
+                    }
+                    return table.openCursor(translateRequest(req))
+                        .then(function (cursor) { return cursor && createVirtualCursor(cursor); });
+                } });
+            return result;
+        } });
+}
+var virtualIndexMiddleware = {
+    stack: "dbcore",
+    name: "VirtualIndexMiddleware",
+    level: 1,
+    create: createVirtualIndexMiddleware
+};
+
+var hooksMiddleware = {
+    stack: "dbcore",
+    name: "HooksMiddleware",
+    level: 2,
+    create: function (downCore) { return (__assign(__assign({}, downCore), { table: function (tableName) {
+            var downTable = downCore.table(tableName);
+            var primaryKey = downTable.schema.primaryKey;
+            var tableMiddleware = __assign(__assign({}, downTable), { mutate: function (req) {
+                    var dxTrans = PSD.trans;
+                    var _a = dxTrans.table(tableName).hook, deleting = _a.deleting, creating = _a.creating, updating = _a.updating;
+                    switch (req.type) {
+                        case 'add':
+                            if (creating.fire === nop)
+                                break;
+                            return dxTrans._promise('readwrite', function () { return addPutOrDelete(req); }, true);
+                        case 'put':
+                            if (creating.fire === nop && updating.fire === nop)
+                                break;
+                            return dxTrans._promise('readwrite', function () { return addPutOrDelete(req); }, true);
+                        case 'delete':
+                            if (deleting.fire === nop)
+                                break;
+                            return dxTrans._promise('readwrite', function () { return addPutOrDelete(req); }, true);
+                        case 'deleteRange':
+                            if (deleting.fire === nop)
+                                break;
+                            return dxTrans._promise('readwrite', function () { return deleteRange(req); }, true);
+                    }
+                    return downTable.mutate(req);
+                    function addPutOrDelete(req) {
+                        var dxTrans = PSD.trans;
+                        var keys$$1 = req.keys || getEffectiveKeys(primaryKey, req);
+                        if (!keys$$1)
+                            throw new Error("Keys missing");
+                        req = req.type === 'add' || req.type === 'put' ? __assign(__assign({}, req), { keys: keys$$1, wantResults: true }) :
+                         __assign({}, req);
+                        if (req.type !== 'delete')
+                            req.values = __spreadArrays(req.values);
+                        if (req.keys)
+                            req.keys = __spreadArrays(req.keys);
+                        return getExistingValues(downTable, req, keys$$1).then(function (existingValues) {
+                            var contexts = keys$$1.map(function (key, i) {
+                                var existingValue = existingValues[i];
+                                var ctx = { onerror: null, onsuccess: null };
+                                if (req.type === 'delete') {
+                                    deleting.fire.call(ctx, key, existingValue, dxTrans);
+                                }
+                                else if (req.type === 'add' || existingValue === undefined) {
+                                    var generatedPrimaryKey = creating.fire.call(ctx, key, req.values[i], dxTrans);
+                                    if (key == null && generatedPrimaryKey != null) {
+                                        key = generatedPrimaryKey;
+                                        req.keys[i] = key;
+                                        if (!primaryKey.outbound) {
+                                            setByKeyPath(req.values[i], primaryKey.keyPath, key);
+                                        }
+                                    }
+                                }
+                                else {
+                                    var objectDiff = getObjectDiff(existingValue, req.values[i]);
+                                    var additionalChanges_1 = updating.fire.call(ctx, objectDiff, key, existingValue, dxTrans);
+                                    if (additionalChanges_1) {
+                                        var requestedValue_1 = req.values[i];
+                                        Object.keys(additionalChanges_1).forEach(function (keyPath) {
+                                            setByKeyPath(requestedValue_1, keyPath, additionalChanges_1[keyPath]);
+                                        });
+                                    }
+                                }
+                                return ctx;
+                            });
+                            return downTable.mutate(req).then(function (_a) {
+                                var failures = _a.failures, results = _a.results, numFailures = _a.numFailures, lastResult = _a.lastResult;
+                                for (var i = 0; i < keys$$1.length; ++i) {
+                                    var primKey = results ? results[i] : keys$$1[i];
+                                    var ctx = contexts[i];
+                                    if (primKey == null) {
+                                        ctx.onerror && ctx.onerror(failures[i]);
+                                    }
+                                    else {
+                                        ctx.onsuccess && ctx.onsuccess(req.type === 'put' && existingValues[i] ?
+                                            req.values[i] :
+                                            primKey
+                                        );
+                                    }
+                                }
+                                return { failures: failures, results: results, numFailures: numFailures, lastResult: lastResult };
+                            }).catch(function (error) {
+                                contexts.forEach(function (ctx) { return ctx.onerror && ctx.onerror(error); });
+                                return Promise.reject(error);
+                            });
+                        });
+                    }
+                    function deleteRange(req) {
+                        return deleteNextChunk(req.trans, req.range, 10000);
+                    }
+                    function deleteNextChunk(trans, range, limit) {
+                        return downTable.query({ trans: trans, values: false, query: { index: primaryKey, range: range }, limit: limit })
+                            .then(function (_a) {
+                            var result = _a.result;
+                            return addPutOrDelete({ type: 'delete', keys: result, trans: trans }).then(function (res) {
+                                if (res.numFailures > 0)
+                                    return Promise.reject(res.failures[0]);
+                                if (result.length < limit) {
+                                    return { failures: [], numFailures: 0, lastResult: undefined };
+                                }
+                                else {
+                                    return deleteNextChunk(trans, __assign(__assign({}, range), { lower: result[result.length - 1], lowerOpen: true }), limit);
+                                }
+                            });
+                        });
+                    }
+                } });
+            return tableMiddleware;
+        } })); }
+};
+
+var Dexie =               (function () {
+    function Dexie(name, options) {
+        var _this = this;
+        this._middlewares = {};
+        this.verno = 0;
+        var deps = Dexie.dependencies;
+        this._options = options = __assign({
+            addons: Dexie.addons, autoOpen: true,
+            indexedDB: deps.indexedDB, IDBKeyRange: deps.IDBKeyRange }, options);
+        this._deps = {
+            indexedDB: options.indexedDB,
+            IDBKeyRange: options.IDBKeyRange
+        };
+        var addons = options.addons;
+        this._dbSchema = {};
+        this._versions = [];
+        this._storeNames = [];
+        this._allTables = {};
+        this.idbdb = null;
+        var state = {
+            dbOpenError: null,
+            isBeingOpened: false,
+            onReadyBeingFired: null,
+            openComplete: false,
+            dbReadyResolve: nop,
+            dbReadyPromise: null,
+            cancelOpen: nop,
+            openCanceller: null,
+            autoSchema: true
+        };
+        state.dbReadyPromise = new DexiePromise(function (resolve) {
+            state.dbReadyResolve = resolve;
+        });
+        state.openCanceller = new DexiePromise(function (_, reject) {
+            state.cancelOpen = reject;
+        });
+        this._state = state;
+        this.name = name;
+        this.on = Events(this, "populate", "blocked", "versionchange", { ready: [promisableChain, nop] });
+        this.on.ready.subscribe = override(this.on.ready.subscribe, function (subscribe) {
+            return function (subscriber, bSticky) {
+                Dexie.vip(function () {
+                    var state = _this._state;
+                    if (state.openComplete) {
+                        if (!state.dbOpenError)
+                            DexiePromise.resolve().then(subscriber);
+                        if (bSticky)
+                            subscribe(subscriber);
+                    }
+                    else if (state.onReadyBeingFired) {
+                        state.onReadyBeingFired.push(subscriber);
+                        if (bSticky)
+                            subscribe(subscriber);
+                    }
+                    else {
+                        subscribe(subscriber);
+                        var db_1 = _this;
+                        if (!bSticky)
+                            subscribe(function unsubscribe() {
+                                db_1.on.ready.unsubscribe(subscriber);
+                                db_1.on.ready.unsubscribe(unsubscribe);
+                            });
+                    }
+                });
+            };
+        });
+        this.Collection = createCollectionConstructor(this);
+        this.Table = createTableConstructor(this);
+        this.Transaction = createTransactionConstructor(this);
+        this.Version = createVersionConstructor(this);
+        this.WhereClause = createWhereClauseConstructor(this);
+        this.on("versionchange", function (ev) {
+            if (ev.newVersion > 0)
+                console.warn("Another connection wants to upgrade database '" + _this.name + "'. Closing db now to resume the upgrade.");
+            else
+                console.warn("Another connection wants to delete database '" + _this.name + "'. Closing db now to resume the delete request.");
+            _this.close();
+        });
+        this.on("blocked", function (ev) {
+            if (!ev.newVersion || ev.newVersion < ev.oldVersion)
+                console.warn("Dexie.delete('" + _this.name + "') was blocked");
+            else
+                console.warn("Upgrade '" + _this.name + "' blocked by other connection holding version " + ev.oldVersion / 10);
+        });
+        this._maxKey = getMaxKey(options.IDBKeyRange);
+        this._createTransaction = function (mode, storeNames, dbschema, parentTransaction) { return new _this.Transaction(mode, storeNames, dbschema, parentTransaction); };
+        this._fireOnBlocked = function (ev) {
+            _this.on("blocked").fire(ev);
+            connections
+                .filter(function (c) { return c.name === _this.name && c !== _this && !c._state.vcFired; })
+                .map(function (c) { return c.on("versionchange").fire(ev); });
+        };
+        this.use(virtualIndexMiddleware);
+        this.use(hooksMiddleware);
+        addons.forEach(function (addon) { return addon(_this); });
+    }
+    Dexie.prototype.version = function (versionNumber) {
+        if (isNaN(versionNumber) || versionNumber < 0.1)
+            throw new exceptions.Type("Given version is not a positive number");
+        versionNumber = Math.round(versionNumber * 10) / 10;
+        if (this.idbdb || this._state.isBeingOpened)
+            throw new exceptions.Schema("Cannot add version when database is open");
+        this.verno = Math.max(this.verno, versionNumber);
+        var versions = this._versions;
+        var versionInstance = versions.filter(function (v) { return v._cfg.version === versionNumber; })[0];
+        if (versionInstance)
+            return versionInstance;
+        versionInstance = new this.Version(versionNumber);
+        versions.push(versionInstance);
+        versions.sort(lowerVersionFirst);
+        versionInstance.stores({});
+        this._state.autoSchema = false;
+        return versionInstance;
+    };
+    Dexie.prototype._whenReady = function (fn) {
+        var _this = this;
+        return this._state.openComplete || PSD.letThrough ? fn() : new DexiePromise(function (resolve, reject) {
+            if (!_this._state.isBeingOpened) {
+                if (!_this._options.autoOpen) {
+                    reject(new exceptions.DatabaseClosed());
+                    return;
+                }
+                _this.open().catch(nop);
+            }
+            _this._state.dbReadyPromise.then(resolve, reject);
+        }).then(fn);
+    };
+    Dexie.prototype.use = function (_a) {
+        var stack = _a.stack, create = _a.create, level = _a.level, name = _a.name;
+        if (name)
+            this.unuse({ stack: stack, name: name });
+        var middlewares = this._middlewares[stack] || (this._middlewares[stack] = []);
+        middlewares.push({ stack: stack, create: create, level: level == null ? 10 : level, name: name });
+        middlewares.sort(function (a, b) { return a.level - b.level; });
+        return this;
+    };
+    Dexie.prototype.unuse = function (_a) {
+        var stack = _a.stack, name = _a.name, create = _a.create;
+        if (stack && this._middlewares[stack]) {
+            this._middlewares[stack] = this._middlewares[stack].filter(function (mw) {
+                return create ? mw.create !== create :
+                    name ? mw.name !== name :
+                        false;
+            });
+        }
+        return this;
+    };
+    Dexie.prototype.open = function () {
+        return dexieOpen(this);
+    };
+    Dexie.prototype.close = function () {
+        var idx = connections.indexOf(this), state = this._state;
+        if (idx >= 0)
+            connections.splice(idx, 1);
+        if (this.idbdb) {
+            try {
+                this.idbdb.close();
+            }
+            catch (e) { }
+            this.idbdb = null;
+        }
+        this._options.autoOpen = false;
+        state.dbOpenError = new exceptions.DatabaseClosed();
+        if (state.isBeingOpened)
+            state.cancelOpen(state.dbOpenError);
+        state.dbReadyPromise = new DexiePromise(function (resolve) {
+            state.dbReadyResolve = resolve;
+        });
+        state.openCanceller = new DexiePromise(function (_, reject) {
+            state.cancelOpen = reject;
+        });
+    };
+    Dexie.prototype.delete = function () {
+        var _this = this;
+        var hasArguments = arguments.length > 0;
+        var state = this._state;
+        return new DexiePromise(function (resolve, reject) {
+            var doDelete = function () {
+                _this.close();
+                var req = _this._deps.indexedDB.deleteDatabase(_this.name);
+                req.onsuccess = wrap(function () {
+                    databaseEnumerator.remove(_this.name);
+                    resolve();
+                });
+                req.onerror = eventRejectHandler(reject);
+                req.onblocked = _this._fireOnBlocked;
+            };
+            if (hasArguments)
+                throw new exceptions.InvalidArgument("Arguments not allowed in db.delete()");
+            if (state.isBeingOpened) {
+                state.dbReadyPromise.then(doDelete);
+            }
+            else {
+                doDelete();
+            }
+        });
+    };
+    Dexie.prototype.backendDB = function () {
+        return this.idbdb;
+    };
+    Dexie.prototype.isOpen = function () {
+        return this.idbdb !== null;
+    };
+    Dexie.prototype.hasBeenClosed = function () {
+        var dbOpenError = this._state.dbOpenError;
+        return dbOpenError && (dbOpenError.name === 'DatabaseClosed');
+    };
+    Dexie.prototype.hasFailed = function () {
+        return this._state.dbOpenError !== null;
+    };
+    Dexie.prototype.dynamicallyOpened = function () {
+        return this._state.autoSchema;
+    };
+    Object.defineProperty(Dexie.prototype, "tables", {
+        get: function () {
+            var _this = this;
+            return dexie_keys(this._allTables).map(function (name) { return _this._allTables[name]; });
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Dexie.prototype.transaction = function () {
+        var args = extractTransactionArgs.apply(this, arguments);
+        return this._transaction.apply(this, args);
+    };
+    Dexie.prototype._transaction = function (mode, tables, scopeFunc) {
+        var _this = this;
+        var parentTransaction = PSD.trans;
+        if (!parentTransaction || parentTransaction.db !== this || mode.indexOf('!') !== -1)
+            parentTransaction = null;
+        var onlyIfCompatible = mode.indexOf('?') !== -1;
+        mode = mode.replace('!', '').replace('?', '');
+        var idbMode, storeNames;
+        try {
+            storeNames = tables.map(function (table) {
+                var storeName = table instanceof _this.Table ? table.name : table;
+                if (typeof storeName !== 'string')
+                    throw new TypeError("Invalid table argument to Dexie.transaction(). Only Table or String are allowed");
+                return storeName;
+            });
+            if (mode == "r" || mode === READONLY)
+                idbMode = READONLY;
+            else if (mode == "rw" || mode == READWRITE)
+                idbMode = READWRITE;
+            else
+                throw new exceptions.InvalidArgument("Invalid transaction mode: " + mode);
+            if (parentTransaction) {
+                if (parentTransaction.mode === READONLY && idbMode === READWRITE) {
+                    if (onlyIfCompatible) {
+                        parentTransaction = null;
+                    }
+                    else
+                        throw new exceptions.SubTransaction("Cannot enter a sub-transaction with READWRITE mode when parent transaction is READONLY");
+                }
+                if (parentTransaction) {
+                    storeNames.forEach(function (storeName) {
+                        if (parentTransaction && parentTransaction.storeNames.indexOf(storeName) === -1) {
+                            if (onlyIfCompatible) {
+                                parentTransaction = null;
+                            }
+                            else
+                                throw new exceptions.SubTransaction("Table " + storeName +
+                                    " not included in parent transaction.");
+                        }
+                    });
+                }
+                if (onlyIfCompatible && parentTransaction && !parentTransaction.active) {
+                    parentTransaction = null;
+                }
+            }
+        }
+        catch (e) {
+            return parentTransaction ?
+                parentTransaction._promise(null, function (_, reject) { reject(e); }) :
+                rejection(e);
+        }
+        var enterTransaction = enterTransactionScope.bind(null, this, idbMode, storeNames, parentTransaction, scopeFunc);
+        return (parentTransaction ?
+            parentTransaction._promise(idbMode, enterTransaction, "lock") :
+            PSD.trans ?
+                usePSD(PSD.transless, function () { return _this._whenReady(enterTransaction); }) :
+                this._whenReady(enterTransaction));
+    };
+    Dexie.prototype.table = function (tableName) {
+        if (!hasOwn(this._allTables, tableName)) {
+            throw new exceptions.InvalidTable("Table " + tableName + " does not exist");
+        }
+        return this._allTables[tableName];
+    };
+    return Dexie;
+}());
+
+var Dexie$1 = Dexie;
+props(Dexie$1, __assign(__assign({}, fullNameExceptions), {
+    delete: function (databaseName) {
+        var db = new Dexie$1(databaseName);
+        return db.delete();
+    },
+    exists: function (name) {
+        return new Dexie$1(name, { addons: [] }).open().then(function (db) {
+            db.close();
+            return true;
+        }).catch('NoSuchDatabaseError', function () { return false; });
+    },
+    getDatabaseNames: function (cb) {
+        return databaseEnumerator ?
+            databaseEnumerator.getDatabaseNames().then(cb) :
+            DexiePromise.resolve([]);
+    },
+    defineClass: function () {
+        function Class(content) {
+            extend(this, content);
+        }
+        return Class;
+    },
+    ignoreTransaction: function (scopeFunc) {
+        return PSD.trans ?
+            usePSD(PSD.transless, scopeFunc) :
+            scopeFunc();
+    },
+    vip: vip, async: function (generatorFn) {
+        return function () {
+            try {
+                var rv = awaitIterator(generatorFn.apply(this, arguments));
+                if (!rv || typeof rv.then !== 'function')
+                    return DexiePromise.resolve(rv);
+                return rv;
+            }
+            catch (e) {
+                return rejection(e);
+            }
+        };
+    }, spawn: function (generatorFn, args, thiz) {
+        try {
+            var rv = awaitIterator(generatorFn.apply(thiz, args || []));
+            if (!rv || typeof rv.then !== 'function')
+                return DexiePromise.resolve(rv);
+            return rv;
+        }
+        catch (e) {
+            return rejection(e);
+        }
+    },
+    currentTransaction: {
+        get: function () { return PSD.trans || null; }
+    }, waitFor: function (promiseOrFunction, optionalTimeout) {
+        var promise = DexiePromise.resolve(typeof promiseOrFunction === 'function' ?
+            Dexie$1.ignoreTransaction(promiseOrFunction) :
+            promiseOrFunction)
+            .timeout(optionalTimeout || 60000);
+        return PSD.trans ?
+            PSD.trans.waitFor(promise) :
+            promise;
+    },
+    Promise: DexiePromise,
+    debug: {
+        get: function () { return debug; },
+        set: function (value) {
+            setDebug(value, value === 'dexie' ? function () { return true; } : dexieStackFrameFilter);
+        }
+    },
+    derive: derive, extend: extend, props: props, override: override,
+    Events: Events,
+    getByKeyPath: getByKeyPath, setByKeyPath: setByKeyPath, delByKeyPath: delByKeyPath, shallowClone: shallowClone, deepClone: deepClone, getObjectDiff: getObjectDiff, asap: asap,
+    minKey: minKey,
+    addons: [],
+    connections: connections,
+    errnames: errnames,
+    dependencies: (function () {
+        try {
+            return {
+                indexedDB: _global.indexedDB || _global.mozIndexedDB || _global.webkitIndexedDB || _global.msIndexedDB,
+                IDBKeyRange: _global.IDBKeyRange || _global.webkitIDBKeyRange
+            };
+        }
+        catch (e) {
+            return { indexedDB: null, IDBKeyRange: null };
+        }
+    })(),
+    semVer: DEXIE_VERSION, version: DEXIE_VERSION.split('.')
+        .map(function (n) { return parseInt(n); })
+        .reduce(function (p, c, i) { return p + (c / Math.pow(10, i * 2)); }),
+    default: Dexie$1,
+    Dexie: Dexie$1 }));
+Dexie$1.maxKey = getMaxKey(Dexie$1.dependencies.IDBKeyRange);
+
+initDatabaseEnumerator(Dexie.dependencies.indexedDB);
+DexiePromise.rejectionMapper = mapError;
+setDebug(debug, dexieStackFrameFilter);
+
+/* harmony default export */ var dexie = (Dexie);
+//# sourceMappingURL=dexie.mjs.map
+
+// EXTERNAL MODULE: ./node_modules/dexie/dist/dexie.js
+var dist_dexie = __webpack_require__(5);
+
+// CONCATENATED MODULE: ./node_modules/dexie-export-import/dist/dexie-export-import.mjs
+/* ========================================================================== 
+ *                           dexie-export-import.js
+ * ==========================================================================
+ *
+ * Dexie addon for exporting and importing databases to / from Blobs.
+ *
+ * By David Fahlander, david.fahlander@gmail.com,
+ *
+ * ==========================================================================
+ *
+ * Version {version}, {date}
+ *
+ * http://dexie.org
+ *
+ * Apache License Version 2.0, January 2004, http://www.apache.org/licenses/
+ * 
+ */
+
+
+
+/*! *****************************************************************************
+Copyright (c) Microsoft Corporation. All rights reserved.
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use
+this file except in compliance with the License. You may obtain a copy of the
+License at http://www.apache.org/licenses/LICENSE-2.0
+
+THIS CODE IS PROVIDED ON AN *AS IS* BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION ANY IMPLIED
+WARRANTIES OR CONDITIONS OF TITLE, FITNESS FOR A PARTICULAR PURPOSE,
+MERCHANTABLITY OR NON-INFRINGEMENT.
+
+See the Apache Version 2.0 License for specific language governing permissions
+and limitations under the License.
+***************************************************************************** */
+
+function __awaiter(thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+}
+
+function __generator(thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+}
+
+function getSchemaString(table) {
+    var primKeyAndIndexes = [table.schema.primKey].concat(table.schema.indexes);
+    return primKeyAndIndexes.map(function (index) { return index.src; }).join(',');
+}
+function extractDbSchema(exportedDb) {
+    var schema = {};
+    for (var _i = 0, _a = exportedDb.tables; _i < _a.length; _i++) {
+        var table = _a[_i];
+        schema[table.name] = table.schema;
+    }
+    return schema;
+}
+function readBlobAsync(blob, type) {
+    return new Promise(function (resolve, reject) {
+        var reader = new FileReader();
+        reader.onabort = function (ev) { return reject(new Error("file read aborted")); };
+        reader.onerror = function (ev) { return reject(ev.target.error); };
+        reader.onload = function (ev) { return resolve(ev.target.result); };
+        if (type === 'binary')
+            reader.readAsArrayBuffer(blob);
+        else
+            reader.readAsText(blob);
+    });
+}
+function readBlobSync(blob, type) {
+    if (typeof FileReaderSync === 'undefined') {
+        throw new Error('FileReaderSync missing. Reading blobs synchronously requires code to run from within a web worker. Use TSON.encapsulateAsync() to do it from the main thread.');
+    }
+    var reader = new FileReaderSync(); // Requires worker environment
+    var data = type === 'binary' ?
+        reader.readAsArrayBuffer(blob) :
+        reader.readAsText(blob);
+    return data;
+}
+
+var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
+
+function createCommonjsModule(fn, module) {
+	return module = { exports: {} }, fn(module, module.exports), module.exports;
+}
+
+var typeson = createCommonjsModule(function (module, exports) {
+!function(e,n){module.exports=n();}(commonjsGlobal,function(){var e="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e},n=function(){return function(e,n){if(Array.isArray(e))return e;if(Symbol.iterator in Object(e))return function sliceIterator(e,n){var t=[],r=!0,i=!1,o=void 0;try{for(var s,c=e[Symbol.iterator]();!(r=(s=c.next()).done)&&(t.push(s.value),!n||t.length!==n);r=!0);}catch(e){i=!0,o=e;}finally{try{!r&&c.return&&c.return();}finally{if(i)throw o}}return t}(e,n);throw new TypeError("Invalid attempt to destructure non-iterable instance")}}(),t=function(e){if(Array.isArray(e)){for(var n=0,t=Array(e.length);n<e.length;n++)t[n]=e[n];return t}return Array.from(e)},r=Object.keys,i=Array.isArray,o={}.toString,s=Object.getPrototypeOf,c={}.hasOwnProperty,a=c.toString,u=["type","replaced","iterateIn","iterateUnsetNumeric"];function isThenable(e,n){return Typeson.isObject(e)&&"function"==typeof e.then&&(!n||"function"==typeof e.catch)}function toStringTag(e){return o.call(e).slice(8,-1)}function hasConstructorOf(n,t){if(!n||"object"!==(void 0===n?"undefined":e(n)))return !1;var r=s(n);if(!r)return !1;var i=c.call(r,"constructor")&&r.constructor;return "function"!=typeof i?null===t:"function"==typeof i&&null!==t&&a.call(i)===a.call(t)}function isPlainObject(e){return !(!e||"Object"!==toStringTag(e))&&(!s(e)||hasConstructorOf(e,Object))}function isObject(n){return n&&"object"===(void 0===n?"undefined":e(n))}function Typeson(o){var s=[],c=[],a={},y=this.types={},p=this.stringify=function(e,n,t,r){r=Object.assign({},o,r,{stringification:!0});var s=l(e,null,r);return i(s)?JSON.stringify(s[0],n,t):s.then(function(e){return JSON.stringify(e,n,t)})};this.stringifySync=function(e,n,t,r){return p(e,n,t,Object.assign({},{throwOnBadSyncType:!0},r,{sync:!0}))},this.stringifyAsync=function(e,n,t,r){return p(e,n,t,Object.assign({},{throwOnBadSyncType:!0},r,{sync:!1}))};var f=this.parse=function(e,n,t){return t=Object.assign({},o,t,{parse:!0}),h(JSON.parse(e,n),t)};this.parseSync=function(e,n,t){return f(e,n,Object.assign({},{throwOnBadSyncType:!0},t,{sync:!0}))},this.parseAsync=function(e,n,t){return f(e,n,Object.assign({},{throwOnBadSyncType:!0},t,{sync:!1}))},this.specialTypeNames=function(e,n){var t=arguments.length>2&&void 0!==arguments[2]?arguments[2]:{};return t.returnTypeNames=!0,this.encapsulate(e,n,t)},this.rootTypeName=function(e,n){var t=arguments.length>2&&void 0!==arguments[2]?arguments[2]:{};return t.iterateNone=!0,this.encapsulate(e,n,t)};var l=this.encapsulate=function(y,p,f){var l=(f=Object.assign({sync:!0},o,f)).sync,h={},v=[],d=[],b=[],O=!(f&&"cyclic"in f)||f.cyclic,m=f.encapsulateObserver,T=_encapsulate("",y,O,p||{},b);function finish(e){var n=Object.values(h);if(f.iterateNone)return n.length?n[0]:Typeson.getJSONType(e);if(n.length){if(f.returnTypeNames)return [].concat(t(new Set(n)));e&&isPlainObject(e)&&!e.hasOwnProperty("$types")?e.$types=h:e={$:e,$types:{$:h}};}else isObject(e)&&e.hasOwnProperty("$types")&&(e={$:e,$types:!0});return !f.returnTypeNames&&e}return b.length?l&&f.throwOnBadSyncType?function(){throw new TypeError("Sync method requested but async result obtained")}():Promise.resolve(function checkPromises(e,t){return Promise.all(t.map(function(e){return e[1].p})).then(function(r){return Promise.all(r.map(function(r){var i=[],o=t.splice(0,1)[0],s=n(o,7),c=s[0],a=s[2],u=s[3],y=s[4],p=s[5],f=s[6],l=_encapsulate(c,r,a,u,i,!0,f),h=hasConstructorOf(l,TypesonPromise);return c&&h?l.p.then(function(n){return y[p]=n,checkPromises(e,i)}):(c?y[p]=l:e=h?l.p:l,checkPromises(e,i))}))}).then(function(){return e})}(T,b)).then(finish):!l&&f.throwOnBadSyncType?function(){throw new TypeError("Async method requested but sync result obtained")}():f.stringification&&l?[finish(T)]:l?finish(T):Promise.resolve(finish(T));function _adaptBuiltinStateObjectProperties(e,n,t){Object.assign(e,n);var r=u.map(function(n){var t=e[n];return delete e[n],t});t(),u.forEach(function(n,t){e[n]=r[t];});}function _encapsulate(n,t,o,c,a,u,y){var p=void 0,l={},b=void 0===t?"undefined":e(t),O=m?function(e){var r=y||c.type||Typeson.getJSONType(t);m(Object.assign(e||l,{keypath:n,value:t,cyclic:o,stateObj:c,promisesData:a,resolvingTypesonPromise:u,awaitingTypesonPromise:hasConstructorOf(t,TypesonPromise)},void 0!==r?{type:r}:{}));}:null;if(b in{string:1,boolean:1,number:1,undefined:1})return void 0===t||"number"===b&&(isNaN(t)||t===-1/0||t===1/0)?(p=replace(n,t,c,a,!1,u,O))!==t&&(l={replaced:p}):p=t,O&&O(),p;if(null===t)return O&&O(),t;if(o&&!c.iterateIn&&!c.iterateUnsetNumeric){var T=v.indexOf(t);if(!(T<0))return h[n]="#",O&&O({cyclicKeypath:d[T]}),"#"+d[T];!0===o&&(v.push(t),d.push(n));}var g=isPlainObject(t),P=i(t),j=(g||P)&&(!s.length||c.replaced)||c.iterateIn?t:replace(n,t,c,a,g||P,null,O),S=void 0;if(j!==t?(p=j,l={replaced:j}):P||"array"===c.iterateIn?(S=new Array(t.length),l={clone:S}):g||"object"===c.iterateIn?l={clone:S={}}:""===n&&hasConstructorOf(t,TypesonPromise)?(a.push([n,t,o,c,void 0,void 0,c.type]),p=t):p=t,O&&O(),f.iterateNone)return S||p;if(!S)return p;if(c.iterateIn){var w=function _loop(e){var r={ownKeys:t.hasOwnProperty(e)};_adaptBuiltinStateObjectProperties(c,r,function(){var r=n+(n?".":"")+escapeKeyPathComponent(e),i=_encapsulate(r,t[e],!!o,c,a,u);hasConstructorOf(i,TypesonPromise)?a.push([r,i,!!o,c,S,e,c.type]):void 0!==i&&(S[e]=i);});};for(var A in t)w(A);O&&O({endIterateIn:!0,end:!0});}else r(t).forEach(function(e){var r=n+(n?".":"")+escapeKeyPathComponent(e);_adaptBuiltinStateObjectProperties(c,{ownKeys:!0},function(){var n=_encapsulate(r,t[e],!!o,c,a,u);hasConstructorOf(n,TypesonPromise)?a.push([r,n,!!o,c,S,e,c.type]):void 0!==n&&(S[e]=n);});}),O&&O({endIterateOwn:!0,end:!0});if(c.iterateUnsetNumeric){for(var C=t.length,N=function _loop2(e){if(!(e in t)){var r=n+(n?".":"")+e;_adaptBuiltinStateObjectProperties(c,{ownKeys:!1},function(){var n=_encapsulate(r,void 0,!!o,c,a,u);hasConstructorOf(n,TypesonPromise)?a.push([r,n,!!o,c,S,e,c.type]):void 0!==n&&(S[e]=n);});}},B=0;B<C;B++)N(B);O&&O({endIterateUnsetNumeric:!0,end:!0});}return S}function replace(e,n,t,r,i,o,u){for(var y=i?s:c,p=y.length;p--;){var f=y[p];if(f.test(n,t)){var v=f.type;if(a[v]){var d=h[e];h[e]=d?[v].concat(d):v;}return Object.assign(t,{type:v,replaced:!0}),!l&&f.replaceAsync||f.replace?(u&&u({replacing:!0}),_encapsulate(e,f[l||!f.replaceAsync?"replace":"replaceAsync"](n,t),O&&"readonly",t,r,o,v)):(u&&u({typeDetected:!0}),_encapsulate(e,n,O&&"readonly",t,r,o,v))}}return n}};this.encapsulateSync=function(e,n,t){return l(e,n,Object.assign({},{throwOnBadSyncType:!0},t,{sync:!0}))},this.encapsulateAsync=function(e,n,t){return l(e,n,Object.assign({},{throwOnBadSyncType:!0},t,{sync:!1}))};var h=this.revive=function(e,t){var s=(t=Object.assign({sync:!0},o,t)).sync,c=e&&e.$types,u=!0;if(!c)return e;if(!0===c)return e.$;c.$&&isPlainObject(c.$)&&(e=e.$,c=c.$,u=!1);var y=[],p={},f=function _revive(e,t,o,s,f,l){if(u&&"$types"===e)return;var h=c[e];if(i(t)||isPlainObject(t)){var v=i(t)?new Array(t.length):{};for(r(t).forEach(function(n){var r=_revive(e+(e?".":"")+escapeKeyPathComponent(n),t[n],o||v,s,v,n);hasConstructorOf(r,Undefined)?v[n]=void 0:void 0!==r&&(v[n]=r);}),t=v;y.length;){var d=n(y[0],4),b=d[0],O=d[1],m=d[2],T=d[3],g=getByKeyPath(b,O);if(hasConstructorOf(g,Undefined))m[T]=void 0;else{if(void 0===g)break;m[T]=g;}y.splice(0,1);}}if(!h)return t;if("#"===h){var P=getByKeyPath(o,t.substr(1));return void 0===P&&y.push([o,t.substr(1),f,l]),P}var j=s.sync;return [].concat(h).reduce(function(e,n){var t=a[n];if(!t)throw new Error("Unregistered type: "+n);return t[j&&t.revive?"revive":!j&&t.reviveAsync?"reviveAsync":"revive"](e,p)},t)}("",e,null,t);return isThenable(f=hasConstructorOf(f,Undefined)?void 0:f)?s&&t.throwOnBadSyncType?function(){throw new TypeError("Sync method requested but async result obtained")}():f:!s&&t.throwOnBadSyncType?function(){throw new TypeError("Async method requested but sync result obtained")}():s?f:Promise.resolve(f)};this.reviveSync=function(e,n){return h(e,Object.assign({},{throwOnBadSyncType:!0},n,{sync:!0}))},this.reviveAsync=function(e,n){return h(e,Object.assign({},{throwOnBadSyncType:!0},n,{sync:!1}))},this.register=function(e,n){return n=n||{},[].concat(e).forEach(function R(e){if(i(e))return e.map(R);e&&r(e).forEach(function(t){if("#"===t)throw new TypeError("# cannot be used as a type name as it is reserved for cyclic objects");if(Typeson.JSON_TYPES.includes(t))throw new TypeError("Plain JSON object types are reserved as type names");var r=e[t],o=r.testPlainObjects?s:c,u=o.filter(function(e){return e.type===t});if(u.length&&(o.splice(o.indexOf(u[0]),1),delete a[t],delete y[t]),r){if("function"==typeof r){var p=r;r={test:function test(e){return e&&e.constructor===p},replace:function replace(e){return assign({},e)},revive:function revive(e){return assign(Object.create(p.prototype),e)}};}else i(r)&&(r={test:r[0],replace:r[1],revive:r[2]});var f={type:t,test:r.test.bind(r)};r.replace&&(f.replace=r.replace.bind(r)),r.replaceAsync&&(f.replaceAsync=r.replaceAsync.bind(r));var l="number"==typeof n.fallback?n.fallback:n.fallback?0:1/0;if(r.testPlainObjects?s.splice(l,0,f):c.splice(l,0,f),r.revive||r.reviveAsync){var h={};r.revive&&(h.revive=r.revive.bind(r)),r.reviveAsync&&(h.reviveAsync=r.reviveAsync.bind(r)),a[t]=h;}y[t]=r;}});}),this};}function assign(e,n){return r(n).map(function(t){e[t]=n[t];}),e}function escapeKeyPathComponent(e){return e.replace(/~/g,"~0").replace(/\./g,"~1")}function unescapeKeyPathComponent(e){return e.replace(/~1/g,".").replace(/~0/g,"~")}function getByKeyPath(e,n){if(""===n)return e;var t=n.indexOf(".");if(t>-1){var r=e[unescapeKeyPathComponent(n.substr(0,t))];return void 0===r?void 0:getByKeyPath(r,n.substr(t+1))}return e[unescapeKeyPathComponent(n)]}function Undefined(){}function TypesonPromise(e){this.p=new Promise(e);}return TypesonPromise.prototype.then=function(e,n){var t=this;return new TypesonPromise(function(r,i){t.p.then(function(n){r(e?e(n):n);},function(e){t.p.catch(function(e){return n?n(e):Promise.reject(e)}).then(r,i);});})},TypesonPromise.prototype.catch=function(e){return this.then(null,e)},TypesonPromise.resolve=function(e){return new TypesonPromise(function(n){n(e);})},TypesonPromise.reject=function(e){return new TypesonPromise(function(n,t){t(e);})},["all","race"].map(function(e){TypesonPromise[e]=function(n){return new TypesonPromise(function(t,r){Promise[e](n.map(function(e){return e.p})).then(t,r);})};}),Typeson.Undefined=Undefined,Typeson.Promise=TypesonPromise,Typeson.isThenable=isThenable,Typeson.toStringTag=toStringTag,Typeson.hasConstructorOf=hasConstructorOf,Typeson.isObject=isObject,Typeson.isPlainObject=isPlainObject,Typeson.isUserObject=function isUserObject(e){if(!e||"Object"!==toStringTag(e))return !1;var n=s(e);return !n||hasConstructorOf(e,Object)||isUserObject(n)},Typeson.escapeKeyPathComponent=escapeKeyPathComponent,Typeson.unescapeKeyPathComponent=unescapeKeyPathComponent,Typeson.getByKeyPath=getByKeyPath,Typeson.getJSONType=function(n){return null===n?"null":i(n)?"array":void 0===n?"undefined":e(n)},Typeson.JSON_TYPES=["null","boolean","number","string","array","object"],Typeson});
+});
+
+var structuredCloning = createCommonjsModule(function (module, exports) {
+!function(e,t){module.exports=t();}(commonjsGlobal,function(){var e="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e},t=function(){return function(e,t){if(Array.isArray(e))return e;if(Symbol.iterator in Object(e))return function sliceIterator(e,t){var n=[],r=!0,i=!1,o=void 0;try{for(var s,a=e[Symbol.iterator]();!(r=(s=a.next()).done)&&(n.push(s.value),!t||n.length!==t);r=!0);}catch(e){i=!0,o=e;}finally{try{!r&&a.return&&a.return();}finally{if(i)throw o}}return n}(e,t);throw new TypeError("Invalid attempt to destructure non-iterable instance")}}(),n=function(e){if(Array.isArray(e)){for(var t=0,n=Array(e.length);t<e.length;t++)n[t]=e[t];return n}return Array.from(e)},r=Object.keys,i=Array.isArray,o={}.toString,s=Object.getPrototypeOf,a={}.hasOwnProperty,c=a.toString,u=["type","replaced","iterateIn","iterateUnsetNumeric"];function isThenable(e,t){return Typeson.isObject(e)&&"function"==typeof e.then&&(!t||"function"==typeof e.catch)}function toStringTag(e){return o.call(e).slice(8,-1)}function hasConstructorOf(t,n){if(!t||"object"!==(void 0===t?"undefined":e(t)))return !1;var r=s(t);if(!r)return !1;var i=a.call(r,"constructor")&&r.constructor;return "function"!=typeof i?null===n:"function"==typeof i&&null!==n&&c.call(i)===c.call(n)}function isPlainObject(e){return !(!e||"Object"!==toStringTag(e))&&(!s(e)||hasConstructorOf(e,Object))}function isObject(t){return t&&"object"===(void 0===t?"undefined":e(t))}function Typeson(o){var s=[],a=[],c={},f=this.types={},p=this.stringify=function(e,t,n,r){r=Object.assign({},o,r,{stringification:!0});var s=y(e,null,r);return i(s)?JSON.stringify(s[0],t,n):s.then(function(e){return JSON.stringify(e,t,n)})};this.stringifySync=function(e,t,n,r){return p(e,t,n,Object.assign({},{throwOnBadSyncType:!0},r,{sync:!0}))},this.stringifyAsync=function(e,t,n,r){return p(e,t,n,Object.assign({},{throwOnBadSyncType:!0},r,{sync:!1}))};var l=this.parse=function(e,t,n){return n=Object.assign({},o,n,{parse:!0}),v(JSON.parse(e,t),n)};this.parseSync=function(e,t,n){return l(e,t,Object.assign({},{throwOnBadSyncType:!0},n,{sync:!0}))},this.parseAsync=function(e,t,n){return l(e,t,Object.assign({},{throwOnBadSyncType:!0},n,{sync:!1}))},this.specialTypeNames=function(e,t){var n=arguments.length>2&&void 0!==arguments[2]?arguments[2]:{};return n.returnTypeNames=!0,this.encapsulate(e,t,n)},this.rootTypeName=function(e,t){var n=arguments.length>2&&void 0!==arguments[2]?arguments[2]:{};return n.iterateNone=!0,this.encapsulate(e,t,n)};var y=this.encapsulate=function(f,p,l){var y=(l=Object.assign({sync:!0},o,l)).sync,v={},d=[],h=[],g=[],b=!(l&&"cyclic"in l)||l.cyclic,m=l.encapsulateObserver,T=_encapsulate("",f,b,p||{},g);function finish(e){var t=Object.values(v);if(l.iterateNone)return t.length?t[0]:Typeson.getJSONType(e);if(t.length){if(l.returnTypeNames)return [].concat(n(new Set(t)));e&&isPlainObject(e)&&!e.hasOwnProperty("$types")?e.$types=v:e={$:e,$types:{$:v}};}else isObject(e)&&e.hasOwnProperty("$types")&&(e={$:e,$types:!0});return !l.returnTypeNames&&e}return g.length?y&&l.throwOnBadSyncType?function(){throw new TypeError("Sync method requested but async result obtained")}():Promise.resolve(function checkPromises(e,n){return Promise.all(n.map(function(e){return e[1].p})).then(function(r){return Promise.all(r.map(function(r){var i=[],o=n.splice(0,1)[0],s=t(o,7),a=s[0],c=s[2],u=s[3],f=s[4],p=s[5],l=s[6],y=_encapsulate(a,r,c,u,i,!0,l),v=hasConstructorOf(y,TypesonPromise);return a&&v?y.p.then(function(t){return f[p]=t,checkPromises(e,i)}):(a?f[p]=y:e=v?y.p:y,checkPromises(e,i))}))}).then(function(){return e})}(T,g)).then(finish):!y&&l.throwOnBadSyncType?function(){throw new TypeError("Async method requested but sync result obtained")}():l.stringification&&y?[finish(T)]:y?finish(T):Promise.resolve(finish(T));function _adaptBuiltinStateObjectProperties(e,t,n){Object.assign(e,t);var r=u.map(function(t){var n=e[t];return delete e[t],n});n(),u.forEach(function(t,n){e[t]=r[n];});}function _encapsulate(t,n,o,a,c,u,f){var p=void 0,y={},g=void 0===n?"undefined":e(n),b=m?function(e){var r=f||a.type||Typeson.getJSONType(n);m(Object.assign(e||y,{keypath:t,value:n,cyclic:o,stateObj:a,promisesData:c,resolvingTypesonPromise:u,awaitingTypesonPromise:hasConstructorOf(n,TypesonPromise)},void 0!==r?{type:r}:{}));}:null;if(g in{string:1,boolean:1,number:1,undefined:1})return void 0===n||"number"===g&&(isNaN(n)||n===-1/0||n===1/0)?(p=replace(t,n,a,c,!1,u,b))!==n&&(y={replaced:p}):p=n,b&&b(),p;if(null===n)return b&&b(),n;if(o&&!a.iterateIn&&!a.iterateUnsetNumeric){var T=d.indexOf(n);if(!(T<0))return v[t]="#",b&&b({cyclicKeypath:h[T]}),"#"+h[T];!0===o&&(d.push(n),h.push(t));}var O=isPlainObject(n),w=i(n),S=(O||w)&&(!s.length||a.replaced)||a.iterateIn?n:replace(t,n,a,c,O||w,null,b),P=void 0;if(S!==n?(p=S,y={replaced:S}):w||"array"===a.iterateIn?(P=new Array(n.length),y={clone:P}):O||"object"===a.iterateIn?y={clone:P={}}:""===t&&hasConstructorOf(n,TypesonPromise)?(c.push([t,n,o,a,void 0,void 0,a.type]),p=n):p=n,b&&b(),l.iterateNone)return P||p;if(!P)return p;if(a.iterateIn){var j=function _loop(e){var r={ownKeys:n.hasOwnProperty(e)};_adaptBuiltinStateObjectProperties(a,r,function(){var r=t+(t?".":"")+escapeKeyPathComponent(e),i=_encapsulate(r,n[e],!!o,a,c,u);hasConstructorOf(i,TypesonPromise)?c.push([r,i,!!o,a,P,e,a.type]):void 0!==i&&(P[e]=i);});};for(var A in n)j(A);b&&b({endIterateIn:!0,end:!0});}else r(n).forEach(function(e){var r=t+(t?".":"")+escapeKeyPathComponent(e);_adaptBuiltinStateObjectProperties(a,{ownKeys:!0},function(){var t=_encapsulate(r,n[e],!!o,a,c,u);hasConstructorOf(t,TypesonPromise)?c.push([r,t,!!o,a,P,e,a.type]):void 0!==t&&(P[e]=t);});}),b&&b({endIterateOwn:!0,end:!0});if(a.iterateUnsetNumeric){for(var C=n.length,N=function _loop2(e){if(!(e in n)){var r=t+(t?".":"")+e;_adaptBuiltinStateObjectProperties(a,{ownKeys:!1},function(){var t=_encapsulate(r,void 0,!!o,a,c,u);hasConstructorOf(t,TypesonPromise)?c.push([r,t,!!o,a,P,e,a.type]):void 0!==t&&(P[e]=t);});}},B=0;B<C;B++)N(B);b&&b({endIterateUnsetNumeric:!0,end:!0});}return P}function replace(e,t,n,r,i,o,u){for(var f=i?s:a,p=f.length;p--;){var l=f[p];if(l.test(t,n)){var d=l.type;if(c[d]){var h=v[e];v[e]=h?[d].concat(h):d;}return Object.assign(n,{type:d,replaced:!0}),!y&&l.replaceAsync||l.replace?(u&&u({replacing:!0}),_encapsulate(e,l[y||!l.replaceAsync?"replace":"replaceAsync"](t,n),b&&"readonly",n,r,o,d)):(u&&u({typeDetected:!0}),_encapsulate(e,t,b&&"readonly",n,r,o,d))}}return t}};this.encapsulateSync=function(e,t,n){return y(e,t,Object.assign({},{throwOnBadSyncType:!0},n,{sync:!0}))},this.encapsulateAsync=function(e,t,n){return y(e,t,Object.assign({},{throwOnBadSyncType:!0},n,{sync:!1}))};var v=this.revive=function(e,n){var s=(n=Object.assign({sync:!0},o,n)).sync,a=e&&e.$types,u=!0;if(!a)return e;if(!0===a)return e.$;a.$&&isPlainObject(a.$)&&(e=e.$,a=a.$,u=!1);var f=[],p={},l=function _revive(e,n,o,s,l,y){if(u&&"$types"===e)return;var v=a[e];if(i(n)||isPlainObject(n)){var d=i(n)?new Array(n.length):{};for(r(n).forEach(function(t){var r=_revive(e+(e?".":"")+escapeKeyPathComponent(t),n[t],o||d,s,d,t);hasConstructorOf(r,Undefined)?d[t]=void 0:void 0!==r&&(d[t]=r);}),n=d;f.length;){var h=t(f[0],4),g=h[0],b=h[1],m=h[2],T=h[3],O=getByKeyPath(g,b);if(hasConstructorOf(O,Undefined))m[T]=void 0;else{if(void 0===O)break;m[T]=O;}f.splice(0,1);}}if(!v)return n;if("#"===v){var w=getByKeyPath(o,n.substr(1));return void 0===w&&f.push([o,n.substr(1),l,y]),w}var S=s.sync;return [].concat(v).reduce(function(e,t){var n=c[t];if(!n)throw new Error("Unregistered type: "+t);return n[S&&n.revive?"revive":!S&&n.reviveAsync?"reviveAsync":"revive"](e,p)},n)}("",e,null,n);return isThenable(l=hasConstructorOf(l,Undefined)?void 0:l)?s&&n.throwOnBadSyncType?function(){throw new TypeError("Sync method requested but async result obtained")}():l:!s&&n.throwOnBadSyncType?function(){throw new TypeError("Async method requested but sync result obtained")}():s?l:Promise.resolve(l)};this.reviveSync=function(e,t){return v(e,Object.assign({},{throwOnBadSyncType:!0},t,{sync:!0}))},this.reviveAsync=function(e,t){return v(e,Object.assign({},{throwOnBadSyncType:!0},t,{sync:!1}))},this.register=function(e,t){return t=t||{},[].concat(e).forEach(function R(e){if(i(e))return e.map(R);e&&r(e).forEach(function(n){if("#"===n)throw new TypeError("# cannot be used as a type name as it is reserved for cyclic objects");if(Typeson.JSON_TYPES.includes(n))throw new TypeError("Plain JSON object types are reserved as type names");var r=e[n],o=r.testPlainObjects?s:a,u=o.filter(function(e){return e.type===n});if(u.length&&(o.splice(o.indexOf(u[0]),1),delete c[n],delete f[n]),r){if("function"==typeof r){var p=r;r={test:function test(e){return e&&e.constructor===p},replace:function replace(e){return assign({},e)},revive:function revive(e){return assign(Object.create(p.prototype),e)}};}else i(r)&&(r={test:r[0],replace:r[1],revive:r[2]});var l={type:n,test:r.test.bind(r)};r.replace&&(l.replace=r.replace.bind(r)),r.replaceAsync&&(l.replaceAsync=r.replaceAsync.bind(r));var y="number"==typeof t.fallback?t.fallback:t.fallback?0:1/0;if(r.testPlainObjects?s.splice(y,0,l):a.splice(y,0,l),r.revive||r.reviveAsync){var v={};r.revive&&(v.revive=r.revive.bind(r)),r.reviveAsync&&(v.reviveAsync=r.reviveAsync.bind(r)),c[n]=v;}f[n]=r;}});}),this};}function assign(e,t){return r(t).map(function(n){e[n]=t[n];}),e}function escapeKeyPathComponent(e){return e.replace(/~/g,"~0").replace(/\./g,"~1")}function unescapeKeyPathComponent(e){return e.replace(/~1/g,".").replace(/~0/g,"~")}function getByKeyPath(e,t){if(""===t)return e;var n=t.indexOf(".");if(n>-1){var r=e[unescapeKeyPathComponent(t.substr(0,n))];return void 0===r?void 0:getByKeyPath(r,t.substr(n+1))}return e[unescapeKeyPathComponent(t)]}function Undefined(){}function TypesonPromise(e){this.p=new Promise(e);}TypesonPromise.prototype.then=function(e,t){var n=this;return new TypesonPromise(function(r,i){n.p.then(function(t){r(e?e(t):t);},function(e){n.p.catch(function(e){return t?t(e):Promise.reject(e)}).then(r,i);});})},TypesonPromise.prototype.catch=function(e){return this.then(null,e)},TypesonPromise.resolve=function(e){return new TypesonPromise(function(t){t(e);})},TypesonPromise.reject=function(e){return new TypesonPromise(function(t,n){n(e);})},["all","race"].map(function(e){TypesonPromise[e]=function(t){return new TypesonPromise(function(n,r){Promise[e](t.map(function(e){return e.p})).then(n,r);})};}),Typeson.Undefined=Undefined,Typeson.Promise=TypesonPromise,Typeson.isThenable=isThenable,Typeson.toStringTag=toStringTag,Typeson.hasConstructorOf=hasConstructorOf,Typeson.isObject=isObject,Typeson.isPlainObject=isPlainObject,Typeson.isUserObject=function isUserObject(e){if(!e||"Object"!==toStringTag(e))return !1;var t=s(e);return !t||hasConstructorOf(e,Object)||isUserObject(t)},Typeson.escapeKeyPathComponent=escapeKeyPathComponent,Typeson.unescapeKeyPathComponent=unescapeKeyPathComponent,Typeson.getByKeyPath=getByKeyPath,Typeson.getJSONType=function(t){return null===t?"null":i(t)?"array":void 0===t?"undefined":e(t)},Typeson.JSON_TYPES=["null","boolean","number","string","array","object"];for(var f={userObject:{test:function test(e,t){return Typeson.isUserObject(e)},replace:function replace(e){return Object.assign({},e)},revive:function revive(e){return e}}},p=[[{sparseArrays:{testPlainObjects:!0,test:function test(e){return Array.isArray(e)},replace:function replace(e,t){return t.iterateUnsetNumeric=!0,e}}},{sparseUndefined:{test:function test(e,t){return void 0===e&&!1===t.ownKeys},replace:function replace(e){return null},revive:function revive(e){}}}],{undef:{test:function test(e,t){return void 0===e&&(t.ownKeys||!("ownKeys"in t))},replace:function replace(e){return null},revive:function revive(e){return new Typeson.Undefined}}}],l={StringObject:{test:function test(t){return "String"===Typeson.toStringTag(t)&&"object"===(void 0===t?"undefined":e(t))},replace:function replace(e){return String(e)},revive:function revive(e){return new String(e)}},BooleanObject:{test:function test(t){return "Boolean"===Typeson.toStringTag(t)&&"object"===(void 0===t?"undefined":e(t))},replace:function replace(e){return Boolean(e)},revive:function revive(e){return new Boolean(e)}},NumberObject:{test:function test(t){return "Number"===Typeson.toStringTag(t)&&"object"===(void 0===t?"undefined":e(t))},replace:function replace(e){return Number(e)},revive:function revive(e){return new Number(e)}}},y=[{nan:{test:function test(e){return "number"==typeof e&&isNaN(e)},replace:function replace(e){return "NaN"},revive:function revive(e){return NaN}}},{infinity:{test:function test(e){return e===1/0},replace:function replace(e){return "Infinity"},revive:function revive(e){return 1/0}}},{negativeInfinity:{test:function test(e){return e===-1/0},replace:function replace(e){return "-Infinity"},revive:function revive(e){return -1/0}}}],v={date:{test:function test(e){return "Date"===Typeson.toStringTag(e)},replace:function replace(e){var t=e.getTime();return isNaN(t)?"NaN":t},revive:function revive(e){return "NaN"===e?new Date(NaN):new Date(e)}}},d={regexp:{test:function test(e){return "RegExp"===Typeson.toStringTag(e)},replace:function replace(e){return {source:e.source,flags:(e.global?"g":"")+(e.ignoreCase?"i":"")+(e.multiline?"m":"")+(e.sticky?"y":"")+(e.unicode?"u":"")}},revive:function revive(e){var t=e.source,n=e.flags;return new RegExp(t,n)}}},h={map:{test:function test(e){return "Map"===Typeson.toStringTag(e)},replace:function replace(e){return Array.from(e.entries())},revive:function revive(e){return new Map(e)}}},g={set:{test:function test(e){return "Set"===Typeson.toStringTag(e)},replace:function replace(e){return Array.from(e.values())},revive:function revive(e){return new Set(e)}}},b="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/",m=new Uint8Array(256),T=0;T<b.length;T++)m[b.charCodeAt(T)]=T;var O=function encode(e,t,n){for(var r=new Uint8Array(e,t,n),i=r.length,o="",s=0;s<i;s+=3)o+=b[r[s]>>2],o+=b[(3&r[s])<<4|r[s+1]>>4],o+=b[(15&r[s+1])<<2|r[s+2]>>6],o+=b[63&r[s+2]];return i%3==2?o=o.substring(0,o.length-1)+"=":i%3==1&&(o=o.substring(0,o.length-2)+"=="),o},w=function decode(e){var t=e.length,n=.75*e.length,r=0,i=void 0,o=void 0,s=void 0,a=void 0;"="===e[e.length-1]&&(n--,"="===e[e.length-2]&&n--);for(var c=new ArrayBuffer(n),u=new Uint8Array(c),f=0;f<t;f+=4)i=m[e.charCodeAt(f)],o=m[e.charCodeAt(f+1)],s=m[e.charCodeAt(f+2)],a=m[e.charCodeAt(f+3)],u[r++]=i<<2|o>>4,u[r++]=(15&o)<<4|s>>2,u[r++]=(3&s)<<6|63&a;return c},S={arraybuffer:{test:function test(e){return "ArrayBuffer"===Typeson.toStringTag(e)},replace:function replace(e,t){t.buffers||(t.buffers=[]);var n=t.buffers.indexOf(e);return n>-1?{index:n}:(t.buffers.push(e),O(e))},revive:function revive(t,n){if(n.buffers||(n.buffers=[]),"object"===(void 0===t?"undefined":e(t)))return n.buffers[t.index];var r=w(t);return n.buffers.push(r),r}}},P="undefined"==typeof self?commonjsGlobal:self,j={};["Int8Array","Uint8Array","Uint8ClampedArray","Int16Array","Uint16Array","Int32Array","Uint32Array","Float32Array","Float64Array"].forEach(function(e){var t=e,n=P[t];n&&(j[e.toLowerCase()]={test:function test(e){return Typeson.toStringTag(e)===t},replace:function replace(e,t){var n=e.buffer,r=e.byteOffset,i=e.length;t.buffers||(t.buffers=[]);var o=t.buffers.indexOf(n);return o>-1?{index:o,byteOffset:r,length:i}:(t.buffers.push(n),{encoded:O(n),byteOffset:r,length:i})},revive:function revive(e,t){t.buffers||(t.buffers=[]);var r=e.byteOffset,i=e.length,o=e.encoded,s=e.index,a=void 0;return "index"in e?a=t.buffers[s]:(a=w(o),t.buffers.push(a)),new n(a,r,i)}});});var A={dataview:{test:function test(e){return "DataView"===Typeson.toStringTag(e)},replace:function replace(e,t){var n=e.buffer,r=e.byteOffset,i=e.byteLength;t.buffers||(t.buffers=[]);var o=t.buffers.indexOf(n);return o>-1?{index:o,byteOffset:r,byteLength:i}:(t.buffers.push(n),{encoded:O(n),byteOffset:r,byteLength:i})},revive:function revive(e,t){t.buffers||(t.buffers=[]);var n=e.byteOffset,r=e.byteLength,i=e.encoded,o=e.index,s=void 0;return "index"in e?s=t.buffers[o]:(s=w(i),t.buffers.push(s)),new DataView(s,n,r)}}},C={IntlCollator:{test:function test(e){return Typeson.hasConstructorOf(e,Intl.Collator)},replace:function replace(e){return e.resolvedOptions()},revive:function revive(e){return new Intl.Collator(e.locale,e)}},IntlDateTimeFormat:{test:function test(e){return Typeson.hasConstructorOf(e,Intl.DateTimeFormat)},replace:function replace(e){return e.resolvedOptions()},revive:function revive(e){return new Intl.DateTimeFormat(e.locale,e)}},IntlNumberFormat:{test:function test(e){return Typeson.hasConstructorOf(e,Intl.NumberFormat)},replace:function replace(e){return e.resolvedOptions()},revive:function revive(e){return new Intl.NumberFormat(e.locale,e)}}};function string2arraybuffer(e){for(var t=new Uint16Array(e.length),n=0;n<e.length;n++)t[n]=e.charCodeAt(n);return t.buffer}var N={file:{test:function test(e){return "File"===Typeson.toStringTag(e)},replace:function replace(e){var t=new XMLHttpRequest;if(t.open("GET",URL.createObjectURL(e),!1),"undefined"!=typeof TextEncoder&&t.overrideMimeType("text/plain; charset=utf-16le"),200!==t.status&&0!==t.status)throw new Error("Bad Blob access: "+t.status);return t.send(),{type:e.type,stringContents:t.responseText,name:e.name,lastModified:e.lastModified}},revive:function revive(e){var t=e.name,n=e.type,r=e.stringContents,i=e.lastModified,o=string2arraybuffer(r);return new File([o],t,{type:n,lastModified:i})},replaceAsync:function replaceAsync(e){return new Typeson.Promise(function(t,n){if(e.isClosed)n(new Error("The File is closed"));else{var r=new FileReader;r.addEventListener("load",function(){t({type:e.type,stringContents:r.result,name:e.name,lastModified:e.lastModified});}),r.addEventListener("error",function(){n(r.error);}),r.readAsText(e,"UTF-16");}})}}};return [f,p,l,y,v,d,{imagedata:{test:function test(e){return "ImageData"===Typeson.toStringTag(e)},replace:function replace(e){return {array:Array.from(e.data),width:e.width,height:e.height}},revive:function revive(e){return new ImageData(new Uint8ClampedArray(e.array),e.width,e.height)}}},{imagebitmap:{test:function test(e){return "ImageBitmap"===Typeson.toStringTag(e)||e&&e.dataset&&"ImageBitmap"===e.dataset.toStringTag},replace:function replace(e){var t=document.createElement("canvas");return t.getContext("2d").drawImage(e,0,0),t.toDataURL()},revive:function revive(e){var t=document.createElement("canvas"),n=t.getContext("2d"),r=document.createElement("img");return r.onload=function(){n.drawImage(r,0,0);},r.src=e,t},reviveAsync:function reviveAsync(e){var t=document.createElement("canvas"),n=t.getContext("2d"),r=document.createElement("img");return r.onload=function(){n.drawImage(r,0,0);},r.src=e,createImageBitmap(t)}}},N,{file:N.file,filelist:{test:function test(e){return "FileList"===Typeson.toStringTag(e)},replace:function replace(e){for(var t=[],n=0;n<e.length;n++)t[n]=e.item(n);return t},revive:function revive(e){function FileList(){this._files=arguments[0],this.length=this._files.length;}return FileList.prototype.item=function(e){return this._files[e]},FileList.prototype[Symbol.toStringTag]="FileList",new FileList(e)}}},{blob:{test:function test(e){return "Blob"===Typeson.toStringTag(e)},replace:function replace(e){var t=new XMLHttpRequest;if(t.open("GET",URL.createObjectURL(e),!1),"undefined"!=typeof TextEncoder&&t.overrideMimeType("text/plain; charset=utf-16le"),200!==t.status&&0!==t.status)throw new Error("Bad Blob access: "+t.status);return t.send(),{type:e.type,stringContents:t.responseText}},revive:function revive(e){var t=e.type,n=e.stringContents;return new Blob([string2arraybuffer(n)],{type:t})},replaceAsync:function replaceAsync(e){return new Typeson.Promise(function(t,n){if(e.isClosed)n(new Error("The Blob is closed"));else{var r=new FileReader;r.addEventListener("load",function(){t({type:e.type,stringContents:r.result});}),r.addEventListener("error",function(){n(r.error);}),r.readAsText(e,"UTF-16");}})}}}].concat("function"==typeof Map?h:[],"function"==typeof Set?g:[],"function"==typeof ArrayBuffer?S:[],"function"==typeof Uint8Array?j:[],"function"==typeof DataView?A:[],"undefined"!=typeof Intl?C:[])});
+
+});
+
+/*
+ * base64-arraybuffer
+ * https://github.com/niklasvh/base64-arraybuffer
+ *
+ * Copyright (c) 2017 Brett Zamir, 2012 Niklas von Hertzen
+ * Licensed under the MIT license.
+ */
+var chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'; // Use a lookup table to find the index.
+
+var lookup = new Uint8Array(256);
+
+for (var dexie_export_import_i = 0; dexie_export_import_i < chars.length; dexie_export_import_i++) {
+  lookup[chars.charCodeAt(dexie_export_import_i)] = dexie_export_import_i;
+}
+
+var encode = function encode(arraybuffer, byteOffset, length) {
+  if (length === null || length === undefined) {
+    length = arraybuffer.byteLength; // Needed for Safari
+  }
+
+  var bytes = new Uint8Array(arraybuffer, byteOffset || 0, // Default needed for Safari
+  length);
+  var len = bytes.length;
+  var base64 = '';
+
+  for (var _i = 0; _i < len; _i += 3) {
+    base64 += chars[bytes[_i] >> 2];
+    base64 += chars[(bytes[_i] & 3) << 4 | bytes[_i + 1] >> 4];
+    base64 += chars[(bytes[_i + 1] & 15) << 2 | bytes[_i + 2] >> 6];
+    base64 += chars[bytes[_i + 2] & 63];
+  }
+
+  if (len % 3 === 2) {
+    base64 = base64.substring(0, base64.length - 1) + '=';
+  } else if (len % 3 === 1) {
+    base64 = base64.substring(0, base64.length - 2) + '==';
+  }
+
+  return base64;
+};
+var decode = function decode(base64) {
+  var len = base64.length;
+  var bufferLength = base64.length * 0.75;
+  var p = 0;
+  var encoded1, encoded2, encoded3, encoded4;
+
+  if (base64[base64.length - 1] === '=') {
+    bufferLength--;
+
+    if (base64[base64.length - 2] === '=') {
+      bufferLength--;
+    }
+  }
+
+  var arraybuffer = new ArrayBuffer(bufferLength),
+      bytes = new Uint8Array(arraybuffer);
+
+  for (var _i2 = 0; _i2 < len; _i2 += 4) {
+    encoded1 = lookup[base64.charCodeAt(_i2)];
+    encoded2 = lookup[base64.charCodeAt(_i2 + 1)];
+    encoded3 = lookup[base64.charCodeAt(_i2 + 2)];
+    encoded4 = lookup[base64.charCodeAt(_i2 + 3)];
+    bytes[p++] = encoded1 << 2 | encoded2 >> 4;
+    bytes[p++] = (encoded2 & 15) << 4 | encoded3 >> 2;
+    bytes[p++] = (encoded3 & 3) << 6 | encoded4 & 63;
+  }
+
+  return arraybuffer;
+};
+
+/* eslint-env browser, node */
+var dexie_export_import_global = typeof self === 'undefined' ? global : self;
+var exportObj = {};
+[
+    'Int8Array',
+    'Uint8Array',
+    'Uint8ClampedArray',
+    'Int16Array',
+    'Uint16Array',
+    'Int32Array',
+    'Uint32Array',
+    'Float32Array',
+    'Float64Array'
+].forEach(function (typeName) {
+    var arrType = typeName;
+    var TypedArray = dexie_export_import_global[arrType];
+    if (TypedArray) {
+        exportObj[typeName.toLowerCase() + "2"] = {
+            test: function (x) { return typeson.toStringTag(x) === arrType; },
+            replace: function (_a) {
+                var buffer = _a.buffer, byteOffset = _a.byteOffset, length = _a.length;
+                return {
+                    buffer: buffer,
+                    byteOffset: byteOffset,
+                    length: length
+                };
+            },
+            revive: function (b64Obj) {
+                var buffer = b64Obj.buffer, byteOffset = b64Obj.byteOffset, length = b64Obj.length;
+                return new TypedArray(buffer, byteOffset, length);
+            }
+        };
+    }
+});
+
+var arrayBuffer = {
+    arraybuffer: {
+        test: function (x) { return typeson.toStringTag(x) === 'ArrayBuffer'; },
+        replace: function (b) {
+            return encode(b, 0, b.byteLength);
+        },
+        revive: function (b64) {
+            var buffer = decode(b64);
+            return buffer;
+        }
+    }
+};
+// See also typed-arrays!
+
+var TSON = new typeson().register(structuredCloning);
+var dexie_export_import_readBlobsSynchronously = 'FileReaderSync' in self; // true in workers only.
+var blobsToAwait = [];
+var blobsToAwaitPos = 0;
+// Need to patch encapsulateAsync as it does not work as of typeson 5.8.2
+// Also, current version of typespn-registry-1.0.0-alpha.21 does not
+// encapsulate/revive Blobs correctly (fails one of the unit tests in
+// this library (test 'export-format'))
+TSON.register([
+    arrayBuffer,
+    exportObj, {
+        blob2: {
+            test: function (x) { return typeson.toStringTag(x) === 'Blob'; },
+            replace: function (b) {
+                if (b.isClosed) { // On MDN, but not in https://w3c.github.io/FileAPI/#dfn-Blob
+                    throw new Error('The Blob is closed');
+                }
+                if (dexie_export_import_readBlobsSynchronously) {
+                    var data = readBlobSync(b, 'binary');
+                    var base64 = encode(data, 0, data.byteLength);
+                    return {
+                        type: b.type,
+                        data: base64
+                    };
+                }
+                else {
+                    blobsToAwait.push(b); // This will also make TSON.mustFinalize() return true.
+                    var result = {
+                        type: b.type,
+                        data: { start: blobsToAwaitPos, end: blobsToAwaitPos + b.size }
+                    };
+                    console.log("b.size: " + b.size);
+                    blobsToAwaitPos += b.size;
+                    return result;
+                }
+            },
+            finalize: function (b, ba) {
+                b.data = encode(ba, 0, ba.byteLength);
+            },
+            revive: function (_a) {
+                var type = _a.type, data = _a.data;
+                return new Blob([decode(data)], { type: type });
+            }
+        }
+    }
+]);
+TSON.mustFinalize = function () { return blobsToAwait.length > 0; };
+TSON.finalize = function (items) { return __awaiter(void 0, void 0, void 0, function () {
+    var allChunks, _i, items_1, item, types, arrayType, keyPath, typeName, typeSpec, b;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, readBlobAsync(new Blob(blobsToAwait), 'binary')];
+            case 1:
+                allChunks = _a.sent();
+                if (items) {
+                    for (_i = 0, items_1 = items; _i < items_1.length; _i++) {
+                        item = items_1[_i];
+                        // Manually go through all "blob" types in the result
+                        // and lookup the data slice they point at.
+                        if (item.$types) {
+                            types = item.$types;
+                            arrayType = types.$;
+                            if (arrayType)
+                                types = types.$;
+                            for (keyPath in types) {
+                                typeName = types[keyPath];
+                                typeSpec = TSON.types[typeName];
+                                if (typeSpec && typeSpec.finalize) {
+                                    b = dist_dexie.getByKeyPath(item, arrayType ? "$." + keyPath : keyPath);
+                                    typeSpec.finalize(b, allChunks.slice(b.start, b.end));
+                                }
+                            }
+                        }
+                    }
+                }
+                // Free up memory
+                blobsToAwait = [];
+                return [2 /*return*/];
+        }
+    });
+}); };
+
+var DEFAULT_ROWS_PER_CHUNK = 2000;
+function exportDB(db, options) {
+    return __awaiter(this, void 0, void 0, function () {
+        function exportAll() {
+            return __awaiter(this, void 0, void 0, function () {
+                var tablesRowCounts, emptyExportJson, posEndDataArray, firstJsonSlice, filter, _loop_1, _i, tables_1, tableName;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0: return [4 /*yield*/, Promise.all(db.tables.map(function (table) { return table.count(); }))];
+                        case 1:
+                            tablesRowCounts = _a.sent();
+                            tablesRowCounts.forEach(function (rowCount, i) { return tables[i].rowCount = rowCount; });
+                            progress.totalRows = tablesRowCounts.reduce(function (p, c) { return p + c; });
+                            emptyExportJson = JSON.stringify(emptyExport, undefined, prettyJson ? 2 : undefined);
+                            posEndDataArray = emptyExportJson.lastIndexOf(']');
+                            firstJsonSlice = emptyExportJson.substring(0, posEndDataArray);
+                            slices.push(firstJsonSlice);
+                            filter = options.filter;
+                            _loop_1 = function (tableName) {
+                                var table, primKey, inbound, LIMIT, emptyTableExport, emptyTableExportJson, posEndRowsArray, lastKey, lastNumRows, mayHaveMoreRows, _loop_2, state_1;
+                                return __generator(this, function (_a) {
+                                    switch (_a.label) {
+                                        case 0:
+                                            table = db.table(tableName);
+                                            primKey = table.schema.primKey;
+                                            inbound = !!primKey.keyPath;
+                                            LIMIT = options.numRowsPerChunk || DEFAULT_ROWS_PER_CHUNK;
+                                            emptyTableExport = inbound ? {
+                                                tableName: table.name,
+                                                inbound: true,
+                                                rows: []
+                                            } : {
+                                                tableName: table.name,
+                                                inbound: false,
+                                                rows: []
+                                            };
+                                            emptyTableExportJson = JSON.stringify(emptyTableExport, undefined, prettyJson ? 2 : undefined);
+                                            if (prettyJson) {
+                                                // Increase indentation according to this:
+                                                // {
+                                                //   ...
+                                                //   data: [
+                                                //     ...
+                                                //     data: [
+                                                // 123456<---- here
+                                                //     ] 
+                                                //   ]
+                                                // }
+                                                emptyTableExportJson = emptyTableExportJson.split('\n').join('\n    ');
+                                            }
+                                            posEndRowsArray = emptyTableExportJson.lastIndexOf(']');
+                                            slices.push(emptyTableExportJson.substring(0, posEndRowsArray));
+                                            lastKey = null;
+                                            lastNumRows = 0;
+                                            mayHaveMoreRows = true;
+                                            _loop_2 = function () {
+                                                var chunkedCollection, values, filteredValues, tsonValues, json, keys, keyvals, tsonTuples, json;
+                                                return __generator(this, function (_a) {
+                                                    switch (_a.label) {
+                                                        case 0:
+                                                            if (progressCallback) {
+                                                                // Keep ongoing transaction private
+                                                                dist_dexie.ignoreTransaction(function () { return progressCallback(progress); });
+                                                            }
+                                                            chunkedCollection = lastKey == null ?
+                                                                table.limit(LIMIT) :
+                                                                table.where(':id').above(lastKey).limit(LIMIT);
+                                                            return [4 /*yield*/, chunkedCollection.toArray()];
+                                                        case 1:
+                                                            values = _a.sent();
+                                                            if (values.length === 0)
+                                                                return [2 /*return*/, "break"];
+                                                            if (lastKey != null && lastNumRows > 0) {
+                                                                // Not initial chunk. Must add a comma:
+                                                                slices.push(",");
+                                                                if (prettyJson) {
+                                                                    slices.push("\n      ");
+                                                                }
+                                                            }
+                                                            mayHaveMoreRows = values.length === LIMIT;
+                                                            if (!inbound) return [3 /*break*/, 4];
+                                                            filteredValues = filter ?
+                                                                values.filter(function (value) { return filter(tableName, value); }) :
+                                                                values;
+                                                            tsonValues = filteredValues.map(function (value) { return TSON.encapsulate(value); });
+                                                            if (!TSON.mustFinalize()) return [3 /*break*/, 3];
+                                                            return [4 /*yield*/, dist_dexie.waitFor(TSON.finalize(tsonValues))];
+                                                        case 2:
+                                                            _a.sent();
+                                                            _a.label = 3;
+                                                        case 3:
+                                                            json = JSON.stringify(tsonValues, undefined, prettyJson ? 2 : undefined);
+                                                            if (prettyJson)
+                                                                json = json.split('\n').join('\n      ');
+                                                            // By generating a blob here, we give web platform the opportunity to store the contents
+                                                            // on disk and release RAM.
+                                                            slices.push(new Blob([json.substring(1, json.length - 1)]));
+                                                            lastNumRows = filteredValues.length;
+                                                            lastKey = values.length > 0 ?
+                                                                dist_dexie.getByKeyPath(values[values.length - 1], primKey.keyPath) :
+                                                                null;
+                                                            return [3 /*break*/, 8];
+                                                        case 4: return [4 /*yield*/, chunkedCollection.primaryKeys()];
+                                                        case 5:
+                                                            keys = _a.sent();
+                                                            keyvals = keys.map(function (key, i) { return [key, values[i]]; });
+                                                            if (filter)
+                                                                keyvals = keyvals.filter(function (_a) {
+                                                                    var key = _a[0], value = _a[1];
+                                                                    return filter(tableName, value, key);
+                                                                });
+                                                            tsonTuples = keyvals.map(function (tuple) { return TSON.encapsulate(tuple); });
+                                                            if (!TSON.mustFinalize()) return [3 /*break*/, 7];
+                                                            return [4 /*yield*/, dist_dexie.waitFor(TSON.finalize(tsonTuples))];
+                                                        case 6:
+                                                            _a.sent();
+                                                            _a.label = 7;
+                                                        case 7:
+                                                            json = JSON.stringify(tsonTuples, undefined, prettyJson ? 2 : undefined);
+                                                            if (prettyJson)
+                                                                json = json.split('\n').join('\n      ');
+                                                            // By generating a blob here, we give web platform the opportunity to store the contents
+                                                            // on disk and release RAM.
+                                                            slices.push(new Blob([json.substring(1, json.length - 1)]));
+                                                            lastNumRows = keyvals.length;
+                                                            lastKey = keys.length > 0 ?
+                                                                keys[keys.length - 1] :
+                                                                null;
+                                                            _a.label = 8;
+                                                        case 8:
+                                                            progress.completedRows += values.length;
+                                                            return [2 /*return*/];
+                                                    }
+                                                });
+                                            };
+                                            _a.label = 1;
+                                        case 1:
+                                            if (!mayHaveMoreRows) return [3 /*break*/, 3];
+                                            return [5 /*yield**/, _loop_2()];
+                                        case 2:
+                                            state_1 = _a.sent();
+                                            if (state_1 === "break")
+                                                return [3 /*break*/, 3];
+                                            return [3 /*break*/, 1];
+                                        case 3:
+                                            slices.push(emptyTableExportJson.substr(posEndRowsArray)); // "]}"
+                                            progress.completedTables += 1;
+                                            if (progress.completedTables < progress.totalTables) {
+                                                slices.push(",");
+                                            }
+                                            return [2 /*return*/];
+                                    }
+                                });
+                            };
+                            _i = 0, tables_1 = tables;
+                            _a.label = 2;
+                        case 2:
+                            if (!(_i < tables_1.length)) return [3 /*break*/, 5];
+                            tableName = tables_1[_i].name;
+                            return [5 /*yield**/, _loop_1(tableName)];
+                        case 3:
+                            _a.sent();
+                            _a.label = 4;
+                        case 4:
+                            _i++;
+                            return [3 /*break*/, 2];
+                        case 5:
+                            slices.push(emptyExportJson.substr(posEndDataArray));
+                            progress.done = true;
+                            if (progressCallback) {
+                                // Keep ongoing transaction private
+                                dist_dexie.ignoreTransaction(function () { return progressCallback(progress); });
+                            }
+                            return [2 /*return*/];
+                    }
+                });
+            });
+        }
+        var slices, tables, prettyJson, emptyExport, progressCallback, progress;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    options = options || {};
+                    slices = [];
+                    tables = db.tables.map(function (table) { return ({
+                        name: table.name,
+                        schema: getSchemaString(table),
+                        rowCount: 0
+                    }); });
+                    prettyJson = options.prettyJson;
+                    emptyExport = {
+                        formatName: "dexie",
+                        formatVersion: 1,
+                        data: {
+                            databaseName: db.name,
+                            databaseVersion: db.verno,
+                            tables: tables,
+                            data: []
+                        }
+                    };
+                    progressCallback = options.progressCallback;
+                    progress = {
+                        done: false,
+                        completedRows: 0,
+                        completedTables: 0,
+                        totalRows: NaN,
+                        totalTables: db.tables.length
+                    };
+                    _a.label = 1;
+                case 1:
+                    _a.trys.push([1, , 6, 7]);
+                    if (!options.noTransaction) return [3 /*break*/, 3];
+                    return [4 /*yield*/, exportAll()];
+                case 2:
+                    _a.sent();
+                    return [3 /*break*/, 5];
+                case 3: return [4 /*yield*/, db.transaction('r', db.tables, exportAll)];
+                case 4:
+                    _a.sent();
+                    _a.label = 5;
+                case 5: return [3 /*break*/, 7];
+                case 6:
+                    TSON.finalize(); // Free up mem if error has occurred
+                    return [7 /*endfinally*/];
+                case 7:
+                    if (progressCallback) {
+                        // Keep ongoing transaction private
+                        dist_dexie.ignoreTransaction(function () { return progressCallback(progress); });
+                    }
+                    return [2 /*return*/, new Blob(slices, { type: "text/json" })];
+            }
+        });
+    });
+}
+
+var VERSION = 1;
+
+var fakeStream = {Stream: function(){}};
+
+var clarinet_1 = createCommonjsModule(function (module, exports) {
+(function (clarinet) {
+
+  // non node-js needs to set clarinet debug on root
+  var env =(typeof process === 'object' && process.env)
+    ? process.env
+    : self;
+
+  clarinet.parser            = function (opt) { return new CParser(opt);};
+  clarinet.CParser           = CParser;
+  clarinet.CStream           = CStream;
+  clarinet.createStream      = createStream;
+  clarinet.MAX_BUFFER_LENGTH = 10 * 1024 * 1024;
+  clarinet.DEBUG             = (env.CDEBUG==='debug');
+  clarinet.INFO              = (env.CDEBUG==='debug' || env.CDEBUG==='info');
+  clarinet.EVENTS            =
+    [ "value"
+    , "string"
+    , "key"
+    , "openobject"
+    , "closeobject"
+    , "openarray"
+    , "closearray"
+    , "error"
+    , "end"
+    , "ready"
+    ];
+
+  var buffers     = {
+        textNode: undefined,
+        numberNode: ""
+    }
+    , streamWraps = clarinet.EVENTS.filter(function (ev) {
+          return ev !== "error" && ev !== "end";
+        })
+    , S           = 0
+    , Stream
+    ;
+
+  clarinet.STATE =
+    { BEGIN                             : S++
+    , VALUE                             : S++ // general stuff
+    , OPEN_OBJECT                       : S++ // {
+    , CLOSE_OBJECT                      : S++ // }
+    , OPEN_ARRAY                        : S++ // [
+    , CLOSE_ARRAY                       : S++ // ]
+    , TEXT_ESCAPE                       : S++ // \ stuff
+    , STRING                            : S++ // ""
+    , BACKSLASH                         : S++
+    , END                               : S++ // No more stack
+    , OPEN_KEY                          : S++ // , "a"
+    , CLOSE_KEY                         : S++ // :
+    , TRUE                              : S++ // r
+    , TRUE2                             : S++ // u
+    , TRUE3                             : S++ // e
+    , FALSE                             : S++ // a
+    , FALSE2                            : S++ // l
+    , FALSE3                            : S++ // s
+    , FALSE4                            : S++ // e
+    , NULL                              : S++ // u
+    , NULL2                             : S++ // l
+    , NULL3                             : S++ // l
+    , NUMBER_DECIMAL_POINT              : S++ // .
+    , NUMBER_DIGIT                      : S++ // [0-9]
+    };
+
+  for (var s_ in clarinet.STATE) clarinet.STATE[clarinet.STATE[s_]] = s_;
+
+  // switcharoo
+  S = clarinet.STATE;
+
+  const Char = {
+    tab                 : 0x09,     // \t
+    lineFeed            : 0x0A,     // \n
+    carriageReturn      : 0x0D,     // \r
+    space               : 0x20,     // " "
+
+    doubleQuote         : 0x22,     // "
+    plus                : 0x2B,     // +
+    comma               : 0x2C,     // ,
+    minus               : 0x2D,     // -
+    period              : 0x2E,     // .
+
+    _0                  : 0x30,     // 0
+    _9                  : 0x39,     // 9
+
+    colon               : 0x3A,     // :
+
+    E                   : 0x45,     // E
+
+    openBracket         : 0x5B,     // [
+    backslash           : 0x5C,     // \
+    closeBracket        : 0x5D,     // ]
+
+    a                   : 0x61,     // a
+    b                   : 0x62,     // b
+    e                   : 0x65,     // e 
+    f                   : 0x66,     // f
+    l                   : 0x6C,     // l
+    n                   : 0x6E,     // n
+    r                   : 0x72,     // r
+    s                   : 0x73,     // s
+    t                   : 0x74,     // t
+    u                   : 0x75,     // u
+
+    openBrace           : 0x7B,     // {
+    closeBrace          : 0x7D,     // }
+  };
+
+  if (!Object.create) {
+    Object.create = function (o) {
+      function f () { this["__proto__"] = o; }
+      f.prototype = o;
+      return new f;
+    };
+  }
+
+  if (!Object.getPrototypeOf) {
+    Object.getPrototypeOf = function (o) {
+      return o["__proto__"];
+    };
+  }
+
+  if (!Object.keys) {
+    Object.keys = function (o) {
+      var a = [];
+      for (var i in o) if (o.hasOwnProperty(i)) a.push(i);
+      return a;
+    };
+  }
+
+  function checkBufferLength (parser) {
+    var maxAllowed = Math.max(clarinet.MAX_BUFFER_LENGTH, 10)
+      , maxActual = 0
+      ;
+    for (var buffer in buffers) {
+      var len = parser[buffer] === undefined ? 0 : parser[buffer].length;
+      if (len > maxAllowed) {
+        switch (buffer) {
+          case "text":
+            closeText(parser);
+          break;
+
+          default:
+            error(parser, "Max buffer length exceeded: "+ buffer);
+        }
+      }
+      maxActual = Math.max(maxActual, len);
+    }
+    parser.bufferCheckPosition = (clarinet.MAX_BUFFER_LENGTH - maxActual)
+                               + parser.position;
+  }
+
+  function clearBuffers (parser) {
+    for (var buffer in buffers) {
+      parser[buffer] = buffers[buffer];
+    }
+  }
+
+  var stringTokenPattern = /[\\"\n]/g;
+
+  function CParser (opt) {
+    if (!(this instanceof CParser)) return new CParser (opt);
+
+    var parser = this;
+    clearBuffers(parser);
+    parser.bufferCheckPosition = clarinet.MAX_BUFFER_LENGTH;
+    parser.q        = parser.c = parser.p = "";
+    parser.opt      = opt || {};
+    parser.closed   = parser.closedRoot = parser.sawRoot = false;
+    parser.tag      = parser.error = null;
+    parser.state    = S.BEGIN;
+    parser.stack    = new Array();
+    // mostly just for error reporting
+    parser.position = parser.column = 0;
+    parser.line     = 1;
+    parser.slashed  = false;
+    parser.unicodeI = 0;
+    parser.unicodeS = null;
+    parser.depth    = 0;
+    emit(parser, "onready");
+  }
+
+  CParser.prototype =
+    { end    : function () { end(this); }
+    , write  : write
+    , resume : function () { this.error = null; return this; }
+    , close  : function () { return this.write(null); }
+    };
+
+  try        { Stream = fakeStream.Stream; }
+  catch (ex) { Stream = function () {}; }
+
+  function createStream (opt) { return new CStream(opt); }
+
+  function CStream (opt) {
+    if (!(this instanceof CStream)) return new CStream(opt);
+
+    this._parser = new CParser(opt);
+    this.writable = true;
+    this.readable = true;
+
+    //var Buffer = this.Buffer || function Buffer () {}; // if we don't have Buffers, fake it so we can do `var instanceof Buffer` and not throw an error
+    this.bytes_remaining = 0; // number of bytes remaining in multi byte utf8 char to read after split boundary
+    this.bytes_in_sequence = 0; // bytes in multi byte utf8 char to read
+    this.temp_buffs = { "2": new Buffer(2), "3": new Buffer(3), "4": new Buffer(4) }; // for rebuilding chars split before boundary is reached
+    this.string = '';
+
+    var me = this;
+    Stream.apply(me);
+
+    this._parser.onend = function () { me.emit("end"); };
+    this._parser.onerror = function (er) {
+      me.emit("error", er);
+      me._parser.error = null;
+    };
+
+    streamWraps.forEach(function (ev) {
+      Object.defineProperty(me, "on" + ev,
+        { get          : function () { return me._parser["on" + ev]; }
+        , set          : function (h) {
+            if (!h) {
+              me.removeAllListeners(ev);
+              me._parser["on"+ev] = h;
+              return h;
+            }
+            me.on(ev, h);
+          }
+        , enumerable   : true
+        , configurable : false
+        });
+    });
+  }
+
+  CStream.prototype = Object.create(Stream.prototype,
+    { constructor: { value: CStream } });
+
+  CStream.prototype.write = function (data) {
+    data = new Buffer(data);
+    for (var i = 0; i < data.length; i++) {
+      var n = data[i];
+
+      // check for carry over of a multi byte char split between data chunks
+      // & fill temp buffer it with start of this data chunk up to the boundary limit set in the last iteration
+      if (this.bytes_remaining > 0) {
+        for (var j = 0; j < this.bytes_remaining; j++) {
+          this.temp_buffs[this.bytes_in_sequence][this.bytes_in_sequence - this.bytes_remaining + j] = data[j];
+        }
+        this.string = this.temp_buffs[this.bytes_in_sequence].toString();
+        this.bytes_in_sequence = this.bytes_remaining = 0;
+
+        // move iterator forward by number of byte read during sequencing
+        i = i + j - 1;
+
+        // pass data to parser and move forward to parse rest of data
+        this._parser.write(this.string);
+        this.emit("data", this.string);
+        continue;
+      }
+
+      // if no remainder bytes carried over, parse multi byte (>=128) chars one at a time
+      if (this.bytes_remaining === 0 && n >= 128) {
+        if ((n >= 194) && (n <= 223)) this.bytes_in_sequence = 2;
+        if ((n >= 224) && (n <= 239)) this.bytes_in_sequence = 3;
+        if ((n >= 240) && (n <= 244)) this.bytes_in_sequence = 4;
+        if ((this.bytes_in_sequence + i) > data.length) { // if bytes needed to complete char fall outside data length, we have a boundary split
+
+          for (var k = 0; k <= (data.length - 1 - i); k++) {
+            this.temp_buffs[this.bytes_in_sequence][k] = data[i + k]; // fill temp data of correct size with bytes available in this chunk
+          }
+          this.bytes_remaining = (i + this.bytes_in_sequence) - data.length;
+
+          // immediately return as we need another chunk to sequence the character
+          return true;
+        } else {
+          this.string = data.slice(i, (i + this.bytes_in_sequence)).toString();
+          i = i + this.bytes_in_sequence - 1;
+
+          this._parser.write(this.string);
+          this.emit("data", this.string);
+          continue;
+        }
+      }
+
+      // is there a range of characters that are immediately parsable?
+      for (var p = i; p < data.length; p++) {
+        if (data[p] >= 128) break;
+      }
+      this.string = data.slice(i, p).toString();
+      this._parser.write(this.string);
+      this.emit("data", this.string);
+      i = p - 1;
+
+      // handle any remaining characters using multibyte logic
+      continue;
+    }
+  };
+
+  CStream.prototype.end = function (chunk) {
+    if (chunk && chunk.length) this._parser.write(chunk.toString());
+    this._parser.end();
+    return true;
+  };
+
+  CStream.prototype.on = function (ev, handler) {
+    var me = this;
+    if (!me._parser["on"+ev] && streamWraps.indexOf(ev) !== -1) {
+      me._parser["on"+ev] = function () {
+        var args = arguments.length === 1 ? [arguments[0]]
+                 : Array.apply(null, arguments);
+        args.splice(0, 0, ev);
+        me.emit.apply(me, args);
+      };
+    }
+    return Stream.prototype.on.call(me, ev, handler);
+  };
+
+  CStream.prototype.destroy = function () {
+    clearBuffers(this._parser);
+    this.emit("close");
+  };
+
+  function emit(parser, event, data) {
+    if(clarinet.INFO) console.log('-- emit', event, data);
+    if (parser[event]) parser[event](data);
+  }
+
+  function emitNode(parser, event, data) {
+    closeValue(parser);
+    emit(parser, event, data);
+  }
+
+  function closeValue(parser, event) {
+    parser.textNode = textopts(parser.opt, parser.textNode);
+    if (parser.textNode !== undefined) {
+      emit(parser, (event ? event : "onvalue"), parser.textNode);
+    }
+    parser.textNode = undefined;
+  }
+
+  function closeNumber(parser) {
+    if (parser.numberNode)
+      emit(parser, "onvalue", parseFloat(parser.numberNode));
+    parser.numberNode = "";
+  }
+
+  function textopts (opt, text) {
+    if (text === undefined) {
+      return text;
+    }
+    if (opt.trim) text = text.trim();
+    if (opt.normalize) text = text.replace(/\s+/g, " ");
+    return text;
+  }
+
+  function error (parser, er) {
+    closeValue(parser);
+    er += "\nLine: "+parser.line+
+          "\nColumn: "+parser.column+
+          "\nChar: "+parser.c;
+    er = new Error(er);
+    parser.error = er;
+    emit(parser, "onerror", er);
+    return parser;
+  }
+
+  function end(parser) {
+    if (parser.state !== S.VALUE || parser.depth !== 0)
+      error(parser, "Unexpected end");
+
+    closeValue(parser);
+    parser.c      = "";
+    parser.closed = true;
+    emit(parser, "onend");
+    CParser.call(parser, parser.opt);
+    return parser;
+  }
+
+  function isWhitespace(c) {
+    return c === Char.carriageReturn || c === Char.lineFeed || c === Char.space || c === Char.tab;
+  }
+
+  function write (chunk) {
+    var parser = this;
+    if (this.error) throw this.error;
+    if (parser.closed) return error(parser,
+      "Cannot write after close. Assign an onready handler.");
+    if (chunk === null) return end(parser);
+    var i = 0, c = chunk.charCodeAt(0), p = parser.p;
+    if (clarinet.DEBUG) console.log('write -> [' + chunk + ']');
+    while (c) {
+      p = c;
+      parser.c = c = chunk.charCodeAt(i++);
+      // if chunk doesnt have next, like streaming char by char
+      // this way we need to check if previous is really previous
+      // if not we need to reset to what the parser says is the previous
+      // from buffer
+      if(p !== c ) parser.p = p;
+      else p = parser.p;
+
+      if(!c) break;
+
+      if (clarinet.DEBUG) console.log(i,c,clarinet.STATE[parser.state]);
+      parser.position ++;
+      if (c === Char.lineFeed) {
+        parser.line ++;
+        parser.column = 0;
+      } else parser.column ++;
+      switch (parser.state) {
+
+        case S.BEGIN:
+          if (c === Char.openBrace) parser.state = S.OPEN_OBJECT;
+          else if (c === Char.openBracket) parser.state = S.OPEN_ARRAY;
+          else if (!isWhitespace(c))
+            error(parser, "Non-whitespace before {[.");
+        continue;
+
+        case S.OPEN_KEY:
+        case S.OPEN_OBJECT:
+          if (isWhitespace(c)) continue;
+          if(parser.state === S.OPEN_KEY) parser.stack.push(S.CLOSE_KEY);
+          else {
+            if(c === Char.closeBrace) {
+              emit(parser, 'onopenobject');
+              this.depth++;
+              emit(parser, 'oncloseobject');
+              this.depth--;
+              parser.state = parser.stack.pop() || S.VALUE;
+              continue;
+            } else  parser.stack.push(S.CLOSE_OBJECT);
+          }
+          if(c === Char.doubleQuote) parser.state = S.STRING;
+          else error(parser, "Malformed object key should start with \"");
+        continue;
+
+        case S.CLOSE_KEY:
+        case S.CLOSE_OBJECT:
+          if (isWhitespace(c)) continue;
+          var event = (parser.state === S.CLOSE_KEY) ? 'key' : 'object';
+          if(c === Char.colon) {
+            if(parser.state === S.CLOSE_OBJECT) {
+              parser.stack.push(S.CLOSE_OBJECT);
+              closeValue(parser, 'onopenobject');
+               this.depth++;
+            } else closeValue(parser, 'onkey');
+            parser.state  = S.VALUE;
+          } else if (c === Char.closeBrace) {
+            emitNode(parser, 'oncloseobject');
+            this.depth--;
+            parser.state = parser.stack.pop() || S.VALUE;
+          } else if(c === Char.comma) {
+            if(parser.state === S.CLOSE_OBJECT)
+              parser.stack.push(S.CLOSE_OBJECT);
+            closeValue(parser);
+            parser.state  = S.OPEN_KEY;
+          } else error(parser, 'Bad object');
+        continue;
+
+        case S.OPEN_ARRAY: // after an array there always a value
+        case S.VALUE:
+          if (isWhitespace(c)) continue;
+          if(parser.state===S.OPEN_ARRAY) {
+            emit(parser, 'onopenarray');
+            this.depth++;
+            parser.state = S.VALUE;
+            if(c === Char.closeBracket) {
+              emit(parser, 'onclosearray');
+              this.depth--;
+              parser.state = parser.stack.pop() || S.VALUE;
+              continue;
+            } else {
+              parser.stack.push(S.CLOSE_ARRAY);
+            }
+          }
+               if(c === Char.doubleQuote) parser.state = S.STRING;
+          else if(c === Char.openBrace) parser.state = S.OPEN_OBJECT;
+          else if(c === Char.openBracket) parser.state = S.OPEN_ARRAY;
+          else if(c === Char.t) parser.state = S.TRUE;
+          else if(c === Char.f) parser.state = S.FALSE;
+          else if(c === Char.n) parser.state = S.NULL;
+          else if(c === Char.minus) { // keep and continue
+            parser.numberNode += "-";
+          } else if(Char._0 <= c && c <= Char._9) {
+            parser.numberNode += String.fromCharCode(c);
+            parser.state = S.NUMBER_DIGIT;
+          } else               error(parser, "Bad value");
+        continue;
+
+        case S.CLOSE_ARRAY:
+          if(c === Char.comma) {
+            parser.stack.push(S.CLOSE_ARRAY);
+            closeValue(parser, 'onvalue');
+            parser.state  = S.VALUE;
+          } else if (c === Char.closeBracket) {
+            emitNode(parser, 'onclosearray');
+            this.depth--;
+            parser.state = parser.stack.pop() || S.VALUE;
+          } else if (isWhitespace(c))
+              continue;
+          else error(parser, 'Bad array');
+        continue;
+
+        case S.STRING:
+          if (parser.textNode === undefined) {
+            parser.textNode = "";
+          }
+
+          // thanks thejh, this is an about 50% performance improvement.
+          var starti              = i-1
+            , slashed = parser.slashed
+            , unicodeI = parser.unicodeI
+            ;
+          STRING_BIGLOOP: while (true) {
+            if (clarinet.DEBUG)
+              console.log(i,c,clarinet.STATE[parser.state]
+                         ,slashed);
+            // zero means "no unicode active". 1-4 mean "parse some more". end after 4.
+            while (unicodeI > 0) {
+              parser.unicodeS += String.fromCharCode(c);
+              c = chunk.charCodeAt(i++);
+              parser.position++;
+              if (unicodeI === 4) {
+                // TODO this might be slow? well, probably not used too often anyway
+                parser.textNode += String.fromCharCode(parseInt(parser.unicodeS, 16));
+                unicodeI = 0;
+                starti = i-1;
+              } else {
+                unicodeI++;
+              }
+              // we can just break here: no stuff we skipped that still has to be sliced out or so
+              if (!c) break STRING_BIGLOOP;
+            }
+            if (c === Char.doubleQuote && !slashed) {
+              parser.state = parser.stack.pop() || S.VALUE;
+              parser.textNode += chunk.substring(starti, i-1);
+              parser.position += i - 1 - starti;
+              break;
+            }
+            if (c === Char.backslash && !slashed) {
+              slashed = true;
+              parser.textNode += chunk.substring(starti, i-1);
+              parser.position += i - 1 - starti;
+              c = chunk.charCodeAt(i++);
+              parser.position++;
+              if (!c) break;
+            }
+            if (slashed) {
+              slashed = false;
+                   if (c === Char.n) { parser.textNode += '\n'; }
+              else if (c === Char.r) { parser.textNode += '\r'; }
+              else if (c === Char.t) { parser.textNode += '\t'; }
+              else if (c === Char.f) { parser.textNode += '\f'; }
+              else if (c === Char.b) { parser.textNode += '\b'; }
+              else if (c === Char.u) {
+                // \uxxxx. meh!
+                unicodeI = 1;
+                parser.unicodeS = '';
+              } else {
+                parser.textNode += String.fromCharCode(c);
+              }
+              c = chunk.charCodeAt(i++);
+              parser.position++;
+              starti = i-1;
+              if (!c) break;
+              else continue;
+            }
+
+            stringTokenPattern.lastIndex = i;
+            var reResult = stringTokenPattern.exec(chunk);
+            if (reResult === null) {
+              i = chunk.length+1;
+              parser.textNode += chunk.substring(starti, i-1);
+              parser.position += i - 1 - starti;
+              break;
+            }
+            i = reResult.index+1;
+            c = chunk.charCodeAt(reResult.index);
+            if (!c) {
+              parser.textNode += chunk.substring(starti, i-1);
+              parser.position += i - 1 - starti;
+              break;
+            }
+          }
+          parser.slashed = slashed;
+          parser.unicodeI = unicodeI;
+        continue;
+
+        case S.TRUE:
+          if (c === Char.r) parser.state = S.TRUE2;
+          else error(parser, 'Invalid true started with t'+ c);
+        continue;
+
+        case S.TRUE2:
+          if (c === Char.u) parser.state = S.TRUE3;
+          else error(parser, 'Invalid true started with tr'+ c);
+        continue;
+
+        case S.TRUE3:
+          if(c === Char.e) {
+            emit(parser, "onvalue", true);
+            parser.state = parser.stack.pop() || S.VALUE;
+          } else error(parser, 'Invalid true started with tru'+ c);
+        continue;
+
+        case S.FALSE:
+          if (c === Char.a) parser.state = S.FALSE2;
+          else error(parser, 'Invalid false started with f'+ c);
+        continue;
+
+        case S.FALSE2:
+          if (c === Char.l) parser.state = S.FALSE3;
+          else error(parser, 'Invalid false started with fa'+ c);
+        continue;
+
+        case S.FALSE3:
+          if (c === Char.s) parser.state = S.FALSE4;
+          else error(parser, 'Invalid false started with fal'+ c);
+        continue;
+
+        case S.FALSE4:
+          if (c === Char.e) {
+            emit(parser, "onvalue", false);
+            parser.state = parser.stack.pop() || S.VALUE;
+          } else error(parser, 'Invalid false started with fals'+ c);
+        continue;
+
+        case S.NULL:
+          if (c === Char.u) parser.state = S.NULL2;
+          else error(parser, 'Invalid null started with n'+ c);
+        continue;
+
+        case S.NULL2:
+          if (c === Char.l) parser.state = S.NULL3;
+          else error(parser, 'Invalid null started with nu'+ c);
+        continue;
+
+        case S.NULL3:
+          if(c === Char.l) {
+            emit(parser, "onvalue", null);
+            parser.state = parser.stack.pop() || S.VALUE;
+          } else error(parser, 'Invalid null started with nul'+ c);
+        continue;
+
+        case S.NUMBER_DECIMAL_POINT:
+          if(c === Char.period) {
+            parser.numberNode += ".";
+            parser.state       = S.NUMBER_DIGIT;
+          } else error(parser, 'Leading zero not followed by .');
+        continue;
+
+        case S.NUMBER_DIGIT:
+          if(Char._0 <= c && c <= Char._9) parser.numberNode += String.fromCharCode(c);
+          else if (c === Char.period) {
+            if(parser.numberNode.indexOf('.')!==-1)
+              error(parser, 'Invalid number has two dots');
+            parser.numberNode += ".";
+          } else if (c === Char.e || c === Char.E) {
+            if(parser.numberNode.indexOf('e')!==-1 ||
+               parser.numberNode.indexOf('E')!==-1 )
+               error(parser, 'Invalid number has two exponential');
+            parser.numberNode += "e";
+          } else if (c === Char.plus || c === Char.minus) {
+            if(!(p === Char.e || p === Char.E))
+              error(parser, 'Invalid symbol in number');
+            parser.numberNode += String.fromCharCode(c);
+          } else {
+            closeNumber(parser);
+            i--; // go back one
+            parser.state = parser.stack.pop() || S.VALUE;
+          }
+        continue;
+
+        default:
+          error(parser, "Unknown state: " + parser.state);
+      }
+    }
+    if (parser.position >= parser.bufferCheckPosition)
+      checkBufferLength(parser);
+    return parser;
+  }
+
+})(exports);
+});
+
+function JsonStream(blob) {
+    var pos = 0;
+    var parser = JsonParser(true);
+    var rv = {
+        pullAsync: function (numBytes) {
+            return __awaiter(this, void 0, void 0, function () {
+                var slize, jsonPart, result;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0:
+                            slize = blob.slice(pos, pos + numBytes);
+                            pos += numBytes;
+                            return [4 /*yield*/, readBlobAsync(slize, 'text')];
+                        case 1:
+                            jsonPart = _a.sent();
+                            result = parser.write(jsonPart);
+                            rv.result = result || {};
+                            return [2 /*return*/, result];
+                    }
+                });
+            });
+        },
+        pullSync: function (numBytes) {
+            var slize = blob.slice(pos, pos + numBytes);
+            pos += numBytes;
+            var jsonPart = readBlobSync(slize, 'text');
+            var result = parser.write(jsonPart);
+            rv.result = result || {};
+            return result;
+        },
+        done: function () {
+            return parser.done();
+        },
+        eof: function () {
+            return pos >= blob.size;
+        },
+        result: {}
+    };
+    return rv;
+}
+function JsonParser(allowPartial) {
+    var parser = clarinet_1.parser();
+    var level = 0;
+    var result;
+    var stack = [];
+    var obj;
+    var key;
+    var done = false;
+    var array = false;
+    parser.onopenobject = function (newKey) {
+        var newObj = {};
+        newObj.incomplete = true;
+        if (!result)
+            result = newObj;
+        if (obj) {
+            stack.push([key, obj, array]);
+            if (allowPartial) {
+                if (array) {
+                    obj.push(newObj);
+                }
+                else {
+                    obj[key] = newObj;
+                }
+            }
+        }
+        obj = newObj;
+        key = newKey;
+        array = false;
+        ++level;
+    };
+    parser.onkey = function (newKey) { return key = newKey; };
+    parser.onvalue = function (value) { return array ? obj.push(value) : obj[key] = value; };
+    parser.oncloseobject = function () {
+        var _a;
+        delete obj.incomplete;
+        key = null;
+        if (--level === 0) {
+            done = true;
+        }
+        else {
+            var completedObj = obj;
+            _a = stack.pop(), key = _a[0], obj = _a[1], array = _a[2];
+            if (!allowPartial) {
+                if (array) {
+                    obj.push(completedObj);
+                }
+                else {
+                    obj[key] = completedObj;
+                }
+            }
+        }
+    };
+    parser.onopenarray = function () {
+        var newObj = [];
+        newObj.incomplete = true;
+        if (!result)
+            result = newObj;
+        if (obj) {
+            stack.push([key, obj, array]);
+            if (allowPartial) {
+                if (array) {
+                    obj.push(newObj);
+                }
+                else {
+                    obj[key] = newObj;
+                }
+            }
+        }
+        obj = newObj;
+        array = true;
+        key = null;
+        ++level;
+    };
+    parser.onclosearray = function () {
+        var _a;
+        delete obj.incomplete;
+        key = null;
+        if (--level === 0) {
+            done = true;
+        }
+        else {
+            var completedObj = obj;
+            _a = stack.pop(), key = _a[0], obj = _a[1], array = _a[2];
+            if (!allowPartial) {
+                if (array) {
+                    obj.push(completedObj);
+                }
+                else {
+                    obj[key] = completedObj;
+                }
+            }
+        }
+    };
+    return {
+        write: function (jsonPart) {
+            parser.write(jsonPart);
+            return result;
+        },
+        done: function () {
+            return done;
+        }
+    };
+}
+
+var DEFAULT_KILOBYTES_PER_CHUNK = 1024;
+function importDB(exportedData, options) {
+    return __awaiter(this, void 0, void 0, function () {
+        var CHUNK_SIZE, stream, dbExport, db;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    options = options || {}; // All booleans defaults to false.
+                    CHUNK_SIZE = options.chunkSizeBytes || (DEFAULT_KILOBYTES_PER_CHUNK * 1024);
+                    return [4 /*yield*/, loadUntilWeGotEnoughData(exportedData, CHUNK_SIZE)];
+                case 1:
+                    stream = _a.sent();
+                    dbExport = stream.result.data;
+                    db = new dist_dexie(dbExport.databaseName);
+                    db.version(dbExport.databaseVersion).stores(extractDbSchema(dbExport));
+                    return [4 /*yield*/, importInto(db, stream, options)];
+                case 2:
+                    _a.sent();
+                    return [2 /*return*/, db];
+            }
+        });
+    });
+}
+function importInto(db, exportedData, options) {
+    return __awaiter(this, void 0, void 0, function () {
+        function importAll() {
+            return __awaiter(this, void 0, void 0, function () {
+                var _loop_1, _i, _a, tableExport, state_1;
+                return __generator(this, function (_b) {
+                    switch (_b.label) {
+                        case 0:
+                            _loop_1 = function (tableExport) {
+                                var tableName, table, tableSchemaStr, sourceRows, rows, i, obj, filter, filteredRows, _a, keys, values;
+                                return __generator(this, function (_b) {
+                                    switch (_b.label) {
+                                        case 0:
+                                            if (!tableExport.rows)
+                                                return [2 /*return*/, "break"]; // Need to pull more!
+                                            if (!tableExport.rows.incomplete && tableExport.rows.length === 0)
+                                                return [2 /*return*/, "continue"];
+                                            if (progressCallback) {
+                                                // Keep ongoing transaction private
+                                                dist_dexie.ignoreTransaction(function () { return progressCallback(progress); });
+                                            }
+                                            tableName = tableExport.tableName;
+                                            table = db.table(tableName);
+                                            tableSchemaStr = dbExport.tables.filter(function (t) { return t.name === tableName; })[0].schema;
+                                            if (!table) {
+                                                if (!options.acceptMissingTables)
+                                                    throw new Error("Exported table " + tableExport.tableName + " is missing in installed database");
+                                                else
+                                                    return [2 /*return*/, "continue"];
+                                            }
+                                            if (!options.acceptChangedPrimaryKey &&
+                                                tableSchemaStr.split(',')[0] != table.schema.primKey.src) {
+                                                throw new Error("Primary key differs for table " + tableExport.tableName + ". ");
+                                            }
+                                            sourceRows = tableExport.rows;
+                                            rows = [];
+                                            for (i = 0; i < sourceRows.length; i++) {
+                                                obj = sourceRows[i];
+                                                if (!obj.incomplete) {
+                                                    rows.push(TSON.revive(obj));
+                                                }
+                                                else {
+                                                    break;
+                                                }
+                                            }
+                                            filter = options.filter;
+                                            filteredRows = filter ?
+                                                tableExport.inbound ?
+                                                    rows.filter(function (value) { return filter(tableName, value); }) :
+                                                    rows.filter(function (_a) {
+                                                        var key = _a[0], value = _a[1];
+                                                        return filter(tableName, value, key);
+                                                    }) :
+                                                rows;
+                                            _a = tableExport.inbound ?
+                                                [undefined, filteredRows] :
+                                                [filteredRows.map(function (row) { return row[0]; }), rows.map(function (row) { return row[1]; })], keys = _a[0], values = _a[1];
+                                            if (!options.clearTablesBeforeImport) return [3 /*break*/, 2];
+                                            return [4 /*yield*/, table.clear()];
+                                        case 1:
+                                            _b.sent();
+                                            _b.label = 2;
+                                        case 2:
+                                            if (!options.overwriteValues) return [3 /*break*/, 4];
+                                            return [4 /*yield*/, table.bulkPut(values, keys)];
+                                        case 3:
+                                            _b.sent();
+                                            return [3 /*break*/, 6];
+                                        case 4: return [4 /*yield*/, table.bulkAdd(values, keys)];
+                                        case 5:
+                                            _b.sent();
+                                            _b.label = 6;
+                                        case 6:
+                                            progress.completedRows += rows.length;
+                                            if (!rows.incomplete) {
+                                                progress.completedTables += 1;
+                                            }
+                                            sourceRows.splice(0, rows.length); // Free up RAM, keep existing array instance.
+                                            return [2 /*return*/];
+                                    }
+                                });
+                            };
+                            _i = 0, _a = dbExport.data;
+                            _b.label = 1;
+                        case 1:
+                            if (!(_i < _a.length)) return [3 /*break*/, 4];
+                            tableExport = _a[_i];
+                            return [5 /*yield**/, _loop_1(tableExport)];
+                        case 2:
+                            state_1 = _b.sent();
+                            if (state_1 === "break")
+                                return [3 /*break*/, 4];
+                            _b.label = 3;
+                        case 3:
+                            _i++;
+                            return [3 /*break*/, 1];
+                        case 4:
+                            // Avoid unnescessary loops in "for (const tableExport of dbExport.data)" 
+                            while (dbExport.data.length > 0 && dbExport.data[0].rows && !dbExport.data[0].rows.incomplete) {
+                                // We've already imported all rows from the first table. Delete its occurrence
+                                dbExport.data.splice(0, 1);
+                            }
+                            if (!(!jsonStream.done() && !jsonStream.eof())) return [3 /*break*/, 8];
+                            if (!readBlobsSynchronously) return [3 /*break*/, 5];
+                            // If we can pull from blob synchronically, we don't have to
+                            // keep transaction alive using Dexie.waitFor().
+                            // This will only be possible in workers.
+                            jsonStream.pullSync(CHUNK_SIZE);
+                            return [3 /*break*/, 7];
+                        case 5: return [4 /*yield*/, dist_dexie.waitFor(jsonStream.pullAsync(CHUNK_SIZE))];
+                        case 6:
+                            _b.sent();
+                            _b.label = 7;
+                        case 7: return [3 /*break*/, 9];
+                        case 8: return [3 /*break*/, 10];
+                        case 9:
+                            return [3 /*break*/, 0];
+                            _b.label = 10;
+                        case 10: return [2 /*return*/];
+                    }
+                });
+            });
+        }
+        var CHUNK_SIZE, jsonStream, dbExportFile, readBlobsSynchronously, dbExport, progressCallback, progress;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    options = options || {}; // All booleans defaults to false.
+                    CHUNK_SIZE = options.chunkSizeBytes || (DEFAULT_KILOBYTES_PER_CHUNK * 1024);
+                    return [4 /*yield*/, loadUntilWeGotEnoughData(exportedData, CHUNK_SIZE)];
+                case 1:
+                    jsonStream = _a.sent();
+                    dbExportFile = jsonStream.result;
+                    readBlobsSynchronously = 'FileReaderSync' in self;
+                    dbExport = dbExportFile.data;
+                    if (!options.acceptNameDiff && db.name !== dbExport.databaseName)
+                        throw new Error("Name differs. Current database name is " + db.name + " but export is " + dbExport.databaseName);
+                    if (!options.acceptVersionDiff && db.verno !== dbExport.databaseVersion) {
+                        // Possible feature: Call upgraders in some isolated way if this happens... ?
+                        throw new Error("Database version differs. Current database is in version " + db.verno + " but export is " + dbExport.databaseVersion);
+                    }
+                    progressCallback = options.progressCallback;
+                    progress = {
+                        done: false,
+                        completedRows: 0,
+                        completedTables: 0,
+                        totalRows: dbExport.tables.reduce(function (p, c) { return p + c.rowCount; }, 0),
+                        totalTables: dbExport.tables.length
+                    };
+                    if (progressCallback) {
+                        // Keep ongoing transaction private
+                        dist_dexie.ignoreTransaction(function () { return progressCallback(progress); });
+                    }
+                    if (!options.noTransaction) return [3 /*break*/, 3];
+                    return [4 /*yield*/, importAll()];
+                case 2:
+                    _a.sent();
+                    return [3 /*break*/, 5];
+                case 3: return [4 /*yield*/, db.transaction('rw', db.tables, importAll)];
+                case 4:
+                    _a.sent();
+                    _a.label = 5;
+                case 5:
+                    progress.done = true;
+                    if (progressCallback) {
+                        // Keep ongoing transaction private
+                        dist_dexie.ignoreTransaction(function () { return progressCallback(progress); });
+                    }
+                    return [2 /*return*/];
+            }
+        });
+    });
+}
+function loadUntilWeGotEnoughData(exportedData, CHUNK_SIZE) {
+    return __awaiter(this, void 0, void 0, function () {
+        var stream, dbExportFile;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    stream = ('slice' in exportedData ?
+                        JsonStream(exportedData) :
+                        exportedData);
+                    _a.label = 1;
+                case 1:
+                    if (!!stream.eof()) return [3 /*break*/, 3];
+                    return [4 /*yield*/, stream.pullAsync(CHUNK_SIZE)];
+                case 2:
+                    _a.sent();
+                    if (stream.result.data && stream.result.data.data)
+                        return [3 /*break*/, 3];
+                    return [3 /*break*/, 1];
+                case 3:
+                    dbExportFile = stream.result;
+                    if (!dbExportFile || dbExportFile.formatName != "dexie")
+                        throw new Error("Given file is not a dexie export");
+                    if (dbExportFile.formatVersion > VERSION) {
+                        throw new Error("Format version " + dbExportFile.formatVersion + " not supported");
+                    }
+                    if (!dbExportFile.data) {
+                        throw new Error("No data in export file");
+                    }
+                    if (!dbExportFile.data.databaseName) {
+                        throw new Error("Missing databaseName in export file");
+                    }
+                    if (!dbExportFile.data.databaseVersion) {
+                        throw new Error("Missing databaseVersion in export file");
+                    }
+                    if (!dbExportFile.data.tables) {
+                        throw new Error("Missing tables in export file");
+                    }
+                    return [2 /*return*/, stream];
+            }
+        });
+    });
+}
+
+//
+// Extend Dexie interface (runtime wise)
+//
+dist_dexie.prototype.export = function (options) {
+    return exportDB(this, options);
+};
+dist_dexie.prototype.import = function (blob, options) {
+    return importInto(this, blob, options);
+};
+dist_dexie.import = function (blob, options) { return importDB(blob, options); };
+var dexieExportImport = (function () {
+    throw new Error("This addon extends Dexie.prototype globally and does not have be included in Dexie constructor's addons options.");
+});
+
+/* harmony default export */ var dexie_export_import = (dexieExportImport);
+
+//# sourceMappingURL=dexie-export-import.mjs.map
+
+// CONCATENATED MODULE: ./lib/mock/idb-export-import.js
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return exportDatabase; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return importDatabase; });
+
+
+const databaseName = "SaladictWords";
+async function exportDatabase() {
+  const db = await new dexie(databaseName).open();
+  let blob = await exportDB(db);
+  blob = await blobToDataURL(blob);
+  return blob;
+}
+
+async function importDatabase(file) {
+  file = dataURLtoBlob(file);
+  const db = new dexie(databaseName);
+  db.version(1).stores({
+    notebook: "date,text,context,url",
+    history: "date,text,context,url",
+    syncmeta: "id",
+  });
+  await db.open();
+  const result = await importInto(db, file, {
+    acceptMissingTables: true,
+    acceptVersionDiff: true,
+    overwriteValues: true
+    // clearTablesBeforeImport:true
+  });
+  return result;
+}
+function blobToDataURL(blob) {
+  return new Promise((res) => {
+    let a = new FileReader();
+    a.onload = function (e) {
+      res(e.target.result);
+    };
+    a.readAsDataURL(blob);
+  });
+}
+function dataURLtoBlob(dataurl) {
+  var arr = dataurl.split(","),
+    mime = arr[0].match(/:(.*?);/)[1],
+    bstr = atob(arr[1]),
+    n = bstr.length,
+    u8arr = new Uint8Array(n);
+  while (n--) {
+    u8arr[n] = bstr.charCodeAt(n);
+  }
+  return new Blob([u8arr], { type: mime });
 }
 
 
 /***/ }),
-/* 32 */
+/* 33 */
 /***/ (function(module, exports) {
 
 module.exports = function(module) {
@@ -26584,7 +36924,7 @@ module.exports = function(module) {
 
 
 /***/ }),
-/* 33 */
+/* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -26625,7 +36965,7 @@ module.exports = function calledInOrder(spies) {
 
 
 /***/ }),
-/* 34 */
+/* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -26645,7 +36985,7 @@ module.exports = function orderByFirstCall(spies) {
 
 
 /***/ }),
-/* 35 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;(function (root, factory) {
@@ -26653,7 +36993,7 @@ module.exports = function orderByFirstCall(spies) {
 
     if (true) {
         // AMD. Register as an anonymous module.
-        !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(36)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
+        !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(37)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
 				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
 				(__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__),
 				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
@@ -26888,7 +37228,7 @@ module.exports = function orderByFirstCall(spies) {
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(2)))
 
 /***/ }),
-/* 36 */
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;(( true && function (m) { !(__WEBPACK_AMD_DEFINE_FACTORY__ = (m),
@@ -27339,7 +37679,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;(( true && fun
 
 
 /***/ }),
-/* 37 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -27365,7 +37705,7 @@ module.exports = function every(obj, fn) {
 
 
 /***/ }),
-/* 38 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {/**
@@ -28303,12 +38643,12 @@ module.exports = get;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(2)))
 
 /***/ }),
-/* 39 */
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-var typeOf = __webpack_require__(21);
+var typeOf = __webpack_require__(22);
 
 module.exports = function iterableToString(obj) {
     var representation = "";
@@ -28344,7 +38684,7 @@ module.exports = function iterableToString(obj) {
 
 
 /***/ }),
-/* 40 */
+/* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {(function (global, factory) {
@@ -28738,7 +39078,7 @@ return typeDetect;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(2)))
 
 /***/ }),
-/* 41 */
+/* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global, process) {(function (global, undefined) {
@@ -28928,10 +39268,10 @@ return typeDetect;
     attachTo.clearImmediate = clearImmediate;
 }(typeof self === "undefined" ? typeof global === "undefined" ? this : global : self));
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(2), __webpack_require__(23)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(2), __webpack_require__(24)))
 
 /***/ }),
-/* 42 */
+/* 43 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -28970,17 +39310,17 @@ exports.printWarning = function (msg) {
 
 
 /***/ }),
-/* 43 */
+/* 44 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var color = __webpack_require__(44);
-var timesInWords = __webpack_require__(16);
-var sinonFormat = __webpack_require__(5);
+var color = __webpack_require__(45);
+var timesInWords = __webpack_require__(18);
+var sinonFormat = __webpack_require__(6);
 var sinonMatch = __webpack_require__(4);
-var jsDiff = __webpack_require__(46);
+var jsDiff = __webpack_require__(47);
 var push = Array.prototype.push;
 
 function colorSinonMatchText(matcher, calledArg, calledArgMessage) {
@@ -29074,13 +39414,13 @@ module.exports = {
 
 
 /***/ }),
-/* 44 */
+/* 45 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var supportsColor = __webpack_require__(45);
+var supportsColor = __webpack_require__(46);
 
 function colorize(str, color) {
     if (supportsColor.stdout === false) {
@@ -29112,7 +39452,7 @@ exports.bold = function (str) {
 
 
 /***/ }),
-/* 45 */
+/* 46 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -29124,7 +39464,7 @@ module.exports = {
 
 
 /***/ }),
-/* 46 */
+/* 47 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*!
@@ -30967,13 +41307,13 @@ return /******/ (function(modules) { // webpackBootstrap
 ;
 
 /***/ }),
-/* 47 */
+/* 48 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var getPropertyDescriptor = __webpack_require__(7);
+var getPropertyDescriptor = __webpack_require__(8);
 
 var slice = [].slice;
 var useLeftMostCallback = -1;
@@ -31234,14 +41574,14 @@ Object.keys(module.exports).forEach(function (method) {
 
 
 /***/ }),
-/* 48 */
+/* 49 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var getPropertyDescriptor = __webpack_require__(7);
-var walk = __webpack_require__(26);
+var getPropertyDescriptor = __webpack_require__(8);
+var walk = __webpack_require__(27);
 
 function stubEntireObject(stub, object) {
     walk(object || {}, function (prop, propOwner) {
@@ -31263,7 +41603,7 @@ module.exports = stubEntireObject;
 
 
 /***/ }),
-/* 49 */
+/* 50 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -31281,14 +41621,14 @@ module.exports = throwOnFalsyObject;
 
 
 /***/ }),
-/* 50 */
+/* 51 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var walk = __webpack_require__(26);
-var getPropertyDescriptor = __webpack_require__(7);
+var walk = __webpack_require__(27);
+var getPropertyDescriptor = __webpack_require__(8);
 
 function collectMethod(methods, object, prop, propOwner) {
     if (
@@ -31312,19 +41652,19 @@ module.exports = collectOwnMethods;
 
 
 /***/ }),
-/* 51 */
+/* 52 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var extend = __webpack_require__(6);
-var sinonCollection = __webpack_require__(22);
+var extend = __webpack_require__(7);
+var sinonCollection = __webpack_require__(23);
 var sinonMatch = __webpack_require__(4);
-var sinonAssert = __webpack_require__(15);
-var sinonClock = __webpack_require__(29);
-var fakeServer = __webpack_require__(20).fakeServer;
-var fakeXhr = __webpack_require__(20).fakeXhr;
+var sinonAssert = __webpack_require__(17);
+var sinonClock = __webpack_require__(30);
+var fakeServer = __webpack_require__(21).fakeServer;
+var fakeXhr = __webpack_require__(21).fakeXhr;
 
 var push = [].push;
 
@@ -31470,7 +41810,7 @@ module.exports = sinonSandbox;
 
 
 /***/ }),
-/* 52 */
+/* 53 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {var require;var require;(function(f){if(true){module.exports=f()}else { var g; }})(function(){var define,module,exports;return (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return require(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
@@ -32346,7 +42686,7 @@ exports.withGlobal = withGlobal;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(2)))
 
 /***/ }),
-/* 53 */
+/* 54 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -32362,7 +42702,7 @@ module.exports = {
 
 
 /***/ }),
-/* 54 */
+/* 55 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -32407,11 +42747,11 @@ exports.default = BaseCache;
 module.exports = exports["default"];
 
 /***/ }),
-/* 55 */
+/* 56 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var api = __webpack_require__(56);
-            var content = __webpack_require__(57);
+var api = __webpack_require__(57);
+            var content = __webpack_require__(58);
 
             content = content.__esModule ? content.default : content;
 
@@ -32431,7 +42771,7 @@ var update = api(content, options);
 module.exports = content.locals || {};
 
 /***/ }),
-/* 56 */
+/* 57 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -32706,11 +43046,11 @@ module.exports = function (list, options) {
 };
 
 /***/ }),
-/* 57 */
+/* 58 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // Imports
-var ___CSS_LOADER_API_IMPORT___ = __webpack_require__(58);
+var ___CSS_LOADER_API_IMPORT___ = __webpack_require__(59);
 exports = ___CSS_LOADER_API_IMPORT___(false);
 // Module
 exports.push([module.i, "html,body{\n    height: 100%;\n    margin:0;\n    padding:0;\n}\n#saladict-paste{\n    display: none;\n}\niframe{\n    border: 0;\n}\n.iframe-wrap{\n    width: 100%;\n    height: 100%;\n    position: absolute;\n    top: 0;\n    left: 0;\n    overflow: hidden;\n}\n.close-iframe-btn{\n    position: absolute;\n    top: 0;\n    right: 5px;\n    line-height: 1.5;\n    font-weight: 400;\n    white-space: nowrap;\n    text-align: center;\n    background-image: none;\n    border: 1px solid transparent;\n    -moz-user-select: none;\n    -ms-user-select: none;\n    user-select: none;\n    -ms-touch-action: manipulation;\n    touch-action: manipulation;\n    padding: 0 5px;\n    font-size: 15px;\n    border-radius: 4px;\n    color: #fff;\n    background-color: #ff4d4f;\n    border-color: #ff4d4f;\n    text-shadow: 0 -1px 0 rgba(0,0,0,0.12);\n    -webkit-box-shadow: 0 2px 0 rgba(0,0,0,0.045);\n    box-shadow: 0 2px 0 rgba(0,0,0,0.045);\n    cursor: pointer;\n}\n/* 搜索条隐藏 */\n.dictPanel-Root .menuBar-Btn:nth-of-type(6),.dictPanel-Root .menuBar-Btn:nth-of-type(7){\n    display: none;\n}\n/* 设置页隐藏 */\n/* main.ant-layout-content[data-option-content=Dictionaries] .ant-col-13,\nmain.ant-layout-content[data-option-content=Profiles] .ant-col-12{\n    width: 100%;\n} */\nmain.ant-layout-content .saladict-form-btns button:nth-of-type(2),\nmain.ant-layout-content[data-option-content=General] form>.ant-row:nth-of-type(1),\nmain.ant-layout-content[data-option-content=Notebook] form>.ant-row:nth-of-type(6),\nmain.ant-layout-content[data-option-content=Notebook] form>.ant-row:nth-of-type(7),\nmain.ant-layout-content[data-option-content=Privacy] form>.ant-row:nth-of-type(1),\nmain.ant-layout-content[data-option-content=SearchModes] form>.ant-row:nth-of-type(1),\nmain.ant-layout-content[data-option-content=SearchModes] form>.ant-row:nth-of-type(2),\nmain.ant-layout-content[data-option-content=SearchModes] form>.ant-row:nth-of-type(3),\nmain.ant-layout-content[data-option-content=SearchModes] form>.ant-row:nth-of-type(4),\nmain.ant-layout-content[data-option-content=SearchModes] form>.ant-row:nth-of-type(5),\nmain.ant-layout-content[data-option-content=SearchModes] form>.ant-row:nth-of-type(6),\nmain.ant-layout-content[data-option-content=SearchModes] form>.ant-row:nth-of-type(7),\nmain.ant-layout-content[data-option-content=DictPanel] form>.ant-row:nth-of-type(6),\nmain.ant-layout-content[data-option-content=DictPanel] form>.ant-row:nth-of-type(7),\nmain.ant-layout-content[data-option-content=DictPanel] form>.ant-row:nth-of-type(9),\nmain.ant-layout-content[data-option-content=DictPanel] form>.ant-row:nth-of-type(10),\nmain.ant-layout-content[data-option-content=DictPanel] form>.ant-row:nth-of-type(11){\n    display: none;\n}\n.ant-layout-sider .ant-menu-item:nth-of-type(8),\n.ant-layout-sider .ant-menu-item:nth-of-type(9),\n.ant-layout-sider .ant-menu-item:nth-of-type(11),\n.ant-layout-sider .ant-menu-item:nth-of-type(12),\n.ant-layout-sider .ant-menu-item:nth-of-type(13){\n    display: none;\n}", ""]);
@@ -32719,7 +43059,7 @@ module.exports = exports;
 
 
 /***/ }),
-/* 58 */
+/* 59 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -32819,7 +43159,7 @@ function toComment(sourceMap) {
 }
 
 /***/ }),
-/* 59 */
+/* 60 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -32829,11 +43169,11 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _stableApiFf = __webpack_require__(62);
+var _stableApiFf = __webpack_require__(63);
 
 var _stableApiFf2 = _interopRequireDefault(_stableApiFf);
 
-var _api = __webpack_require__(63);
+var _api = __webpack_require__(64);
 
 var _api2 = _interopRequireDefault(_api);
 
@@ -32848,10 +43188,10 @@ exports.default = new _api2.default(_stableApiFf2.default).create();
 module.exports = exports['default'];
 
 /***/ }),
-/* 60 */
+/* 61 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var root = __webpack_require__(69);
+var root = __webpack_require__(70);
 
 /** Built-in value references. */
 var Symbol = root.Symbol;
@@ -32860,18 +43200,17 @@ module.exports = Symbol;
 
 
 /***/ }),
-/* 61 */
+/* 62 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var sinon_chrome_webextensions__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(59);
+/* harmony import */ var sinon_chrome_webextensions__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(60);
 /* harmony import */ var sinon_chrome_webextensions__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(sinon_chrome_webextensions__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _mock_utils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(9);
-/* harmony import */ var _mock_idb_backup_and_restore_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(31);
-/* harmony import */ var _mock_idb_backup_and_restore_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_mock_idb_backup_and_restore_js__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _mock_addon__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(30);
-/* harmony import */ var _mock_refactor_css__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(55);
+/* harmony import */ var _mock_utils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(10);
+/* harmony import */ var _mock_idb_export_import__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(32);
+/* harmony import */ var _mock_addon__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(31);
+/* harmony import */ var _mock_refactor_css__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(56);
 /* harmony import */ var _mock_refactor_css__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_mock_refactor_css__WEBPACK_IMPORTED_MODULE_4__);
 
 
@@ -32880,7 +43219,7 @@ __webpack_require__.r(__webpack_exports__);
 
 window.browser = sinon_chrome_webextensions__WEBPACK_IMPORTED_MODULE_0___default.a
 window.chrome = sinon_chrome_webextensions__WEBPACK_IMPORTED_MODULE_0___default.a
-const req = __webpack_require__(83)
+const req = __webpack_require__(84)
 req.keys().map(req)
 
 window.openIframe = _mock_utils__WEBPACK_IMPORTED_MODULE_1__[/* openIframe */ "b"]
@@ -32911,10 +43250,14 @@ utools.onPluginEnter(({ code, type, payload }) => {
 })
 
 async function init() {
+    utools.db.remove("indexedDBData")
     localStorageData = new _mock_utils__WEBPACK_IMPORTED_MODULE_1__[/* utoolsStorage */ "e"]('localStorageData');
-    indexedDBData = new _mock_utils__WEBPACK_IMPORTED_MODULE_1__[/* utoolsStorage */ "e"]('indexedDBData');
+    indexedDBData = new _mock_utils__WEBPACK_IMPORTED_MODULE_1__[/* utoolsStorage */ "e"]('indexedDBDataV2');
     versionData = new _mock_utils__WEBPACK_IMPORTED_MODULE_1__[/* utoolsStorage */ "e"]('versionData');
+    // 还原内部storage
     Object(_mock_utils__WEBPACK_IMPORTED_MODULE_1__[/* restoreLocalStorageData */ "d"])(localStorageData);
+    // 还原indexedDB
+    await Object(_mock_utils__WEBPACK_IMPORTED_MODULE_1__[/* restoreIndexedBDData */ "c"])(indexedDBData)
     let utoolsPageScript = [
       "assets/runtime.7c358480.js",
       "assets/view-vendor.e505b0d9.js",
@@ -32922,13 +43265,11 @@ async function init() {
       "assets/20.c4eab594.js",
       "assets/background.3ba95e36.js"
     ];
-    // 先加载沙拉
+    // 加载沙拉
     await Object(_mock_utils__WEBPACK_IMPORTED_MODULE_1__[/* loadAllJs */ "a"])(utoolsPageScript);
-    // 再还原indexedDB
-    await Object(_mock_utils__WEBPACK_IMPORTED_MODULE_1__[/* restoreIndexedBDData */ "c"])(indexedDBData)
 
     inited = true;
-    mockOnInstalled();
+    await mockOnInstalled();
     enterEventListener && enterEventListener();
 
 }
@@ -32941,7 +43282,7 @@ utools.onPluginReady(() => {
 // 模拟install事件
 function mockOnInstalled(){
     //install
-    window.browser.storage.sync.get().then((data) => {
+    return window.browser.storage.sync.get().then((data) => {
         if (!data.activeProfileID) {
           console.log('mock install')
           window.browser.runtime.onInstalled._listeners.forEach((listener) => {
@@ -32971,18 +43312,13 @@ function mockOnInstalled(){
 // 保存indexedDB
 function saveIndexedBDData() {
     console.log("saveIndexedBDData -> saveIndexedBDData")
-    return new Promise((resolve, reject) => {
-        var request = indexedDB.open('SaladictWords')
-        request.onsuccess = async function (event) {
-            let db = request.result;
-            // console.log('数据库打开成功');
-            let data = await Object(_mock_idb_backup_and_restore_js__WEBPACK_IMPORTED_MODULE_2__["exportToJson"])(db)
-            if (data) {
-                indexedDBData.save(data);
-            }
-            db.close()
-            resolve()
-        };
+    return new Promise(async (resolve, reject) => {
+        let data = await Object(_mock_idb_export_import__WEBPACK_IMPORTED_MODULE_2__[/* exportDatabase */ "a"])('SaladictWords')
+        console.log("saveIndexedBDData -> data", data)
+        if (data) {
+            indexedDBData.save(data);
+        }
+        resolve()
     })
 }
 
@@ -33002,13 +43338,13 @@ window.saveIndexedBDData = saveIndexedBDData;
 
 
 /***/ }),
-/* 62 */
+/* 63 */
 /***/ (function(module) {
 
 module.exports = JSON.parse("[{\"events\":[{\"description\":\"Fired when an alarm has expired. Useful for transient background pages.\",\"name\":\"onAlarm\",\"parameters\":[{\"$ref\":\"Alarm\",\"description\":\"The alarm that has expired.\",\"name\":\"name\"}],\"type\":\"function\"}],\"functions\":[{\"description\":\"Creates an alarm. After the delay is expired, the onAlarm event is fired. If there is another alarm with the same name (or no name if none is specified), it will be cancelled and replaced by this alarm.\",\"name\":\"create\",\"parameters\":[{\"description\":\"Optional name to identify this alarm. Defaults to the empty string.\",\"name\":\"name\",\"optional\":true,\"type\":\"string\"},{\"description\":\"Details about the alarm. The alarm first fires either at 'when' milliseconds past the epoch (if 'when' is provided), after 'delayInMinutes' minutes from the current time (if 'delayInMinutes' is provided instead), or after 'periodInMinutes' minutes from the current time (if only 'periodInMinutes' is provided). Users should never provide both 'when' and 'delayInMinutes'. If 'periodInMinutes' is provided, then the alarm recurs repeatedly after that many minutes.\",\"name\":\"alarmInfo\",\"properties\":{\"delayInMinutes\":{\"description\":\"Number of minutes from the current time after which the alarm should first fire.\",\"optional\":true,\"type\":\"number\"},\"periodInMinutes\":{\"description\":\"Number of minutes after which the alarm should recur repeatedly.\",\"optional\":true,\"type\":\"number\"},\"when\":{\"description\":\"Time when the alarm is scheduled to first fire, in milliseconds past the epoch.\",\"optional\":true,\"type\":\"number\"}},\"type\":\"object\"}],\"type\":\"function\"},{\"async\":\"callback\",\"description\":\"Retrieves details about the specified alarm.\",\"name\":\"get\",\"parameters\":[{\"description\":\"The name of the alarm to get. Defaults to the empty string.\",\"name\":\"name\",\"optional\":true,\"type\":\"string\"},{\"name\":\"callback\",\"parameters\":[{\"$ref\":\"Alarm\",\"name\":\"alarm\",\"optional\":true}],\"type\":\"function\"}],\"type\":\"function\"},{\"async\":\"callback\",\"description\":\"Gets an array of all the alarms.\",\"name\":\"getAll\",\"parameters\":[{\"name\":\"callback\",\"parameters\":[{\"items\":{\"$ref\":\"Alarm\"},\"name\":\"alarms\",\"type\":\"array\"}],\"type\":\"function\"}],\"type\":\"function\"},{\"async\":\"callback\",\"description\":\"Clears the alarm with the given name.\",\"name\":\"clear\",\"parameters\":[{\"description\":\"The name of the alarm to clear. Defaults to the empty string.\",\"name\":\"name\",\"optional\":true,\"type\":\"string\"},{\"name\":\"callback\",\"parameters\":[{\"description\":\"Whether an alarm of the given name was found to clear.\",\"name\":\"wasCleared\",\"type\":\"boolean\"}],\"type\":\"function\"}],\"type\":\"function\"},{\"async\":\"callback\",\"description\":\"Clears all alarms.\",\"name\":\"clearAll\",\"parameters\":[{\"name\":\"callback\",\"parameters\":[{\"description\":\"Whether any alarm was found to clear.\",\"name\":\"wasCleared\",\"type\":\"boolean\"}],\"type\":\"function\"}],\"type\":\"function\"}],\"namespace\":\"alarms\",\"permissions\":[\"alarms\"],\"types\":[{\"id\":\"Alarm\",\"properties\":{\"name\":{\"description\":\"Name of this alarm.\",\"type\":\"string\"},\"periodInMinutes\":{\"description\":\"When present, signals that the alarm triggers periodically after so many minutes.\",\"optional\":true,\"type\":\"number\"},\"scheduledTime\":{\"description\":\"Time when the alarm is scheduled to fire, in milliseconds past the epoch.\",\"type\":\"number\"}},\"type\":\"object\"}]},{\"description\":\"Use the <code>browser.bookmarks</code> API to create, organize, and otherwise manipulate bookmarks. Also see $(topic:override)[Override Pages], which you can use to create a custom Bookmark Manager page.\",\"events\":[{\"description\":\"Fired when a bookmark or folder is created.\",\"name\":\"onCreated\",\"parameters\":[{\"name\":\"id\",\"type\":\"string\"},{\"$ref\":\"BookmarkTreeNode\",\"name\":\"bookmark\"}],\"type\":\"function\"},{\"description\":\"Fired when a bookmark or folder is removed.  When a folder is removed recursively, a single notification is fired for the folder, and none for its contents.\",\"name\":\"onRemoved\",\"parameters\":[{\"name\":\"id\",\"type\":\"string\"},{\"name\":\"removeInfo\",\"properties\":{\"index\":{\"type\":\"integer\"},\"node\":{\"$ref\":\"BookmarkTreeNode\"},\"parentId\":{\"type\":\"string\"}},\"type\":\"object\"}],\"type\":\"function\"},{\"description\":\"Fired when a bookmark or folder changes.  <b>Note:</b> Currently, only title and url changes trigger this.\",\"name\":\"onChanged\",\"parameters\":[{\"name\":\"id\",\"type\":\"string\"},{\"name\":\"changeInfo\",\"properties\":{\"title\":{\"type\":\"string\"},\"url\":{\"optional\":true,\"type\":\"string\"}},\"type\":\"object\"}],\"type\":\"function\"},{\"description\":\"Fired when a bookmark or folder is moved to a different parent folder.\",\"name\":\"onMoved\",\"parameters\":[{\"name\":\"id\",\"type\":\"string\"},{\"name\":\"moveInfo\",\"properties\":{\"index\":{\"type\":\"integer\"},\"oldIndex\":{\"type\":\"integer\"},\"oldParentId\":{\"type\":\"string\"},\"parentId\":{\"type\":\"string\"}},\"type\":\"object\"}],\"type\":\"function\"},{\"description\":\"Fired when the children of a folder have changed their order due to the order being sorted in the UI.  This is not called as a result of a move().\",\"name\":\"onChildrenReordered\",\"parameters\":[{\"name\":\"id\",\"type\":\"string\"},{\"name\":\"reorderInfo\",\"properties\":{\"childIds\":{\"items\":{\"type\":\"string\"},\"type\":\"array\"}},\"type\":\"object\"}],\"type\":\"function\",\"unsupported\":true},{\"description\":\"Fired when a bookmark import session is begun.  Expensive observers should ignore onCreated updates until onImportEnded is fired.  Observers should still handle other notifications immediately.\",\"name\":\"onImportBegan\",\"parameters\":[],\"type\":\"function\",\"unsupported\":true},{\"description\":\"Fired when a bookmark import session is ended.\",\"name\":\"onImportEnded\",\"parameters\":[],\"type\":\"function\",\"unsupported\":true}],\"functions\":[{\"async\":\"callback\",\"description\":\"Retrieves the specified BookmarkTreeNode(s).\",\"name\":\"get\",\"parameters\":[{\"choices\":[{\"type\":\"string\"},{\"items\":{\"type\":\"string\"},\"minItems\":1,\"type\":\"array\"}],\"description\":\"A single string-valued id, or an array of string-valued ids\",\"name\":\"idOrIdList\"},{\"name\":\"callback\",\"parameters\":[{\"items\":{\"$ref\":\"BookmarkTreeNode\"},\"name\":\"results\",\"type\":\"array\"}],\"type\":\"function\"}],\"type\":\"function\"},{\"async\":\"callback\",\"description\":\"Retrieves the children of the specified BookmarkTreeNode id.\",\"name\":\"getChildren\",\"parameters\":[{\"name\":\"id\",\"type\":\"string\"},{\"name\":\"callback\",\"parameters\":[{\"items\":{\"$ref\":\"BookmarkTreeNode\"},\"name\":\"results\",\"type\":\"array\"}],\"type\":\"function\"}],\"type\":\"function\"},{\"async\":\"callback\",\"description\":\"Retrieves the recently added bookmarks.\",\"name\":\"getRecent\",\"parameters\":[{\"description\":\"The maximum number of items to return.\",\"minimum\":1,\"name\":\"numberOfItems\",\"type\":\"integer\"},{\"name\":\"callback\",\"parameters\":[{\"items\":{\"$ref\":\"BookmarkTreeNode\"},\"name\":\"results\",\"type\":\"array\"}],\"type\":\"function\"}],\"type\":\"function\"},{\"async\":\"callback\",\"description\":\"Retrieves the entire Bookmarks hierarchy.\",\"name\":\"getTree\",\"parameters\":[{\"name\":\"callback\",\"parameters\":[{\"items\":{\"$ref\":\"BookmarkTreeNode\"},\"name\":\"results\",\"type\":\"array\"}],\"type\":\"function\"}],\"type\":\"function\"},{\"async\":\"callback\",\"description\":\"Retrieves part of the Bookmarks hierarchy, starting at the specified node.\",\"name\":\"getSubTree\",\"parameters\":[{\"description\":\"The ID of the root of the subtree to retrieve.\",\"name\":\"id\",\"type\":\"string\"},{\"name\":\"callback\",\"parameters\":[{\"items\":{\"$ref\":\"BookmarkTreeNode\"},\"name\":\"results\",\"type\":\"array\"}],\"type\":\"function\"}],\"type\":\"function\"},{\"async\":\"callback\",\"description\":\"Searches for BookmarkTreeNodes matching the given query. Queries specified with an object produce BookmarkTreeNodes matching all specified properties.\",\"name\":\"search\",\"parameters\":[{\"choices\":[{\"description\":\"A string of words and quoted phrases that are matched against bookmark URLs and titles.\",\"type\":\"string\"},{\"description\":\"An object specifying properties and values to match when searching. Produces bookmarks matching all properties.\",\"properties\":{\"query\":{\"description\":\"A string of words and quoted phrases that are matched against bookmark URLs and titles.\",\"optional\":true,\"type\":\"string\"},\"title\":{\"description\":\"The title of the bookmark; matches verbatim.\",\"optional\":true,\"type\":\"string\"},\"url\":{\"description\":\"The URL of the bookmark; matches verbatim. Note that folders have no URL.\",\"format\":\"url\",\"optional\":true,\"type\":\"string\"}},\"type\":\"object\"}],\"description\":\"Either a string of words and quoted phrases that are matched against bookmark URLs and titles, or an object. If an object, the properties <code>query</code>, <code>url</code>, and <code>title</code> may be specified and bookmarks matching all specified properties will be produced.\",\"name\":\"query\"},{\"name\":\"callback\",\"parameters\":[{\"items\":{\"$ref\":\"BookmarkTreeNode\"},\"name\":\"results\",\"type\":\"array\"}],\"type\":\"function\"}],\"type\":\"function\"},{\"async\":\"callback\",\"description\":\"Creates a bookmark or folder under the specified parentId.  If url is NULL or missing, it will be a folder.\",\"name\":\"create\",\"parameters\":[{\"$ref\":\"CreateDetails\",\"name\":\"bookmark\"},{\"name\":\"callback\",\"optional\":true,\"parameters\":[{\"$ref\":\"BookmarkTreeNode\",\"name\":\"result\"}],\"type\":\"function\"}],\"type\":\"function\"},{\"async\":\"callback\",\"description\":\"Moves the specified BookmarkTreeNode to the provided location.\",\"name\":\"move\",\"parameters\":[{\"name\":\"id\",\"type\":\"string\"},{\"name\":\"destination\",\"properties\":{\"index\":{\"minimum\":0,\"optional\":true,\"type\":\"integer\"},\"parentId\":{\"optional\":true,\"type\":\"string\"}},\"type\":\"object\"},{\"name\":\"callback\",\"optional\":true,\"parameters\":[{\"$ref\":\"BookmarkTreeNode\",\"name\":\"result\"}],\"type\":\"function\"}],\"type\":\"function\"},{\"async\":\"callback\",\"description\":\"Updates the properties of a bookmark or folder. Specify only the properties that you want to change; unspecified properties will be left unchanged.  <b>Note:</b> Currently, only 'title' and 'url' are supported.\",\"name\":\"update\",\"parameters\":[{\"name\":\"id\",\"type\":\"string\"},{\"name\":\"changes\",\"properties\":{\"title\":{\"optional\":true,\"type\":\"string\"},\"url\":{\"optional\":true,\"type\":\"string\"}},\"type\":\"object\"},{\"name\":\"callback\",\"optional\":true,\"parameters\":[{\"$ref\":\"BookmarkTreeNode\",\"name\":\"result\"}],\"type\":\"function\"}],\"type\":\"function\"},{\"async\":\"callback\",\"description\":\"Removes a bookmark or an empty bookmark folder.\",\"name\":\"remove\",\"parameters\":[{\"name\":\"id\",\"type\":\"string\"},{\"name\":\"callback\",\"optional\":true,\"parameters\":[],\"type\":\"function\"}],\"type\":\"function\"},{\"async\":\"callback\",\"description\":\"Recursively removes a bookmark folder.\",\"name\":\"removeTree\",\"parameters\":[{\"name\":\"id\",\"type\":\"string\"},{\"name\":\"callback\",\"optional\":true,\"parameters\":[],\"type\":\"function\"}],\"type\":\"function\"},{\"async\":\"callback\",\"description\":\"Imports bookmarks from an html bookmark file\",\"name\":\"import\",\"parameters\":[{\"name\":\"callback\",\"optional\":true,\"parameters\":[],\"type\":\"function\"}],\"type\":\"function\",\"unsupported\":true},{\"async\":\"callback\",\"description\":\"Exports bookmarks to an html bookmark file\",\"name\":\"export\",\"parameters\":[{\"name\":\"callback\",\"optional\":true,\"parameters\":[],\"type\":\"function\"}],\"type\":\"function\",\"unsupported\":true}],\"namespace\":\"bookmarks\",\"permissions\":[\"bookmarks\"],\"types\":[{\"description\":\"Indicates the reason why this node is unmodifiable. The <var>managed</var> value indicates that this node was configured by the system administrator or by the custodian of a supervised user. Omitted if the node can be modified by the user and the extension (default).\",\"enum\":[\"managed\"],\"id\":\"BookmarkTreeNodeUnmodifiable\",\"type\":\"string\"},{\"description\":\"Indicates the type of a BookmarkTreeNode, which can be one of bookmark, folder or separator.\",\"enum\":[\"bookmark\",\"folder\",\"separator\"],\"id\":\"BookmarkTreeNodeType\",\"type\":\"string\"},{\"description\":\"A node (either a bookmark or a folder) in the bookmark tree.  Child nodes are ordered within their parent folder.\",\"id\":\"BookmarkTreeNode\",\"properties\":{\"children\":{\"description\":\"An ordered list of children of this node.\",\"items\":{\"$ref\":\"BookmarkTreeNode\"},\"optional\":true,\"type\":\"array\"},\"dateAdded\":{\"description\":\"When this node was created, in milliseconds since the epoch (<code>new Date(dateAdded)</code>).\",\"optional\":true,\"type\":\"number\"},\"dateGroupModified\":{\"description\":\"When the contents of this folder last changed, in milliseconds since the epoch.\",\"optional\":true,\"type\":\"number\"},\"id\":{\"description\":\"The unique identifier for the node. IDs are unique within the current profile, and they remain valid even after the browser is restarted.\",\"type\":\"string\"},\"index\":{\"description\":\"The 0-based position of this node within its parent folder.\",\"optional\":true,\"type\":\"integer\"},\"parentId\":{\"description\":\"The <code>id</code> of the parent folder.  Omitted for the root node.\",\"optional\":true,\"type\":\"string\"},\"title\":{\"description\":\"The text displayed for the node.\",\"type\":\"string\"},\"type\":{\"$ref\":\"BookmarkTreeNodeType\",\"description\":\"Indicates the type of the BookmarkTreeNode, which can be one of bookmark, folder or separator.\",\"optional\":true},\"unmodifiable\":{\"$ref\":\"BookmarkTreeNodeUnmodifiable\",\"description\":\"Indicates the reason why this node is unmodifiable. The <var>managed</var> value indicates that this node was configured by the system administrator or by the custodian of a supervised user. Omitted if the node can be modified by the user and the extension (default).\",\"optional\":true},\"url\":{\"description\":\"The URL navigated to when a user clicks the bookmark. Omitted for folders.\",\"optional\":true,\"type\":\"string\"}},\"type\":\"object\"},{\"description\":\"Object passed to the create() function.\",\"id\":\"CreateDetails\",\"properties\":{\"index\":{\"minimum\":0,\"optional\":true,\"type\":\"integer\"},\"parentId\":{\"description\":\"Defaults to the Other Bookmarks folder.\",\"optional\":true,\"type\":\"string\"},\"title\":{\"optional\":true,\"type\":\"string\"},\"type\":{\"$ref\":\"BookmarkTreeNodeType\",\"description\":\"Indicates the type of BookmarkTreeNode to create, which can be one of bookmark, folder or separator.\",\"optional\":true},\"url\":{\"optional\":true,\"type\":\"string\"}},\"type\":\"object\"}]},{\"description\":\"Use browser actions to put icons in the main browser toolbar, to the right of the address bar. In addition to its icon, a browser action can also have a tooltip, a badge, and a popup.\",\"events\":[{\"description\":\"Fired when a browser action icon is clicked.  This event will not fire if the browser action has a popup.\",\"name\":\"onClicked\",\"parameters\":[{\"$ref\":\"tabs.Tab\",\"name\":\"tab\"}],\"type\":\"function\"}],\"functions\":[{\"async\":\"callback\",\"description\":\"Sets the title of the browser action. This shows up in the tooltip.\",\"name\":\"setTitle\",\"parameters\":[{\"name\":\"details\",\"properties\":{\"tabId\":{\"description\":\"Limits the change to when a particular tab is selected. Automatically resets when the tab is closed.\",\"optional\":true,\"type\":\"integer\"},\"title\":{\"description\":\"The string the browser action should display when moused over.\",\"type\":\"string\"}},\"type\":\"object\"},{\"name\":\"callback\",\"optional\":true,\"parameters\":[],\"type\":\"function\"}],\"type\":\"function\"},{\"async\":\"callback\",\"description\":\"Gets the title of the browser action.\",\"name\":\"getTitle\",\"parameters\":[{\"name\":\"details\",\"properties\":{\"tabId\":{\"description\":\"Specify the tab to get the title from. If no tab is specified, the non-tab-specific title is returned.\",\"optional\":true,\"type\":\"integer\"}},\"type\":\"object\"},{\"name\":\"callback\",\"parameters\":[{\"name\":\"result\",\"type\":\"string\"}],\"type\":\"function\"}],\"type\":\"function\"},{\"async\":\"callback\",\"description\":\"Sets the icon for the browser action. The icon can be specified either as the path to an image file or as the pixel data from a canvas element, or as dictionary of either one of those. Either the <b>path</b> or the <b>imageData</b> property must be specified.\",\"name\":\"setIcon\",\"parameters\":[{\"name\":\"details\",\"properties\":{\"imageData\":{\"choices\":[{\"$ref\":\"ImageDataType\"},{\"patternProperties\":{\"^[1-9]\\\\d*$\":{\"$ref\":\"ImageDataType\"}},\"type\":\"object\"}],\"description\":\"Either an ImageData object or a dictionary {size -> ImageData} representing icon to be set. If the icon is specified as a dictionary, the actual image to be used is chosen depending on screen's pixel density. If the number of image pixels that fit into one screen space unit equals <code>scale</code>, then image with size <code>scale</code> * 19 will be selected. Initially only scales 1 and 2 will be supported. At least one image must be specified. Note that 'details.imageData = foo' is equivalent to 'details.imageData = {'19': foo}'\",\"optional\":true},\"path\":{\"choices\":[{\"type\":\"string\"},{\"patternProperties\":{\"^[1-9]\\\\d*$\":{\"type\":\"string\"}},\"type\":\"object\"}],\"description\":\"Either a relative image path or a dictionary {size -> relative image path} pointing to icon to be set. If the icon is specified as a dictionary, the actual image to be used is chosen depending on screen's pixel density. If the number of image pixels that fit into one screen space unit equals <code>scale</code>, then image with size <code>scale</code> * 19 will be selected. Initially only scales 1 and 2 will be supported. At least one image must be specified. Note that 'details.path = foo' is equivalent to 'details.imageData = {'19': foo}'\",\"optional\":true},\"tabId\":{\"description\":\"Limits the change to when a particular tab is selected. Automatically resets when the tab is closed.\",\"optional\":true,\"type\":\"integer\"}},\"type\":\"object\"},{\"name\":\"callback\",\"optional\":true,\"parameters\":[],\"type\":\"function\"}],\"type\":\"function\"},{\"async\":\"callback\",\"description\":\"Sets the html document to be opened as a popup when the user clicks on the browser action's icon.\",\"name\":\"setPopup\",\"parameters\":[{\"name\":\"details\",\"properties\":{\"popup\":{\"description\":\"The html file to show in a popup.  If set to the empty string (''), no popup is shown.\",\"type\":\"string\"},\"tabId\":{\"description\":\"Limits the change to when a particular tab is selected. Automatically resets when the tab is closed.\",\"minimum\":0,\"optional\":true,\"type\":\"integer\"}},\"type\":\"object\"},{\"name\":\"callback\",\"optional\":true,\"parameters\":[],\"type\":\"function\"}],\"type\":\"function\"},{\"async\":\"callback\",\"description\":\"Gets the html document set as the popup for this browser action.\",\"name\":\"getPopup\",\"parameters\":[{\"name\":\"details\",\"properties\":{\"tabId\":{\"description\":\"Specify the tab to get the popup from. If no tab is specified, the non-tab-specific popup is returned.\",\"optional\":true,\"type\":\"integer\"}},\"type\":\"object\"},{\"name\":\"callback\",\"parameters\":[{\"name\":\"result\",\"type\":\"string\"}],\"type\":\"function\"}],\"type\":\"function\"},{\"async\":\"callback\",\"description\":\"Sets the badge text for the browser action. The badge is displayed on top of the icon.\",\"name\":\"setBadgeText\",\"parameters\":[{\"name\":\"details\",\"properties\":{\"tabId\":{\"description\":\"Limits the change to when a particular tab is selected. Automatically resets when the tab is closed.\",\"optional\":true,\"type\":\"integer\"},\"text\":{\"description\":\"Any number of characters can be passed, but only about four can fit in the space.\",\"type\":\"string\"}},\"type\":\"object\"},{\"name\":\"callback\",\"optional\":true,\"parameters\":[],\"type\":\"function\"}],\"type\":\"function\"},{\"async\":\"callback\",\"description\":\"Gets the badge text of the browser action. If no tab is specified, the non-tab-specific badge text is returned.\",\"name\":\"getBadgeText\",\"parameters\":[{\"name\":\"details\",\"properties\":{\"tabId\":{\"description\":\"Specify the tab to get the badge text from. If no tab is specified, the non-tab-specific badge text is returned.\",\"optional\":true,\"type\":\"integer\"}},\"type\":\"object\"},{\"name\":\"callback\",\"parameters\":[{\"name\":\"result\",\"type\":\"string\"}],\"type\":\"function\"}],\"type\":\"function\"},{\"async\":\"callback\",\"description\":\"Sets the background color for the badge.\",\"name\":\"setBadgeBackgroundColor\",\"parameters\":[{\"name\":\"details\",\"properties\":{\"color\":{\"choices\":[{\"type\":\"string\"},{\"$ref\":\"ColorArray\"}],\"description\":\"An array of four integers in the range [0,255] that make up the RGBA color of the badge. For example, opaque red is <code>[255, 0, 0, 255]</code>. Can also be a string with a CSS value, with opaque red being <code>#FF0000</code> or <code>#F00</code>.\"},\"tabId\":{\"description\":\"Limits the change to when a particular tab is selected. Automatically resets when the tab is closed.\",\"optional\":true,\"type\":\"integer\"}},\"type\":\"object\"},{\"name\":\"callback\",\"optional\":true,\"parameters\":[],\"type\":\"function\"}],\"type\":\"function\"},{\"async\":\"callback\",\"description\":\"Gets the background color of the browser action.\",\"name\":\"getBadgeBackgroundColor\",\"parameters\":[{\"name\":\"details\",\"properties\":{\"tabId\":{\"description\":\"Specify the tab to get the badge background color from. If no tab is specified, the non-tab-specific badge background color is returned.\",\"optional\":true,\"type\":\"integer\"}},\"type\":\"object\"},{\"name\":\"callback\",\"parameters\":[{\"$ref\":\"ColorArray\",\"name\":\"result\"}],\"type\":\"function\"}],\"type\":\"function\"},{\"async\":\"callback\",\"description\":\"Enables the browser action for a tab. By default, browser actions are enabled.\",\"name\":\"enable\",\"parameters\":[{\"description\":\"The id of the tab for which you want to modify the browser action.\",\"minimum\":0,\"name\":\"tabId\",\"optional\":true,\"type\":\"integer\"},{\"name\":\"callback\",\"optional\":true,\"parameters\":[],\"type\":\"function\"}],\"type\":\"function\"},{\"async\":\"callback\",\"description\":\"Disables the browser action for a tab.\",\"name\":\"disable\",\"parameters\":[{\"description\":\"The id of the tab for which you want to modify the browser action.\",\"minimum\":0,\"name\":\"tabId\",\"optional\":true,\"type\":\"integer\"},{\"name\":\"callback\",\"optional\":true,\"parameters\":[],\"type\":\"function\"}],\"type\":\"function\"},{\"async\":true,\"description\":\"Opens the extension popup window in the active window.\",\"name\":\"openPopup\",\"parameters\":[],\"requireUserInput\":true,\"type\":\"function\"}],\"namespace\":\"browserAction\",\"permissions\":[\"manifest:browser_action\"],\"types\":[{\"id\":\"ColorArray\",\"items\":{\"maximum\":255,\"minimum\":0,\"type\":\"integer\"},\"maxItems\":4,\"minItems\":4,\"type\":\"array\"},{\"additionalProperties\":{\"type\":\"any\"},\"description\":\"Pixel data for an image. Must be an ImageData object (for example, from a <code>canvas</code> element).\",\"id\":\"ImageDataType\",\"isInstanceOf\":\"ImageData\",\"postprocess\":\"convertImageDataToURL\",\"type\":\"object\"}]},{\"description\":\"Use the <code>browser.browserSettings</code> API to control global settings of the browser.\",\"namespace\":\"browserSettings\",\"permissions\":[\"browserSettings\"],\"properties\":{\"allowPopupsForUserEvents\":{\"$ref\":\"types.Setting\",\"description\":\"Allows or disallows pop-up windows from opening in response to user events.\"},\"cacheEnabled\":{\"$ref\":\"types.Setting\",\"description\":\"Enables or disables the browser cache.\"},\"contextMenuShowEvent\":{\"$ref\":\"types.Setting\",\"description\":\"Controls after which mouse event context menus popup. This setting's value is of type ContextMenuMouseEvent, which has possible values of <code>mouseup</code> and <code>mousedown</code>.\"},\"homepageOverride\":{\"$ref\":\"types.Setting\",\"description\":\"Returns the value of the overridden home page. Read-only.\"},\"imageAnimationBehavior\":{\"$ref\":\"types.Setting\",\"description\":\"Controls the behaviour of image animation in the browser. This setting's value is of type ImageAnimationBehavior, defaulting to <code>normal</code>.\"},\"newTabPageOverride\":{\"$ref\":\"types.Setting\",\"description\":\"Returns the value of the overridden new tab page. Read-only.\"},\"webNotificationsDisabled\":{\"$ref\":\"types.Setting\",\"description\":\"Disables webAPI notifications.\"}},\"types\":[{\"description\":\"How images should be animated in the browser.\",\"enum\":[\"normal\",\"none\",\"once\"],\"id\":\"ImageAnimationBehavior\",\"type\":\"string\"},{\"description\":\"After which mouse event context menus should popup.\",\"enum\":[\"mouseup\",\"mousedown\"],\"id\":\"ContextMenuMouseEvent\",\"type\":\"string\"}]},{\"description\":\"Use the <code>chrome.browsingData</code> API to remove browsing data from a user's local profile.\",\"functions\":[{\"async\":\"callback\",\"description\":\"Reports which types of data are currently selected in the 'Clear browsing data' settings UI.  Note: some of the data types included in this API are not available in the settings UI, and some UI settings control more than one data type listed here.\",\"name\":\"settings\",\"parameters\":[{\"name\":\"callback\",\"parameters\":[{\"name\":\"result\",\"properties\":{\"dataRemovalPermitted\":{\"$ref\":\"DataTypeSet\",\"description\":\"All of the types will be present in the result, with values of <code>true</code> if they are permitted to be removed (e.g., by enterprise policy) and <code>false</code> if not.\"},\"dataToRemove\":{\"$ref\":\"DataTypeSet\",\"description\":\"All of the types will be present in the result, with values of <code>true</code> if they are both selected to be removed and permitted to be removed, otherwise <code>false</code>.\"},\"options\":{\"$ref\":\"RemovalOptions\"}},\"type\":\"object\"}],\"type\":\"function\"}],\"type\":\"function\"},{\"async\":\"callback\",\"description\":\"Clears various types of browsing data stored in a user's profile.\",\"name\":\"remove\",\"parameters\":[{\"$ref\":\"RemovalOptions\",\"name\":\"options\"},{\"$ref\":\"DataTypeSet\",\"description\":\"The set of data types to remove.\",\"name\":\"dataToRemove\"},{\"description\":\"Called when deletion has completed.\",\"name\":\"callback\",\"optional\":true,\"parameters\":[],\"type\":\"function\"}],\"type\":\"function\"},{\"async\":\"callback\",\"description\":\"Clears websites' appcache data.\",\"name\":\"removeAppcache\",\"parameters\":[{\"$ref\":\"RemovalOptions\",\"name\":\"options\"},{\"description\":\"Called when websites' appcache data has been cleared.\",\"name\":\"callback\",\"optional\":true,\"parameters\":[],\"type\":\"function\"}],\"type\":\"function\",\"unsupported\":true},{\"async\":\"callback\",\"description\":\"Clears the browser's cache.\",\"name\":\"removeCache\",\"parameters\":[{\"$ref\":\"RemovalOptions\",\"name\":\"options\"},{\"description\":\"Called when the browser's cache has been cleared.\",\"name\":\"callback\",\"optional\":true,\"parameters\":[],\"type\":\"function\"}],\"type\":\"function\"},{\"async\":\"callback\",\"description\":\"Clears the browser's cookies and server-bound certificates modified within a particular timeframe.\",\"name\":\"removeCookies\",\"parameters\":[{\"$ref\":\"RemovalOptions\",\"name\":\"options\"},{\"description\":\"Called when the browser's cookies and server-bound certificates have been cleared.\",\"name\":\"callback\",\"optional\":true,\"parameters\":[],\"type\":\"function\"}],\"type\":\"function\"},{\"async\":\"callback\",\"description\":\"Clears the browser's list of downloaded files (<em>not</em> the downloaded files themselves).\",\"name\":\"removeDownloads\",\"parameters\":[{\"$ref\":\"RemovalOptions\",\"name\":\"options\"},{\"description\":\"Called when the browser's list of downloaded files has been cleared.\",\"name\":\"callback\",\"optional\":true,\"parameters\":[],\"type\":\"function\"}],\"type\":\"function\"},{\"async\":\"callback\",\"description\":\"Clears websites' file system data.\",\"name\":\"removeFileSystems\",\"parameters\":[{\"$ref\":\"RemovalOptions\",\"name\":\"options\"},{\"description\":\"Called when websites' file systems have been cleared.\",\"name\":\"callback\",\"optional\":true,\"parameters\":[],\"type\":\"function\"}],\"type\":\"function\",\"unsupported\":true},{\"async\":\"callback\",\"description\":\"Clears the browser's stored form data (autofill).\",\"name\":\"removeFormData\",\"parameters\":[{\"$ref\":\"RemovalOptions\",\"name\":\"options\"},{\"description\":\"Called when the browser's form data has been cleared.\",\"name\":\"callback\",\"optional\":true,\"parameters\":[],\"type\":\"function\"}],\"type\":\"function\"},{\"async\":\"callback\",\"description\":\"Clears the browser's history.\",\"name\":\"removeHistory\",\"parameters\":[{\"$ref\":\"RemovalOptions\",\"name\":\"options\"},{\"description\":\"Called when the browser's history has cleared.\",\"name\":\"callback\",\"optional\":true,\"parameters\":[],\"type\":\"function\"}],\"type\":\"function\"},{\"async\":\"callback\",\"description\":\"Clears websites' IndexedDB data.\",\"name\":\"removeIndexedDB\",\"parameters\":[{\"$ref\":\"RemovalOptions\",\"name\":\"options\"},{\"description\":\"Called when websites' IndexedDB data has been cleared.\",\"name\":\"callback\",\"optional\":true,\"parameters\":[],\"type\":\"function\"}],\"type\":\"function\",\"unsupported\":true},{\"async\":\"callback\",\"description\":\"Clears websites' local storage data.\",\"name\":\"removeLocalStorage\",\"parameters\":[{\"$ref\":\"RemovalOptions\",\"name\":\"options\"},{\"description\":\"Called when websites' local storage has been cleared.\",\"name\":\"callback\",\"optional\":true,\"parameters\":[],\"type\":\"function\"}],\"type\":\"function\"},{\"async\":\"callback\",\"description\":\"Clears plugins' data.\",\"name\":\"removePluginData\",\"parameters\":[{\"$ref\":\"RemovalOptions\",\"name\":\"options\"},{\"description\":\"Called when plugins' data has been cleared.\",\"name\":\"callback\",\"optional\":true,\"parameters\":[],\"type\":\"function\"}],\"type\":\"function\"},{\"async\":\"callback\",\"description\":\"Clears the browser's stored passwords.\",\"name\":\"removePasswords\",\"parameters\":[{\"$ref\":\"RemovalOptions\",\"name\":\"options\"},{\"description\":\"Called when the browser's passwords have been cleared.\",\"name\":\"callback\",\"optional\":true,\"parameters\":[],\"type\":\"function\"}],\"type\":\"function\"},{\"async\":\"callback\",\"description\":\"Clears websites' WebSQL data.\",\"name\":\"removeWebSQL\",\"parameters\":[{\"$ref\":\"RemovalOptions\",\"name\":\"options\"},{\"description\":\"Called when websites' WebSQL databases have been cleared.\",\"name\":\"callback\",\"optional\":true,\"parameters\":[],\"type\":\"function\"}],\"type\":\"function\",\"unsupported\":true}],\"namespace\":\"browsingData\",\"permissions\":[\"browsingData\"],\"types\":[{\"description\":\"Options that determine exactly what data will be removed.\",\"id\":\"RemovalOptions\",\"properties\":{\"hostnames\":{\"description\":\"Only remove data associated with these hostnames (only applies to cookies and localStorage).\",\"items\":{\"format\":\"hostname\",\"type\":\"string\"},\"optional\":true,\"type\":\"array\"},\"originTypes\":{\"description\":\"An object whose properties specify which origin types ought to be cleared. If this object isn't specified, it defaults to clearing only \\\"unprotected\\\" origins. Please ensure that you <em>really</em> want to remove application data before adding 'protectedWeb' or 'extensions'.\",\"optional\":true,\"properties\":{\"extension\":{\"description\":\"Extensions and packaged applications a user has installed (be _really_ careful!).\",\"optional\":true,\"type\":\"boolean\"},\"protectedWeb\":{\"description\":\"Websites that have been installed as hosted applications (be careful!).\",\"optional\":true,\"type\":\"boolean\"},\"unprotectedWeb\":{\"description\":\"Normal websites.\",\"optional\":true,\"type\":\"boolean\"}},\"type\":\"object\"},\"since\":{\"$ref\":\"extensionTypes.Date\",\"description\":\"Remove data accumulated on or after this date, represented in milliseconds since the epoch (accessible via the <code>getTime</code> method of the JavaScript <code>Date</code> object). If absent, defaults to 0 (which would remove all browsing data).\",\"optional\":true}},\"type\":\"object\"},{\"description\":\"A set of data types. Missing data types are interpreted as <code>false</code>.\",\"id\":\"DataTypeSet\",\"properties\":{\"cache\":{\"description\":\"The browser's cache. Note: when removing data, this clears the <em>entire</em> cache: it is not limited to the range you specify.\",\"optional\":true,\"type\":\"boolean\"},\"cookies\":{\"description\":\"The browser's cookies.\",\"optional\":true,\"type\":\"boolean\"},\"downloads\":{\"description\":\"The browser's download list.\",\"optional\":true,\"type\":\"boolean\"},\"formData\":{\"description\":\"The browser's stored form data.\",\"optional\":true,\"type\":\"boolean\"},\"history\":{\"description\":\"The browser's history.\",\"optional\":true,\"type\":\"boolean\"},\"indexedDB\":{\"description\":\"Websites' IndexedDB data.\",\"optional\":true,\"type\":\"boolean\"},\"localStorage\":{\"description\":\"Websites' local storage data.\",\"optional\":true,\"type\":\"boolean\"},\"passwords\":{\"description\":\"Stored passwords.\",\"optional\":true,\"type\":\"boolean\"},\"pluginData\":{\"description\":\"Plugins' data.\",\"optional\":true,\"type\":\"boolean\"},\"serverBoundCertificates\":{\"description\":\"Server-bound certificates.\",\"optional\":true,\"type\":\"boolean\"},\"serviceWorkers\":{\"description\":\"Service Workers.\",\"optional\":true,\"type\":\"boolean\"}},\"type\":\"object\"}]},{\"description\":\"Offers the ability to write to the clipboard. Reading is not supported because the clipboard can already be read through the standard web platform APIs.\",\"functions\":[{\"async\":true,\"description\":\"Copy an image to the clipboard. The image is re-encoded before it is written to the clipboard. If the image is invalid, the clipboard is not modified.\",\"name\":\"setImageData\",\"parameters\":[{\"additionalProperties\":true,\"description\":\"The image data to be copied.\",\"isInstanceOf\":\"ArrayBuffer\",\"name\":\"imageData\",\"type\":\"object\"},{\"description\":\"The type of imageData.\",\"enum\":[\"jpeg\",\"png\"],\"name\":\"imageType\",\"type\":\"string\"}],\"type\":\"function\"}],\"namespace\":\"clipboard\",\"permissions\":[\"clipboardWrite\"]},{\"description\":\"Use the commands API to add keyboard shortcuts that trigger actions in your extension, for example, an action to open the browser action or send a command to the xtension.\",\"events\":[{\"description\":\"Fired when a registered command is activated using a keyboard shortcut.\",\"name\":\"onCommand\",\"parameters\":[{\"name\":\"command\",\"type\":\"string\"}],\"type\":\"function\"}],\"functions\":[{\"async\":\"callback\",\"description\":\"Returns all the registered extension commands for this extension and their shortcut (if active).\",\"name\":\"getAll\",\"parameters\":[{\"description\":\"Called to return the registered commands.\",\"name\":\"callback\",\"optional\":true,\"parameters\":[{\"items\":{\"$ref\":\"Command\"},\"name\":\"commands\",\"type\":\"array\"}],\"type\":\"function\"}],\"type\":\"function\"}],\"namespace\":\"commands\",\"permissions\":[\"manifest:commands\"],\"types\":[{\"id\":\"Command\",\"properties\":{\"description\":{\"description\":\"The Extension Command description\",\"optional\":true,\"type\":\"string\"},\"name\":{\"description\":\"The name of the Extension Command\",\"optional\":true,\"type\":\"string\"},\"shortcut\":{\"description\":\"The shortcut active for this command, or blank if not active.\",\"optional\":true,\"type\":\"string\"}},\"type\":\"object\"}]},{\"description\":\"Use the <code>browser.contextualIdentities</code> API to query and modify contextual identity, also called as containers.\",\"events\":[{\"description\":\"Fired when a container is updated.\",\"name\":\"onUpdated\",\"parameters\":[{\"name\":\"changeInfo\",\"properties\":{\"contextualIdentity\":{\"$ref\":\"ContextualIdentity\",\"description\":\"Contextual identity that has been updated\"}},\"type\":\"object\"}],\"type\":\"function\"},{\"description\":\"Fired when a new container is created.\",\"name\":\"onCreated\",\"parameters\":[{\"name\":\"changeInfo\",\"properties\":{\"contextualIdentity\":{\"$ref\":\"ContextualIdentity\",\"description\":\"Contextual identity that has been created\"}},\"type\":\"object\"}],\"type\":\"function\"},{\"description\":\"Fired when a container is removed.\",\"name\":\"onRemoved\",\"parameters\":[{\"name\":\"changeInfo\",\"properties\":{\"contextualIdentity\":{\"$ref\":\"ContextualIdentity\",\"description\":\"Contextual identity that has been removed\"}},\"type\":\"object\"}],\"type\":\"function\"}],\"functions\":[{\"async\":true,\"description\":\"Retrieves information about a single contextual identity.\",\"name\":\"get\",\"parameters\":[{\"description\":\"The ID of the contextual identity cookie store. \",\"name\":\"cookieStoreId\",\"type\":\"string\"}],\"type\":\"function\"},{\"async\":true,\"description\":\"Retrieves all contextual identities\",\"name\":\"query\",\"parameters\":[{\"description\":\"Information to filter the contextual identities being retrieved.\",\"name\":\"details\",\"properties\":{\"name\":{\"description\":\"Filters the contextual identity by name.\",\"optional\":true,\"type\":\"string\"}},\"type\":\"object\"}],\"type\":\"function\"},{\"async\":true,\"description\":\"Creates a contextual identity with the given data.\",\"name\":\"create\",\"parameters\":[{\"description\":\"Details about the contextual identity being created.\",\"name\":\"details\",\"properties\":{\"color\":{\"description\":\"The color of the contextual identity.\",\"optional\":false,\"type\":\"string\"},\"icon\":{\"description\":\"The icon of the contextual identity.\",\"optional\":false,\"type\":\"string\"},\"name\":{\"description\":\"The name of the contextual identity.\",\"optional\":false,\"type\":\"string\"}},\"type\":\"object\"}],\"type\":\"function\"},{\"async\":true,\"description\":\"Updates a contextual identity with the given data.\",\"name\":\"update\",\"parameters\":[{\"description\":\"The ID of the contextual identity cookie store. \",\"name\":\"cookieStoreId\",\"type\":\"string\"},{\"description\":\"Details about the contextual identity being created.\",\"name\":\"details\",\"properties\":{\"color\":{\"description\":\"The color of the contextual identity.\",\"optional\":true,\"type\":\"string\"},\"icon\":{\"description\":\"The icon of the contextual identity.\",\"optional\":true,\"type\":\"string\"},\"name\":{\"description\":\"The name of the contextual identity.\",\"optional\":true,\"type\":\"string\"}},\"type\":\"object\"}],\"type\":\"function\"},{\"async\":true,\"description\":\"Deletes a contetual identity by its cookie Store ID.\",\"name\":\"remove\",\"parameters\":[{\"description\":\"The ID of the contextual identity cookie store. \",\"name\":\"cookieStoreId\",\"type\":\"string\"}],\"type\":\"function\"}],\"namespace\":\"contextualIdentities\",\"permissions\":[\"contextualIdentities\"],\"types\":[{\"description\":\"Represents information about a contextual identity.\",\"id\":\"ContextualIdentity\",\"properties\":{\"color\":{\"description\":\"The color name of the contextual identity.\",\"type\":\"string\"},\"colorCode\":{\"description\":\"The color hash of the contextual identity.\",\"type\":\"string\"},\"cookieStoreId\":{\"description\":\"The cookie store ID of the contextual identity.\",\"type\":\"string\"},\"icon\":{\"description\":\"The icon name of the contextual identity.\",\"type\":\"string\"},\"iconUrl\":{\"description\":\"The icon url of the contextual identity.\",\"type\":\"string\"},\"name\":{\"description\":\"The name of the contextual identity.\",\"type\":\"string\"}},\"type\":\"object\"}]},{\"description\":\"Use the <code>browser.cookies</code> API to query and modify cookies, and to be notified when they change.\",\"events\":[{\"description\":\"Fired when a cookie is set or removed. As a special case, note that updating a cookie's properties is implemented as a two step process: the cookie to be updated is first removed entirely, generating a notification with \\\"cause\\\" of \\\"overwrite\\\" .  Afterwards, a new cookie is written with the updated values, generating a second notification with \\\"cause\\\" \\\"explicit\\\".\",\"name\":\"onChanged\",\"parameters\":[{\"name\":\"changeInfo\",\"properties\":{\"cause\":{\"$ref\":\"OnChangedCause\",\"description\":\"The underlying reason behind the cookie's change.\"},\"cookie\":{\"$ref\":\"Cookie\",\"description\":\"Information about the cookie that was set or removed.\"},\"removed\":{\"description\":\"True if a cookie was removed.\",\"type\":\"boolean\"}},\"type\":\"object\"}],\"type\":\"function\"}],\"functions\":[{\"async\":\"callback\",\"description\":\"Retrieves information about a single cookie. If more than one cookie of the same name exists for the given URL, the one with the longest path will be returned. For cookies with the same path length, the cookie with the earliest creation time will be returned.\",\"name\":\"get\",\"parameters\":[{\"description\":\"Details to identify the cookie being retrieved.\",\"name\":\"details\",\"properties\":{\"name\":{\"description\":\"The name of the cookie to retrieve.\",\"type\":\"string\"},\"storeId\":{\"description\":\"The ID of the cookie store in which to look for the cookie. By default, the current execution context's cookie store will be used.\",\"optional\":true,\"type\":\"string\"},\"url\":{\"description\":\"The URL with which the cookie to retrieve is associated. This argument may be a full URL, in which case any data following the URL path (e.g. the query string) is simply ignored. If host permissions for this URL are not specified in the manifest file, the API call will fail.\",\"type\":\"string\"}},\"type\":\"object\"},{\"name\":\"callback\",\"parameters\":[{\"$ref\":\"Cookie\",\"description\":\"Contains details about the cookie. This parameter is null if no such cookie was found.\",\"name\":\"cookie\",\"optional\":true}],\"type\":\"function\"}],\"type\":\"function\"},{\"async\":\"callback\",\"description\":\"Retrieves all cookies from a single cookie store that match the given information.  The cookies returned will be sorted, with those with the longest path first.  If multiple cookies have the same path length, those with the earliest creation time will be first.\",\"name\":\"getAll\",\"parameters\":[{\"description\":\"Information to filter the cookies being retrieved.\",\"name\":\"details\",\"properties\":{\"domain\":{\"description\":\"Restricts the retrieved cookies to those whose domains match or are subdomains of this one.\",\"optional\":true,\"type\":\"string\"},\"name\":{\"description\":\"Filters the cookies by name.\",\"optional\":true,\"type\":\"string\"},\"path\":{\"description\":\"Restricts the retrieved cookies to those whose path exactly matches this string.\",\"optional\":true,\"type\":\"string\"},\"secure\":{\"description\":\"Filters the cookies by their Secure property.\",\"optional\":true,\"type\":\"boolean\"},\"session\":{\"description\":\"Filters out session vs. persistent cookies.\",\"optional\":true,\"type\":\"boolean\"},\"storeId\":{\"description\":\"The cookie store to retrieve cookies from. If omitted, the current execution context's cookie store will be used.\",\"optional\":true,\"type\":\"string\"},\"url\":{\"description\":\"Restricts the retrieved cookies to those that would match the given URL.\",\"optional\":true,\"type\":\"string\"}},\"type\":\"object\"},{\"name\":\"callback\",\"parameters\":[{\"description\":\"All the existing, unexpired cookies that match the given cookie info.\",\"items\":{\"$ref\":\"Cookie\"},\"name\":\"cookies\",\"type\":\"array\"}],\"type\":\"function\"}],\"type\":\"function\"},{\"async\":\"callback\",\"description\":\"Sets a cookie with the given cookie data; may overwrite equivalent cookies if they exist.\",\"name\":\"set\",\"parameters\":[{\"description\":\"Details about the cookie being set.\",\"name\":\"details\",\"properties\":{\"domain\":{\"description\":\"The domain of the cookie. If omitted, the cookie becomes a host-only cookie.\",\"optional\":true,\"type\":\"string\"},\"expirationDate\":{\"description\":\"The expiration date of the cookie as the number of seconds since the UNIX epoch. If omitted, the cookie becomes a session cookie.\",\"optional\":true,\"type\":\"number\"},\"httpOnly\":{\"description\":\"Whether the cookie should be marked as HttpOnly. Defaults to false.\",\"optional\":true,\"type\":\"boolean\"},\"name\":{\"description\":\"The name of the cookie. Empty by default if omitted.\",\"optional\":true,\"type\":\"string\"},\"path\":{\"description\":\"The path of the cookie. Defaults to the path portion of the url parameter.\",\"optional\":true,\"type\":\"string\"},\"secure\":{\"description\":\"Whether the cookie should be marked as Secure. Defaults to false.\",\"optional\":true,\"type\":\"boolean\"},\"storeId\":{\"description\":\"The ID of the cookie store in which to set the cookie. By default, the cookie is set in the current execution context's cookie store.\",\"optional\":true,\"type\":\"string\"},\"url\":{\"description\":\"The request-URI to associate with the setting of the cookie. This value can affect the default domain and path values of the created cookie. If host permissions for this URL are not specified in the manifest file, the API call will fail.\",\"type\":\"string\"},\"value\":{\"description\":\"The value of the cookie. Empty by default if omitted.\",\"optional\":true,\"type\":\"string\"}},\"type\":\"object\"},{\"name\":\"callback\",\"optional\":true,\"parameters\":[{\"$ref\":\"Cookie\",\"description\":\"Contains details about the cookie that's been set.  If setting failed for any reason, this will be \\\"null\\\", and $(ref:runtime.lastError) will be set.\",\"name\":\"cookie\",\"optional\":true}],\"type\":\"function\"}],\"type\":\"function\"},{\"async\":\"callback\",\"description\":\"Deletes a cookie by name.\",\"name\":\"remove\",\"parameters\":[{\"description\":\"Information to identify the cookie to remove.\",\"name\":\"details\",\"properties\":{\"name\":{\"description\":\"The name of the cookie to remove.\",\"type\":\"string\"},\"storeId\":{\"description\":\"The ID of the cookie store to look in for the cookie. If unspecified, the cookie is looked for by default in the current execution context's cookie store.\",\"optional\":true,\"type\":\"string\"},\"url\":{\"description\":\"The URL associated with the cookie. If host permissions for this URL are not specified in the manifest file, the API call will fail.\",\"type\":\"string\"}},\"type\":\"object\"},{\"name\":\"callback\",\"optional\":true,\"parameters\":[{\"description\":\"Contains details about the cookie that's been removed.  If removal failed for any reason, this will be \\\"null\\\", and $(ref:runtime.lastError) will be set.\",\"name\":\"details\",\"optional\":true,\"properties\":{\"name\":{\"description\":\"The name of the cookie that's been removed.\",\"type\":\"string\"},\"storeId\":{\"description\":\"The ID of the cookie store from which the cookie was removed.\",\"type\":\"string\"},\"url\":{\"description\":\"The URL associated with the cookie that's been removed.\",\"type\":\"string\"}},\"type\":\"object\"}],\"type\":\"function\"}],\"type\":\"function\"},{\"async\":\"callback\",\"description\":\"Lists all existing cookie stores.\",\"name\":\"getAllCookieStores\",\"parameters\":[{\"name\":\"callback\",\"parameters\":[{\"description\":\"All the existing cookie stores.\",\"items\":{\"$ref\":\"CookieStore\"},\"name\":\"cookieStores\",\"type\":\"array\"}],\"type\":\"function\"}],\"type\":\"function\"}],\"namespace\":\"cookies\",\"permissions\":[\"cookies\"],\"types\":[{\"description\":\"Represents information about an HTTP cookie.\",\"id\":\"Cookie\",\"properties\":{\"domain\":{\"description\":\"The domain of the cookie (e.g. \\\"www.google.com\\\", \\\"example.com\\\").\",\"type\":\"string\"},\"expirationDate\":{\"description\":\"The expiration date of the cookie as the number of seconds since the UNIX epoch. Not provided for session cookies.\",\"optional\":true,\"type\":\"number\"},\"hostOnly\":{\"description\":\"True if the cookie is a host-only cookie (i.e. a request's host must exactly match the domain of the cookie).\",\"type\":\"boolean\"},\"httpOnly\":{\"description\":\"True if the cookie is marked as HttpOnly (i.e. the cookie is inaccessible to client-side scripts).\",\"type\":\"boolean\"},\"name\":{\"description\":\"The name of the cookie.\",\"type\":\"string\"},\"path\":{\"description\":\"The path of the cookie.\",\"type\":\"string\"},\"secure\":{\"description\":\"True if the cookie is marked as Secure (i.e. its scope is limited to secure channels, typically HTTPS).\",\"type\":\"boolean\"},\"session\":{\"description\":\"True if the cookie is a session cookie, as opposed to a persistent cookie with an expiration date.\",\"type\":\"boolean\"},\"storeId\":{\"description\":\"The ID of the cookie store containing this cookie, as provided in getAllCookieStores().\",\"type\":\"string\"},\"value\":{\"description\":\"The value of the cookie.\",\"type\":\"string\"}},\"type\":\"object\"},{\"description\":\"Represents a cookie store in the browser. An incognito mode window, for instance, uses a separate cookie store from a non-incognito window.\",\"id\":\"CookieStore\",\"properties\":{\"id\":{\"description\":\"The unique identifier for the cookie store.\",\"type\":\"string\"},\"incognito\":{\"description\":\"Indicates if this is an incognito cookie store\",\"type\":\"boolean\"},\"tabIds\":{\"description\":\"Identifiers of all the browser tabs that share this cookie store.\",\"items\":{\"type\":\"integer\"},\"type\":\"array\"}},\"type\":\"object\"},{\"description\":\"The underlying reason behind the cookie's change. If a cookie was inserted, or removed via an explicit call to $(ref:cookies.remove), \\\"cause\\\" will be \\\"explicit\\\". If a cookie was automatically removed due to expiry, \\\"cause\\\" will be \\\"expired\\\". If a cookie was removed due to being overwritten with an already-expired expiration date, \\\"cause\\\" will be set to \\\"expired_overwrite\\\".  If a cookie was automatically removed due to garbage collection, \\\"cause\\\" will be \\\"evicted\\\".  If a cookie was automatically removed due to a \\\"set\\\" call that overwrote it, \\\"cause\\\" will be \\\"overwrite\\\". Plan your response accordingly.\",\"enum\":[\"evicted\",\"expired\",\"explicit\",\"expired_overwrite\",\"overwrite\"],\"id\":\"OnChangedCause\",\"type\":\"string\"}]},{\"allowedContexts\":[\"devtools\",\"devtools_only\"],\"defaultContexts\":[\"devtools\",\"devtools_only\"],\"namespace\":\"devtools\",\"permissions\":[\"devtools\"]},{\"allowedContexts\":[\"devtools\",\"devtools_only\"],\"defaultContexts\":[\"devtools\",\"devtools_only\"],\"description\":\"Use the <code>chrome.devtools.inspectedWindow</code> API to interact with the inspected window: obtain the tab ID for the inspected page, evaluate the code in the context of the inspected window, reload the page, or obtain the list of resources within the page.\",\"events\":[{\"description\":\"Fired when a new resource is added to the inspected page.\",\"name\":\"onResourceAdded\",\"parameters\":[{\"$ref\":\"Resource\",\"name\":\"resource\"}],\"type\":\"function\",\"unsupported\":true},{\"description\":\"Fired when a new revision of the resource is committed (e.g. user saves an edited version of the resource in the Developer Tools).\",\"name\":\"onResourceContentCommitted\",\"parameters\":[{\"$ref\":\"Resource\",\"name\":\"resource\"},{\"description\":\"New content of the resource.\",\"name\":\"content\",\"type\":\"string\"}],\"type\":\"function\",\"unsupported\":true}],\"functions\":[{\"async\":\"callback\",\"description\":\"Evaluates a JavaScript expression in the context of the main frame of the inspected page. The expression must evaluate to a JSON-compliant object, otherwise an exception is thrown. The eval function can report either a DevTools-side error or a JavaScript exception that occurs during evaluation. In either case, the <code>result</code> parameter of the callback is <code>undefined</code>. In the case of a DevTools-side error, the <code>isException</code> parameter is non-null and has <code>isError</code> set to true and <code>code</code> set to an error code. In the case of a JavaScript error, <code>isException</code> is set to true and <code>value</code> is set to the string value of thrown object.\",\"name\":\"eval\",\"parameters\":[{\"description\":\"An expression to evaluate.\",\"name\":\"expression\",\"type\":\"string\"},{\"description\":\"The options parameter can contain one or more options.\",\"name\":\"options\",\"optional\":true,\"properties\":{\"contextSecurityOrigin\":{\"description\":\"Evaluate the expression in the context of a content script of an extension that matches the specified origin. If given, contextSecurityOrigin overrides the 'true' setting on userContentScriptContext.\",\"optional\":true,\"type\":\"string\",\"unsupported\":true},\"frameURL\":{\"description\":\"If specified, the expression is evaluated on the iframe whose URL matches the one specified. By default, the expression is evaluated in the top frame of the inspected page.\",\"optional\":true,\"type\":\"string\",\"unsupported\":true},\"useContentScriptContext\":{\"description\":\"Evaluate the expression in the context of the content script of the calling extension, provided that the content script is already injected into the inspected page. If not, the expression is not evaluated and the callback is invoked with the exception parameter set to an object that has the <code>isError</code> field set to true and the <code>code</code> field set to <code>E_NOTFOUND</code>.\",\"optional\":true,\"type\":\"boolean\",\"unsupported\":true}},\"type\":\"object\"},{\"description\":\"A function called when evaluation completes.\",\"name\":\"callback\",\"optional\":true,\"parameters\":[{\"description\":\"The result of evaluation.\",\"name\":\"result\",\"type\":\"any\"},{\"description\":\"An object providing details if an exception occurred while evaluating the expression.\",\"name\":\"exceptionInfo\",\"optional\":true,\"properties\":{\"code\":{\"description\":\"Set if the error occurred on the DevTools side before the expression is evaluated.\",\"type\":\"string\"},\"description\":{\"description\":\"Set if the error occurred on the DevTools side before the expression is evaluated.\",\"type\":\"string\"},\"details\":{\"description\":\"Set if the error occurred on the DevTools side before the expression is evaluated, contains the array of the values that may be substituted into the description string to provide more information about the cause of the error.\",\"items\":{\"type\":\"any\"},\"type\":\"array\"},\"isError\":{\"description\":\"Set if the error occurred on the DevTools side before the expression is evaluated.\",\"type\":\"boolean\"},\"isException\":{\"description\":\"Set if the evaluated code produces an unhandled exception.\",\"type\":\"boolean\"},\"value\":{\"description\":\"Set if the evaluated code produces an unhandled exception.\",\"type\":\"string\"}},\"type\":\"object\"}],\"type\":\"function\"}],\"type\":\"function\"},{\"description\":\"Reloads the inspected page.\",\"name\":\"reload\",\"parameters\":[{\"name\":\"reloadOptions\",\"optional\":true,\"properties\":{\"ignoreCache\":{\"description\":\"When true, the loader will bypass the cache for all inspected page resources loaded before the <code>load</code> event is fired. The effect is similar to pressing Ctrl+Shift+R in the inspected window or within the Developer Tools window.\",\"optional\":true,\"type\":\"boolean\"},\"injectedScript\":{\"description\":\"If specified, the script will be injected into every frame of the inspected page immediately upon load, before any of the frame's scripts. The script will not be injected after subsequent reloads&mdash;for example, if the user presses Ctrl+R.\",\"optional\":true,\"type\":\"string\"},\"preprocessorScript\":{\"deprecated\":\"Please avoid using this parameter, it will be removed soon.\",\"description\":\"If specified, this script evaluates into a function that accepts three string arguments: the source to preprocess, the URL of the source, and a function name if the source is an DOM event handler. The preprocessorerScript function should return a string to be compiled by Chrome in place of the input source. In the case that the source is a DOM event handler, the returned source must compile to a single JS function.\",\"optional\":true,\"type\":\"string\",\"unsupported\":true},\"userAgent\":{\"description\":\"If specified, the string will override the value of the <code>User-Agent</code> HTTP header that's sent while loading the resources of the inspected page. The string will also override the value of the <code>navigator.userAgent</code> property that's returned to any scripts that are running within the inspected page.\",\"optional\":true,\"type\":\"string\"}},\"type\":\"object\"}],\"type\":\"function\"},{\"async\":\"callback\",\"description\":\"Retrieves the list of resources from the inspected page.\",\"name\":\"getResources\",\"parameters\":[{\"description\":\"A function that receives the list of resources when the request completes.\",\"name\":\"callback\",\"parameters\":[{\"description\":\"The resources within the page.\",\"items\":{\"$ref\":\"Resource\"},\"name\":\"resources\",\"type\":\"array\"}],\"type\":\"function\"}],\"type\":\"function\",\"unsupported\":true}],\"namespace\":\"devtools.inspectedWindow\",\"nocompile\":true,\"properties\":{\"tabId\":{\"description\":\"The ID of the tab being inspected. This ID may be used with chrome.tabs.* API.\",\"type\":\"integer\"}},\"types\":[{\"description\":\"A resource within the inspected page, such as a document, a script, or an image.\",\"functions\":[{\"async\":\"callback\",\"description\":\"Gets the content of the resource.\",\"name\":\"getContent\",\"parameters\":[{\"description\":\"A function that receives resource content when the request completes.\",\"name\":\"callback\",\"parameters\":[{\"description\":\"Content of the resource (potentially encoded).\",\"name\":\"content\",\"type\":\"string\"},{\"description\":\"Empty if content is not encoded, encoding name otherwise. Currently, only base64 is supported.\",\"name\":\"encoding\",\"type\":\"string\"}],\"type\":\"function\"}],\"type\":\"function\",\"unsupported\":true},{\"async\":\"callback\",\"description\":\"Sets the content of the resource.\",\"name\":\"setContent\",\"parameters\":[{\"description\":\"New content of the resource. Only resources with the text type are currently supported.\",\"name\":\"content\",\"type\":\"string\"},{\"description\":\"True if the user has finished editing the resource, and the new content of the resource should be persisted; false if this is a minor change sent in progress of the user editing the resource.\",\"name\":\"commit\",\"type\":\"boolean\"},{\"description\":\"A function called upon request completion.\",\"name\":\"callback\",\"optional\":true,\"parameters\":[{\"additionalProperties\":{\"type\":\"any\"},\"description\":\"Set to undefined if the resource content was set successfully; describes error otherwise.\",\"name\":\"error\",\"optional\":true,\"type\":\"object\"}],\"type\":\"function\"}],\"type\":\"function\",\"unsupported\":true}],\"id\":\"Resource\",\"properties\":{\"url\":{\"description\":\"The URL of the resource.\",\"type\":\"string\"}},\"type\":\"object\"}]},{\"allowedContexts\":[\"devtools\",\"devtools_only\"],\"defaultContexts\":[\"devtools\",\"devtools_only\"],\"description\":\"Use the <code>chrome.devtools.network</code> API to retrieve the information about network requests displayed by the Developer Tools in the Network panel.\",\"events\":[{\"description\":\"Fired when a network request is finished and all request data are available.\",\"name\":\"onRequestFinished\",\"parameters\":[{\"$ref\":\"Request\",\"description\":\"Description of a network request in the form of a HAR entry. See HAR specification for details.\",\"name\":\"request\"}],\"type\":\"function\",\"unsupported\":true},{\"description\":\"Fired when the inspected window navigates to a new page.\",\"name\":\"onNavigated\",\"parameters\":[{\"description\":\"URL of the new page.\",\"name\":\"url\",\"type\":\"string\"}],\"type\":\"function\"}],\"functions\":[{\"async\":\"callback\",\"description\":\"Returns HAR log that contains all known network requests.\",\"name\":\"getHAR\",\"parameters\":[{\"description\":\"A function that receives the HAR log when the request completes.\",\"name\":\"callback\",\"parameters\":[{\"additionalProperties\":{\"type\":\"any\"},\"description\":\"A HAR log. See HAR specification for details.\",\"name\":\"harLog\",\"type\":\"object\"}],\"type\":\"function\"}],\"type\":\"function\",\"unsupported\":true}],\"namespace\":\"devtools.network\",\"types\":[{\"description\":\"Represents a network request for a document resource (script, image and so on). See HAR Specification for reference.\",\"functions\":[{\"async\":\"callback\",\"description\":\"Returns content of the response body.\",\"name\":\"getContent\",\"parameters\":[{\"description\":\"A function that receives the response body when the request completes.\",\"name\":\"callback\",\"parameters\":[{\"description\":\"Content of the response body (potentially encoded).\",\"name\":\"content\",\"type\":\"string\"},{\"description\":\"Empty if content is not encoded, encoding name otherwise. Currently, only base64 is supported.\",\"name\":\"encoding\",\"type\":\"string\"}],\"type\":\"function\"}],\"type\":\"function\"}],\"id\":\"Request\",\"type\":\"object\"}]},{\"allowedContexts\":[\"devtools\",\"devtools_only\"],\"defaultContexts\":[\"devtools\",\"devtools_only\"],\"description\":\"Use the <code>chrome.devtools.panels</code> API to integrate your extension into Developer Tools window UI: create your own panels, access existing panels, and add sidebars.\",\"events\":[{\"description\":\"Fired when the devtools theme changes.\",\"name\":\"onThemeChanged\",\"parameters\":[{\"description\":\"The name of the current devtools theme.\",\"name\":\"themeName\",\"type\":\"string\"}],\"type\":\"function\"}],\"functions\":[{\"async\":\"callback\",\"description\":\"Creates an extension panel.\",\"name\":\"create\",\"parameters\":[{\"description\":\"Title that is displayed next to the extension icon in the Developer Tools toolbar.\",\"name\":\"title\",\"type\":\"string\"},{\"choices\":[{\"enum\":[\"\"],\"type\":\"string\"},{\"$ref\":\"manifest.ExtensionURL\"}],\"description\":\"Path of the panel's icon relative to the extension directory, or an empty string to use the default extension icon as the panel icon.\",\"name\":\"iconPath\"},{\"$ref\":\"manifest.ExtensionURL\",\"description\":\"Path of the panel's HTML page relative to the extension directory.\",\"name\":\"pagePath\"},{\"description\":\"A function that is called when the panel is created.\",\"name\":\"callback\",\"optional\":true,\"parameters\":[{\"$ref\":\"ExtensionPanel\",\"description\":\"An ExtensionPanel object representing the created panel.\",\"name\":\"panel\"}],\"type\":\"function\"}],\"type\":\"function\"},{\"async\":\"callback\",\"description\":\"Specifies the function to be called when the user clicks a resource link in the Developer Tools window. To unset the handler, either call the method with no parameters or pass null as the parameter.\",\"name\":\"setOpenResourceHandler\",\"parameters\":[{\"description\":\"A function that is called when the user clicks on a valid resource link in Developer Tools window. Note that if the user clicks an invalid URL or an XHR, this function is not called.\",\"name\":\"callback\",\"optional\":true,\"parameters\":[{\"$ref\":\"devtools.inspectedWindow.Resource\",\"description\":\"A $(ref:devtools.inspectedWindow.Resource) object for the resource that was clicked.\",\"name\":\"resource\"}],\"type\":\"function\"}],\"type\":\"function\",\"unsupported\":true},{\"async\":\"callback\",\"description\":\"Requests DevTools to open a URL in a Developer Tools panel.\",\"name\":\"openResource\",\"parameters\":[{\"description\":\"The URL of the resource to open.\",\"name\":\"url\",\"type\":\"string\"},{\"description\":\"Specifies the line number to scroll to when the resource is loaded.\",\"name\":\"lineNumber\",\"type\":\"integer\"},{\"description\":\"A function that is called when the resource has been successfully loaded.\",\"name\":\"callback\",\"optional\":true,\"type\":\"function\"}],\"type\":\"function\",\"unsupported\":true}],\"namespace\":\"devtools.panels\",\"nocompile\":true,\"properties\":{\"elements\":{\"$ref\":\"ElementsPanel\",\"description\":\"Elements panel.\"},\"sources\":{\"$ref\":\"SourcesPanel\",\"description\":\"Sources panel.\"},\"themeName\":{\"description\":\"The name of the current devtools theme.\",\"type\":\"string\"}},\"types\":[{\"description\":\"Represents the Elements panel.\",\"events\":[{\"description\":\"Fired when an object is selected in the panel.\",\"name\":\"onSelectionChanged\",\"type\":\"function\"}],\"functions\":[{\"async\":\"callback\",\"description\":\"Creates a pane within panel's sidebar.\",\"name\":\"createSidebarPane\",\"parameters\":[{\"description\":\"Text that is displayed in sidebar caption.\",\"name\":\"title\",\"type\":\"string\"},{\"description\":\"A callback invoked when the sidebar is created.\",\"name\":\"callback\",\"optional\":true,\"parameters\":[{\"$ref\":\"ExtensionSidebarPane\",\"description\":\"An ExtensionSidebarPane object for created sidebar pane.\",\"name\":\"result\"}],\"type\":\"function\"}],\"type\":\"function\"}],\"id\":\"ElementsPanel\",\"type\":\"object\"},{\"description\":\"Represents the Sources panel.\",\"events\":[{\"description\":\"Fired when an object is selected in the panel.\",\"name\":\"onSelectionChanged\",\"unsupported\":true}],\"functions\":[{\"description\":\"Creates a pane within panel's sidebar.\",\"name\":\"createSidebarPane\",\"parameters\":[{\"description\":\"Text that is displayed in sidebar caption.\",\"name\":\"title\",\"type\":\"string\"},{\"description\":\"A callback invoked when the sidebar is created.\",\"name\":\"callback\",\"optional\":true,\"parameters\":[{\"$ref\":\"ExtensionSidebarPane\",\"description\":\"An ExtensionSidebarPane object for created sidebar pane.\",\"name\":\"result\"}],\"type\":\"function\"}],\"type\":\"function\",\"unsupported\":true}],\"id\":\"SourcesPanel\",\"type\":\"object\"},{\"description\":\"Represents a panel created by extension.\",\"events\":[{\"description\":\"Fired upon a search action (start of a new search, search result navigation, or search being canceled).\",\"name\":\"onSearch\",\"parameters\":[{\"description\":\"Type of search action being performed.\",\"name\":\"action\",\"type\":\"string\"},{\"description\":\"Query string (only for 'performSearch').\",\"name\":\"queryString\",\"optional\":true,\"type\":\"string\"}],\"unsupported\":true},{\"description\":\"Fired when the user switches to the panel.\",\"name\":\"onShown\",\"parameters\":[{\"additionalProperties\":{\"type\":\"any\"},\"description\":\"The JavaScript <code>window</code> object of panel's page.\",\"isInstanceOf\":\"global\",\"name\":\"window\",\"type\":\"object\"}],\"type\":\"function\"},{\"description\":\"Fired when the user switches away from the panel.\",\"name\":\"onHidden\",\"type\":\"function\"}],\"functions\":[{\"description\":\"Appends a button to the status bar of the panel.\",\"name\":\"createStatusBarButton\",\"parameters\":[{\"description\":\"Path to the icon of the button. The file should contain a 64x24-pixel image composed of two 32x24 icons. The left icon is used when the button is inactive; the right icon is displayed when the button is pressed.\",\"name\":\"iconPath\",\"type\":\"string\"},{\"description\":\"Text shown as a tooltip when user hovers the mouse over the button.\",\"name\":\"tooltipText\",\"type\":\"string\"},{\"description\":\"Whether the button is disabled.\",\"name\":\"disabled\",\"type\":\"boolean\"}],\"returns\":{\"$ref\":\"Button\"},\"type\":\"function\",\"unsupported\":true}],\"id\":\"ExtensionPanel\",\"type\":\"object\"},{\"description\":\"A sidebar created by the extension.\",\"events\":[{\"description\":\"Fired when the sidebar pane becomes visible as a result of user switching to the panel that hosts it.\",\"name\":\"onShown\",\"parameters\":[{\"additionalProperties\":{\"type\":\"any\"},\"description\":\"The JavaScript <code>window</code> object of the sidebar page, if one was set with the <code>setPage()</code> method.\",\"isInstanceOf\":\"global\",\"name\":\"window\",\"type\":\"object\"}],\"type\":\"function\"},{\"description\":\"Fired when the sidebar pane becomes hidden as a result of the user switching away from the panel that hosts the sidebar pane.\",\"name\":\"onHidden\",\"type\":\"function\"}],\"functions\":[{\"description\":\"Sets the height of the sidebar.\",\"name\":\"setHeight\",\"parameters\":[{\"description\":\"A CSS-like size specification, such as <code>'100px'</code> or <code>'12ex'</code>.\",\"name\":\"height\",\"type\":\"string\"}],\"type\":\"function\",\"unsupported\":true},{\"async\":\"callback\",\"description\":\"Sets an expression that is evaluated within the inspected page. The result is displayed in the sidebar pane.\",\"name\":\"setExpression\",\"parameters\":[{\"description\":\"An expression to be evaluated in context of the inspected page. JavaScript objects and DOM nodes are displayed in an expandable tree similar to the console/watch.\",\"name\":\"expression\",\"type\":\"string\"},{\"description\":\"An optional title for the root of the expression tree.\",\"name\":\"rootTitle\",\"optional\":true,\"type\":\"string\"},{\"description\":\"A callback invoked after the sidebar pane is updated with the expression evaluation results.\",\"name\":\"callback\",\"optional\":true,\"type\":\"function\"}],\"type\":\"function\"},{\"async\":\"callback\",\"description\":\"Sets a JSON-compliant object to be displayed in the sidebar pane.\",\"name\":\"setObject\",\"parameters\":[{\"description\":\"An object to be displayed in context of the inspected page. Evaluated in the context of the caller (API client).\",\"name\":\"jsonObject\",\"type\":\"string\"},{\"description\":\"An optional title for the root of the expression tree.\",\"name\":\"rootTitle\",\"optional\":true,\"type\":\"string\"},{\"description\":\"A callback invoked after the sidebar is updated with the object.\",\"name\":\"callback\",\"optional\":true,\"type\":\"function\"}],\"type\":\"function\"},{\"description\":\"Sets an HTML page to be displayed in the sidebar pane.\",\"name\":\"setPage\",\"parameters\":[{\"description\":\"Relative path of an extension page to display within the sidebar.\",\"name\":\"path\",\"type\":\"string\"}],\"type\":\"function\",\"unsupported\":true}],\"id\":\"ExtensionSidebarPane\",\"type\":\"object\"},{\"description\":\"A button created by the extension.\",\"events\":[{\"description\":\"Fired when the button is clicked.\",\"name\":\"onClicked\",\"type\":\"function\",\"unsupported\":true}],\"functions\":[{\"description\":\"Updates the attributes of the button. If some of the arguments are omitted or <code>null</code>, the corresponding attributes are not updated.\",\"name\":\"update\",\"parameters\":[{\"description\":\"Path to the new icon of the button.\",\"name\":\"iconPath\",\"optional\":true,\"type\":\"string\"},{\"description\":\"Text shown as a tooltip when user hovers the mouse over the button.\",\"name\":\"tooltipText\",\"optional\":true,\"type\":\"string\"},{\"description\":\"Whether the button is disabled.\",\"name\":\"disabled\",\"optional\":true,\"type\":\"boolean\"}],\"type\":\"function\",\"unsupported\":true}],\"id\":\"Button\",\"type\":\"object\"}]},{\"events\":[{\"description\":\"This event fires with the <a href='#type-DownloadItem'>DownloadItem</a> object when a download begins.\",\"name\":\"onCreated\",\"parameters\":[{\"$ref\":\"DownloadItem\",\"name\":\"downloadItem\"}],\"type\":\"function\"},{\"description\":\"Fires with the <code>downloadId</code> when a download is erased from history.\",\"name\":\"onErased\",\"parameters\":[{\"description\":\"The <code>id</code> of the <a href='#type-DownloadItem'>DownloadItem</a> that was erased.\",\"name\":\"downloadId\",\"type\":\"integer\"}],\"type\":\"function\"},{\"description\":\"When any of a <a href='#type-DownloadItem'>DownloadItem</a>'s properties except <code>bytesReceived</code> changes, this event fires with the <code>downloadId</code> and an object containing the properties that changed.\",\"name\":\"onChanged\",\"parameters\":[{\"name\":\"downloadDelta\",\"properties\":{\"canResume\":{\"$ref\":\"BooleanDelta\",\"optional\":true},\"danger\":{\"$ref\":\"StringDelta\",\"description\":\"Describes a change in a <a href='#type-DownloadItem'>DownloadItem</a>'s <code>danger</code>.\",\"optional\":true},\"endTime\":{\"$ref\":\"StringDelta\",\"description\":\"Describes a change in a <a href='#type-DownloadItem'>DownloadItem</a>'s <code>endTime</code>.\",\"optional\":true},\"error\":{\"$ref\":\"StringDelta\",\"description\":\"Describes a change in a <a href='#type-DownloadItem'>DownloadItem</a>'s <code>error</code>.\",\"optional\":true},\"exists\":{\"$ref\":\"BooleanDelta\",\"optional\":true},\"fileSize\":{\"$ref\":\"DoubleDelta\",\"description\":\"Describes a change in a <a href='#type-DownloadItem'>DownloadItem</a>'s <code>fileSize</code>.\",\"optional\":true},\"filename\":{\"$ref\":\"StringDelta\",\"description\":\"Describes a change in a <a href='#type-DownloadItem'>DownloadItem</a>'s <code>filename</code>.\",\"optional\":true},\"id\":{\"description\":\"The <code>id</code> of the <a href='#type-DownloadItem'>DownloadItem</a> that changed.\",\"type\":\"integer\"},\"mime\":{\"$ref\":\"StringDelta\",\"description\":\"Describes a change in a <a href='#type-DownloadItem'>DownloadItem</a>'s <code>mime</code>.\",\"optional\":true},\"paused\":{\"$ref\":\"BooleanDelta\",\"description\":\"Describes a change in a <a href='#type-DownloadItem'>DownloadItem</a>'s <code>paused</code>.\",\"optional\":true},\"startTime\":{\"$ref\":\"StringDelta\",\"description\":\"Describes a change in a <a href='#type-DownloadItem'>DownloadItem</a>'s <code>startTime</code>.\",\"optional\":true},\"state\":{\"$ref\":\"StringDelta\",\"description\":\"Describes a change in a <a href='#type-DownloadItem'>DownloadItem</a>'s <code>state</code>.\",\"optional\":true},\"totalBytes\":{\"$ref\":\"DoubleDelta\",\"description\":\"Describes a change in a <a href='#type-DownloadItem'>DownloadItem</a>'s <code>totalBytes</code>.\",\"optional\":true},\"url\":{\"$ref\":\"StringDelta\",\"description\":\"Describes a change in a <a href='#type-DownloadItem'>DownloadItem</a>'s <code>url</code>.\",\"optional\":true}},\"type\":\"object\"}],\"type\":\"function\"}],\"functions\":[{\"async\":\"callback\",\"description\":\"Download a URL. If the URL uses the HTTP[S] protocol, then the request will include all cookies currently set for its hostname. If both <code>filename</code> and <code>saveAs</code> are specified, then the Save As dialog will be displayed, pre-populated with the specified <code>filename</code>. If the download started successfully, <code>callback</code> will be called with the new <a href='#type-DownloadItem'>DownloadItem</a>'s <code>downloadId</code>. If there was an error starting the download, then <code>callback</code> will be called with <code>downloadId=undefined</code> and <a href='extension.html#property-lastError'>chrome.extension.lastError</a> will contain a descriptive string. The error strings are not guaranteed to remain backwards compatible between releases. You must not parse it.\",\"name\":\"download\",\"parameters\":[{\"description\":\"What to download and how.\",\"name\":\"options\",\"properties\":{\"body\":{\"description\":\"Post body.\",\"optional\":true,\"type\":\"string\"},\"conflictAction\":{\"$ref\":\"FilenameConflictAction\",\"optional\":true},\"filename\":{\"description\":\"A file path relative to the Downloads directory to contain the downloaded file.\",\"optional\":true,\"type\":\"string\"},\"headers\":{\"description\":\"Extra HTTP headers to send with the request if the URL uses the HTTP[s] protocol. Each header is represented as a dictionary containing the keys <code>name</code> and either <code>value</code> or <code>binaryValue</code>, restricted to those allowed by XMLHttpRequest.\",\"items\":{\"properties\":{\"name\":{\"description\":\"Name of the HTTP header.\",\"type\":\"string\"},\"value\":{\"description\":\"Value of the HTTP header.\",\"type\":\"string\"}},\"type\":\"object\"},\"optional\":true,\"type\":\"array\"},\"incognito\":{\"default\":false,\"description\":\"Whether to associate the download with a private browsing session.\",\"optional\":true,\"type\":\"boolean\"},\"method\":{\"description\":\"The HTTP method to use if the URL uses the HTTP[S] protocol.\",\"enum\":[\"GET\",\"POST\"],\"optional\":true,\"type\":\"string\"},\"saveAs\":{\"description\":\"Use a file-chooser to allow the user to select a filename. If the option is not specified, the file chooser will be shown only if the Firefox \\\"Always ask you where to save files\\\" option is enabled (i.e. the pref <code>browser.download.useDownloadDir</code> is set to <code>false</code>).\",\"optional\":true,\"type\":\"boolean\"},\"url\":{\"description\":\"The URL to download.\",\"format\":\"url\",\"type\":\"string\"}},\"type\":\"object\"},{\"name\":\"callback\",\"optional\":true,\"parameters\":[{\"name\":\"downloadId\",\"type\":\"integer\"}],\"type\":\"function\"}],\"type\":\"function\"},{\"async\":\"callback\",\"description\":\"Find <a href='#type-DownloadItem'>DownloadItems</a>. Set <code>query</code> to the empty object to get all <a href='#type-DownloadItem'>DownloadItems</a>. To get a specific <a href='#type-DownloadItem'>DownloadItem</a>, set only the <code>id</code> field.\",\"name\":\"search\",\"parameters\":[{\"$ref\":\"DownloadQuery\",\"name\":\"query\"},{\"name\":\"callback\",\"parameters\":[{\"items\":{\"$ref\":\"DownloadItem\"},\"name\":\"results\",\"type\":\"array\"}],\"type\":\"function\"}],\"type\":\"function\"},{\"async\":\"callback\",\"description\":\"Pause the download. If the request was successful the download is in a paused state. Otherwise <a href='extension.html#property-lastError'>chrome.extension.lastError</a> contains an error message. The request will fail if the download is not active.\",\"name\":\"pause\",\"parameters\":[{\"description\":\"The id of the download to pause.\",\"name\":\"downloadId\",\"type\":\"integer\"},{\"name\":\"callback\",\"optional\":true,\"parameters\":[],\"type\":\"function\"}],\"type\":\"function\"},{\"async\":\"callback\",\"description\":\"Resume a paused download. If the request was successful the download is in progress and unpaused. Otherwise <a href='extension.html#property-lastError'>chrome.extension.lastError</a> contains an error message. The request will fail if the download is not active.\",\"name\":\"resume\",\"parameters\":[{\"description\":\"The id of the download to resume.\",\"name\":\"downloadId\",\"type\":\"integer\"},{\"name\":\"callback\",\"optional\":true,\"parameters\":[],\"type\":\"function\"}],\"type\":\"function\"},{\"async\":\"callback\",\"description\":\"Cancel a download. When <code>callback</code> is run, the download is cancelled, completed, interrupted or doesn't exist anymore.\",\"name\":\"cancel\",\"parameters\":[{\"description\":\"The id of the download to cancel.\",\"name\":\"downloadId\",\"type\":\"integer\"},{\"name\":\"callback\",\"optional\":true,\"parameters\":[],\"type\":\"function\"}],\"type\":\"function\"},{\"async\":\"callback\",\"description\":\"Retrieve an icon for the specified download. For new downloads, file icons are available after the <a href='#event-onCreated'>onCreated</a> event has been received. The image returned by this function while a download is in progress may be different from the image returned after the download is complete. Icon retrieval is done by querying the underlying operating system or toolkit depending on the platform. The icon that is returned will therefore depend on a number of factors including state of the download, platform, registered file types and visual theme. If a file icon cannot be determined, <a href='extension.html#property-lastError'>chrome.extension.lastError</a> will contain an error message.\",\"name\":\"getFileIcon\",\"parameters\":[{\"description\":\"The identifier for the download.\",\"name\":\"downloadId\",\"type\":\"integer\"},{\"name\":\"options\",\"optional\":true,\"properties\":{\"size\":{\"description\":\"The size of the icon.  The returned icon will be square with dimensions size * size pixels.  The default size for the icon is 32x32 pixels.\",\"maximum\":127,\"minimum\":1,\"optional\":true,\"type\":\"integer\"}},\"type\":\"object\"},{\"name\":\"callback\",\"parameters\":[{\"name\":\"iconURL\",\"optional\":true,\"type\":\"string\"}],\"type\":\"function\"}],\"type\":\"function\"},{\"async\":\"callback\",\"description\":\"Open the downloaded file.\",\"name\":\"open\",\"parameters\":[{\"name\":\"downloadId\",\"type\":\"integer\"},{\"name\":\"callback\",\"optional\":true,\"parameters\":[],\"type\":\"function\"}],\"permissions\":[\"downloads.open\"],\"requireUserInput\":true,\"type\":\"function\"},{\"async\":\"callback\",\"description\":\"Show the downloaded file in its folder in a file manager.\",\"name\":\"show\",\"parameters\":[{\"name\":\"downloadId\",\"type\":\"integer\"},{\"name\":\"callback\",\"optional\":true,\"parameters\":[{\"name\":\"success\",\"type\":\"boolean\"}],\"type\":\"function\"}],\"type\":\"function\"},{\"name\":\"showDefaultFolder\",\"parameters\":[],\"type\":\"function\"},{\"async\":\"callback\",\"description\":\"Erase matching <a href='#type-DownloadItem'>DownloadItems</a> from history\",\"name\":\"erase\",\"parameters\":[{\"$ref\":\"DownloadQuery\",\"name\":\"query\"},{\"name\":\"callback\",\"optional\":true,\"parameters\":[{\"items\":{\"type\":\"integer\"},\"name\":\"erasedIds\",\"type\":\"array\"}],\"type\":\"function\"}],\"type\":\"function\"},{\"async\":\"callback\",\"name\":\"removeFile\",\"parameters\":[{\"name\":\"downloadId\",\"type\":\"integer\"},{\"name\":\"callback\",\"optional\":true,\"parameters\":[],\"type\":\"function\"}],\"type\":\"function\"},{\"description\":\"Prompt the user to either accept or cancel a dangerous download. <code>acceptDanger()</code> does not automatically accept dangerous downloads.\",\"name\":\"acceptDanger\",\"parameters\":[{\"name\":\"downloadId\",\"type\":\"integer\"},{\"name\":\"callback\",\"optional\":true,\"parameters\":[],\"type\":\"function\"}],\"type\":\"function\",\"unsupported\":true},{\"description\":\"Initiate dragging the file to another application.\",\"name\":\"drag\",\"parameters\":[{\"name\":\"downloadId\",\"type\":\"integer\"}],\"type\":\"function\",\"unsupported\":true},{\"name\":\"setShelfEnabled\",\"parameters\":[{\"name\":\"enabled\",\"type\":\"boolean\"}],\"type\":\"function\",\"unsupported\":true}],\"namespace\":\"downloads\",\"permissions\":[\"downloads\"],\"types\":[{\"enum\":[\"uniquify\",\"overwrite\",\"prompt\"],\"id\":\"FilenameConflictAction\",\"type\":\"string\"},{\"enum\":[\"FILE_FAILED\",\"FILE_ACCESS_DENIED\",\"FILE_NO_SPACE\",\"FILE_NAME_TOO_LONG\",\"FILE_TOO_LARGE\",\"FILE_VIRUS_INFECTED\",\"FILE_TRANSIENT_ERROR\",\"FILE_BLOCKED\",\"FILE_SECURITY_CHECK_FAILED\",\"FILE_TOO_SHORT\",\"NETWORK_FAILED\",\"NETWORK_TIMEOUT\",\"NETWORK_DISCONNECTED\",\"NETWORK_SERVER_DOWN\",\"NETWORK_INVALID_REQUEST\",\"SERVER_FAILED\",\"SERVER_NO_RANGE\",\"SERVER_BAD_CONTENT\",\"SERVER_UNAUTHORIZED\",\"SERVER_CERT_PROBLEM\",\"SERVER_FORBIDDEN\",\"USER_CANCELED\",\"USER_SHUTDOWN\",\"CRASH\"],\"id\":\"InterruptReason\",\"type\":\"string\"},{\"description\":\"<dl><dt>file</dt><dd>The download's filename is suspicious.</dd><dt>url</dt><dd>The download's URL is known to be malicious.</dd><dt>content</dt><dd>The downloaded file is known to be malicious.</dd><dt>uncommon</dt><dd>The download's URL is not commonly downloaded and could be dangerous.</dd><dt>safe</dt><dd>The download presents no known danger to the user's computer.</dd></dl>These string constants will never change, however the set of DangerTypes may change.\",\"enum\":[\"file\",\"url\",\"content\",\"uncommon\",\"host\",\"unwanted\",\"safe\",\"accepted\"],\"id\":\"DangerType\",\"type\":\"string\"},{\"description\":\"<dl><dt>in_progress</dt><dd>The download is currently receiving data from the server.</dd><dt>interrupted</dt><dd>An error broke the connection with the file host.</dd><dt>complete</dt><dd>The download completed successfully.</dd></dl>These string constants will never change, however the set of States may change.\",\"enum\":[\"in_progress\",\"interrupted\",\"complete\"],\"id\":\"State\",\"type\":\"string\"},{\"id\":\"DownloadItem\",\"properties\":{\"byExtensionId\":{\"optional\":true,\"type\":\"string\"},\"byExtensionName\":{\"optional\":true,\"type\":\"string\"},\"bytesReceived\":{\"description\":\"Number of bytes received so far from the host, without considering file compression.\",\"type\":\"number\"},\"canResume\":{\"type\":\"boolean\"},\"danger\":{\"$ref\":\"DangerType\",\"description\":\"Indication of whether this download is thought to be safe or known to be suspicious.\"},\"endTime\":{\"description\":\"Number of milliseconds between the unix epoch and when this download ended.\",\"optional\":true,\"type\":\"string\"},\"error\":{\"$ref\":\"InterruptReason\",\"description\":\"Number indicating why a download was interrupted.\",\"optional\":true},\"estimatedEndTime\":{\"optional\":true,\"type\":\"string\"},\"exists\":{\"type\":\"boolean\"},\"fileSize\":{\"description\":\"Number of bytes in the whole file post-decompression, or -1 if unknown.\",\"type\":\"number\"},\"filename\":{\"description\":\"Absolute local path.\",\"type\":\"string\"},\"id\":{\"description\":\"An identifier that is persistent across browser sessions.\",\"type\":\"integer\"},\"incognito\":{\"description\":\"False if this download is recorded in the history, true if it is not recorded.\",\"type\":\"boolean\"},\"mime\":{\"description\":\"The file's MIME type.\",\"type\":\"string\"},\"paused\":{\"description\":\"True if the download has stopped reading data from the host, but kept the connection open.\",\"type\":\"boolean\"},\"referrer\":{\"optional\":true,\"type\":\"string\"},\"startTime\":{\"description\":\"Number of milliseconds between the unix epoch and when this download began.\",\"type\":\"string\"},\"state\":{\"$ref\":\"State\",\"description\":\"Indicates whether the download is progressing, interrupted, or complete.\"},\"totalBytes\":{\"description\":\"Number of bytes in the whole file, without considering file compression, or -1 if unknown.\",\"type\":\"number\"},\"url\":{\"description\":\"Absolute URL.\",\"type\":\"string\"}},\"type\":\"object\"},{\"id\":\"StringDelta\",\"properties\":{\"current\":{\"optional\":true,\"type\":\"string\"},\"previous\":{\"optional\":true,\"type\":\"string\"}},\"type\":\"object\"},{\"id\":\"DoubleDelta\",\"properties\":{\"current\":{\"optional\":true,\"type\":\"number\"},\"previous\":{\"optional\":true,\"type\":\"number\"}},\"type\":\"object\"},{\"id\":\"BooleanDelta\",\"properties\":{\"current\":{\"optional\":true,\"type\":\"boolean\"},\"previous\":{\"optional\":true,\"type\":\"boolean\"}},\"type\":\"object\"},{\"choices\":[{\"pattern\":\"^[1-9]\\\\d*$\",\"type\":\"string\"},{\"$ref\":\"extensionTypes.Date\"}],\"description\":\"A time specified as a Date object, a number or string representing milliseconds since the epoch, or an ISO 8601 string\",\"id\":\"DownloadTime\"},{\"description\":\"Parameters that combine to specify a predicate that can be used to select a set of downloads.  Used for example in search() and erase()\",\"id\":\"DownloadQuery\",\"properties\":{\"bytesReceived\":{\"description\":\"Number of bytes received so far from the host, without considering file compression.\",\"optional\":true,\"type\":\"number\"},\"danger\":{\"$ref\":\"DangerType\",\"description\":\"Indication of whether this download is thought to be safe or known to be suspicious.\",\"optional\":true},\"endTime\":{\"optional\":true,\"type\":\"string\"},\"endedAfter\":{\"$ref\":\"DownloadTime\",\"description\":\"Limits results to downloads that ended after the given ms since the epoch.\",\"optional\":true},\"endedBefore\":{\"$ref\":\"DownloadTime\",\"description\":\"Limits results to downloads that ended before the given ms since the epoch.\",\"optional\":true},\"error\":{\"$ref\":\"InterruptReason\",\"description\":\"Why a download was interrupted.\",\"optional\":true},\"exists\":{\"optional\":true,\"type\":\"boolean\"},\"fileSize\":{\"description\":\"Number of bytes in the whole file post-decompression, or -1 if unknown.\",\"optional\":true,\"type\":\"number\"},\"filename\":{\"description\":\"Absolute local path.\",\"optional\":true,\"type\":\"string\"},\"filenameRegex\":{\"description\":\"Limits results to <a href='#type-DownloadItem'>DownloadItems</a> whose <code>filename</code> matches the given regular expression.\",\"optional\":true,\"type\":\"string\"},\"id\":{\"optional\":true,\"type\":\"integer\"},\"limit\":{\"description\":\"Setting this integer limits the number of results. Otherwise, all matching <a href='#type-DownloadItem'>DownloadItems</a> will be returned.\",\"optional\":true,\"type\":\"integer\"},\"mime\":{\"description\":\"The file's MIME type.\",\"optional\":true,\"type\":\"string\"},\"orderBy\":{\"description\":\"Setting elements of this array to <a href='#type-DownloadItem'>DownloadItem</a> properties in order to sort the search results. For example, setting <code>orderBy='startTime'</code> sorts the <a href='#type-DownloadItem'>DownloadItems</a> by their start time in ascending order. To specify descending order, prefix <code>orderBy</code> with a hyphen: '-startTime'.\",\"items\":{\"type\":\"string\"},\"optional\":true,\"type\":\"array\"},\"paused\":{\"description\":\"True if the download has stopped reading data from the host, but kept the connection open.\",\"optional\":true,\"type\":\"boolean\"},\"query\":{\"description\":\"This array of search terms limits results to <a href='#type-DownloadItem'>DownloadItems</a> whose <code>filename</code> or <code>url</code> contain all of the search terms that do not begin with a dash '-' and none of the search terms that do begin with a dash.\",\"items\":{\"type\":\"string\"},\"optional\":true,\"type\":\"array\"},\"startTime\":{\"optional\":true,\"type\":\"string\"},\"startedAfter\":{\"$ref\":\"DownloadTime\",\"description\":\"Limits results to downloads that started after the given ms since the epoch.\",\"optional\":true},\"startedBefore\":{\"$ref\":\"DownloadTime\",\"description\":\"Limits results to downloads that started before the given ms since the epoch.\",\"optional\":true},\"state\":{\"$ref\":\"State\",\"description\":\"Indicates whether the download is progressing, interrupted, or complete.\",\"optional\":true},\"totalBytes\":{\"description\":\"Number of bytes in the whole file, without considering file compression, or -1 if unknown.\",\"optional\":true,\"type\":\"number\"},\"totalBytesGreater\":{\"description\":\"Limits results to downloads whose totalBytes is greater than the given integer.\",\"optional\":true,\"type\":\"number\"},\"totalBytesLess\":{\"description\":\"Limits results to downloads whose totalBytes is less than the given integer.\",\"optional\":true,\"type\":\"number\"},\"url\":{\"description\":\"Absolute URL.\",\"optional\":true,\"type\":\"string\"},\"urlRegex\":{\"description\":\"Limits results to <a href='#type-DownloadItem'>DownloadItems</a> whose <code>url</code> matches the given regular expression.\",\"optional\":true,\"type\":\"string\"}},\"type\":\"object\"}]},{\"description\":\"The <code>chrome.events</code> namespace contains common types used by APIs dispatching events to notify you when something interesting happens.\",\"namespace\":\"events\",\"types\":[{\"description\":\"Description of a declarative rule for handling events.\",\"id\":\"Rule\",\"properties\":{\"actions\":{\"description\":\"List of actions that are triggered if one of the condtions is fulfilled.\",\"items\":{\"type\":\"any\"},\"type\":\"array\"},\"conditions\":{\"description\":\"List of conditions that can trigger the actions.\",\"items\":{\"type\":\"any\"},\"type\":\"array\"},\"id\":{\"description\":\"Optional identifier that allows referencing this rule.\",\"optional\":true,\"type\":\"string\"},\"priority\":{\"description\":\"Optional priority of this rule. Defaults to 100.\",\"optional\":true,\"type\":\"integer\"},\"tags\":{\"description\":\"Tags can be used to annotate rules and perform operations on sets of rules.\",\"items\":{\"type\":\"string\"},\"optional\":true,\"type\":\"array\"}},\"type\":\"object\"},{\"description\":\"An object which allows the addition and removal of listeners for a Chrome event.\",\"functions\":[{\"description\":\"Registers an event listener <em>callback</em> to an event.\",\"name\":\"addListener\",\"parameters\":[{\"description\":\"Called when an event occurs. The parameters of this function depend on the type of event.\",\"name\":\"callback\",\"type\":\"function\"}],\"type\":\"function\"},{\"description\":\"Deregisters an event listener <em>callback</em> from an event.\",\"name\":\"removeListener\",\"parameters\":[{\"description\":\"Listener that shall be unregistered.\",\"name\":\"callback\",\"type\":\"function\"}],\"type\":\"function\"},{\"name\":\"hasListener\",\"parameters\":[{\"description\":\"Listener whose registration status shall be tested.\",\"name\":\"callback\",\"type\":\"function\"}],\"returns\":{\"description\":\"True if <em>callback</em> is registered to the event.\",\"type\":\"boolean\"},\"type\":\"function\"},{\"name\":\"hasListeners\",\"parameters\":[],\"returns\":{\"description\":\"True if any event listeners are registered to the event.\",\"type\":\"boolean\"},\"type\":\"function\"},{\"description\":\"Registers rules to handle events.\",\"name\":\"addRules\",\"parameters\":[{\"description\":\"Name of the event this function affects.\",\"name\":\"eventName\",\"type\":\"string\"},{\"description\":\"If provided, this is an integer that uniquely identfies the <webview> associated with this function call.\",\"name\":\"webViewInstanceId\",\"type\":\"integer\"},{\"description\":\"Rules to be registered. These do not replace previously registered rules.\",\"items\":{\"$ref\":\"Rule\"},\"name\":\"rules\",\"type\":\"array\"},{\"description\":\"Called with registered rules.\",\"name\":\"callback\",\"optional\":true,\"parameters\":[{\"description\":\"Rules that were registered, the optional parameters are filled with values.\",\"items\":{\"$ref\":\"Rule\"},\"name\":\"rules\",\"type\":\"array\"}],\"type\":\"function\"}],\"type\":\"function\",\"unsupported\":true},{\"description\":\"Returns currently registered rules.\",\"name\":\"getRules\",\"parameters\":[{\"description\":\"Name of the event this function affects.\",\"name\":\"eventName\",\"type\":\"string\"},{\"description\":\"If provided, this is an integer that uniquely identfies the <webview> associated with this function call.\",\"name\":\"webViewInstanceId\",\"type\":\"integer\"},{\"description\":\"If an array is passed, only rules with identifiers contained in this array are returned.\",\"items\":{\"type\":\"string\"},\"name\":\"ruleIdentifiers\",\"optional\":true,\"type\":\"array\"},{\"description\":\"Called with registered rules.\",\"name\":\"callback\",\"parameters\":[{\"description\":\"Rules that were registered, the optional parameters are filled with values.\",\"items\":{\"$ref\":\"Rule\"},\"name\":\"rules\",\"type\":\"array\"}],\"type\":\"function\"}],\"type\":\"function\",\"unsupported\":true},{\"description\":\"Unregisters currently registered rules.\",\"name\":\"removeRules\",\"parameters\":[{\"description\":\"Name of the event this function affects.\",\"name\":\"eventName\",\"type\":\"string\"},{\"description\":\"If provided, this is an integer that uniquely identfies the <webview> associated with this function call.\",\"name\":\"webViewInstanceId\",\"type\":\"integer\"},{\"description\":\"If an array is passed, only rules with identifiers contained in this array are unregistered.\",\"items\":{\"type\":\"string\"},\"name\":\"ruleIdentifiers\",\"optional\":true,\"type\":\"array\"},{\"description\":\"Called when rules were unregistered.\",\"name\":\"callback\",\"optional\":true,\"parameters\":[],\"type\":\"function\"}],\"type\":\"function\",\"unsupported\":true}],\"id\":\"Event\",\"type\":\"object\"},{\"description\":\"Filters URLs for various criteria. See <a href='events#filtered'>event filtering</a>. All criteria are case sensitive.\",\"id\":\"UrlFilter\",\"properties\":{\"hostContains\":{\"description\":\"Matches if the host name of the URL contains a specified string. To test whether a host name component has a prefix 'foo', use hostContains: '.foo'. This matches 'www.foobar.com' and 'foo.com', because an implicit dot is added at the beginning of the host name. Similarly, hostContains can be used to match against component suffix ('foo.') and to exactly match against components ('.foo.'). Suffix- and exact-matching for the last components need to be done separately using hostSuffix, because no implicit dot is added at the end of the host name.\",\"optional\":true,\"type\":\"string\"},\"hostEquals\":{\"description\":\"Matches if the host name of the URL is equal to a specified string.\",\"optional\":true,\"type\":\"string\"},\"hostPrefix\":{\"description\":\"Matches if the host name of the URL starts with a specified string.\",\"optional\":true,\"type\":\"string\"},\"hostSuffix\":{\"description\":\"Matches if the host name of the URL ends with a specified string.\",\"optional\":true,\"type\":\"string\"},\"originAndPathMatches\":{\"description\":\"Matches if the URL without query segment and fragment identifier matches a specified regular expression. Port numbers are stripped from the URL if they match the default port number. The regular expressions use the <a href=\\\"https://github.com/google/re2/blob/master/doc/syntax.txt\\\">RE2 syntax</a>.\",\"optional\":true,\"type\":\"string\"},\"pathContains\":{\"description\":\"Matches if the path segment of the URL contains a specified string.\",\"optional\":true,\"type\":\"string\"},\"pathEquals\":{\"description\":\"Matches if the path segment of the URL is equal to a specified string.\",\"optional\":true,\"type\":\"string\"},\"pathPrefix\":{\"description\":\"Matches if the path segment of the URL starts with a specified string.\",\"optional\":true,\"type\":\"string\"},\"pathSuffix\":{\"description\":\"Matches if the path segment of the URL ends with a specified string.\",\"optional\":true,\"type\":\"string\"},\"ports\":{\"description\":\"Matches if the port of the URL is contained in any of the specified port lists. For example <code>[80, 443, [1000, 1200]]</code> matches all requests on port 80, 443 and in the range 1000-1200.\",\"items\":{\"choices\":[{\"description\":\"A specific port.\",\"type\":\"integer\"},{\"description\":\"A pair of integers identiying the start and end (both inclusive) of a port range.\",\"items\":{\"type\":\"integer\"},\"maxItems\":2,\"minItems\":2,\"type\":\"array\"}]},\"optional\":true,\"type\":\"array\"},\"queryContains\":{\"description\":\"Matches if the query segment of the URL contains a specified string.\",\"optional\":true,\"type\":\"string\"},\"queryEquals\":{\"description\":\"Matches if the query segment of the URL is equal to a specified string.\",\"optional\":true,\"type\":\"string\"},\"queryPrefix\":{\"description\":\"Matches if the query segment of the URL starts with a specified string.\",\"optional\":true,\"type\":\"string\"},\"querySuffix\":{\"description\":\"Matches if the query segment of the URL ends with a specified string.\",\"optional\":true,\"type\":\"string\"},\"schemes\":{\"description\":\"Matches if the scheme of the URL is equal to any of the schemes specified in the array.\",\"items\":{\"type\":\"string\"},\"optional\":true,\"type\":\"array\"},\"urlContains\":{\"description\":\"Matches if the URL (without fragment identifier) contains a specified string. Port numbers are stripped from the URL if they match the default port number.\",\"optional\":true,\"type\":\"string\"},\"urlEquals\":{\"description\":\"Matches if the URL (without fragment identifier) is equal to a specified string. Port numbers are stripped from the URL if they match the default port number.\",\"optional\":true,\"type\":\"string\"},\"urlMatches\":{\"description\":\"Matches if the URL (without fragment identifier) matches a specified regular expression. Port numbers are stripped from the URL if they match the default port number. The regular expressions use the <a href=\\\"https://github.com/google/re2/blob/master/doc/syntax.txt\\\">RE2 syntax</a>.\",\"optional\":true,\"type\":\"string\"},\"urlPrefix\":{\"description\":\"Matches if the URL (without fragment identifier) starts with a specified string. Port numbers are stripped from the URL if they match the default port number.\",\"optional\":true,\"type\":\"string\"},\"urlSuffix\":{\"description\":\"Matches if the URL (without fragment identifier) ends with a specified string. Port numbers are stripped from the URL if they match the default port number.\",\"optional\":true,\"type\":\"string\"}},\"type\":\"object\"}]},{\"allowedContexts\":[\"content\",\"devtools\"],\"description\":\"The <code>browser.extension</code> API has utilities that can be used by any extension page. It includes support for exchanging messages between an extension and its content scripts or between extensions, as described in detail in $(topic:messaging)[Message Passing].\",\"events\":[{\"deprecated\":\"Please use $(ref:runtime.onMessage).\",\"description\":\"Fired when a request is sent from either an extension process or a content script.\",\"name\":\"onRequest\",\"parameters\":[{\"description\":\"The request sent by the calling script.\",\"name\":\"request\",\"optional\":true,\"type\":\"any\"},{\"$ref\":\"runtime.MessageSender\",\"name\":\"sender\"},{\"description\":\"Function to call (at most once) when you have a response. The argument should be any JSON-ifiable object, or undefined if there is no response. If you have more than one <code>onRequest</code> listener in the same document, then only one may send a response.\",\"name\":\"sendResponse\",\"type\":\"function\"}],\"type\":\"function\",\"unsupported\":true},{\"deprecated\":\"Please use $(ref:runtime.onMessageExternal).\",\"description\":\"Fired when a request is sent from another extension.\",\"name\":\"onRequestExternal\",\"parameters\":[{\"description\":\"The request sent by the calling script.\",\"name\":\"request\",\"optional\":true,\"type\":\"any\"},{\"$ref\":\"runtime.MessageSender\",\"name\":\"sender\"},{\"description\":\"Function to call when you have a response. The argument should be any JSON-ifiable object, or undefined if there is no response.\",\"name\":\"sendResponse\",\"type\":\"function\"}],\"type\":\"function\",\"unsupported\":true}],\"functions\":[{\"allowedContexts\":[\"content\",\"devtools\"],\"description\":\"Converts a relative path within an extension install directory to a fully-qualified URL.\",\"name\":\"getURL\",\"parameters\":[{\"description\":\"A path to a resource within an extension expressed relative to its install directory.\",\"name\":\"path\",\"type\":\"string\"}],\"returns\":{\"description\":\"The fully-qualified URL to the resource.\",\"type\":\"string\"},\"type\":\"function\"},{\"description\":\"Returns an array of the JavaScript 'window' objects for each of the pages running inside the current extension.\",\"name\":\"getViews\",\"parameters\":[{\"name\":\"fetchProperties\",\"optional\":true,\"properties\":{\"tabId\":{\"description\":\"Find a view according to a tab id. If this field is omitted, returns all views.\",\"optional\":true,\"type\":\"integer\"},\"type\":{\"$ref\":\"ViewType\",\"description\":\"The type of view to get. If omitted, returns all views (including background pages and tabs). Valid values: 'tab', 'popup', 'sidebar'.\",\"optional\":true},\"windowId\":{\"description\":\"The window to restrict the search to. If omitted, returns all views.\",\"optional\":true,\"type\":\"integer\"}},\"type\":\"object\"}],\"returns\":{\"description\":\"Array of global objects\",\"items\":{\"additionalProperties\":{\"type\":\"any\"},\"isInstanceOf\":\"Window\",\"type\":\"object\"},\"type\":\"array\"},\"type\":\"function\"},{\"description\":\"Returns the JavaScript 'window' object for the background page running inside the current extension. Returns null if the extension has no background page.\",\"name\":\"getBackgroundPage\",\"parameters\":[],\"returns\":{\"additionalProperties\":{\"type\":\"any\"},\"isInstanceOf\":\"Window\",\"optional\":true,\"type\":\"object\"},\"type\":\"function\"},{\"async\":\"callback\",\"description\":\"Retrieves the state of the extension's access to Incognito-mode (as determined by the user-controlled 'Allowed in Incognito' checkbox.\",\"name\":\"isAllowedIncognitoAccess\",\"parameters\":[{\"name\":\"callback\",\"parameters\":[{\"description\":\"True if the extension has access to Incognito mode, false otherwise.\",\"name\":\"isAllowedAccess\",\"type\":\"boolean\"}],\"type\":\"function\"}],\"type\":\"function\"},{\"async\":\"callback\",\"description\":\"Retrieves the state of the extension's access to the 'file://' scheme (as determined by the user-controlled 'Allow access to File URLs' checkbox.\",\"name\":\"isAllowedFileSchemeAccess\",\"parameters\":[{\"name\":\"callback\",\"parameters\":[{\"description\":\"True if the extension can access the 'file://' scheme, false otherwise.\",\"name\":\"isAllowedAccess\",\"type\":\"boolean\"}],\"type\":\"function\"}],\"type\":\"function\"},{\"description\":\"Sets the value of the ap CGI parameter used in the extension's update URL.  This value is ignored for extensions that are hosted in the browser vendor's store.\",\"name\":\"setUpdateUrlData\",\"parameters\":[{\"maxLength\":1024,\"name\":\"data\",\"type\":\"string\"}],\"type\":\"function\",\"unsupported\":true}],\"namespace\":\"extension\",\"properties\":{\"inIncognitoContext\":{\"allowedContexts\":[\"content\",\"devtools\"],\"description\":\"True for content scripts running inside incognito tabs, and for extension pages running inside an incognito process. The latter only applies to extensions with 'split' incognito_behavior.\",\"optional\":true,\"type\":\"boolean\"},\"lastError\":{\"additionalProperties\":{\"type\":\"any\"},\"allowedContexts\":[\"content\",\"devtools\"],\"description\":\"Set for the lifetime of a callback if an ansychronous extension api has resulted in an error. If no error has occured lastError will be <var>undefined</var>.\",\"optional\":true,\"properties\":{\"message\":{\"description\":\"Description of the error that has taken place.\",\"type\":\"string\"}},\"type\":\"object\"}},\"types\":[{\"description\":\"The type of extension view.\",\"enum\":[\"tab\",\"popup\",\"sidebar\"],\"id\":\"ViewType\",\"type\":\"string\"}]},{\"description\":\"The <code>browser.extensionTypes</code> API contains type declarations for WebExtensions.\",\"namespace\":\"extensionTypes\",\"types\":[{\"description\":\"The format of an image.\",\"enum\":[\"jpeg\",\"png\"],\"id\":\"ImageFormat\",\"type\":\"string\"},{\"description\":\"Details about the format and quality of an image.\",\"id\":\"ImageDetails\",\"properties\":{\"format\":{\"$ref\":\"ImageFormat\",\"description\":\"The format of the resulting image.  Default is <code>\\\"jpeg\\\"</code>.\",\"optional\":true},\"quality\":{\"description\":\"When format is <code>\\\"jpeg\\\"</code>, controls the quality of the resulting image.  This value is ignored for PNG images.  As quality is decreased, the resulting image will have more visual artifacts, and the number of bytes needed to store it will decrease.\",\"maximum\":100,\"minimum\":0,\"optional\":true,\"type\":\"integer\"}},\"type\":\"object\"},{\"description\":\"The soonest that the JavaScript or CSS will be injected into the tab.\",\"enum\":[\"document_start\",\"document_end\",\"document_idle\"],\"id\":\"RunAt\",\"type\":\"string\"},{\"description\":\"The origin of the CSS to inject, this affects the cascading order (priority) of the stylesheet.\",\"enum\":[\"user\",\"author\"],\"id\":\"CSSOrigin\",\"type\":\"string\"},{\"description\":\"Details of the script or CSS to inject. Either the code or the file property must be set, but both may not be set at the same time.\",\"id\":\"InjectDetails\",\"properties\":{\"allFrames\":{\"description\":\"If allFrames is <code>true</code>, implies that the JavaScript or CSS should be injected into all frames of current page. By default, it's <code>false</code> and is only injected into the top frame.\",\"optional\":true,\"type\":\"boolean\"},\"code\":{\"description\":\"JavaScript or CSS code to inject.<br><br><b>Warning:</b><br>Be careful using the <code>code</code> parameter. Incorrect use of it may open your extension to <a href=\\\"https://en.wikipedia.org/wiki/Cross-site_scripting\\\">cross site scripting</a> attacks.\",\"optional\":true,\"type\":\"string\"},\"cssOrigin\":{\"$ref\":\"CSSOrigin\",\"description\":\"The css origin of the stylesheet to inject. Defaults to \\\"author\\\".\",\"optional\":true},\"file\":{\"description\":\"JavaScript or CSS file to inject.\",\"optional\":true,\"type\":\"string\"},\"frameId\":{\"description\":\"The ID of the frame to inject the script into. This may not be used in combination with <code>allFrames</code>.\",\"minimum\":0,\"optional\":true,\"type\":\"integer\"},\"matchAboutBlank\":{\"description\":\"If matchAboutBlank is true, then the code is also injected in about:blank and about:srcdoc frames if your extension has access to its parent document. Code cannot be inserted in top-level about:-frames. By default it is <code>false</code>.\",\"optional\":true,\"type\":\"boolean\"},\"runAt\":{\"$ref\":\"RunAt\",\"default\":\"document_idle\",\"description\":\"The soonest that the JavaScript or CSS will be injected into the tab. Defaults to \\\"document_idle\\\".\",\"optional\":true}},\"type\":\"object\"},{\"choices\":[{\"format\":\"date\",\"type\":\"string\"},{\"minimum\":0,\"type\":\"integer\"},{\"additionalProperties\":{\"type\":\"any\"},\"isInstanceOf\":\"Date\",\"type\":\"object\"}],\"id\":\"Date\"}]},{\"description\":\"Use the <code>browser.find</code> API to interact with the browser's <code>Find</code> interface.\",\"functions\":[{\"async\":true,\"description\":\"Search for text in document and store found ranges in array, in document order.\",\"name\":\"find\",\"parameters\":[{\"description\":\"The string to search for.\",\"name\":\"queryphrase\",\"type\":\"string\"},{\"description\":\"Search parameters.\",\"name\":\"params\",\"optional\":true,\"properties\":{\"caseSensitive\":{\"description\":\"Find only ranges with case sensitive match.\",\"optional\":true,\"type\":\"boolean\"},\"entireWord\":{\"description\":\"Find only ranges that match entire word.\",\"optional\":true,\"type\":\"boolean\"},\"includeRangeData\":{\"description\":\"Return range data which provides range data in a serializable form.\",\"optional\":true,\"type\":\"boolean\"},\"includeRectData\":{\"description\":\"Return rectangle data which describes visual position of search results.\",\"optional\":true,\"type\":\"boolean\"},\"tabId\":{\"description\":\"Tab to query. Defaults to the active tab.\",\"minimum\":0,\"optional\":true,\"type\":\"integer\"}},\"type\":\"object\"}],\"type\":\"function\"},{\"async\":true,\"description\":\"Highlight a range\",\"name\":\"highlightResults\",\"parameters\":[{\"description\":\"highlightResults parameters\",\"name\":\"params\",\"optional\":true,\"properties\":{\"noScroll\":{\"description\":\"Don't scroll to highlighted item.\",\"optional\":true,\"type\":\"boolean\"},\"rangeIndex\":{\"description\":\"Found range to be highlighted. Default highlights all ranges.\",\"minimum\":0,\"optional\":true,\"type\":\"integer\"},\"tabId\":{\"description\":\"Tab to highlight. Defaults to the active tab.\",\"minimum\":0,\"optional\":true,\"type\":\"integer\"}},\"type\":\"object\"}],\"type\":\"function\"},{\"async\":true,\"description\":\"Remove all highlighting from previous searches.\",\"name\":\"removeHighlighting\",\"parameters\":[{\"description\":\"Tab to highlight. Defaults to the active tab.\",\"name\":\"tabId\",\"optional\":true,\"type\":\"integer\"}],\"type\":\"function\"}],\"namespace\":\"find\",\"permissions\":[\"find\"]},{\"description\":\"Exposes the browser's profiler.\",\"events\":[{\"description\":\"Fires when the profiler starts/stops running.\",\"name\":\"onRunning\",\"parameters\":[{\"description\":\"Whether the profiler is running or not. Pausing the profiler will not affect this value.\",\"name\":\"isRunning\",\"type\":\"boolean\"}],\"type\":\"function\"}],\"functions\":[{\"async\":true,\"description\":\"Starts the profiler with the specified settings.\",\"name\":\"start\",\"parameters\":[{\"name\":\"settings\",\"properties\":{\"bufferSize\":{\"description\":\"The size in bytes of the buffer used to store profiling data. A larger value allows capturing a profile that covers a greater amount of time.\",\"minimum\":0,\"type\":\"integer\"},\"features\":{\"description\":\"A list of active features for the profiler.\",\"items\":{\"$ref\":\"ProfilerFeature\"},\"type\":\"array\"},\"interval\":{\"description\":\"Interval in milliseconds between samples of profiling data. A smaller value will increase the detail of the profiles captured.\",\"type\":\"number\"},\"threads\":{\"description\":\"A list of thread names for which to capture profiles.\",\"items\":{\"type\":\"string\"},\"optional\":true,\"type\":\"array\"}},\"type\":\"object\"}],\"type\":\"function\"},{\"async\":true,\"description\":\"Stops the profiler and discards any captured profile data.\",\"name\":\"stop\",\"parameters\":[],\"type\":\"function\"},{\"async\":true,\"description\":\"Pauses the profiler, keeping any profile data that is already written.\",\"name\":\"pause\",\"parameters\":[],\"type\":\"function\"},{\"async\":true,\"description\":\"Resumes the profiler with the settings that were initially used to start it.\",\"name\":\"resume\",\"parameters\":[],\"type\":\"function\"},{\"async\":true,\"description\":\"Gathers the profile data from the current profiling session.\",\"name\":\"getProfile\",\"parameters\":[],\"type\":\"function\"},{\"async\":true,\"description\":\"Gathers the profile data from the current profiling session. The returned promise resolves to an array buffer that contains a JSON string.\",\"name\":\"getProfileAsArrayBuffer\",\"parameters\":[],\"type\":\"function\"},{\"async\":true,\"description\":\"Gets the debug symbols for a particular library.\",\"name\":\"getSymbols\",\"parameters\":[{\"description\":\"The name of the library's debug file. For example, 'xul.pdb\",\"name\":\"debugName\",\"type\":\"string\"},{\"description\":\"The Breakpad ID of the library\",\"name\":\"breakpadId\",\"type\":\"string\"}],\"type\":\"function\"}],\"namespace\":\"geckoProfiler\",\"permissions\":[\"geckoProfiler\"],\"types\":[{\"enum\":[\"java\",\"js\",\"leaf\",\"mainthreadio\",\"memory\",\"privacy\",\"restyle\",\"stackwalk\",\"tasktracer\",\"threads\"],\"id\":\"ProfilerFeature\",\"type\":\"string\"}]},{\"description\":\"Use the <code>browser.history</code> API to interact with the browser's record of visited pages. You can add, remove, and query for URLs in the browser's history. To override the history page with your own version, see $(topic:override)[Override Pages].\",\"events\":[{\"description\":\"Fired when a URL is visited, providing the HistoryItem data for that URL.  This event fires before the page has loaded.\",\"name\":\"onVisited\",\"parameters\":[{\"$ref\":\"HistoryItem\",\"name\":\"result\"}],\"type\":\"function\"},{\"description\":\"Fired when one or more URLs are removed from the history service.  When all visits have been removed the URL is purged from history.\",\"name\":\"onVisitRemoved\",\"parameters\":[{\"name\":\"removed\",\"properties\":{\"allHistory\":{\"description\":\"True if all history was removed.  If true, then urls will be empty.\",\"type\":\"boolean\"},\"urls\":{\"items\":{\"type\":\"string\"},\"type\":\"array\"}},\"type\":\"object\"}],\"type\":\"function\"},{\"description\":\"Fired when the title of a URL is changed in the browser history.\",\"name\":\"onTitleChanged\",\"parameters\":[{\"name\":\"changed\",\"properties\":{\"title\":{\"description\":\"The new title for the URL.\",\"type\":\"string\"},\"url\":{\"description\":\"The URL for which the title has changed\",\"type\":\"string\"}},\"type\":\"object\"}],\"type\":\"function\"}],\"functions\":[{\"async\":\"callback\",\"description\":\"Searches the history for the last visit time of each page matching the query.\",\"name\":\"search\",\"parameters\":[{\"name\":\"query\",\"properties\":{\"endTime\":{\"$ref\":\"extensionTypes.Date\",\"description\":\"Limit results to those visited before this date.\",\"optional\":true},\"maxResults\":{\"description\":\"The maximum number of results to retrieve.  Defaults to 100.\",\"minimum\":1,\"optional\":true,\"type\":\"integer\"},\"startTime\":{\"$ref\":\"extensionTypes.Date\",\"description\":\"Limit results to those visited after this date. If not specified, this defaults to 24 hours in the past.\",\"optional\":true},\"text\":{\"description\":\"A free-text query to the history service.  Leave empty to retrieve all pages.\",\"type\":\"string\"}},\"type\":\"object\"},{\"name\":\"callback\",\"parameters\":[{\"items\":{\"$ref\":\"HistoryItem\"},\"name\":\"results\",\"type\":\"array\"}],\"type\":\"function\"}],\"type\":\"function\"},{\"async\":\"callback\",\"description\":\"Retrieves information about visits to a URL.\",\"name\":\"getVisits\",\"parameters\":[{\"name\":\"details\",\"properties\":{\"url\":{\"description\":\"The URL for which to retrieve visit information.  It must be in the format as returned from a call to history.search.\",\"type\":\"string\"}},\"type\":\"object\"},{\"name\":\"callback\",\"parameters\":[{\"items\":{\"$ref\":\"VisitItem\"},\"name\":\"results\",\"type\":\"array\"}],\"type\":\"function\"}],\"type\":\"function\"},{\"async\":\"callback\",\"description\":\"Adds a URL to the history with a default visitTime of the current time and a default $(topic:transition-types)[transition type] of \\\"link\\\".\",\"name\":\"addUrl\",\"parameters\":[{\"name\":\"details\",\"properties\":{\"title\":{\"description\":\"The title of the page.\",\"optional\":true,\"type\":\"string\"},\"transition\":{\"$ref\":\"TransitionType\",\"description\":\"The $(topic:transition-types)[transition type] for this visit from its referrer.\",\"optional\":true},\"url\":{\"description\":\"The URL to add. Must be a valid URL that can be added to history.\",\"type\":\"string\"},\"visitTime\":{\"$ref\":\"extensionTypes.Date\",\"description\":\"The date when this visit occurred.\",\"optional\":true}},\"type\":\"object\"},{\"name\":\"callback\",\"optional\":true,\"parameters\":[],\"type\":\"function\"}],\"type\":\"function\"},{\"async\":\"callback\",\"description\":\"Removes all occurrences of the given URL from the history.\",\"name\":\"deleteUrl\",\"parameters\":[{\"name\":\"details\",\"properties\":{\"url\":{\"description\":\"The URL to remove.\",\"type\":\"string\"}},\"type\":\"object\"},{\"name\":\"callback\",\"optional\":true,\"parameters\":[],\"type\":\"function\"}],\"type\":\"function\"},{\"async\":\"callback\",\"description\":\"Removes all items within the specified date range from the history.  Pages will not be removed from the history unless all visits fall within the range.\",\"name\":\"deleteRange\",\"parameters\":[{\"name\":\"range\",\"properties\":{\"endTime\":{\"$ref\":\"extensionTypes.Date\",\"description\":\"Items added to history before this date.\"},\"startTime\":{\"$ref\":\"extensionTypes.Date\",\"description\":\"Items added to history after this date.\"}},\"type\":\"object\"},{\"name\":\"callback\",\"parameters\":[],\"type\":\"function\"}],\"type\":\"function\"},{\"async\":\"callback\",\"description\":\"Deletes all items from the history.\",\"name\":\"deleteAll\",\"parameters\":[{\"name\":\"callback\",\"parameters\":[],\"type\":\"function\"}],\"type\":\"function\"}],\"namespace\":\"history\",\"permissions\":[\"history\"],\"types\":[{\"description\":\"The $(topic:transition-types)[transition type] for this visit from its referrer.\",\"enum\":[\"link\",\"typed\",\"auto_bookmark\",\"auto_subframe\",\"manual_subframe\",\"generated\",\"auto_toplevel\",\"form_submit\",\"reload\",\"keyword\",\"keyword_generated\"],\"id\":\"TransitionType\",\"type\":\"string\"},{\"description\":\"An object encapsulating one result of a history query.\",\"id\":\"HistoryItem\",\"properties\":{\"id\":{\"description\":\"The unique identifier for the item.\",\"type\":\"string\"},\"lastVisitTime\":{\"description\":\"When this page was last loaded, represented in milliseconds since the epoch.\",\"optional\":true,\"type\":\"number\"},\"title\":{\"description\":\"The title of the page when it was last loaded.\",\"optional\":true,\"type\":\"string\"},\"typedCount\":{\"description\":\"The number of times the user has navigated to this page by typing in the address.\",\"optional\":true,\"type\":\"integer\"},\"url\":{\"description\":\"The URL navigated to by a user.\",\"optional\":true,\"type\":\"string\"},\"visitCount\":{\"description\":\"The number of times the user has navigated to this page.\",\"optional\":true,\"type\":\"integer\"}},\"type\":\"object\"},{\"description\":\"An object encapsulating one visit to a URL.\",\"id\":\"VisitItem\",\"properties\":{\"id\":{\"description\":\"The unique identifier for the item.\",\"type\":\"string\"},\"referringVisitId\":{\"description\":\"The visit ID of the referrer.\",\"type\":\"string\"},\"transition\":{\"$ref\":\"TransitionType\",\"description\":\"The $(topic:transition-types)[transition type] for this visit from its referrer.\"},\"visitId\":{\"description\":\"The unique identifier for this visit.\",\"type\":\"string\"},\"visitTime\":{\"description\":\"When this visit occurred, represented in milliseconds since the epoch.\",\"optional\":true,\"type\":\"number\"}},\"type\":\"object\"}]},{\"allowedContexts\":[\"content\",\"devtools\"],\"defaultContexts\":[\"content\",\"devtools\"],\"description\":\"Use the <code>browser.i18n</code> infrastructure to implement internationalization across your whole app or extension.\",\"events\":[],\"functions\":[{\"async\":\"callback\",\"description\":\"Gets the accept-languages of the browser. This is different from the locale used by the browser; to get the locale, use $(ref:i18n.getUILanguage).\",\"name\":\"getAcceptLanguages\",\"parameters\":[{\"name\":\"callback\",\"parameters\":[{\"description\":\"Array of LanguageCode\",\"items\":{\"$ref\":\"LanguageCode\"},\"name\":\"languages\",\"type\":\"array\"}],\"type\":\"function\"}],\"type\":\"function\"},{\"description\":\"Gets the localized string for the specified message. If the message is missing, this method returns an empty string (''). If the format of the <code>getMessage()</code> call is wrong &mdash; for example, <em>messageName</em> is not a string or the <em>substitutions</em> array has more than 9 elements &mdash; this method returns <code>undefined</code>.\",\"name\":\"getMessage\",\"parameters\":[{\"description\":\"The name of the message, as specified in the <code>$(topic:i18n-messages)[messages.json]</code> file.\",\"name\":\"messageName\",\"type\":\"string\"},{\"description\":\"Substitution strings, if the message requires any.\",\"name\":\"substitutions\",\"optional\":true,\"type\":\"any\"}],\"returns\":{\"description\":\"Message localized for current locale.\",\"type\":\"string\"},\"type\":\"function\"},{\"description\":\"Gets the browser UI language of the browser. This is different from $(ref:i18n.getAcceptLanguages) which returns the preferred user languages.\",\"name\":\"getUILanguage\",\"parameters\":[],\"returns\":{\"description\":\"The browser UI language code such as en-US or fr-FR.\",\"type\":\"string\"},\"type\":\"function\"},{\"async\":\"callback\",\"description\":\"Detects the language of the provided text using CLD.\",\"name\":\"detectLanguage\",\"parameters\":[{\"description\":\"User input string to be translated.\",\"name\":\"text\",\"type\":\"string\"},{\"name\":\"callback\",\"parameters\":[{\"description\":\"LanguageDetectionResult object that holds detected langugae reliability and array of DetectedLanguage\",\"name\":\"result\",\"properties\":{\"isReliable\":{\"description\":\"CLD detected language reliability\",\"type\":\"boolean\"},\"languages\":{\"description\":\"array of detectedLanguage\",\"items\":{\"description\":\"DetectedLanguage object that holds detected ISO language code and its percentage in the input string\",\"properties\":{\"language\":{\"$ref\":\"LanguageCode\"},\"percentage\":{\"description\":\"The percentage of the detected language\",\"type\":\"integer\"}},\"type\":\"object\"},\"type\":\"array\"}},\"type\":\"object\"}],\"type\":\"function\"}],\"type\":\"function\"}],\"namespace\":\"i18n\",\"types\":[{\"description\":\"An ISO language code such as <code>en</code> or <code>fr</code>. For a complete list of languages supported by this method, see <a href='http://src.chromium.org/viewvc/chrome/trunk/src/third_party/cld/languages/internal/languages.cc'>kLanguageInfoTable</a>. For an unknown language, <code>und</code> will be returned, which means that [percentage] of the text is unknown to CLD\",\"id\":\"LanguageCode\",\"type\":\"string\"}]},{\"description\":\"Use the chrome.identity API to get OAuth2 access tokens. \",\"events\":[{\"description\":\"Fired when signin state changes for an account on the user's profile.\",\"name\":\"onSignInChanged\",\"parameters\":[{\"$ref\":\"AccountInfo\",\"name\":\"account\"},{\"name\":\"signedIn\",\"type\":\"boolean\"}],\"type\":\"function\",\"unsupported\":true}],\"functions\":[{\"async\":\"callback\",\"description\":\"Retrieves a list of AccountInfo objects describing the accounts present on the profile.\",\"name\":\"getAccounts\",\"parameters\":[{\"name\":\"callback\",\"parameters\":[{\"items\":{\"$ref\":\"AccountInfo\"},\"name\":\"results\",\"type\":\"array\"}],\"type\":\"function\"}],\"type\":\"function\",\"unsupported\":true},{\"async\":\"callback\",\"description\":\"Gets an OAuth2 access token using the client ID and scopes specified in the oauth2 section of manifest.json.\",\"name\":\"getAuthToken\",\"parameters\":[{\"name\":\"details\",\"optional\":true,\"properties\":{\"account\":{\"$ref\":\"AccountInfo\",\"optional\":true},\"interactive\":{\"optional\":true,\"type\":\"boolean\"},\"scopes\":{\"items\":{\"type\":\"string\"},\"optional\":true,\"type\":\"array\"}},\"type\":\"object\"},{\"name\":\"callback\",\"optional\":true,\"parameters\":[{\"items\":{\"$ref\":\"AccountInfo\"},\"name\":\"results\",\"type\":\"array\"}],\"type\":\"function\"}],\"type\":\"function\",\"unsupported\":true},{\"async\":\"callback\",\"description\":\"Retrieves email address and obfuscated gaia id of the user signed into a profile.\",\"name\":\"getProfileUserInfo\",\"parameters\":[{\"name\":\"callback\",\"parameters\":[{\"name\":\"userinfo\",\"properties\":{\"email\":{\"type\":\"string\"},\"id\":{\"type\":\"string\"}},\"type\":\"object\"}],\"type\":\"function\"}],\"type\":\"function\",\"unsupported\":true},{\"async\":\"callback\",\"description\":\"Removes an OAuth2 access token from the Identity API's token cache.\",\"name\":\"removeCachedAuthToken\",\"parameters\":[{\"name\":\"details\",\"properties\":{\"token\":{\"type\":\"string\"}},\"type\":\"object\"},{\"name\":\"callback\",\"optional\":true,\"parameters\":[{\"name\":\"userinfo\",\"properties\":{\"email\":{\"type\":\"string\"},\"id\":{\"type\":\"string\"}},\"type\":\"object\"}],\"type\":\"function\"}],\"type\":\"function\",\"unsupported\":true},{\"async\":\"callback\",\"description\":\"Starts an auth flow at the specified URL.\",\"name\":\"launchWebAuthFlow\",\"parameters\":[{\"name\":\"details\",\"properties\":{\"interactive\":{\"optional\":true,\"type\":\"boolean\"},\"url\":{\"$ref\":\"manifest.HttpURL\"}},\"type\":\"object\"},{\"name\":\"callback\",\"parameters\":[{\"name\":\" responseUrl\",\"optional\":true,\"type\":\"string\"}],\"type\":\"function\"}],\"type\":\"function\"},{\"description\":\"Generates a redirect URL to be used in |launchWebAuthFlow|.\",\"name\":\"getRedirectURL\",\"parameters\":[{\"default\":\"\",\"description\":\"The path appended to the end of the generated URL. \",\"name\":\"path\",\"optional\":true,\"type\":\"string\"}],\"returns\":{\"type\":\"string\"},\"type\":\"function\"}],\"namespace\":\"identity\",\"permissions\":[\"identity\"],\"types\":[{\"description\":\"An object encapsulating an OAuth account id.\",\"id\":\"AccountInfo\",\"properties\":{\"id\":{\"description\":\"A unique identifier for the account. This ID will not change for the lifetime of the account. \",\"type\":\"string\"}},\"type\":\"object\"}]},{\"description\":\"Use the <code>browser.idle</code> API to detect when the machine's idle state changes.\",\"events\":[{\"description\":\"Fired when the system changes to an active or idle state. The event fires with \\\"idle\\\" if the the user has not generated any input for a specified number of seconds, and \\\"active\\\" when the user generates input on an idle system.\",\"name\":\"onStateChanged\",\"parameters\":[{\"$ref\":\"IdleState\",\"name\":\"newState\"}],\"type\":\"function\"}],\"functions\":[{\"async\":\"callback\",\"description\":\"Returns \\\"idle\\\" if the user has not generated any input for a specified number of seconds, or \\\"active\\\" otherwise.\",\"name\":\"queryState\",\"parameters\":[{\"description\":\"The system is considered idle if detectionIntervalInSeconds seconds have elapsed since the last user input detected.\",\"minimum\":15,\"name\":\"detectionIntervalInSeconds\",\"type\":\"integer\"},{\"name\":\"callback\",\"parameters\":[{\"$ref\":\"IdleState\",\"name\":\"newState\"}],\"type\":\"function\"}],\"type\":\"function\"},{\"description\":\"Sets the interval, in seconds, used to determine when the system is in an idle state for onStateChanged events. The default interval is 60 seconds.\",\"name\":\"setDetectionInterval\",\"parameters\":[{\"description\":\"Threshold, in seconds, used to determine when the system is in an idle state.\",\"minimum\":15,\"name\":\"intervalInSeconds\",\"type\":\"integer\"}],\"type\":\"function\"}],\"namespace\":\"idle\",\"permissions\":[\"idle\"],\"types\":[{\"enum\":[\"active\",\"idle\"],\"id\":\"IdleState\",\"type\":\"string\"}]},{\"description\":\"The <code>browser.management</code> API provides ways to manage the list of extensions that are installed and running.\",\"events\":[{\"description\":\"Fired when an addon has been disabled.\",\"name\":\"onDisabled\",\"parameters\":[{\"$ref\":\"ExtensionInfo\",\"name\":\"info\"}],\"permissions\":[\"management\"],\"type\":\"function\"},{\"description\":\"Fired when an addon has been enabled.\",\"name\":\"onEnabled\",\"parameters\":[{\"$ref\":\"ExtensionInfo\",\"name\":\"info\"}],\"permissions\":[\"management\"],\"type\":\"function\"},{\"description\":\"Fired when an addon has been installed.\",\"name\":\"onInstalled\",\"parameters\":[{\"$ref\":\"ExtensionInfo\",\"name\":\"info\"}],\"permissions\":[\"management\"],\"type\":\"function\"},{\"description\":\"Fired when an addon has been uninstalled.\",\"name\":\"onUninstalled\",\"parameters\":[{\"$ref\":\"ExtensionInfo\",\"name\":\"info\"}],\"permissions\":[\"management\"],\"type\":\"function\"}],\"functions\":[{\"async\":\"callback\",\"description\":\"Returns a list of information about installed extensions.\",\"name\":\"getAll\",\"parameters\":[{\"name\":\"callback\",\"optional\":true,\"parameters\":[{\"items\":{\"$ref\":\"ExtensionInfo\"},\"name\":\"result\",\"type\":\"array\"}],\"type\":\"function\"}],\"permissions\":[\"management\"],\"type\":\"function\"},{\"async\":\"callback\",\"description\":\"Returns information about the installed extension that has the given ID.\",\"name\":\"get\",\"parameters\":[{\"$ref\":\"manifest.ExtensionID\",\"description\":\"The ID from an item of $(ref:management.ExtensionInfo).\",\"name\":\"id\"},{\"name\":\"callback\",\"optional\":true,\"parameters\":[{\"$ref\":\"ExtensionInfo\",\"name\":\"result\"}],\"type\":\"function\"}],\"permissions\":[\"management\"],\"type\":\"function\"},{\"async\":\"callback\",\"description\":\"Returns information about the calling extension. Note: This function can be used without requesting the 'management' permission in the manifest.\",\"name\":\"getSelf\",\"parameters\":[{\"name\":\"callback\",\"optional\":true,\"parameters\":[{\"$ref\":\"ExtensionInfo\",\"name\":\"result\"}],\"type\":\"function\"}],\"type\":\"function\"},{\"async\":\"callback\",\"description\":\"Uninstalls the calling extension. Note: This function can be used without requesting the 'management' permission in the manifest.\",\"name\":\"uninstallSelf\",\"parameters\":[{\"name\":\"options\",\"optional\":true,\"properties\":{\"dialogMessage\":{\"description\":\"The message to display to a user when being asked to confirm removal of the extension.\",\"optional\":true,\"type\":\"string\"},\"showConfirmDialog\":{\"description\":\"Whether or not a confirm-uninstall dialog should prompt the user. Defaults to false.\",\"optional\":true,\"type\":\"boolean\"}},\"type\":\"object\"},{\"name\":\"callback\",\"optional\":true,\"parameters\":[],\"type\":\"function\"}],\"type\":\"function\"},{\"async\":\"callback\",\"description\":\"Enables or disables the given add-on.\",\"name\":\"setEnabled\",\"parameters\":[{\"description\":\"ID of the add-on to enable/disable.\",\"name\":\"id\",\"type\":\"string\"},{\"description\":\"Whether to enable or disable the add-on.\",\"name\":\"enabled\",\"type\":\"boolean\"},{\"name\":\"callback\",\"optional\":true,\"parameters\":[],\"type\":\"function\"}],\"permissions\":[\"management\"],\"type\":\"function\"}],\"namespace\":\"management\",\"types\":[{\"description\":\"Information about an icon belonging to an extension.\",\"id\":\"IconInfo\",\"properties\":{\"size\":{\"description\":\"A number representing the width and height of the icon. Likely values include (but are not limited to) 128, 48, 24, and 16.\",\"type\":\"integer\"},\"url\":{\"description\":\"The URL for this icon image. To display a grayscale version of the icon (to indicate that an extension is disabled, for example), append <code>?grayscale=true</code> to the URL.\",\"type\":\"string\"}},\"type\":\"object\"},{\"description\":\"A reason the item is disabled.\",\"enum\":[\"unknown\",\"permissions_increase\"],\"id\":\"ExtensionDisabledReason\",\"type\":\"string\"},{\"description\":\"The type of this extension. Will always be 'extension'.\",\"enum\":[\"extension\",\"theme\"],\"id\":\"ExtensionType\",\"type\":\"string\"},{\"description\":\"How the extension was installed. One of<br><var>development</var>: The extension was loaded unpacked in developer mode,<br><var>normal</var>: The extension was installed normally via an .xpi file,<br><var>sideload</var>: The extension was installed by other software on the machine,<br><var>other</var>: The extension was installed by other means.\",\"enum\":[\"development\",\"normal\",\"sideload\",\"other\"],\"id\":\"ExtensionInstallType\",\"type\":\"string\"},{\"description\":\"Information about an installed extension.\",\"id\":\"ExtensionInfo\",\"properties\":{\"description\":{\"description\":\"The description of this extension.\",\"type\":\"string\"},\"disabledReason\":{\"$ref\":\"ExtensionDisabledReason\",\"description\":\"A reason the item is disabled.\",\"optional\":true},\"enabled\":{\"description\":\"Whether it is currently enabled or disabled.\",\"type\":\"boolean\"},\"homepageUrl\":{\"description\":\"The URL of the homepage of this extension.\",\"optional\":true,\"type\":\"string\"},\"hostPermissions\":{\"description\":\"Returns a list of host based permissions.\",\"items\":{\"type\":\"string\"},\"optional\":true,\"type\":\"array\"},\"icons\":{\"description\":\"A list of icon information. Note that this just reflects what was declared in the manifest, and the actual image at that url may be larger or smaller than what was declared, so you might consider using explicit width and height attributes on img tags referencing these images. See the <a href='manifest/icons'>manifest documentation on icons</a> for more details.\",\"items\":{\"$ref\":\"IconInfo\"},\"optional\":true,\"type\":\"array\"},\"id\":{\"description\":\"The extension's unique identifier.\",\"type\":\"string\"},\"installType\":{\"$ref\":\"ExtensionInstallType\",\"description\":\"How the extension was installed.\"},\"mayDisable\":{\"description\":\"Whether this extension can be disabled or uninstalled by the user.\",\"type\":\"boolean\"},\"name\":{\"description\":\"The name of this extension.\",\"type\":\"string\"},\"optionsUrl\":{\"description\":\"The url for the item's options page, if it has one.\",\"type\":\"string\"},\"permissions\":{\"description\":\"Returns a list of API based permissions.\",\"items\":{\"type\":\"string\"},\"optional\":true,\"type\":\"array\"},\"shortName\":{\"description\":\"A short version of the name of this extension.\",\"optional\":true,\"type\":\"string\"},\"type\":{\"$ref\":\"ExtensionType\",\"description\":\"The type of this extension. Will always return 'extension'.\"},\"updateUrl\":{\"description\":\"The update URL of this extension.\",\"optional\":true,\"type\":\"string\"},\"version\":{\"description\":\"The <a href='manifest/version'>version</a> of this extension.\",\"type\":\"string\"},\"versionName\":{\"description\":\"The <a href='manifest/version#version_name'>version name</a> of this extension if the manifest specified one.\",\"optional\":true,\"type\":\"string\"}},\"type\":\"object\"}]},{\"namespace\":\"manifest\",\"permissions\":[],\"types\":[{\"additionalProperties\":{\"$ref\":\"UnrecognizedProperty\"},\"description\":\"Represents a WebExtension manifest.json file\",\"id\":\"WebExtensionManifest\",\"properties\":{\"applications\":{\"optional\":true,\"properties\":{\"gecko\":{\"$ref\":\"FirefoxSpecificProperties\",\"optional\":true}},\"type\":\"object\"},\"author\":{\"onError\":\"warn\",\"optional\":true,\"preprocess\":\"localize\",\"type\":\"string\"},\"background\":{\"choices\":[{\"additionalProperties\":{\"$ref\":\"UnrecognizedProperty\"},\"properties\":{\"page\":{\"$ref\":\"ExtensionURL\"},\"persistent\":{\"$ref\":\"PersistentBackgroundProperty\",\"optional\":true}},\"type\":\"object\"},{\"additionalProperties\":{\"$ref\":\"UnrecognizedProperty\"},\"properties\":{\"persistent\":{\"$ref\":\"PersistentBackgroundProperty\",\"optional\":true},\"scripts\":{\"items\":{\"$ref\":\"ExtensionURL\"},\"type\":\"array\"}},\"type\":\"object\"}],\"optional\":true},\"browser_specific_settings\":{\"optional\":true,\"properties\":{\"gecko\":{\"$ref\":\"FirefoxSpecificProperties\",\"optional\":true}},\"type\":\"object\"},\"content_scripts\":{\"items\":{\"$ref\":\"ContentScript\"},\"optional\":true,\"type\":\"array\"},\"content_security_policy\":{\"format\":\"contentSecurityPolicy\",\"onError\":\"warn\",\"optional\":true,\"type\":\"string\"},\"description\":{\"optional\":true,\"preprocess\":\"localize\",\"type\":\"string\"},\"developer\":{\"optional\":true,\"properties\":{\"name\":{\"optional\":true,\"preprocess\":\"localize\",\"type\":\"string\"},\"url\":{\"optional\":true,\"preprocess\":\"localize\",\"type\":\"string\"}},\"type\":\"object\"},\"homepage_url\":{\"format\":\"url\",\"optional\":true,\"preprocess\":\"localize\",\"type\":\"string\"},\"icons\":{\"optional\":true,\"patternProperties\":{\"^[1-9]\\\\d*$\":{\"type\":\"string\"}},\"type\":\"object\"},\"incognito\":{\"enum\":[\"spanning\"],\"onError\":\"warn\",\"optional\":true,\"type\":\"string\"},\"manifest_version\":{\"maximum\":2,\"minimum\":2,\"type\":\"integer\"},\"minimum_chrome_version\":{\"optional\":true,\"type\":\"string\"},\"minimum_opera_version\":{\"optional\":true,\"type\":\"string\"},\"name\":{\"optional\":false,\"preprocess\":\"localize\",\"type\":\"string\"},\"optional_permissions\":{\"default\":[],\"items\":{\"$ref\":\"OptionalPermissionOrOrigin\",\"onError\":\"warn\"},\"optional\":true,\"type\":\"array\"},\"options_ui\":{\"additionalProperties\":{\"deprecated\":\"An unexpected property was found in the WebExtension manifest\",\"type\":\"any\"},\"optional\":true,\"properties\":{\"browser_style\":{\"optional\":true,\"type\":\"boolean\"},\"chrome_style\":{\"optional\":true,\"type\":\"boolean\"},\"open_in_tab\":{\"optional\":true,\"type\":\"boolean\"},\"page\":{\"$ref\":\"ExtensionURL\"}},\"type\":\"object\"},\"permissions\":{\"default\":[],\"items\":{\"$ref\":\"PermissionOrOrigin\",\"onError\":\"warn\"},\"optional\":true,\"type\":\"array\"},\"short_name\":{\"optional\":true,\"preprocess\":\"localize\",\"type\":\"string\"},\"version\":{\"optional\":false,\"type\":\"string\"},\"web_accessible_resources\":{\"items\":{\"type\":\"string\"},\"optional\":true,\"type\":\"array\"}},\"type\":\"object\"},{\"description\":\"Represents a WebExtension language pack manifest.json file\",\"id\":\"WebExtensionLangpackManifest\",\"properties\":{\"applications\":{\"optional\":true,\"properties\":{\"gecko\":{\"$ref\":\"FirefoxSpecificProperties\",\"optional\":true}},\"type\":\"object\"},\"author\":{\"onError\":\"warn\",\"optional\":true,\"preprocess\":\"localize\",\"type\":\"string\"},\"browser_specific_settings\":{\"optional\":true,\"properties\":{\"gecko\":{\"$ref\":\"FirefoxSpecificProperties\",\"optional\":true}},\"type\":\"object\"},\"description\":{\"optional\":true,\"preprocess\":\"localize\",\"type\":\"string\"},\"homepage_url\":{\"format\":\"url\",\"optional\":true,\"preprocess\":\"localize\",\"type\":\"string\"},\"langpack_id\":{\"pattern\":\"^[a-zA-Z][a-zA-Z-]+$\",\"type\":\"string\"},\"languages\":{\"patternProperties\":{\"^[a-z]{2}[a-zA-Z-]*$\":{\"properties\":{\"chrome_resources\":{\"patternProperties\":{\"^[a-zA-Z-.]+$\":{\"choices\":[{\"$ref\":\"ExtensionURL\"},{\"patternProperties\":{\"^[a-z]+$\":{\"$ref\":\"ExtensionURL\"}},\"type\":\"object\"}]}},\"type\":\"object\"},\"version\":{\"type\":\"string\"}},\"type\":\"object\"}},\"type\":\"object\"},\"manifest_version\":{\"maximum\":2,\"minimum\":2,\"type\":\"integer\"},\"name\":{\"optional\":false,\"preprocess\":\"localize\",\"type\":\"string\"},\"short_name\":{\"optional\":true,\"preprocess\":\"localize\",\"type\":\"string\"},\"sources\":{\"optional\":true,\"patternProperties\":{\"^[a-z]+$\":{\"properties\":{\"base_path\":{\"$ref\":\"ExtensionURL\"},\"paths\":{\"items\":{\"format\":\"strictRelativeUrl\",\"type\":\"string\"},\"optional\":true,\"type\":\"array\"}},\"type\":\"object\"}},\"type\":\"object\"},\"version\":{\"optional\":false,\"type\":\"string\"}},\"type\":\"object\"},{\"additionalProperties\":{\"$ref\":\"UnrecognizedProperty\"},\"id\":\"ThemeIcons\",\"properties\":{\"dark\":{\"$ref\":\"ExtensionURL\",\"description\":\"The dark icon to use for light themes\"},\"light\":{\"$ref\":\"ExtensionURL\",\"description\":\"A light icon to use for dark themes\"},\"size\":{\"description\":\"The size of the icons\",\"type\":\"integer\"}},\"type\":\"object\"},{\"choices\":[{\"enum\":[\"clipboardRead\",\"clipboardWrite\",\"geolocation\",\"idle\",\"notifications\"],\"type\":\"string\"}],\"id\":\"OptionalPermission\"},{\"choices\":[{\"$ref\":\"OptionalPermission\"},{\"$ref\":\"MatchPattern\"}],\"id\":\"OptionalPermissionOrOrigin\"},{\"choices\":[{\"$ref\":\"OptionalPermission\"},{\"enum\":[\"alarms\",\"mozillaAddons\",\"storage\",\"unlimitedStorage\"],\"type\":\"string\"}],\"id\":\"Permission\"},{\"choices\":[{\"$ref\":\"Permission\"},{\"$ref\":\"MatchPattern\"}],\"id\":\"PermissionOrOrigin\"},{\"format\":\"url\",\"id\":\"HttpURL\",\"pattern\":\"^https?://.*$\",\"type\":\"string\"},{\"format\":\"strictRelativeUrl\",\"id\":\"ExtensionURL\",\"type\":\"string\"},{\"format\":\"imageDataOrStrictRelativeUrl\",\"id\":\"ImageDataOrExtensionURL\",\"type\":\"string\"},{\"choices\":[{\"pattern\":\"(?i)^\\\\{[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\\\\}$\",\"type\":\"string\"},{\"pattern\":\"(?i)^[a-z0-9-._]*@[a-z0-9-._]+$\",\"type\":\"string\"}],\"id\":\"ExtensionID\"},{\"id\":\"FirefoxSpecificProperties\",\"properties\":{\"id\":{\"$ref\":\"ExtensionID\",\"optional\":true},\"strict_max_version\":{\"optional\":true,\"type\":\"string\"},\"strict_min_version\":{\"optional\":true,\"type\":\"string\"},\"update_url\":{\"format\":\"url\",\"optional\":true,\"type\":\"string\"}},\"type\":\"object\"},{\"choices\":[{\"enum\":[\"<all_urls>\"],\"type\":\"string\"},{\"pattern\":\"^(https?|wss?|file|ftp|\\\\*)://(\\\\*|\\\\*\\\\.[^*/]+|[^*/]+)/.*$\",\"type\":\"string\"},{\"pattern\":\"^file:///.*$\",\"type\":\"string\"}],\"id\":\"MatchPattern\"},{\"choices\":[{\"enum\":[\"<all_urls>\"],\"type\":\"string\"},{\"pattern\":\"^(https?|wss?|file|ftp|moz-extension|\\\\*)://(\\\\*|\\\\*\\\\.[^*/]+|[^*/]+)/.*$\",\"type\":\"string\"},{\"pattern\":\"^file:///.*$\",\"type\":\"string\"}],\"description\":\"Same as MatchPattern above, but includes moz-extension protocol\",\"id\":\"MatchPatternInternal\"},{\"additionalProperties\":{\"$ref\":\"UnrecognizedProperty\"},\"description\":\"Details of the script or CSS to inject. Either the code or the file property must be set, but both may not be set at the same time. Based on InjectDetails, but using underscore rather than camel case naming conventions.\",\"id\":\"ContentScript\",\"properties\":{\"all_frames\":{\"description\":\"If allFrames is <code>true</code>, implies that the JavaScript or CSS should be injected into all frames of current page. By default, it's <code>false</code> and is only injected into the top frame.\",\"optional\":true,\"type\":\"boolean\"},\"css\":{\"description\":\"The list of CSS files to inject\",\"items\":{\"$ref\":\"ExtensionURL\"},\"optional\":true,\"type\":\"array\"},\"exclude_globs\":{\"items\":{\"type\":\"string\"},\"optional\":true,\"type\":\"array\"},\"exclude_matches\":{\"items\":{\"$ref\":\"MatchPattern\"},\"minItems\":1,\"optional\":true,\"type\":\"array\"},\"include_globs\":{\"items\":{\"type\":\"string\"},\"optional\":true,\"type\":\"array\"},\"js\":{\"description\":\"The list of CSS files to inject\",\"items\":{\"$ref\":\"ExtensionURL\"},\"optional\":true,\"type\":\"array\"},\"match_about_blank\":{\"description\":\"If matchAboutBlank is true, then the code is also injected in about:blank and about:srcdoc frames if your extension has access to its parent document. Code cannot be inserted in top-level about:-frames. By default it is <code>false</code>.\",\"optional\":true,\"type\":\"boolean\"},\"matches\":{\"items\":{\"$ref\":\"MatchPattern\"},\"minItems\":1,\"optional\":false,\"type\":\"array\"},\"run_at\":{\"$ref\":\"extensionTypes.RunAt\",\"default\":\"document_idle\",\"description\":\"The soonest that the JavaScript or CSS will be injected into the tab. Defaults to \\\"document_idle\\\".\",\"optional\":true}},\"type\":\"object\"},{\"choices\":[{\"additionalProperties\":false,\"patternProperties\":{\"^[1-9]\\\\d*$\":{\"$ref\":\"ExtensionURL\"}},\"type\":\"object\"},{\"$ref\":\"ExtensionURL\"}],\"id\":\"IconPath\"},{\"choices\":[{\"additionalProperties\":false,\"patternProperties\":{\"^[1-9]\\\\d*$\":{\"$ref\":\"ImageData\"}},\"type\":\"object\"},{\"$ref\":\"ImageData\"}],\"id\":\"IconImageData\"},{\"id\":\"ImageData\",\"isInstanceOf\":\"ImageData\",\"postprocess\":\"convertImageDataToURL\",\"type\":\"object\"},{\"deprecated\":\"An unexpected property was found in the WebExtension manifest.\",\"id\":\"UnrecognizedProperty\",\"type\":\"any\"},{\"deprecated\":\"Event pages are not currently supported. This will run as a persistent background page.\",\"id\":\"PersistentBackgroundProperty\",\"type\":\"boolean\"}]},{\"$import\":\"menus\",\"description\":\"Use the browser.contextMenus API to add items to the browser's context menu. You can choose what types of objects your context menu additions apply to, such as images, hyperlinks, and pages.\",\"namespace\":\"contextMenus\",\"permissions\":[\"contextMenus\"],\"types\":[{\"description\":\"The different contexts a menu can appear in. Specifying 'all' is equivalent to the combination of all other contexts except for 'tab' and 'tools_menu'.\",\"enum\":[\"all\",\"page\",\"frame\",\"selection\",\"link\",\"editable\",\"password\",\"image\",\"video\",\"audio\",\"launcher\",\"browser_action\",\"page_action\",\"tab\"],\"id\":\"ContextType\",\"type\":\"string\"}]},{\"description\":\"Use the browser.menus API to add items to the browser's menus. You can choose what types of objects your context menu additions apply to, such as images, hyperlinks, and pages.\",\"events\":[{\"description\":\"Fired when a context menu item is clicked.\",\"name\":\"onClicked\",\"parameters\":[{\"$ref\":\"OnClickData\",\"description\":\"Information about the item clicked and the context where the click happened.\",\"name\":\"info\"},{\"$ref\":\"tabs.Tab\",\"description\":\"The details of the tab where the click took place. If the click did not take place in a tab, this parameter will be missing.\",\"name\":\"tab\",\"optional\":true}],\"type\":\"function\"}],\"functions\":[{\"description\":\"Creates a new context menu item. Note that if an error occurs during creation, you may not find out until the creation callback fires (the details will be in $(ref:runtime.lastError)).\",\"name\":\"create\",\"parameters\":[{\"name\":\"createProperties\",\"properties\":{\"checked\":{\"description\":\"The initial state of a checkbox or radio item: true for selected and false for unselected. Only one radio item can be selected at a time in a given group of radio items.\",\"optional\":true,\"type\":\"boolean\"},\"command\":{\"description\":\"Specifies a command to issue for the context click.  Currently supports internal commands _execute_page_action, _execute_browser_action and _execute_sidebar_action.\",\"optional\":true,\"type\":\"string\"},\"contexts\":{\"description\":\"List of contexts this menu item will appear in. Defaults to ['page'] if not specified.\",\"items\":{\"$ref\":\"ContextType\"},\"minItems\":1,\"optional\":true,\"type\":\"array\"},\"documentUrlPatterns\":{\"description\":\"Lets you restrict the item to apply only to documents whose URL matches one of the given patterns. (This applies to frames as well.) For details on the format of a pattern, see $(topic:match_patterns)[Match Patterns].\",\"items\":{\"type\":\"string\"},\"optional\":true,\"type\":\"array\"},\"enabled\":{\"description\":\"Whether this context menu item is enabled or disabled. Defaults to true.\",\"optional\":true,\"type\":\"boolean\"},\"icons\":{\"optional\":true,\"patternProperties\":{\"^[1-9]\\\\d*$\":{\"type\":\"string\"}},\"type\":\"object\"},\"id\":{\"description\":\"The unique ID to assign to this item. Mandatory for event pages. Cannot be the same as another ID for this extension.\",\"optional\":true,\"type\":\"string\"},\"onclick\":{\"description\":\"A function that will be called back when the menu item is clicked. Event pages cannot use this; instead, they should register a listener for $(ref:contextMenus.onClicked).\",\"optional\":true,\"parameters\":[{\"$ref\":\"contextMenusInternal.OnClickData\",\"description\":\"Information about the item clicked and the context where the click happened.\",\"name\":\"info\"},{\"$ref\":\"tabs.Tab\",\"description\":\"The details of the tab where the click took place. Note: this parameter only present for extensions.\",\"name\":\"tab\"}],\"type\":\"function\"},\"parentId\":{\"choices\":[{\"type\":\"integer\"},{\"type\":\"string\"}],\"description\":\"The ID of a parent menu item; this makes the item a child of a previously added item.\",\"optional\":true},\"targetUrlPatterns\":{\"description\":\"Similar to documentUrlPatterns, but lets you filter based on the src attribute of img/audio/video tags and the href of anchor tags.\",\"items\":{\"type\":\"string\"},\"optional\":true,\"type\":\"array\"},\"title\":{\"description\":\"The text to be displayed in the item; this is <em>required</em> unless <code>type</code> is 'separator'. When the context is 'selection', you can use <code>%s</code> within the string to show the selected text. For example, if this parameter's value is \\\"Translate '%s' to Pig Latin\\\" and the user selects the word \\\"cool\\\", the context menu item for the selection is \\\"Translate 'cool' to Pig Latin\\\".\",\"optional\":true,\"type\":\"string\"},\"type\":{\"$ref\":\"ItemType\",\"description\":\"The type of menu item. Defaults to 'normal' if not specified.\",\"optional\":true}},\"type\":\"object\"},{\"description\":\"Called when the item has been created in the browser. If there were any problems creating the item, details will be available in $(ref:runtime.lastError).\",\"name\":\"callback\",\"optional\":true,\"parameters\":[],\"type\":\"function\"}],\"returns\":{\"choices\":[{\"type\":\"integer\"},{\"type\":\"string\"}],\"description\":\"The ID of the newly created item.\"},\"type\":\"function\"},{\"async\":\"callback\",\"description\":\"Updates a previously created context menu item.\",\"name\":\"update\",\"parameters\":[{\"choices\":[{\"type\":\"integer\"},{\"type\":\"string\"}],\"description\":\"The ID of the item to update.\",\"name\":\"id\"},{\"description\":\"The properties to update. Accepts the same values as the create function.\",\"name\":\"updateProperties\",\"properties\":{\"checked\":{\"optional\":true,\"type\":\"boolean\"},\"contexts\":{\"items\":{\"$ref\":\"ContextType\"},\"minItems\":1,\"optional\":true,\"type\":\"array\"},\"documentUrlPatterns\":{\"items\":{\"type\":\"string\"},\"optional\":true,\"type\":\"array\"},\"enabled\":{\"optional\":true,\"type\":\"boolean\"},\"onclick\":{\"optional\":\"omit-key-if-missing\",\"parameters\":[{\"$ref\":\"menusInternal.OnClickData\",\"name\":\"info\"},{\"$ref\":\"tabs.Tab\",\"description\":\"The details of the tab where the click took place. Note: this parameter only present for extensions.\",\"name\":\"tab\"}],\"type\":\"function\"},\"parentId\":{\"choices\":[{\"type\":\"integer\"},{\"type\":\"string\"}],\"description\":\"Note: You cannot change an item to be a child of one of its own descendants.\",\"optional\":true},\"targetUrlPatterns\":{\"items\":{\"type\":\"string\"},\"optional\":true,\"type\":\"array\"},\"title\":{\"optional\":true,\"type\":\"string\"},\"type\":{\"$ref\":\"ItemType\",\"optional\":true}},\"type\":\"object\"},{\"description\":\"Called when the context menu has been updated.\",\"name\":\"callback\",\"optional\":true,\"parameters\":[],\"type\":\"function\"}],\"type\":\"function\"},{\"async\":\"callback\",\"description\":\"Removes a context menu item.\",\"name\":\"remove\",\"parameters\":[{\"choices\":[{\"type\":\"integer\"},{\"type\":\"string\"}],\"description\":\"The ID of the context menu item to remove.\",\"name\":\"menuItemId\"},{\"description\":\"Called when the context menu has been removed.\",\"name\":\"callback\",\"optional\":true,\"parameters\":[],\"type\":\"function\"}],\"type\":\"function\"},{\"async\":\"callback\",\"description\":\"Removes all context menu items added by this extension.\",\"name\":\"removeAll\",\"parameters\":[{\"description\":\"Called when removal is complete.\",\"name\":\"callback\",\"optional\":true,\"parameters\":[],\"type\":\"function\"}],\"type\":\"function\"}],\"namespace\":\"menus\",\"permissions\":[\"menus\"],\"properties\":{\"ACTION_MENU_TOP_LEVEL_LIMIT\":{\"description\":\"The maximum number of top level extension items that can be added to an extension action context menu. Any items beyond this limit will be ignored.\",\"value\":6}},\"types\":[{\"description\":\"The different contexts a menu can appear in. Specifying 'all' is equivalent to the combination of all other contexts except for 'tab' and 'tools_menu'.\",\"enum\":[\"all\",\"page\",\"frame\",\"selection\",\"link\",\"editable\",\"password\",\"image\",\"video\",\"audio\",\"launcher\",\"browser_action\",\"page_action\",\"tab\",\"tools_menu\"],\"id\":\"ContextType\",\"type\":\"string\"},{\"description\":\"The type of menu item.\",\"enum\":[\"normal\",\"checkbox\",\"radio\",\"separator\"],\"id\":\"ItemType\",\"type\":\"string\"},{\"description\":\"Information sent when a context menu item is clicked.\",\"id\":\"OnClickData\",\"properties\":{\"checked\":{\"description\":\"A flag indicating the state of a checkbox or radio item after it is clicked.\",\"optional\":true,\"type\":\"boolean\"},\"editable\":{\"description\":\"A flag indicating whether the element is editable (text input, textarea, etc.).\",\"type\":\"boolean\"},\"frameUrl\":{\"description\":\" The URL of the frame of the element where the context menu was clicked, if it was in a frame.\",\"optional\":true,\"type\":\"string\"},\"linkText\":{\"description\":\"If the element is a link, the text of that link.\",\"optional\":true,\"type\":\"string\"},\"linkUrl\":{\"description\":\"If the element is a link, the URL it points to.\",\"optional\":true,\"type\":\"string\"},\"mediaType\":{\"description\":\"One of 'image', 'video', or 'audio' if the context menu was activated on one of these types of elements.\",\"optional\":true,\"type\":\"string\"},\"menuItemId\":{\"choices\":[{\"type\":\"integer\"},{\"type\":\"string\"}],\"description\":\"The ID of the menu item that was clicked.\"},\"modifiers\":{\"description\":\"An array of keyboard modifiers that were held while the menu item was clicked.\",\"items\":{\"enum\":[\"Shift\",\"Alt\",\"Command\",\"Ctrl\",\"MacCtrl\"],\"type\":\"string\"},\"type\":\"array\"},\"pageUrl\":{\"description\":\"The URL of the page where the menu item was clicked. This property is not set if the click occured in a context where there is no current page, such as in a launcher context menu.\",\"optional\":true,\"type\":\"string\"},\"parentMenuItemId\":{\"choices\":[{\"type\":\"integer\"},{\"type\":\"string\"}],\"description\":\"The parent ID, if any, for the item clicked.\",\"optional\":true},\"selectionText\":{\"description\":\"The text for the context selection, if any.\",\"optional\":true,\"type\":\"string\"},\"srcUrl\":{\"description\":\"Will be present for elements with a 'src' URL.\",\"optional\":true,\"type\":\"string\"},\"wasChecked\":{\"description\":\"A flag indicating the state of a checkbox or radio item before it was clicked.\",\"optional\":true,\"type\":\"boolean\"}},\"type\":\"object\"}]},{\"allowedContexts\":[\"addon_parent_only\"],\"description\":\"Use the <code>browser.contextMenus</code> API to add items to the browser's context menu. You can choose what types of objects your context menu additions apply to, such as images, hyperlinks, and pages.\",\"namespace\":\"menusInternal\",\"types\":[{\"description\":\"Information sent when a context menu item is clicked.\",\"id\":\"OnClickData\",\"properties\":{\"checked\":{\"description\":\"A flag indicating the state of a checkbox or radio item after it is clicked.\",\"optional\":true,\"type\":\"boolean\"},\"editable\":{\"description\":\"A flag indicating whether the element is editable (text input, textarea, etc.).\",\"type\":\"boolean\"},\"frameUrl\":{\"description\":\" The URL of the frame of the element where the context menu was clicked, if it was in a frame.\",\"optional\":true,\"type\":\"string\"},\"linkUrl\":{\"description\":\"If the element is a link, the URL it points to.\",\"optional\":true,\"type\":\"string\"},\"mediaType\":{\"description\":\"One of 'image', 'video', or 'audio' if the context menu was activated on one of these types of elements.\",\"optional\":true,\"type\":\"string\"},\"menuItemId\":{\"choices\":[{\"type\":\"integer\"},{\"type\":\"string\"}],\"description\":\"The ID of the menu item that was clicked.\"},\"pageUrl\":{\"description\":\"The URL of the page where the menu item was clicked. This property is not set if the click occured in a context where there is no current page, such as in a launcher context menu.\",\"optional\":true,\"type\":\"string\"},\"parentMenuItemId\":{\"choices\":[{\"type\":\"integer\"},{\"type\":\"string\"}],\"description\":\"The parent ID, if any, for the item clicked.\",\"optional\":true},\"selectionText\":{\"description\":\"The text for the context selection, if any.\",\"optional\":true,\"type\":\"string\"},\"srcUrl\":{\"description\":\"Will be present for elements with a 'src' URL.\",\"optional\":true,\"type\":\"string\"},\"wasChecked\":{\"description\":\"A flag indicating the state of a checkbox or radio item before it was clicked.\",\"optional\":true,\"type\":\"boolean\"}},\"type\":\"object\"}]},{\"events\":[{\"description\":\"Fired when the notification closed, either by the system or by user action.\",\"name\":\"onClosed\",\"parameters\":[{\"description\":\"The notificationId of the closed notification.\",\"name\":\"notificationId\",\"type\":\"string\"},{\"description\":\"True if the notification was closed by the user.\",\"name\":\"byUser\",\"type\":\"boolean\"}],\"type\":\"function\"},{\"description\":\"Fired when the user clicked in a non-button area of the notification.\",\"name\":\"onClicked\",\"parameters\":[{\"description\":\"The notificationId of the clicked notification.\",\"name\":\"notificationId\",\"type\":\"string\"}],\"type\":\"function\"},{\"description\":\"Fired when the  user pressed a button in the notification.\",\"name\":\"onButtonClicked\",\"parameters\":[{\"description\":\"The notificationId of the clicked notification.\",\"name\":\"notificationId\",\"type\":\"string\"},{\"description\":\"The index of the button clicked by the user.\",\"name\":\"buttonIndex\",\"type\":\"number\"}],\"type\":\"function\"},{\"description\":\"Fired when the user changes the permission level.\",\"name\":\"onPermissionLevelChanged\",\"parameters\":[{\"$ref\":\"PermissionLevel\",\"description\":\"The new permission level.\",\"name\":\"level\"}],\"type\":\"function\",\"unsupported\":true},{\"description\":\"Fired when the user clicked on a link for the app's notification settings.\",\"name\":\"onShowSettings\",\"parameters\":[],\"type\":\"function\",\"unsupported\":true},{\"description\":\"Fired when the notification is shown.\",\"name\":\"onShown\",\"parameters\":[{\"description\":\"The notificationId of the shown notification.\",\"name\":\"notificationId\",\"type\":\"string\"}],\"type\":\"function\"}],\"functions\":[{\"async\":\"callback\",\"description\":\"Creates and displays a notification.\",\"name\":\"create\",\"parameters\":[{\"description\":\"Identifier of the notification. If it is empty, this method generates an id. If it matches an existing notification, this method first clears that notification before proceeding with the create operation.\",\"name\":\"notificationId\",\"optional\":true,\"type\":\"string\"},{\"$ref\":\"CreateNotificationOptions\",\"description\":\"Contents of the notification.\",\"name\":\"options\"},{\"name\":\"callback\",\"optional\":true,\"parameters\":[{\"description\":\"The notification id (either supplied or generated) that represents the created notification.\",\"name\":\"notificationId\",\"type\":\"string\"}],\"type\":\"function\"}],\"type\":\"function\"},{\"async\":\"callback\",\"description\":\"Updates an existing notification.\",\"name\":\"update\",\"parameters\":[{\"description\":\"The id of the notification to be updated.\",\"name\":\"notificationId\",\"type\":\"string\"},{\"$ref\":\"UpdateNotificationOptions\",\"description\":\"Contents of the notification to update to.\",\"name\":\"options\"},{\"name\":\"callback\",\"optional\":true,\"parameters\":[{\"description\":\"Indicates whether a matching notification existed.\",\"name\":\"wasUpdated\",\"type\":\"boolean\"}],\"type\":\"function\"}],\"type\":\"function\",\"unsupported\":true},{\"async\":\"callback\",\"description\":\"Clears an existing notification.\",\"name\":\"clear\",\"parameters\":[{\"description\":\"The id of the notification to be updated.\",\"name\":\"notificationId\",\"type\":\"string\"},{\"name\":\"callback\",\"optional\":true,\"parameters\":[{\"description\":\"Indicates whether a matching notification existed.\",\"name\":\"wasCleared\",\"type\":\"boolean\"}],\"type\":\"function\"}],\"type\":\"function\"},{\"async\":\"callback\",\"description\":\"Retrieves all the notifications.\",\"name\":\"getAll\",\"parameters\":[{\"name\":\"callback\",\"parameters\":[{\"additionalProperties\":{\"$ref\":\"CreateNotificationOptions\"},\"description\":\"The set of notifications currently in the system.\",\"name\":\"notifications\",\"type\":\"object\"}],\"type\":\"function\"}],\"type\":\"function\"},{\"async\":\"callback\",\"description\":\"Retrieves whether the user has enabled notifications from this app or extension.\",\"name\":\"getPermissionLevel\",\"parameters\":[{\"name\":\"callback\",\"parameters\":[{\"$ref\":\"PermissionLevel\",\"description\":\"The current permission level.\",\"name\":\"level\"}],\"type\":\"function\"}],\"type\":\"function\",\"unsupported\":true}],\"namespace\":\"notifications\",\"permissions\":[\"notifications\"],\"types\":[{\"enum\":[\"basic\",\"image\",\"list\",\"progress\"],\"id\":\"TemplateType\",\"type\":\"string\"},{\"enum\":[\"granted\",\"denied\"],\"id\":\"PermissionLevel\",\"type\":\"string\"},{\"id\":\"NotificationItem\",\"properties\":{\"message\":{\"description\":\"Additional details about this item.\",\"type\":\"string\"},\"title\":{\"description\":\"Title of one item of a list notification.\",\"type\":\"string\"}},\"type\":\"object\"},{\"id\":\"CreateNotificationOptions\",\"properties\":{\"appIconMaskUrl\":{\"description\":\"A URL to the app icon mask.\",\"optional\":true,\"type\":\"string\"},\"buttons\":{\"description\":\"Text and icons for up to two notification action buttons.\",\"items\":{\"properties\":{\"iconUrl\":{\"optional\":true,\"type\":\"string\"},\"title\":{\"type\":\"string\"}},\"type\":\"object\"},\"optional\":true,\"type\":\"array\",\"unsupported\":true},\"contextMessage\":{\"description\":\"Alternate notification content with a lower-weight font.\",\"optional\":true,\"type\":\"string\"},\"eventTime\":{\"description\":\"A timestamp associated with the notification, in milliseconds past the epoch.\",\"optional\":true,\"type\":\"number\"},\"iconUrl\":{\"description\":\"A URL to the sender's avatar, app icon, or a thumbnail for image notifications.\",\"optional\":true,\"type\":\"string\"},\"imageUrl\":{\"description\":\"A URL to the image thumbnail for image-type notifications.\",\"optional\":true,\"type\":\"string\"},\"isClickable\":{\"description\":\"Whether to show UI indicating that the app will visibly respond to clicks on the body of a notification.\",\"optional\":true,\"type\":\"boolean\"},\"items\":{\"description\":\"Items for multi-item notifications.\",\"items\":{\"$ref\":\"NotificationItem\"},\"optional\":true,\"type\":\"array\"},\"message\":{\"description\":\"Main notification content.\",\"type\":\"string\"},\"priority\":{\"description\":\"Priority ranges from -2 to 2. -2 is lowest priority. 2 is highest. Zero is default.\",\"maximum\":2,\"minimum\":-2,\"optional\":true,\"type\":\"integer\"},\"progress\":{\"description\":\"Current progress ranges from 0 to 100.\",\"maximum\":100,\"minimum\":0,\"optional\":true,\"type\":\"integer\"},\"title\":{\"description\":\"Title of the notification (e.g. sender name for email).\",\"type\":\"string\"},\"type\":{\"$ref\":\"TemplateType\",\"description\":\"Which type of notification to display.\"}},\"type\":\"object\"},{\"id\":\"UpdateNotificationOptions\",\"properties\":{\"appIconMaskUrl\":{\"description\":\"A URL to the app icon mask.\",\"optional\":true,\"type\":\"string\"},\"buttons\":{\"description\":\"Text and icons for up to two notification action buttons.\",\"items\":{\"properties\":{\"iconUrl\":{\"optional\":true,\"type\":\"string\"},\"title\":{\"type\":\"string\"}},\"type\":\"object\"},\"optional\":true,\"type\":\"array\",\"unsupported\":true},\"contextMessage\":{\"description\":\"Alternate notification content with a lower-weight font.\",\"optional\":true,\"type\":\"string\"},\"eventTime\":{\"description\":\"A timestamp associated with the notification, in milliseconds past the epoch.\",\"optional\":true,\"type\":\"number\"},\"iconUrl\":{\"description\":\"A URL to the sender's avatar, app icon, or a thumbnail for image notifications.\",\"optional\":true,\"type\":\"string\"},\"imageUrl\":{\"description\":\"A URL to the image thumbnail for image-type notifications.\",\"optional\":true,\"type\":\"string\"},\"isClickable\":{\"description\":\"Whether to show UI indicating that the app will visibly respond to clicks on the body of a notification.\",\"optional\":true,\"type\":\"boolean\"},\"items\":{\"description\":\"Items for multi-item notifications.\",\"items\":{\"$ref\":\"NotificationItem\"},\"optional\":true,\"type\":\"array\"},\"message\":{\"description\":\"Main notification content.\",\"optional\":true,\"type\":\"string\"},\"priority\":{\"description\":\"Priority ranges from -2 to 2. -2 is lowest priority. 2 is highest. Zero is default.\",\"maximum\":2,\"minimum\":-2,\"optional\":true,\"type\":\"integer\"},\"progress\":{\"description\":\"Current progress ranges from 0 to 100.\",\"maximum\":100,\"minimum\":0,\"optional\":true,\"type\":\"integer\"},\"title\":{\"description\":\"Title of the notification (e.g. sender name for email).\",\"optional\":true,\"type\":\"string\"},\"type\":{\"$ref\":\"TemplateType\",\"description\":\"Which type of notification to display.\",\"optional\":true}},\"type\":\"object\"}]},{\"description\":\"The omnibox API allows you to register a keyword with Firefox's address bar.\",\"events\":[{\"description\":\"User has started a keyword input session by typing the extension's keyword. This is guaranteed to be sent exactly once per input session, and before any onInputChanged events.\",\"name\":\"onInputStarted\",\"parameters\":[],\"type\":\"function\"},{\"description\":\"User has changed what is typed into the omnibox.\",\"name\":\"onInputChanged\",\"parameters\":[{\"name\":\"text\",\"type\":\"string\"},{\"description\":\"A callback passed to the onInputChanged event used for sending suggestions back to the browser.\",\"name\":\"suggest\",\"parameters\":[{\"description\":\"Array of suggest results\",\"items\":{\"$ref\":\"SuggestResult\"},\"name\":\"suggestResults\",\"type\":\"array\"}],\"type\":\"function\"}],\"type\":\"function\"},{\"description\":\"User has accepted what is typed into the omnibox.\",\"name\":\"onInputEntered\",\"parameters\":[{\"name\":\"text\",\"type\":\"string\"},{\"$ref\":\"OnInputEnteredDisposition\",\"name\":\"disposition\"}],\"type\":\"function\"},{\"description\":\"User has ended the keyword input session without accepting the input.\",\"name\":\"onInputCancelled\",\"parameters\":[],\"type\":\"function\"}],\"functions\":[{\"description\":\"Sets the description and styling for the default suggestion. The default suggestion is the text that is displayed in the first suggestion row underneath the URL bar.\",\"name\":\"setDefaultSuggestion\",\"parameters\":[{\"$ref\":\"DefaultSuggestResult\",\"description\":\"A partial SuggestResult object, without the 'content' parameter.\",\"name\":\"suggestion\"}],\"type\":\"function\"}],\"namespace\":\"omnibox\",\"permissions\":[\"manifest:omnibox\"],\"types\":[{\"description\":\"The style type.\",\"enum\":[\"url\",\"match\",\"dim\"],\"id\":\"DescriptionStyleType\",\"type\":\"string\"},{\"description\":\"The window disposition for the omnibox query. This is the recommended context to display results. For example, if the omnibox command is to navigate to a certain URL, a disposition of 'newForegroundTab' means the navigation should take place in a new selected tab.\",\"enum\":[\"currentTab\",\"newForegroundTab\",\"newBackgroundTab\"],\"id\":\"OnInputEnteredDisposition\",\"type\":\"string\"},{\"description\":\"A suggest result.\",\"id\":\"SuggestResult\",\"properties\":{\"content\":{\"description\":\"The text that is put into the URL bar, and that is sent to the extension when the user chooses this entry.\",\"minLength\":1,\"type\":\"string\"},\"description\":{\"description\":\"The text that is displayed in the URL dropdown. Can contain XML-style markup for styling. The supported tags are 'url' (for a literal URL), 'match' (for highlighting text that matched what the user's query), and 'dim' (for dim helper text). The styles can be nested, eg. <dim><match>dimmed match</match></dim>. You must escape the five predefined entities to display them as text: stackoverflow.com/a/1091953/89484 \",\"minLength\":1,\"type\":\"string\"},\"descriptionStyles\":{\"description\":\"An array of style ranges for the description, as provided by the extension.\",\"items\":{\"description\":\"The style ranges for the description, as provided by the extension.\",\"properties\":{\"length\":{\"optional\":true,\"type\":\"integer\"},\"offset\":{\"type\":\"integer\"},\"type\":{\"$ref\":\"DescriptionStyleType\",\"description\":\"The style type\"}},\"type\":\"object\"},\"optional\":true,\"type\":\"array\",\"unsupported\":true},\"descriptionStylesRaw\":{\"description\":\"An array of style ranges for the description, as provided by ToValue().\",\"items\":{\"description\":\"The style ranges for the description, as provided by ToValue().\",\"properties\":{\"offset\":{\"type\":\"integer\"},\"type\":{\"type\":\"integer\"}},\"type\":\"object\"},\"optional\":true,\"type\":\"array\",\"unsupported\":true}},\"type\":\"object\"},{\"description\":\"A suggest result.\",\"id\":\"DefaultSuggestResult\",\"properties\":{\"description\":{\"description\":\"The text that is displayed in the URL dropdown.\",\"minLength\":1,\"type\":\"string\"},\"descriptionStyles\":{\"description\":\"An array of style ranges for the description, as provided by the extension.\",\"items\":{\"description\":\"The style ranges for the description, as provided by the extension.\",\"properties\":{\"length\":{\"optional\":true,\"type\":\"integer\"},\"offset\":{\"type\":\"integer\"},\"type\":{\"$ref\":\"DescriptionStyleType\",\"description\":\"The style type\"}},\"type\":\"object\"},\"optional\":true,\"type\":\"array\",\"unsupported\":true},\"descriptionStylesRaw\":{\"description\":\"An array of style ranges for the description, as provided by ToValue().\",\"items\":{\"description\":\"The style ranges for the description, as provided by ToValue().\",\"properties\":{\"offset\":{\"type\":\"integer\"},\"type\":{\"type\":\"integer\"}},\"type\":\"object\"},\"optional\":true,\"type\":\"array\",\"unsupported\":true}},\"type\":\"object\"}]},{\"description\":\"Use the <code>browser.pageAction</code> API to put icons inside the address bar. Page actions represent actions that can be taken on the current page, but that aren't applicable to all pages.\",\"events\":[{\"description\":\"Fired when a page action icon is clicked.  This event will not fire if the page action has a popup.\",\"name\":\"onClicked\",\"parameters\":[{\"$ref\":\"tabs.Tab\",\"name\":\"tab\"}],\"type\":\"function\"}],\"functions\":[{\"async\":\"callback\",\"description\":\"Shows the page action. The page action is shown whenever the tab is selected.\",\"name\":\"show\",\"parameters\":[{\"description\":\"The id of the tab for which you want to modify the page action.\",\"minimum\":0,\"name\":\"tabId\",\"type\":\"integer\"},{\"name\":\"callback\",\"optional\":true,\"parameters\":[],\"type\":\"function\"}],\"type\":\"function\"},{\"async\":\"callback\",\"description\":\"Hides the page action.\",\"name\":\"hide\",\"parameters\":[{\"description\":\"The id of the tab for which you want to modify the page action.\",\"minimum\":0,\"name\":\"tabId\",\"type\":\"integer\"},{\"name\":\"callback\",\"optional\":true,\"parameters\":[],\"type\":\"function\"}],\"type\":\"function\"},{\"description\":\"Sets the title of the page action. This is displayed in a tooltip over the page action.\",\"name\":\"setTitle\",\"parameters\":[{\"name\":\"details\",\"properties\":{\"tabId\":{\"description\":\"The id of the tab for which you want to modify the page action.\",\"minimum\":0,\"type\":\"integer\"},\"title\":{\"description\":\"The tooltip string.\",\"type\":\"string\"}},\"type\":\"object\"}],\"type\":\"function\"},{\"async\":\"callback\",\"description\":\"Gets the title of the page action.\",\"name\":\"getTitle\",\"parameters\":[{\"name\":\"details\",\"properties\":{\"tabId\":{\"description\":\"Specify the tab to get the title from.\",\"type\":\"integer\"}},\"type\":\"object\"},{\"name\":\"callback\",\"parameters\":[{\"name\":\"result\",\"type\":\"string\"}],\"type\":\"function\"}],\"type\":\"function\"},{\"async\":\"callback\",\"description\":\"Sets the icon for the page action. The icon can be specified either as the path to an image file or as the pixel data from a canvas element, or as dictionary of either one of those. Either the <b>path</b> or the <b>imageData</b> property must be specified.\",\"name\":\"setIcon\",\"parameters\":[{\"name\":\"details\",\"properties\":{\"imageData\":{\"choices\":[{\"$ref\":\"ImageDataType\"},{\"patternProperties\":{\"^[1-9]\\\\d*$\":{\"$ref\":\"ImageDataType\"}},\"type\":\"object\"}],\"description\":\"Either an ImageData object or a dictionary {size -> ImageData} representing icon to be set. If the icon is specified as a dictionary, the actual image to be used is chosen depending on screen's pixel density. If the number of image pixels that fit into one screen space unit equals <code>scale</code>, then image with size <code>scale</code> * 19 will be selected. Initially only scales 1 and 2 will be supported. At least one image must be specified. Note that 'details.imageData = foo' is equivalent to 'details.imageData = {'19': foo}'\",\"optional\":true},\"path\":{\"choices\":[{\"type\":\"string\"},{\"patternProperties\":{\"^[1-9]\\\\d*$\":{\"type\":\"string\"}},\"type\":\"object\"}],\"description\":\"Either a relative image path or a dictionary {size -> relative image path} pointing to icon to be set. If the icon is specified as a dictionary, the actual image to be used is chosen depending on screen's pixel density. If the number of image pixels that fit into one screen space unit equals <code>scale</code>, then image with size <code>scale</code> * 19 will be selected. Initially only scales 1 and 2 will be supported. At least one image must be specified. Note that 'details.path = foo' is equivalent to 'details.imageData = {'19': foo}'\",\"optional\":true},\"tabId\":{\"description\":\"The id of the tab for which you want to modify the page action.\",\"minimum\":0,\"type\":\"integer\"}},\"type\":\"object\"},{\"name\":\"callback\",\"optional\":true,\"parameters\":[],\"type\":\"function\"}],\"type\":\"function\"},{\"async\":true,\"description\":\"Sets the html document to be opened as a popup when the user clicks on the page action's icon.\",\"name\":\"setPopup\",\"parameters\":[{\"name\":\"details\",\"properties\":{\"popup\":{\"description\":\"The html file to show in a popup.  If set to the empty string (''), no popup is shown.\",\"type\":\"string\"},\"tabId\":{\"description\":\"The id of the tab for which you want to modify the page action.\",\"minimum\":0,\"type\":\"integer\"}},\"type\":\"object\"}],\"type\":\"function\"},{\"async\":\"callback\",\"description\":\"Gets the html document set as the popup for this page action.\",\"name\":\"getPopup\",\"parameters\":[{\"name\":\"details\",\"properties\":{\"tabId\":{\"description\":\"Specify the tab to get the popup from.\",\"type\":\"integer\"}},\"type\":\"object\"},{\"name\":\"callback\",\"parameters\":[{\"name\":\"result\",\"type\":\"string\"}],\"type\":\"function\"}],\"type\":\"function\"},{\"async\":true,\"description\":\"Opens the extension page action in the active window.\",\"name\":\"openPopup\",\"parameters\":[],\"requireUserInput\":true,\"type\":\"function\"}],\"namespace\":\"pageAction\",\"permissions\":[\"manifest:page_action\"],\"types\":[{\"additionalProperties\":{\"type\":\"any\"},\"description\":\"Pixel data for an image. Must be an ImageData object (for example, from a <code>canvas</code> element).\",\"id\":\"ImageDataType\",\"isInstanceOf\":\"ImageData\",\"postprocess\":\"convertImageDataToURL\",\"type\":\"object\"}]},{\"events\":[{\"description\":\"Fired when the extension acquires new permissions.\",\"name\":\"onAdded\",\"parameters\":[{\"$ref\":\"Permissions\",\"name\":\"permissions\"}],\"type\":\"function\",\"unsupported\":true},{\"description\":\"Fired when permissions are removed from the extension.\",\"name\":\"onRemoved\",\"parameters\":[{\"$ref\":\"Permissions\",\"name\":\"permissions\"}],\"type\":\"function\",\"unsupported\":true}],\"functions\":[{\"async\":\"callback\",\"description\":\"Get a list of all the extension's permissions.\",\"name\":\"getAll\",\"parameters\":[{\"name\":\"callback\",\"parameters\":[{\"$ref\":\"AnyPermissions\",\"name\":\"permissions\"}],\"type\":\"function\"}],\"type\":\"function\"},{\"async\":\"callback\",\"description\":\"Check if the extension has the given permissions.\",\"name\":\"contains\",\"parameters\":[{\"$ref\":\"AnyPermissions\",\"name\":\"permissions\"},{\"name\":\"callback\",\"parameters\":[{\"name\":\"result\",\"type\":\"boolean\"}],\"type\":\"function\"}],\"type\":\"function\"},{\"allowedContexts\":[\"content\"],\"async\":\"callback\",\"description\":\"Request the given permissions.\",\"name\":\"request\",\"parameters\":[{\"$ref\":\"Permissions\",\"name\":\"permissions\"},{\"name\":\"callback\",\"parameters\":[{\"name\":\"granted\",\"type\":\"boolean\"}],\"type\":\"function\"}],\"requireUserInput\":true,\"type\":\"function\"},{\"async\":\"callback\",\"description\":\"Relinquish the given permissions.\",\"name\":\"remove\",\"parameters\":[{\"$ref\":\"Permissions\",\"name\":\"permissions\"},{\"name\":\"callback\",\"parameters\":[],\"type\":\"function\"}],\"type\":\"function\"}],\"namespace\":\"permissions\",\"permissions\":[\"manifest:optional_permissions\"],\"types\":[{\"id\":\"Permissions\",\"properties\":{\"origins\":{\"default\":[],\"items\":{\"$ref\":\"manifest.MatchPattern\"},\"optional\":true,\"type\":\"array\"},\"permissions\":{\"default\":[],\"items\":{\"$ref\":\"manifest.OptionalPermission\"},\"optional\":true,\"type\":\"array\"}},\"type\":\"object\"},{\"id\":\"AnyPermissions\",\"properties\":{\"origins\":{\"default\":[],\"items\":{\"$ref\":\"manifest.MatchPatternInternal\"},\"optional\":true,\"type\":\"array\"},\"permissions\":{\"default\":[],\"items\":{\"$ref\":\"manifest.Permission\"},\"optional\":true,\"type\":\"array\"}},\"type\":\"object\"}]},{\"description\":\"PKCS#11 module management API\",\"functions\":[{\"async\":true,\"description\":\"checks whether a PKCS#11 module, given by name, is installed\",\"name\":\"isModuleInstalled\",\"parameters\":[{\"name\":\"name\",\"type\":\"string\"}],\"type\":\"function\"},{\"async\":true,\"description\":\"Install a PKCS#11 module with a given name\",\"name\":\"installModule\",\"parameters\":[{\"name\":\"name\",\"type\":\"string\"},{\"name\":\"flags\",\"optional\":true,\"type\":\"integer\"}],\"type\":\"function\"},{\"async\":true,\"description\":\"Remove an installed PKCS#11 module from firefox\",\"name\":\"uninstallModule\",\"parameters\":[{\"name\":\"name\",\"type\":\"string\"}],\"type\":\"function\"},{\"async\":true,\"description\":\"Enumerate a module's slots, each with their name and whether a token is present\",\"name\":\"getModuleSlots\",\"parameters\":[{\"name\":\"name\",\"type\":\"string\"}],\"type\":\"function\"}],\"namespace\":\"pkcs11\",\"permissions\":[\"pkcs11\"]},{\"namespace\":\"privacy\",\"permissions\":[\"privacy\"]},{\"description\":\"Use the <code>browser.privacy</code> API to control usage of the features in the browser that can affect a user's privacy.\",\"namespace\":\"privacy.network\",\"permissions\":[\"privacy\"],\"properties\":{\"networkPredictionEnabled\":{\"$ref\":\"types.Setting\",\"description\":\"If enabled, the browser attempts to speed up your web browsing experience by pre-resolving DNS entries, prerendering sites (<code>&lt;link rel='prefetch' ...&gt;</code>), and preemptively opening TCP and SSL connections to servers.  This preference's value is a boolean, defaulting to <code>true</code>.\"},\"peerConnectionEnabled\":{\"$ref\":\"types.Setting\",\"description\":\"Allow users to enable and disable RTCPeerConnections (aka WebRTC).\"},\"webRTCIPHandlingPolicy\":{\"$ref\":\"types.Setting\",\"description\":\"Allow users to specify the media performance/privacy tradeoffs which impacts how WebRTC traffic will be routed and how much local address information is exposed. This preference's value is of type IPHandlingPolicy, defaulting to <code>default</code>.\"}},\"types\":[{\"description\":\"The IP handling policy of WebRTC.\",\"enum\":[\"default\",\"default_public_and_private_interfaces\",\"default_public_interface_only\",\"disable_non_proxied_udp\"],\"id\":\"IPHandlingPolicy\",\"type\":\"string\"}]},{\"description\":\"Use the <code>browser.privacy</code> API to control usage of the features in the browser that can affect a user's privacy.\",\"namespace\":\"privacy.services\",\"permissions\":[\"privacy\"],\"properties\":{\"passwordSavingEnabled\":{\"$ref\":\"types.Setting\",\"description\":\"If enabled, the password manager will ask if you want to save passwords. This preference's value is a boolean, defaulting to <code>true</code>.\"}}},{\"description\":\"Use the <code>browser.privacy</code> API to control usage of the features in the browser that can affect a user's privacy.\",\"namespace\":\"privacy.websites\",\"permissions\":[\"privacy\"],\"properties\":{\"firstPartyIsolate\":{\"$ref\":\"types.Setting\",\"description\":\"If enabled, the browser will associate all data (including cookies, HSTS data, cached images, and more) for any third party domains with the domain in the address bar. This prevents third party trackers from using directly stored information to identify you across different websites, but may break websites where you login with a third party account (such as a Facebook or Google login.) The value of this preference is of type boolean, and the default value is <code>false</code>.\"},\"hyperlinkAuditingEnabled\":{\"$ref\":\"types.Setting\",\"description\":\"If enabled, the browser sends auditing pings when requested by a website (<code>&lt;a ping&gt;</code>). The value of this preference is of type boolean, and the default value is <code>true</code>.\"},\"protectedContentEnabled\":{\"$ref\":\"types.Setting\",\"description\":\"<strong>Available on Windows and ChromeOS only</strong>: If enabled, the browser provides a unique ID to plugins in order to run protected content. The value of this preference is of type boolean, and the default value is <code>true</code>.\",\"unsupported\":true},\"referrersEnabled\":{\"$ref\":\"types.Setting\",\"description\":\"If enabled, the browser sends <code>referer</code> headers with your requests. Yes, the name of this preference doesn't match the misspelled header. No, we're not going to change it. The value of this preference is of type boolean, and the default value is <code>true</code>.\"},\"resistFingerprinting\":{\"$ref\":\"types.Setting\",\"description\":\"If enabled, the browser attempts to appear similar to other users by reporting generic information to websites. This can prevent websites from uniquely identifying users. Examples of data that is spoofed include number of CPU cores, precision of JavaScript timers, the local timezone, and disabling features such as GamePad support, and the WebSpeech and Navigator APIs. The value of this preference is of type boolean, and the default value is <code>false</code>.\"},\"thirdPartyCookiesAllowed\":{\"$ref\":\"types.Setting\",\"description\":\"If disabled, the browser blocks third-party sites from setting cookies. The value of this preference is of type boolean, and the default value is <code>true</code>.\",\"unsupported\":true},\"trackingProtectionMode\":{\"$ref\":\"types.Setting\",\"description\":\"Allow users to specify the mode for tracking protection. This setting's value is of type TrackingProtectionModeOption, defaulting to <code>private_browsing_only</code>.\"}},\"types\":[{\"description\":\"The mode for tracking protection.\",\"enum\":[\"always\",\"never\",\"private_browsing\"],\"id\":\"TrackingProtectionModeOption\",\"type\":\"string\"}]},{\"description\":\"Use the browser.proxy API to register proxy scripts in Firefox. Proxy scripts in Firefox are proxy auto-config files with extra contextual information and support for additional return types.\",\"events\":[{\"description\":\"Notifies about proxy script errors.\",\"name\":\"onProxyError\",\"parameters\":[{\"name\":\"error\",\"type\":\"object\"}],\"type\":\"function\"}],\"functions\":[{\"async\":true,\"description\":\"Registers the proxy script for the extension.\",\"name\":\"register\",\"parameters\":[{\"format\":\"strictRelativeUrl\",\"name\":\"url\",\"type\":\"string\"}],\"type\":\"function\"},{\"async\":true,\"description\":\"Unregisters the proxy script for the extension.\",\"name\":\"unregister\",\"parameters\":[],\"type\":\"function\"},{\"async\":true,\"deprecated\":\"Please use $(ref:proxy.register)\",\"description\":\"Registers the proxy script for the extension.\",\"name\":\"registerProxyScript\",\"parameters\":[{\"format\":\"strictRelativeUrl\",\"name\":\"url\",\"type\":\"string\"}],\"type\":\"function\"}],\"namespace\":\"proxy\",\"permissions\":[\"proxy\"]},{\"allowedContexts\":[\"content\",\"devtools\",\"proxy\"],\"description\":\"Use the <code>browser.runtime</code> API to retrieve the background page, return details about the manifest, and listen for and respond to events in the app or extension lifecycle. You can also use this API to convert the relative path of URLs to fully-qualified URLs.\",\"events\":[{\"description\":\"Fired when a profile that has this extension installed first starts up. This event is not fired for incognito profiles.\",\"name\":\"onStartup\",\"type\":\"function\"},{\"description\":\"Fired when the extension is first installed, when the extension is updated to a new version, and when the browser is updated to a new version.\",\"name\":\"onInstalled\",\"parameters\":[{\"name\":\"details\",\"properties\":{\"id\":{\"description\":\"Indicates the ID of the imported shared module extension which updated. This is present only if 'reason' is 'shared_module_update'.\",\"optional\":true,\"type\":\"string\",\"unsupported\":true},\"previousVersion\":{\"description\":\"Indicates the previous version of the extension, which has just been updated. This is present only if 'reason' is 'update'.\",\"optional\":true,\"type\":\"string\"},\"reason\":{\"$ref\":\"OnInstalledReason\",\"description\":\"The reason that this event is being dispatched.\"},\"temporary\":{\"description\":\"Indicates whether the addon is installed as a temporary extension.\",\"type\":\"boolean\"}},\"type\":\"object\"}],\"type\":\"function\"},{\"description\":\"Sent to the event page just before it is unloaded. This gives the extension opportunity to do some clean up. Note that since the page is unloading, any asynchronous operations started while handling this event are not guaranteed to complete. If more activity for the event page occurs before it gets unloaded the onSuspendCanceled event will be sent and the page won't be unloaded. \",\"name\":\"onSuspend\",\"type\":\"function\",\"unsupported\":true},{\"description\":\"Sent after onSuspend to indicate that the app won't be unloaded after all.\",\"name\":\"onSuspendCanceled\",\"type\":\"function\",\"unsupported\":true},{\"description\":\"Fired when an update is available, but isn't installed immediately because the app is currently running. If you do nothing, the update will be installed the next time the background page gets unloaded, if you want it to be installed sooner you can explicitly call $(ref:runtime.reload). If your extension is using a persistent background page, the background page of course never gets unloaded, so unless you call $(ref:runtime.reload) manually in response to this event the update will not get installed until the next time the browser itself restarts. If no handlers are listening for this event, and your extension has a persistent background page, it behaves as if $(ref:runtime.reload) is called in response to this event.\",\"name\":\"onUpdateAvailable\",\"parameters\":[{\"additionalProperties\":{\"type\":\"any\"},\"description\":\"The manifest details of the available update.\",\"name\":\"details\",\"properties\":{\"version\":{\"description\":\"The version number of the available update.\",\"type\":\"string\"}},\"type\":\"object\"}],\"type\":\"function\"},{\"deprecated\":\"Please use $(ref:runtime.onRestartRequired).\",\"description\":\"Fired when an update for the browser is available, but isn't installed immediately because a browser restart is required.\",\"name\":\"onBrowserUpdateAvailable\",\"parameters\":[],\"type\":\"function\",\"unsupported\":true},{\"allowedContexts\":[\"content\",\"devtools\"],\"description\":\"Fired when a connection is made from either an extension process or a content script.\",\"name\":\"onConnect\",\"parameters\":[{\"$ref\":\"Port\",\"name\":\"port\"}],\"type\":\"function\"},{\"description\":\"Fired when a connection is made from another extension.\",\"name\":\"onConnectExternal\",\"parameters\":[{\"$ref\":\"Port\",\"name\":\"port\"}],\"type\":\"function\"},{\"allowedContexts\":[\"content\",\"devtools\",\"proxy\"],\"description\":\"Fired when a message is sent from either an extension process or a content script.\",\"name\":\"onMessage\",\"parameters\":[{\"description\":\"The message sent by the calling script.\",\"name\":\"message\",\"optional\":true,\"type\":\"any\"},{\"$ref\":\"MessageSender\",\"name\":\"sender\"},{\"description\":\"Function to call (at most once) when you have a response. The argument should be any JSON-ifiable object. If you have more than one <code>onMessage</code> listener in the same document, then only one may send a response. This function becomes invalid when the event listener returns, unless you return true from the event listener to indicate you wish to send a response asynchronously (this will keep the message channel open to the other end until <code>sendResponse</code> is called).\",\"name\":\"sendResponse\",\"type\":\"function\"}],\"returns\":{\"description\":\"Return true from the event listener if you wish to call <code>sendResponse</code> after the event listener returns.\",\"optional\":true,\"type\":\"boolean\"},\"type\":\"function\"},{\"description\":\"Fired when a message is sent from another extension/app. Cannot be used in a content script.\",\"name\":\"onMessageExternal\",\"parameters\":[{\"description\":\"The message sent by the calling script.\",\"name\":\"message\",\"optional\":true,\"type\":\"any\"},{\"$ref\":\"MessageSender\",\"name\":\"sender\"},{\"description\":\"Function to call (at most once) when you have a response. The argument should be any JSON-ifiable object. If you have more than one <code>onMessage</code> listener in the same document, then only one may send a response. This function becomes invalid when the event listener returns, unless you return true from the event listener to indicate you wish to send a response asynchronously (this will keep the message channel open to the other end until <code>sendResponse</code> is called).\",\"name\":\"sendResponse\",\"type\":\"function\"}],\"returns\":{\"description\":\"Return true from the event listener if you wish to call <code>sendResponse</code> after the event listener returns.\",\"optional\":true,\"type\":\"boolean\"},\"type\":\"function\"},{\"description\":\"Fired when an app or the device that it runs on needs to be restarted. The app should close all its windows at its earliest convenient time to let the restart to happen. If the app does nothing, a restart will be enforced after a 24-hour grace period has passed. Currently, this event is only fired for Chrome OS kiosk apps.\",\"name\":\"onRestartRequired\",\"parameters\":[{\"$ref\":\"OnRestartRequiredReason\",\"description\":\"The reason that the event is being dispatched.\",\"name\":\"reason\"}],\"type\":\"function\",\"unsupported\":true}],\"functions\":[{\"async\":\"callback\",\"description\":\"Retrieves the JavaScript 'window' object for the background page running inside the current extension/app. If the background page is an event page, the system will ensure it is loaded before calling the callback. If there is no background page, an error is set.\",\"name\":\"getBackgroundPage\",\"parameters\":[{\"name\":\"callback\",\"parameters\":[{\"additionalProperties\":{\"type\":\"any\"},\"description\":\"The JavaScript 'window' object for the background page.\",\"isInstanceOf\":\"Window\",\"name\":\"backgroundPage\",\"optional\":true,\"type\":\"object\"}],\"type\":\"function\"}],\"type\":\"function\"},{\"async\":\"callback\",\"description\":\"<p>Open your Extension's options page, if possible.</p><p>The precise behavior may depend on your manifest's <code>$(topic:optionsV2)[options_ui]</code> or <code>$(topic:options)[options_page]</code> key, or what the browser happens to support at the time.</p><p>If your Extension does not declare an options page, or the browser failed to create one for some other reason, the callback will set $(ref:lastError).</p>\",\"name\":\"openOptionsPage\",\"parameters\":[{\"name\":\"callback\",\"optional\":true,\"parameters\":[],\"type\":\"function\"}],\"type\":\"function\"},{\"allowedContexts\":[\"content\",\"devtools\"],\"description\":\"Returns details about the app or extension from the manifest. The object returned is a serialization of the full $(topic:manifest)[manifest file].\",\"name\":\"getManifest\",\"parameters\":[],\"returns\":{\"additionalProperties\":{\"type\":\"any\"},\"description\":\"The manifest details.\",\"properties\":{},\"type\":\"object\"},\"type\":\"function\"},{\"allowedContexts\":[\"content\",\"devtools\"],\"description\":\"Converts a relative path within an app/extension install directory to a fully-qualified URL.\",\"name\":\"getURL\",\"parameters\":[{\"description\":\"A path to a resource within an app/extension expressed relative to its install directory.\",\"name\":\"path\",\"type\":\"string\"}],\"returns\":{\"description\":\"The fully-qualified URL to the resource.\",\"type\":\"string\"},\"type\":\"function\"},{\"async\":\"callback\",\"description\":\"Sets the URL to be visited upon uninstallation. This may be used to clean up server-side data, do analytics, and implement surveys. Maximum 255 characters.\",\"name\":\"setUninstallURL\",\"parameters\":[{\"description\":\"URL to be opened after the extension is uninstalled. This URL must have an http: or https: scheme. Set an empty string to not open a new tab upon uninstallation.\",\"maxLength\":255,\"name\":\"url\",\"type\":\"string\"},{\"description\":\"Called when the uninstall URL is set. If the given URL is invalid, $(ref:runtime.lastError) will be set.\",\"name\":\"callback\",\"optional\":true,\"parameters\":[],\"type\":\"function\"}],\"type\":\"function\"},{\"description\":\"Reloads the app or extension.\",\"name\":\"reload\",\"parameters\":[],\"type\":\"function\"},{\"async\":\"callback\",\"description\":\"Requests an update check for this app/extension.\",\"name\":\"requestUpdateCheck\",\"parameters\":[{\"name\":\"callback\",\"parameters\":[{\"$ref\":\"RequestUpdateCheckStatus\",\"description\":\"Result of the update check.\",\"name\":\"status\"},{\"description\":\"If an update is available, this contains more information about the available update.\",\"name\":\"details\",\"optional\":true,\"properties\":{\"version\":{\"description\":\"The version of the available update.\",\"type\":\"string\"}},\"type\":\"object\"}],\"type\":\"function\"}],\"type\":\"function\",\"unsupported\":true},{\"description\":\"Restart the device when the app runs in kiosk mode. Otherwise, it's no-op.\",\"name\":\"restart\",\"parameters\":[],\"type\":\"function\",\"unsupported\":true},{\"allowedContexts\":[\"content\",\"devtools\"],\"description\":\"Attempts to connect to connect listeners within an extension/app (such as the background page), or other extensions/apps. This is useful for content scripts connecting to their extension processes, inter-app/extension communication, and $(topic:manifest/externally_connectable)[web messaging]. Note that this does not connect to any listeners in a content script. Extensions may connect to content scripts embedded in tabs via $(ref:tabs.connect).\",\"name\":\"connect\",\"parameters\":[{\"description\":\"The ID of the extension or app to connect to. If omitted, a connection will be attempted with your own extension. Required if sending messages from a web page for $(topic:manifest/externally_connectable)[web messaging].\",\"name\":\"extensionId\",\"optional\":true,\"type\":\"string\"},{\"name\":\"connectInfo\",\"optional\":true,\"properties\":{\"includeTlsChannelId\":{\"description\":\"Whether the TLS channel ID will be passed into onConnectExternal for processes that are listening for the connection event.\",\"optional\":true,\"type\":\"boolean\"},\"name\":{\"description\":\"Will be passed into onConnect for processes that are listening for the connection event.\",\"optional\":true,\"type\":\"string\"}},\"type\":\"object\"}],\"returns\":{\"$ref\":\"Port\",\"description\":\"Port through which messages can be sent and received. The port's $(ref:runtime.Port onDisconnect) event is fired if the extension/app does not exist. \"},\"type\":\"function\"},{\"description\":\"Connects to a native application in the host machine.\",\"name\":\"connectNative\",\"parameters\":[{\"description\":\"The name of the registered application to connect to.\",\"name\":\"application\",\"pattern\":\"^\\\\w+(\\\\.\\\\w+)*$\",\"type\":\"string\"}],\"permissions\":[\"nativeMessaging\"],\"returns\":{\"$ref\":\"Port\",\"description\":\"Port through which messages can be sent and received with the application\"},\"type\":\"function\"},{\"allowAmbiguousOptionalArguments\":true,\"allowedContexts\":[\"content\",\"devtools\",\"proxy\"],\"async\":\"responseCallback\",\"description\":\"Sends a single message to event listeners within your extension/app or a different extension/app. Similar to $(ref:runtime.connect) but only sends a single message, with an optional response. If sending to your extension, the $(ref:runtime.onMessage) event will be fired in each page, or $(ref:runtime.onMessageExternal), if a different extension. Note that extensions cannot send messages to content scripts using this method. To send messages to content scripts, use $(ref:tabs.sendMessage).\",\"name\":\"sendMessage\",\"parameters\":[{\"description\":\"The ID of the extension/app to send the message to. If omitted, the message will be sent to your own extension/app. Required if sending messages from a web page for $(topic:manifest/externally_connectable)[web messaging].\",\"name\":\"extensionId\",\"optional\":true,\"type\":\"string\"},{\"name\":\"message\",\"type\":\"any\"},{\"name\":\"options\",\"optional\":true,\"properties\":{\"includeTlsChannelId\":{\"description\":\"Whether the TLS channel ID will be passed into onMessageExternal for processes that are listening for the connection event.\",\"optional\":true,\"type\":\"boolean\",\"unsupported\":true},\"toProxyScript\":{\"description\":\"If true, the message will be directed to the extension's proxy sandbox.\",\"optional\":true,\"type\":\"boolean\"}},\"type\":\"object\"},{\"name\":\"responseCallback\",\"optional\":true,\"parameters\":[{\"description\":\"The JSON response object sent by the handler of the message. If an error occurs while connecting to the extension, the callback will be called with no arguments and $(ref:runtime.lastError) will be set to the error message.\",\"name\":\"response\",\"type\":\"any\"}],\"type\":\"function\"}],\"type\":\"function\"},{\"async\":\"responseCallback\",\"description\":\"Send a single message to a native application.\",\"name\":\"sendNativeMessage\",\"parameters\":[{\"description\":\"The name of the native messaging host.\",\"name\":\"application\",\"pattern\":\"^\\\\w+(\\\\.\\\\w+)*$\",\"type\":\"string\"},{\"description\":\"The message that will be passed to the native messaging host.\",\"name\":\"message\",\"type\":\"any\"},{\"name\":\"responseCallback\",\"optional\":true,\"parameters\":[{\"description\":\"The response message sent by the native messaging host. If an error occurs while connecting to the native messaging host, the callback will be called with no arguments and $(ref:runtime.lastError) will be set to the error message.\",\"name\":\"response\",\"type\":\"any\"}],\"type\":\"function\"}],\"permissions\":[\"nativeMessaging\"],\"type\":\"function\"},{\"async\":\"callback\",\"description\":\"Returns information about the current browser.\",\"name\":\"getBrowserInfo\",\"parameters\":[{\"description\":\"Called with results\",\"name\":\"callback\",\"parameters\":[{\"$ref\":\"BrowserInfo\",\"name\":\"browserInfo\"}],\"type\":\"function\"}],\"type\":\"function\"},{\"async\":\"callback\",\"description\":\"Returns information about the current platform.\",\"name\":\"getPlatformInfo\",\"parameters\":[{\"description\":\"Called with results\",\"name\":\"callback\",\"parameters\":[{\"$ref\":\"PlatformInfo\",\"name\":\"platformInfo\"}],\"type\":\"function\"}],\"type\":\"function\"},{\"async\":\"callback\",\"description\":\"Returns a DirectoryEntry for the package directory.\",\"name\":\"getPackageDirectoryEntry\",\"parameters\":[{\"name\":\"callback\",\"parameters\":[{\"additionalProperties\":{\"type\":\"any\"},\"isInstanceOf\":\"DirectoryEntry\",\"name\":\"directoryEntry\",\"type\":\"object\"}],\"type\":\"function\"}],\"type\":\"function\",\"unsupported\":true}],\"namespace\":\"runtime\",\"properties\":{\"id\":{\"allowedContexts\":[\"content\",\"devtools\"],\"description\":\"The ID of the extension/app.\",\"type\":\"string\"},\"lastError\":{\"additionalProperties\":{\"type\":\"any\"},\"allowedContexts\":[\"content\",\"devtools\"],\"description\":\"This will be defined during an API method callback if there was an error\",\"optional\":true,\"properties\":{\"message\":{\"description\":\"Details about the error which occurred.\",\"optional\":true,\"type\":\"string\"}},\"type\":\"object\"}},\"types\":[{\"additionalProperties\":{\"type\":\"any\"},\"allowedContexts\":[\"content\",\"devtools\"],\"description\":\"An object which allows two way communication with other pages.\",\"id\":\"Port\",\"properties\":{\"disconnect\":{\"type\":\"function\"},\"name\":{\"type\":\"string\"},\"onDisconnect\":{\"$ref\":\"events.Event\"},\"onMessage\":{\"$ref\":\"events.Event\"},\"postMessage\":{\"type\":\"function\"},\"sender\":{\"$ref\":\"MessageSender\",\"description\":\"This property will <b>only</b> be present on ports passed to onConnect/onConnectExternal listeners.\",\"optional\":true}},\"type\":\"object\"},{\"allowedContexts\":[\"content\",\"devtools\"],\"description\":\"An object containing information about the script context that sent a message or request.\",\"id\":\"MessageSender\",\"properties\":{\"frameId\":{\"description\":\"The $(topic:frame_ids)[frame] that opened the connection. 0 for top-level frames, positive for child frames. This will only be set when <code>tab</code> is set.\",\"optional\":true,\"type\":\"integer\"},\"id\":{\"description\":\"The ID of the extension or app that opened the connection, if any.\",\"optional\":true,\"type\":\"string\"},\"tab\":{\"$ref\":\"tabs.Tab\",\"description\":\"The $(ref:tabs.Tab) which opened the connection, if any. This property will <strong>only</strong> be present when the connection was opened from a tab (including content scripts), and <strong>only</strong> if the receiver is an extension, not an app.\",\"optional\":true},\"tlsChannelId\":{\"description\":\"The TLS channel ID of the page or frame that opened the connection, if requested by the extension or app, and if available.\",\"optional\":true,\"type\":\"string\",\"unsupported\":true},\"url\":{\"description\":\"The URL of the page or frame that opened the connection. If the sender is in an iframe, it will be iframe's URL not the URL of the page which hosts it.\",\"optional\":true,\"type\":\"string\"}},\"type\":\"object\"},{\"allowedContexts\":[\"content\",\"devtools\"],\"description\":\"The operating system the browser is running on.\",\"enum\":[\"mac\",\"win\",\"android\",\"cros\",\"linux\",\"openbsd\"],\"id\":\"PlatformOs\",\"type\":\"string\"},{\"allowedContexts\":[\"content\",\"devtools\"],\"description\":\"The machine's processor architecture.\",\"enum\":[\"arm\",\"x86-32\",\"x86-64\"],\"id\":\"PlatformArch\",\"type\":\"string\"},{\"allowedContexts\":[\"content\",\"devtools\"],\"description\":\"An object containing information about the current platform.\",\"id\":\"PlatformInfo\",\"properties\":{\"arch\":{\"$ref\":\"PlatformArch\",\"description\":\"The machine's processor architecture.\"},\"nacl_arch\":{\"$ref\":\"PlatformNaclArch\",\"description\":\"The native client architecture. This may be different from arch on some platforms.\",\"unsupported\":true},\"os\":{\"$ref\":\"PlatformOs\",\"description\":\"The operating system the browser is running on.\"}},\"type\":\"object\"},{\"description\":\"An object containing information about the current browser.\",\"id\":\"BrowserInfo\",\"properties\":{\"buildID\":{\"description\":\"The browser's build ID/date, for example '20160101'.\",\"type\":\"string\"},\"name\":{\"description\":\"The name of the browser, for example 'Firefox'.\",\"type\":\"string\"},\"vendor\":{\"description\":\"The name of the browser vendor, for example 'Mozilla'.\",\"type\":\"string\"},\"version\":{\"description\":\"The browser's version, for example '42.0.0' or '0.8.1pre'.\",\"type\":\"string\"}},\"type\":\"object\"},{\"allowedContexts\":[\"content\",\"devtools\"],\"description\":\"Result of the update check.\",\"enum\":[\"throttled\",\"no_update\",\"update_available\"],\"id\":\"RequestUpdateCheckStatus\",\"type\":\"string\"},{\"allowedContexts\":[\"content\",\"devtools\"],\"description\":\"The reason that this event is being dispatched.\",\"enum\":[\"install\",\"update\",\"browser_update\"],\"id\":\"OnInstalledReason\",\"type\":\"string\"},{\"allowedContexts\":[\"content\",\"devtools\"],\"description\":\"The reason that the event is being dispatched. 'app_update' is used when the restart is needed because the application is updated to a newer version. 'os_update' is used when the restart is needed because the browser/OS is updated to a newer version. 'periodic' is used when the system runs for more than the permitted uptime set in the enterprise policy.\",\"enum\":[\"app_update\",\"os_update\",\"periodic\"],\"id\":\"OnRestartRequiredReason\",\"type\":\"string\"}]},{\"description\":\"Use the <code>chrome.sessions</code> API to query and restore tabs and windows from a browsing session.\",\"events\":[{\"description\":\"Fired when recently closed tabs and/or windows are changed. This event does not monitor synced sessions changes.\",\"name\":\"onChanged\",\"type\":\"function\"}],\"functions\":[{\"async\":true,\"description\":\"Forget a recently closed tab.\",\"name\":\"forgetClosedTab\",\"parameters\":[{\"description\":\"The windowId of the window to which the recently closed tab to be forgotten belongs.\",\"name\":\"windowId\",\"type\":\"integer\"},{\"description\":\"The sessionId (closedId) of the recently closed tab to be forgotten.\",\"name\":\"sessionId\",\"type\":\"string\"}],\"type\":\"function\"},{\"async\":true,\"description\":\"Forget a recently closed window.\",\"name\":\"forgetClosedWindow\",\"parameters\":[{\"description\":\"The sessionId (closedId) of the recently closed window to be forgotten.\",\"name\":\"sessionId\",\"type\":\"string\"}],\"type\":\"function\"},{\"async\":\"callback\",\"description\":\"Gets the list of recently closed tabs and/or windows.\",\"name\":\"getRecentlyClosed\",\"parameters\":[{\"$ref\":\"Filter\",\"default\":{},\"name\":\"filter\",\"optional\":true},{\"name\":\"callback\",\"parameters\":[{\"description\":\"The list of closed entries in reverse order that they were closed (the most recently closed tab or window will be at index <code>0</code>). The entries may contain either tabs or windows.\",\"items\":{\"$ref\":\"Session\"},\"name\":\"sessions\",\"type\":\"array\"}],\"type\":\"function\"}],\"type\":\"function\"},{\"async\":\"callback\",\"description\":\"Retrieves all devices with synced sessions.\",\"name\":\"getDevices\",\"parameters\":[{\"$ref\":\"Filter\",\"name\":\"filter\",\"optional\":true},{\"name\":\"callback\",\"parameters\":[{\"description\":\"The list of $(ref:sessions.Device) objects for each synced session, sorted in order from device with most recently modified session to device with least recently modified session. $(ref:tabs.Tab) objects are sorted by recency in the $(ref:windows.Window) of the $(ref:sessions.Session) objects.\",\"items\":{\"$ref\":\"Device\"},\"name\":\"devices\",\"type\":\"array\"}],\"type\":\"function\"}],\"type\":\"function\",\"unsupported\":true},{\"async\":\"callback\",\"description\":\"Reopens a $(ref:windows.Window) or $(ref:tabs.Tab), with an optional callback to run when the entry has been restored.\",\"name\":\"restore\",\"parameters\":[{\"description\":\"The $(ref:windows.Window.sessionId), or $(ref:tabs.Tab.sessionId) to restore. If this parameter is not specified, the most recently closed session is restored.\",\"name\":\"sessionId\",\"optional\":true,\"type\":\"string\"},{\"name\":\"callback\",\"optional\":true,\"parameters\":[{\"$ref\":\"Session\",\"description\":\"A $(ref:sessions.Session) containing the restored $(ref:windows.Window) or $(ref:tabs.Tab) object.\",\"name\":\"restoredSession\"}],\"type\":\"function\"}],\"type\":\"function\"},{\"async\":true,\"description\":\"Set a key/value pair on a given tab.\",\"name\":\"setTabValue\",\"parameters\":[{\"description\":\"The id of the tab that the key/value pair is being set on.\",\"minimum\":0,\"name\":\"tabId\",\"type\":\"integer\"},{\"description\":\"The key which corresponds to the value being set.\",\"name\":\"key\",\"type\":\"string\"},{\"description\":\"The value being set.\",\"name\":\"value\",\"type\":\"any\"}],\"type\":\"function\"},{\"async\":true,\"description\":\"Retrieve a value that was set for a given key on a given tab.\",\"name\":\"getTabValue\",\"parameters\":[{\"description\":\"The id of the tab whose value is being retrieved from.\",\"minimum\":0,\"name\":\"tabId\",\"type\":\"integer\"},{\"description\":\"The key which corresponds to the value.\",\"name\":\"key\",\"type\":\"string\"}],\"type\":\"function\"},{\"async\":true,\"description\":\"Remove a key/value pair that was set on a given tab.\",\"name\":\"removeTabValue\",\"parameters\":[{\"description\":\"The id of the tab whose key/value pair is being removed.\",\"minimum\":0,\"name\":\"tabId\",\"type\":\"integer\"},{\"description\":\"The key which corresponds to the value.\",\"name\":\"key\",\"type\":\"string\"}],\"type\":\"function\"},{\"async\":true,\"description\":\"Set a key/value pair on a given window.\",\"name\":\"setWindowValue\",\"parameters\":[{\"description\":\"The id of the window that the key/value pair is being set on.\",\"minimum\":-2,\"name\":\"windowId\",\"type\":\"integer\"},{\"description\":\"The key which corresponds to the value being set.\",\"name\":\"key\",\"type\":\"string\"},{\"description\":\"The value being set.\",\"name\":\"value\",\"type\":\"any\"}],\"type\":\"function\"},{\"async\":true,\"description\":\"Retrieve a value that was set for a given key on a given window.\",\"name\":\"getWindowValue\",\"parameters\":[{\"description\":\"The id of the window whose value is being retrieved from.\",\"minimum\":-2,\"name\":\"windowId\",\"type\":\"integer\"},{\"description\":\"The key which corresponds to the value.\",\"name\":\"key\",\"type\":\"string\"}],\"type\":\"function\"},{\"async\":true,\"description\":\"Remove a key/value pair that was set on a given window.\",\"name\":\"removeWindowValue\",\"parameters\":[{\"description\":\"The id of the window whose key/value pair is being removed.\",\"minimum\":-2,\"name\":\"windowId\",\"type\":\"integer\"},{\"description\":\"The key which corresponds to the value.\",\"name\":\"key\",\"type\":\"string\"}],\"type\":\"function\"}],\"namespace\":\"sessions\",\"permissions\":[\"sessions\"],\"properties\":{\"MAX_SESSION_RESULTS\":{\"description\":\"The maximum number of $(ref:sessions.Session) that will be included in a requested list.\",\"value\":25}},\"types\":[{\"id\":\"Filter\",\"properties\":{\"maxResults\":{\"description\":\"The maximum number of entries to be fetched in the requested list. Omit this parameter to fetch the maximum number of entries ($(ref:sessions.MAX_SESSION_RESULTS)).\",\"maximum\":25,\"minimum\":0,\"optional\":true,\"type\":\"integer\"}},\"type\":\"object\"},{\"id\":\"Session\",\"properties\":{\"lastModified\":{\"description\":\"The time when the window or tab was closed or modified, represented in milliseconds since the epoch.\",\"type\":\"integer\"},\"tab\":{\"$ref\":\"tabs.Tab\",\"description\":\"The $(ref:tabs.Tab), if this entry describes a tab. Either this or $(ref:sessions.Session.window) will be set.\",\"optional\":true},\"window\":{\"$ref\":\"windows.Window\",\"description\":\"The $(ref:windows.Window), if this entry describes a window. Either this or $(ref:sessions.Session.tab) will be set.\",\"optional\":true}},\"type\":\"object\"},{\"id\":\"Device\",\"properties\":{\"deviceName\":{\"description\":\"The name of the foreign device.\",\"type\":\"string\"},\"info\":{\"type\":\"string\"},\"sessions\":{\"description\":\"A list of open window sessions for the foreign device, sorted from most recently to least recently modified session.\",\"items\":{\"$ref\":\"Session\"},\"type\":\"array\"}},\"type\":\"object\"}]},{\"description\":\"Use sidebar actions to add a sidebar to Firefox.\",\"functions\":[{\"async\":true,\"description\":\"Sets the title of the sidebar action. This shows up in the tooltip.\",\"name\":\"setTitle\",\"parameters\":[{\"name\":\"details\",\"properties\":{\"tabId\":{\"description\":\"Sets the sidebar title for the tab specified by tabId. Automatically resets when the tab is closed.\",\"optional\":true,\"type\":\"integer\"},\"title\":{\"description\":\"The string the sidebar action should display when moused over.\",\"type\":\"string\"}},\"type\":\"object\"}],\"type\":\"function\"},{\"async\":true,\"description\":\"Gets the title of the sidebar action.\",\"name\":\"getTitle\",\"parameters\":[{\"name\":\"details\",\"properties\":{\"tabId\":{\"description\":\"Specify the tab to get the title from. If no tab is specified, the non-tab-specific title is returned.\",\"optional\":true,\"type\":\"integer\"}},\"type\":\"object\"}],\"type\":\"function\"},{\"async\":true,\"description\":\"Sets the icon for the sidebar action. The icon can be specified either as the path to an image file or as the pixel data from a canvas element, or as dictionary of either one of those. Either the <strong>path</strong> or the <strong>imageData</strong> property must be specified.\",\"name\":\"setIcon\",\"parameters\":[{\"name\":\"details\",\"properties\":{\"imageData\":{\"choices\":[{\"$ref\":\"ImageDataType\"},{\"additionalProperties\":false,\"patternProperties\":{\"^[1-9]\\\\d*$\":{\"$ref\":\"ImageDataType\"}},\"type\":\"object\"}],\"description\":\"Either an ImageData object or a dictionary {size -> ImageData} representing icon to be set. If the icon is specified as a dictionary, the actual image to be used is chosen depending on screen's pixel density. If the number of image pixels that fit into one screen space unit equals <code>scale</code>, then image with size <code>scale</code> * 19 will be selected. Initially only scales 1 and 2 will be supported. At least one image must be specified. Note that 'details.imageData = foo' is equivalent to 'details.imageData = {'19': foo}'\",\"optional\":true},\"path\":{\"choices\":[{\"type\":\"string\"},{\"additionalProperties\":{\"type\":\"string\"},\"type\":\"object\"}],\"description\":\"Either a relative image path or a dictionary {size -> relative image path} pointing to icon to be set. If the icon is specified as a dictionary, the actual image to be used is chosen depending on screen's pixel density. If the number of image pixels that fit into one screen space unit equals <code>scale</code>, then image with size <code>scale</code> * 19 will be selected. Initially only scales 1 and 2 will be supported. At least one image must be specified. Note that 'details.path = foo' is equivalent to 'details.imageData = {'19': foo}'\",\"optional\":true},\"tabId\":{\"description\":\"Sets the sidebar icon for the tab specified by tabId. Automatically resets when the tab is closed.\",\"optional\":true,\"type\":\"integer\"}},\"type\":\"object\"}],\"type\":\"function\"},{\"async\":true,\"description\":\"Sets the url to the html document to be opened in the sidebar when the user clicks on the sidebar action's icon.\",\"name\":\"setPanel\",\"parameters\":[{\"name\":\"details\",\"properties\":{\"panel\":{\"description\":\"The url to the html file to show in a sidebar.  If set to the empty string (''), no sidebar is shown.\",\"type\":\"string\"},\"tabId\":{\"description\":\"Sets the sidebar url for the tab specified by tabId. Automatically resets when the tab is closed.\",\"minimum\":0,\"optional\":true,\"type\":\"integer\"}},\"type\":\"object\"}],\"type\":\"function\"},{\"async\":true,\"description\":\"Gets the url to the html document set as the panel for this sidebar action.\",\"name\":\"getPanel\",\"parameters\":[{\"name\":\"details\",\"properties\":{\"tabId\":{\"description\":\"Specify the tab to get the sidebar from. If no tab is specified, the non-tab-specific sidebar is returned.\",\"optional\":true,\"type\":\"integer\"}},\"type\":\"object\"}],\"type\":\"function\"},{\"async\":true,\"description\":\"Opens the extension sidebar in the active window.\",\"name\":\"open\",\"parameters\":[],\"requireUserInput\":true,\"type\":\"function\"},{\"async\":true,\"description\":\"Closes the extension sidebar in the active window if the sidebar belongs to the extension.\",\"name\":\"close\",\"parameters\":[],\"requireUserInput\":true,\"type\":\"function\"}],\"namespace\":\"sidebarAction\",\"permissions\":[\"manifest:sidebar_action\"],\"types\":[{\"additionalProperties\":{\"type\":\"any\"},\"description\":\"Pixel data for an image. Must be an ImageData object (for example, from a <code>canvas</code> element).\",\"id\":\"ImageDataType\",\"isInstanceOf\":\"ImageData\",\"postprocess\":\"convertImageDataToURL\",\"type\":\"object\"}]},{\"allowedContexts\":[\"content\",\"devtools\"],\"defaultContexts\":[\"content\",\"devtools\"],\"description\":\"Use the <code>browser.storage</code> API to store, retrieve, and track changes to user data.\",\"events\":[{\"description\":\"Fired when one or more items change.\",\"name\":\"onChanged\",\"parameters\":[{\"additionalProperties\":{\"$ref\":\"StorageChange\"},\"description\":\"Object mapping each key that changed to its corresponding $(ref:storage.StorageChange) for that item.\",\"name\":\"changes\",\"type\":\"object\"},{\"description\":\"The name of the storage area (<code>\\\"sync\\\"</code>, <code>\\\"local\\\"</code> or <code>\\\"managed\\\"</code>) the changes are for.\",\"name\":\"areaName\",\"type\":\"string\"}],\"type\":\"function\"}],\"namespace\":\"storage\",\"permissions\":[\"storage\"],\"properties\":{\"local\":{\"$ref\":\"StorageArea\",\"description\":\"Items in the <code>local</code> storage area are local to each machine.\",\"properties\":{\"QUOTA_BYTES\":{\"description\":\"The maximum amount (in bytes) of data that can be stored in local storage, as measured by the JSON stringification of every value plus every key's length. This value will be ignored if the extension has the <code>unlimitedStorage</code> permission. Updates that would cause this limit to be exceeded fail immediately and set $(ref:runtime.lastError).\",\"value\":5242880}}},\"managed\":{\"$ref\":\"StorageArea\",\"description\":\"Items in the <code>managed</code> storage area are set by administrators or native applications, and are read-only for the extension; trying to modify this namespace results in an error.\",\"properties\":{\"QUOTA_BYTES\":{\"description\":\"The maximum size (in bytes) of the managed storage JSON manifest file. Files larger than this limit will fail to load.\",\"value\":5242880}}},\"sync\":{\"$ref\":\"StorageArea\",\"description\":\"Items in the <code>sync</code> storage area are synced by the browser.\",\"properties\":{\"MAX_ITEMS\":{\"description\":\"The maximum number of items that can be stored in sync storage. Updates that would cause this limit to be exceeded will fail immediately and set $(ref:runtime.lastError).\",\"value\":512},\"MAX_SUSTAINED_WRITE_OPERATIONS_PER_MINUTE\":{\"deprecated\":\"The storage.sync API no longer has a sustained write operation quota.\",\"description\":\"\",\"value\":1000000},\"MAX_WRITE_OPERATIONS_PER_HOUR\":{\"description\":\"<p>The maximum number of <code>set</code>, <code>remove</code>, or <code>clear</code> operations that can be performed each hour. This is 1 every 2 seconds, a lower ceiling than the short term higher writes-per-minute limit.</p><p>Updates that would cause this limit to be exceeded fail immediately and set $(ref:runtime.lastError).</p>\",\"value\":1800},\"MAX_WRITE_OPERATIONS_PER_MINUTE\":{\"description\":\"<p>The maximum number of <code>set</code>, <code>remove</code>, or <code>clear</code> operations that can be performed each minute. This is 2 per second, providing higher throughput than writes-per-hour over a shorter period of time.</p><p>Updates that would cause this limit to be exceeded fail immediately and set $(ref:runtime.lastError).</p>\",\"value\":120},\"QUOTA_BYTES\":{\"description\":\"The maximum total amount (in bytes) of data that can be stored in sync storage, as measured by the JSON stringification of every value plus every key's length. Updates that would cause this limit to be exceeded fail immediately and set $(ref:runtime.lastError).\",\"value\":102400},\"QUOTA_BYTES_PER_ITEM\":{\"description\":\"The maximum size (in bytes) of each individual item in sync storage, as measured by the JSON stringification of its value plus its key length. Updates containing items larger than this limit will fail immediately and set $(ref:runtime.lastError).\",\"value\":8192}}}},\"types\":[{\"id\":\"StorageChange\",\"properties\":{\"newValue\":{\"description\":\"The new value of the item, if there is a new value.\",\"optional\":true,\"type\":\"any\"},\"oldValue\":{\"description\":\"The old value of the item, if there was an old value.\",\"optional\":true,\"type\":\"any\"}},\"type\":\"object\"},{\"functions\":[{\"async\":\"callback\",\"description\":\"Gets one or more items from storage.\",\"name\":\"get\",\"parameters\":[{\"choices\":[{\"type\":\"string\"},{\"items\":{\"type\":\"string\"},\"type\":\"array\"},{\"additionalProperties\":{\"type\":\"any\"},\"description\":\"Storage items to return in the callback, where the values are replaced with those from storage if they exist.\",\"type\":\"object\"}],\"description\":\"A single key to get, list of keys to get, or a dictionary specifying default values (see description of the object).  An empty list or object will return an empty result object.  Pass in <code>null</code> to get the entire contents of storage.\",\"name\":\"keys\",\"optional\":true},{\"description\":\"Callback with storage items, or on failure (in which case $(ref:runtime.lastError) will be set).\",\"name\":\"callback\",\"parameters\":[{\"additionalProperties\":{\"type\":\"any\"},\"description\":\"Object with items in their key-value mappings.\",\"name\":\"items\",\"type\":\"object\"}],\"type\":\"function\"}],\"type\":\"function\"},{\"async\":\"callback\",\"description\":\"Gets the amount of space (in bytes) being used by one or more items.\",\"name\":\"getBytesInUse\",\"parameters\":[{\"choices\":[{\"type\":\"string\"},{\"items\":{\"type\":\"string\"},\"type\":\"array\"}],\"description\":\"A single key or list of keys to get the total usage for. An empty list will return 0. Pass in <code>null</code> to get the total usage of all of storage.\",\"name\":\"keys\",\"optional\":true},{\"description\":\"Callback with the amount of space being used by storage, or on failure (in which case $(ref:runtime.lastError) will be set).\",\"name\":\"callback\",\"parameters\":[{\"description\":\"Amount of space being used in storage, in bytes.\",\"name\":\"bytesInUse\",\"type\":\"integer\"}],\"type\":\"function\"}],\"type\":\"function\",\"unsupported\":true},{\"async\":\"callback\",\"description\":\"Sets multiple items.\",\"name\":\"set\",\"parameters\":[{\"additionalProperties\":{\"type\":\"any\"},\"description\":\"<p>An object which gives each key/value pair to update storage with. Any other key/value pairs in storage will not be affected.</p><p>Primitive values such as numbers will serialize as expected. Values with a <code>typeof</code> <code>\\\"object\\\"</code> and <code>\\\"function\\\"</code> will typically serialize to <code>{}</code>, with the exception of <code>Array</code> (serializes as expected), <code>Date</code>, and <code>Regex</code> (serialize using their <code>String</code> representation).</p>\",\"name\":\"items\",\"type\":\"object\"},{\"description\":\"Callback on success, or on failure (in which case $(ref:runtime.lastError) will be set).\",\"name\":\"callback\",\"optional\":true,\"parameters\":[],\"type\":\"function\"}],\"type\":\"function\"},{\"async\":\"callback\",\"description\":\"Removes one or more items from storage.\",\"name\":\"remove\",\"parameters\":[{\"choices\":[{\"type\":\"string\"},{\"items\":{\"type\":\"string\"},\"type\":\"array\"}],\"description\":\"A single key or a list of keys for items to remove.\",\"name\":\"keys\"},{\"description\":\"Callback on success, or on failure (in which case $(ref:runtime.lastError) will be set).\",\"name\":\"callback\",\"optional\":true,\"parameters\":[],\"type\":\"function\"}],\"type\":\"function\"},{\"async\":\"callback\",\"description\":\"Removes all items from storage.\",\"name\":\"clear\",\"parameters\":[{\"description\":\"Callback on success, or on failure (in which case $(ref:runtime.lastError) will be set).\",\"name\":\"callback\",\"optional\":true,\"parameters\":[],\"type\":\"function\"}],\"type\":\"function\"}],\"id\":\"StorageArea\",\"type\":\"object\"}]},{\"description\":\"Use the <code>browser.tabs</code> API to interact with the browser's tab system. You can use this API to create, modify, and rearrange tabs in the browser.\",\"events\":[{\"description\":\"Fired when a tab is created. Note that the tab's URL may not be set at the time this event fired, but you can listen to onUpdated events to be notified when a URL is set.\",\"name\":\"onCreated\",\"parameters\":[{\"$ref\":\"Tab\",\"description\":\"Details of the tab that was created.\",\"name\":\"tab\"}],\"type\":\"function\"},{\"description\":\"Fired when a tab is updated.\",\"name\":\"onUpdated\",\"parameters\":[{\"minimum\":0,\"name\":\"tabId\",\"type\":\"integer\"},{\"description\":\"Lists the changes to the state of the tab that was updated.\",\"name\":\"changeInfo\",\"properties\":{\"audible\":{\"description\":\"The tab's new audible state.\",\"optional\":true,\"type\":\"boolean\"},\"discarded\":{\"description\":\"True while the tab is not loaded with content.\",\"optional\":true,\"type\":\"boolean\"},\"favIconUrl\":{\"description\":\"The tab's new favicon URL.\",\"optional\":true,\"type\":\"string\"},\"mutedInfo\":{\"$ref\":\"MutedInfo\",\"description\":\"The tab's new muted state and the reason for the change.\",\"optional\":true},\"pinned\":{\"description\":\"The tab's new pinned state.\",\"optional\":true,\"type\":\"boolean\"},\"status\":{\"description\":\"The status of the tab. Can be either <em>loading</em> or <em>complete</em>.\",\"optional\":true,\"type\":\"string\"},\"url\":{\"description\":\"The tab's URL if it has changed.\",\"optional\":true,\"type\":\"string\"}},\"type\":\"object\"},{\"$ref\":\"Tab\",\"description\":\"Gives the state of the tab that was updated.\",\"name\":\"tab\"}],\"type\":\"function\"},{\"description\":\"Fired when a tab is moved within a window. Only one move event is fired, representing the tab the user directly moved. Move events are not fired for the other tabs that must move in response. This event is not fired when a tab is moved between windows. For that, see $(ref:tabs.onDetached).\",\"name\":\"onMoved\",\"parameters\":[{\"minimum\":0,\"name\":\"tabId\",\"type\":\"integer\"},{\"name\":\"moveInfo\",\"properties\":{\"fromIndex\":{\"minimum\":0,\"type\":\"integer\"},\"toIndex\":{\"minimum\":0,\"type\":\"integer\"},\"windowId\":{\"minimum\":0,\"type\":\"integer\"}},\"type\":\"object\"}],\"type\":\"function\"},{\"deprecated\":\"Please use $(ref:tabs.onActivated).\",\"description\":\"Fires when the selected tab in a window changes.\",\"name\":\"onSelectionChanged\",\"parameters\":[{\"description\":\"The ID of the tab that has become active.\",\"minimum\":0,\"name\":\"tabId\",\"type\":\"integer\"},{\"name\":\"selectInfo\",\"properties\":{\"windowId\":{\"description\":\"The ID of the window the selected tab changed inside of.\",\"minimum\":0,\"type\":\"integer\"}},\"type\":\"object\"}],\"type\":\"function\",\"unsupported\":true},{\"deprecated\":\"Please use $(ref:tabs.onActivated).\",\"description\":\"Fires when the selected tab in a window changes. Note that the tab's URL may not be set at the time this event fired, but you can listen to $(ref:tabs.onUpdated) events to be notified when a URL is set.\",\"name\":\"onActiveChanged\",\"parameters\":[{\"description\":\"The ID of the tab that has become active.\",\"minimum\":0,\"name\":\"tabId\",\"type\":\"integer\"},{\"name\":\"selectInfo\",\"properties\":{\"windowId\":{\"description\":\"The ID of the window the selected tab changed inside of.\",\"minimum\":0,\"type\":\"integer\"}},\"type\":\"object\"}],\"type\":\"function\",\"unsupported\":true},{\"description\":\"Fires when the active tab in a window changes. Note that the tab's URL may not be set at the time this event fired, but you can listen to onUpdated events to be notified when a URL is set.\",\"name\":\"onActivated\",\"parameters\":[{\"name\":\"activeInfo\",\"properties\":{\"tabId\":{\"description\":\"The ID of the tab that has become active.\",\"minimum\":0,\"type\":\"integer\"},\"windowId\":{\"description\":\"The ID of the window the active tab changed inside of.\",\"minimum\":0,\"type\":\"integer\"}},\"type\":\"object\"}],\"type\":\"function\"},{\"deprecated\":\"Please use $(ref:tabs.onHighlighted).\",\"description\":\"Fired when the highlighted or selected tabs in a window changes.\",\"name\":\"onHighlightChanged\",\"parameters\":[{\"name\":\"selectInfo\",\"properties\":{\"tabIds\":{\"description\":\"All highlighted tabs in the window.\",\"items\":{\"minimum\":0,\"type\":\"integer\"},\"type\":\"array\"},\"windowId\":{\"description\":\"The window whose tabs changed.\",\"minimum\":0,\"type\":\"integer\"}},\"type\":\"object\"}],\"type\":\"function\",\"unsupported\":true},{\"description\":\"Fired when the highlighted or selected tabs in a window changes.\",\"name\":\"onHighlighted\",\"parameters\":[{\"name\":\"highlightInfo\",\"properties\":{\"tabIds\":{\"description\":\"All highlighted tabs in the window.\",\"items\":{\"minimum\":0,\"type\":\"integer\"},\"type\":\"array\"},\"windowId\":{\"description\":\"The window whose tabs changed.\",\"minimum\":0,\"type\":\"integer\"}},\"type\":\"object\"}],\"type\":\"function\"},{\"description\":\"Fired when a tab is detached from a window, for example because it is being moved between windows.\",\"name\":\"onDetached\",\"parameters\":[{\"minimum\":0,\"name\":\"tabId\",\"type\":\"integer\"},{\"name\":\"detachInfo\",\"properties\":{\"oldPosition\":{\"minimum\":0,\"type\":\"integer\"},\"oldWindowId\":{\"minimum\":0,\"type\":\"integer\"}},\"type\":\"object\"}],\"type\":\"function\"},{\"description\":\"Fired when a tab is attached to a window, for example because it was moved between windows.\",\"name\":\"onAttached\",\"parameters\":[{\"minimum\":0,\"name\":\"tabId\",\"type\":\"integer\"},{\"name\":\"attachInfo\",\"properties\":{\"newPosition\":{\"minimum\":0,\"type\":\"integer\"},\"newWindowId\":{\"minimum\":0,\"type\":\"integer\"}},\"type\":\"object\"}],\"type\":\"function\"},{\"description\":\"Fired when a tab is closed.\",\"name\":\"onRemoved\",\"parameters\":[{\"minimum\":0,\"name\":\"tabId\",\"type\":\"integer\"},{\"name\":\"removeInfo\",\"properties\":{\"isWindowClosing\":{\"description\":\"True when the tab is being closed because its window is being closed.\",\"type\":\"boolean\"},\"windowId\":{\"description\":\"The window whose tab is closed.\",\"minimum\":0,\"type\":\"integer\"}},\"type\":\"object\"}],\"type\":\"function\"},{\"description\":\"Fired when a tab is replaced with another tab due to prerendering or instant.\",\"name\":\"onReplaced\",\"parameters\":[{\"minimum\":0,\"name\":\"addedTabId\",\"type\":\"integer\"},{\"minimum\":0,\"name\":\"removedTabId\",\"type\":\"integer\"}],\"type\":\"function\"},{\"description\":\"Fired when a tab is zoomed.\",\"name\":\"onZoomChange\",\"parameters\":[{\"name\":\"ZoomChangeInfo\",\"properties\":{\"newZoomFactor\":{\"type\":\"number\"},\"oldZoomFactor\":{\"type\":\"number\"},\"tabId\":{\"minimum\":0,\"type\":\"integer\"},\"zoomSettings\":{\"$ref\":\"ZoomSettings\"}},\"type\":\"object\"}],\"type\":\"function\"}],\"functions\":[{\"async\":\"callback\",\"description\":\"Retrieves details about the specified tab.\",\"name\":\"get\",\"parameters\":[{\"minimum\":0,\"name\":\"tabId\",\"type\":\"integer\"},{\"name\":\"callback\",\"parameters\":[{\"$ref\":\"Tab\",\"name\":\"tab\"}],\"type\":\"function\"}],\"type\":\"function\"},{\"async\":\"callback\",\"description\":\"Gets the tab that this script call is being made from. May be undefined if called from a non-tab context (for example: a background page or popup view).\",\"name\":\"getCurrent\",\"parameters\":[{\"name\":\"callback\",\"parameters\":[{\"$ref\":\"Tab\",\"name\":\"tab\",\"optional\":true}],\"type\":\"function\"}],\"type\":\"function\"},{\"description\":\"Connects to the content script(s) in the specified tab. The $(ref:runtime.onConnect) event is fired in each content script running in the specified tab for the current extension. For more details, see $(topic:messaging)[Content Script Messaging].\",\"name\":\"connect\",\"parameters\":[{\"minimum\":0,\"name\":\"tabId\",\"type\":\"integer\"},{\"name\":\"connectInfo\",\"optional\":true,\"properties\":{\"frameId\":{\"description\":\"Open a port to a specific $(topic:frame_ids)[frame] identified by <code>frameId</code> instead of all frames in the tab.\",\"minimum\":0,\"optional\":true,\"type\":\"integer\"},\"name\":{\"description\":\"Will be passed into onConnect for content scripts that are listening for the connection event.\",\"optional\":true,\"type\":\"string\"}},\"type\":\"object\"}],\"returns\":{\"$ref\":\"runtime.Port\",\"description\":\"A port that can be used to communicate with the content scripts running in the specified tab. The port's $(ref:runtime.Port) event is fired if the tab closes or does not exist. \"},\"type\":\"function\"},{\"deprecated\":\"Please use $(ref:runtime.sendMessage).\",\"description\":\"Sends a single request to the content script(s) in the specified tab, with an optional callback to run when a response is sent back.  The $(ref:extension.onRequest) event is fired in each content script running in the specified tab for the current extension.\",\"name\":\"sendRequest\",\"parameters\":[{\"minimum\":0,\"name\":\"tabId\",\"type\":\"integer\"},{\"name\":\"request\",\"type\":\"any\"},{\"name\":\"responseCallback\",\"optional\":true,\"parameters\":[{\"description\":\"The JSON response object sent by the handler of the request. If an error occurs while connecting to the specified tab, the callback will be called with no arguments and $(ref:runtime.lastError) will be set to the error message.\",\"name\":\"response\",\"type\":\"any\"}],\"type\":\"function\"}],\"type\":\"function\",\"unsupported\":true},{\"async\":\"responseCallback\",\"description\":\"Sends a single message to the content script(s) in the specified tab, with an optional callback to run when a response is sent back.  The $(ref:runtime.onMessage) event is fired in each content script running in the specified tab for the current extension.\",\"name\":\"sendMessage\",\"parameters\":[{\"minimum\":0,\"name\":\"tabId\",\"type\":\"integer\"},{\"name\":\"message\",\"type\":\"any\"},{\"name\":\"options\",\"optional\":true,\"properties\":{\"frameId\":{\"description\":\"Send a message to a specific $(topic:frame_ids)[frame] identified by <code>frameId</code> instead of all frames in the tab.\",\"minimum\":0,\"optional\":true,\"type\":\"integer\"}},\"type\":\"object\"},{\"name\":\"responseCallback\",\"optional\":true,\"parameters\":[{\"description\":\"The JSON response object sent by the handler of the message. If an error occurs while connecting to the specified tab, the callback will be called with no arguments and $(ref:runtime.lastError) will be set to the error message.\",\"name\":\"response\",\"type\":\"any\"}],\"type\":\"function\"}],\"type\":\"function\"},{\"async\":\"callback\",\"deprecated\":\"Please use $(ref:tabs.query) <code>{active: true}</code>.\",\"description\":\"Gets the tab that is selected in the specified window.\",\"name\":\"getSelected\",\"parameters\":[{\"description\":\"Defaults to the $(topic:current-window)[current window].\",\"minimum\":-2,\"name\":\"windowId\",\"optional\":true,\"type\":\"integer\"},{\"name\":\"callback\",\"parameters\":[{\"$ref\":\"Tab\",\"name\":\"tab\"}],\"type\":\"function\"}],\"type\":\"function\",\"unsupported\":true},{\"async\":\"callback\",\"deprecated\":\"Please use $(ref:tabs.query) <code>{windowId: windowId}</code>.\",\"description\":\"Gets details about all tabs in the specified window.\",\"name\":\"getAllInWindow\",\"parameters\":[{\"description\":\"Defaults to the $(topic:current-window)[current window].\",\"minimum\":-2,\"name\":\"windowId\",\"optional\":true,\"type\":\"integer\"},{\"name\":\"callback\",\"parameters\":[{\"items\":{\"$ref\":\"Tab\"},\"name\":\"tabs\",\"type\":\"array\"}],\"type\":\"function\"}],\"type\":\"function\",\"unsupported\":true},{\"async\":\"callback\",\"description\":\"Creates a new tab.\",\"name\":\"create\",\"parameters\":[{\"name\":\"createProperties\",\"properties\":{\"active\":{\"description\":\"Whether the tab should become the active tab in the window. Does not affect whether the window is focused (see $(ref:windows.update)). Defaults to <var>true</var>.\",\"optional\":true,\"type\":\"boolean\"},\"cookieStoreId\":{\"description\":\"The CookieStoreId for the tab that opened this tab.\",\"optional\":true,\"type\":\"string\"},\"index\":{\"description\":\"The position the tab should take in the window. The provided value will be clamped to between zero and the number of tabs in the window.\",\"minimum\":0,\"optional\":true,\"type\":\"integer\"},\"openInReaderMode\":{\"description\":\"Whether the document in the tab should be opened in reader mode.\",\"optional\":true,\"type\":\"boolean\"},\"openerTabId\":{\"description\":\"The ID of the tab that opened this tab. If specified, the opener tab must be in the same window as the newly created tab.\",\"minimum\":0,\"optional\":true,\"type\":\"integer\"},\"pinned\":{\"description\":\"Whether the tab should be pinned. Defaults to <var>false</var>\",\"optional\":true,\"type\":\"boolean\"},\"selected\":{\"deprecated\":\"Please use <em>active</em>.\",\"description\":\"Whether the tab should become the selected tab in the window. Defaults to <var>true</var>\",\"optional\":true,\"type\":\"boolean\",\"unsupported\":true},\"url\":{\"description\":\"The URL to navigate the tab to initially. Fully-qualified URLs must include a scheme (i.e. 'http://www.google.com', not 'www.google.com'). Relative URLs will be relative to the current page within the extension. Defaults to the New Tab Page.\",\"optional\":true,\"type\":\"string\"},\"windowId\":{\"description\":\"The window to create the new tab in. Defaults to the $(topic:current-window)[current window].\",\"minimum\":-2,\"optional\":true,\"type\":\"integer\"}},\"type\":\"object\"},{\"name\":\"callback\",\"optional\":true,\"parameters\":[{\"$ref\":\"Tab\",\"description\":\"Details about the created tab. Will contain the ID of the new tab.\",\"name\":\"tab\",\"optional\":true}],\"type\":\"function\"}],\"type\":\"function\"},{\"async\":\"callback\",\"description\":\"Duplicates a tab.\",\"name\":\"duplicate\",\"parameters\":[{\"description\":\"The ID of the tab which is to be duplicated.\",\"minimum\":0,\"name\":\"tabId\",\"type\":\"integer\"},{\"name\":\"callback\",\"optional\":true,\"parameters\":[{\"$ref\":\"Tab\",\"description\":\"Details about the duplicated tab. The $(ref:tabs.Tab) object doesn't contain <code>url</code>, <code>title</code> and <code>favIconUrl</code> if the <code>\\\"tabs\\\"</code> permission has not been requested.\",\"name\":\"tab\",\"optional\":true}],\"type\":\"function\"}],\"type\":\"function\"},{\"async\":\"callback\",\"description\":\"Gets all tabs that have the specified properties, or all tabs if no properties are specified.\",\"name\":\"query\",\"parameters\":[{\"name\":\"queryInfo\",\"properties\":{\"active\":{\"description\":\"Whether the tabs are active in their windows.\",\"optional\":true,\"type\":\"boolean\"},\"audible\":{\"description\":\"Whether the tabs are audible.\",\"optional\":true,\"type\":\"boolean\"},\"cookieStoreId\":{\"description\":\"The CookieStoreId used for the tab.\",\"optional\":true,\"type\":\"string\"},\"currentWindow\":{\"description\":\"Whether the tabs are in the $(topic:current-window)[current window].\",\"optional\":true,\"type\":\"boolean\"},\"discarded\":{\"description\":\"True while the tabs are not loaded with content.\",\"optional\":true,\"type\":\"boolean\"},\"highlighted\":{\"description\":\"Whether the tabs are highlighted.  Works as an alias of active.\",\"optional\":true,\"type\":\"boolean\"},\"index\":{\"description\":\"The position of the tabs within their windows.\",\"minimum\":0,\"optional\":true,\"type\":\"integer\"},\"lastFocusedWindow\":{\"description\":\"Whether the tabs are in the last focused window.\",\"optional\":true,\"type\":\"boolean\"},\"muted\":{\"description\":\"Whether the tabs are muted.\",\"optional\":true,\"type\":\"boolean\"},\"openerTabId\":{\"description\":\"The ID of the tab that opened this tab. If specified, the opener tab must be in the same window as this tab.\",\"minimum\":0,\"optional\":true,\"type\":\"integer\"},\"pinned\":{\"description\":\"Whether the tabs are pinned.\",\"optional\":true,\"type\":\"boolean\"},\"status\":{\"$ref\":\"TabStatus\",\"description\":\"Whether the tabs have completed loading.\",\"optional\":true},\"title\":{\"description\":\"Match page titles against a pattern.\",\"optional\":true,\"type\":\"string\"},\"url\":{\"choices\":[{\"type\":\"string\"},{\"items\":{\"type\":\"string\"},\"type\":\"array\"}],\"description\":\"Match tabs against one or more $(topic:match_patterns)[URL patterns]. Note that fragment identifiers are not matched.\",\"optional\":true},\"windowId\":{\"description\":\"The ID of the parent window, or $(ref:windows.WINDOW_ID_CURRENT) for the $(topic:current-window)[current window].\",\"minimum\":-2,\"optional\":true,\"type\":\"integer\"},\"windowType\":{\"$ref\":\"WindowType\",\"description\":\"The type of window the tabs are in.\",\"optional\":true}},\"type\":\"object\"},{\"name\":\"callback\",\"parameters\":[{\"items\":{\"$ref\":\"Tab\"},\"name\":\"result\",\"type\":\"array\"}],\"type\":\"function\"}],\"type\":\"function\"},{\"async\":\"callback\",\"description\":\"Highlights the given tabs.\",\"name\":\"highlight\",\"parameters\":[{\"name\":\"highlightInfo\",\"properties\":{\"tabs\":{\"choices\":[{\"items\":{\"minimum\":0,\"type\":\"integer\"},\"type\":\"array\"},{\"type\":\"integer\"}],\"description\":\"One or more tab indices to highlight.\"},\"windowId\":{\"description\":\"The window that contains the tabs.\",\"minimum\":-2,\"optional\":true,\"type\":\"integer\"}},\"type\":\"object\"},{\"name\":\"callback\",\"optional\":true,\"parameters\":[{\"$ref\":\"windows.Window\",\"description\":\"Contains details about the window whose tabs were highlighted.\",\"name\":\"window\"}],\"type\":\"function\"}],\"type\":\"function\",\"unsupported\":\"true\"},{\"async\":\"callback\",\"description\":\"Modifies the properties of a tab. Properties that are not specified in <var>updateProperties</var> are not modified.\",\"name\":\"update\",\"parameters\":[{\"description\":\"Defaults to the selected tab of the $(topic:current-window)[current window].\",\"minimum\":0,\"name\":\"tabId\",\"optional\":true,\"type\":\"integer\"},{\"name\":\"updateProperties\",\"properties\":{\"active\":{\"description\":\"Whether the tab should be active. Does not affect whether the window is focused (see $(ref:windows.update)).\",\"optional\":true,\"type\":\"boolean\"},\"highlighted\":{\"description\":\"Adds or removes the tab from the current selection.\",\"optional\":true,\"type\":\"boolean\",\"unsupported\":true},\"loadReplace\":{\"description\":\"Whether the load should replace the current history entry for the tab.\",\"optional\":true,\"type\":\"boolean\"},\"muted\":{\"description\":\"Whether the tab should be muted.\",\"optional\":true,\"type\":\"boolean\"},\"openerTabId\":{\"description\":\"The ID of the tab that opened this tab. If specified, the opener tab must be in the same window as this tab.\",\"minimum\":0,\"optional\":true,\"type\":\"integer\"},\"pinned\":{\"description\":\"Whether the tab should be pinned.\",\"optional\":true,\"type\":\"boolean\"},\"selected\":{\"deprecated\":\"Please use <em>highlighted</em>.\",\"description\":\"Whether the tab should be selected.\",\"optional\":true,\"type\":\"boolean\",\"unsupported\":true},\"url\":{\"description\":\"A URL to navigate the tab to.\",\"optional\":true,\"type\":\"string\"}},\"type\":\"object\"},{\"name\":\"callback\",\"optional\":true,\"parameters\":[{\"$ref\":\"Tab\",\"description\":\"Details about the updated tab. The $(ref:tabs.Tab) object doesn't contain <code>url</code>, <code>title</code> and <code>favIconUrl</code> if the <code>\\\"tabs\\\"</code> permission has not been requested.\",\"name\":\"tab\",\"optional\":true}],\"type\":\"function\"}],\"type\":\"function\"},{\"async\":\"callback\",\"description\":\"Moves one or more tabs to a new position within its window, or to a new window. Note that tabs can only be moved to and from normal (window.type === \\\"normal\\\") windows.\",\"name\":\"move\",\"parameters\":[{\"choices\":[{\"minimum\":0,\"type\":\"integer\"},{\"items\":{\"minimum\":0,\"type\":\"integer\"},\"type\":\"array\"}],\"description\":\"The tab or list of tabs to move.\",\"name\":\"tabIds\"},{\"name\":\"moveProperties\",\"properties\":{\"index\":{\"description\":\"The position to move the window to. -1 will place the tab at the end of the window.\",\"minimum\":-1,\"type\":\"integer\"},\"windowId\":{\"description\":\"Defaults to the window the tab is currently in.\",\"minimum\":-2,\"optional\":true,\"type\":\"integer\"}},\"type\":\"object\"},{\"name\":\"callback\",\"optional\":true,\"parameters\":[{\"choices\":[{\"$ref\":\"Tab\"},{\"items\":{\"$ref\":\"Tab\"},\"type\":\"array\"}],\"description\":\"Details about the moved tabs.\",\"name\":\"tabs\"}],\"type\":\"function\"}],\"type\":\"function\"},{\"async\":\"callback\",\"description\":\"Reload a tab.\",\"name\":\"reload\",\"parameters\":[{\"description\":\"The ID of the tab to reload; defaults to the selected tab of the current window.\",\"minimum\":0,\"name\":\"tabId\",\"optional\":true,\"type\":\"integer\"},{\"name\":\"reloadProperties\",\"optional\":true,\"properties\":{\"bypassCache\":{\"description\":\"Whether using any local cache. Default is false.\",\"optional\":true,\"type\":\"boolean\"}},\"type\":\"object\"},{\"name\":\"callback\",\"optional\":true,\"parameters\":[],\"type\":\"function\"}],\"type\":\"function\"},{\"async\":\"callback\",\"description\":\"Closes one or more tabs.\",\"name\":\"remove\",\"parameters\":[{\"choices\":[{\"minimum\":0,\"type\":\"integer\"},{\"items\":{\"minimum\":0,\"type\":\"integer\"},\"type\":\"array\"}],\"description\":\"The tab or list of tabs to close.\",\"name\":\"tabIds\"},{\"name\":\"callback\",\"optional\":true,\"parameters\":[],\"type\":\"function\"}],\"type\":\"function\"},{\"async\":true,\"description\":\"discards one or more tabs.\",\"name\":\"discard\",\"parameters\":[{\"choices\":[{\"minimum\":0,\"type\":\"integer\"},{\"items\":{\"minimum\":0,\"type\":\"integer\"},\"type\":\"array\"}],\"description\":\"The tab or list of tabs to discard.\",\"name\":\"tabIds\"}],\"type\":\"function\"},{\"async\":\"callback\",\"description\":\"Detects the primary language of the content in a tab.\",\"name\":\"detectLanguage\",\"parameters\":[{\"description\":\"Defaults to the active tab of the $(topic:current-window)[current window].\",\"minimum\":0,\"name\":\"tabId\",\"optional\":true,\"type\":\"integer\"},{\"name\":\"callback\",\"parameters\":[{\"description\":\"An ISO language code such as <code>en</code> or <code>fr</code>. For a complete list of languages supported by this method, see <a href='http://src.chromium.org/viewvc/chrome/trunk/src/third_party/cld/languages/internal/languages.cc'>kLanguageInfoTable</a>. The 2nd to 4th columns will be checked and the first non-NULL value will be returned except for Simplified Chinese for which zh-CN will be returned. For an unknown language, <code>und</code> will be returned.\",\"name\":\"language\",\"type\":\"string\"}],\"type\":\"function\"}],\"type\":\"function\"},{\"async\":true,\"description\":\"Toggles reader mode for the document in the tab.\",\"name\":\"toggleReaderMode\",\"parameters\":[{\"description\":\"Defaults to the active tab of the $(topic:current-window)[current window].\",\"minimum\":0,\"name\":\"tabId\",\"optional\":true,\"type\":\"integer\"}],\"type\":\"function\"},{\"async\":\"callback\",\"description\":\"Captures the visible area of the currently active tab in the specified window. You must have $(topic:declare_permissions)[&lt;all_urls&gt;] permission to use this method.\",\"name\":\"captureVisibleTab\",\"parameters\":[{\"description\":\"The target window. Defaults to the $(topic:current-window)[current window].\",\"minimum\":-2,\"name\":\"windowId\",\"optional\":true,\"type\":\"integer\"},{\"$ref\":\"extensionTypes.ImageDetails\",\"name\":\"options\",\"optional\":true},{\"name\":\"callback\",\"parameters\":[{\"description\":\"A data URL which encodes an image of the visible area of the captured tab. May be assigned to the 'src' property of an HTML Image element for display.\",\"name\":\"dataUrl\",\"type\":\"string\"}],\"type\":\"function\"}],\"permissions\":[\"<all_urls>\"],\"type\":\"function\"},{\"async\":\"callback\",\"description\":\"Injects JavaScript code into a page. For details, see the $(topic:content_scripts)[programmatic injection] section of the content scripts doc.\",\"name\":\"executeScript\",\"parameters\":[{\"description\":\"The ID of the tab in which to run the script; defaults to the active tab of the current window.\",\"minimum\":0,\"name\":\"tabId\",\"optional\":true,\"type\":\"integer\"},{\"$ref\":\"extensionTypes.InjectDetails\",\"description\":\"Details of the script to run.\",\"name\":\"details\"},{\"description\":\"Called after all the JavaScript has been executed.\",\"name\":\"callback\",\"optional\":true,\"parameters\":[{\"description\":\"The result of the script in every injected frame.\",\"items\":{\"type\":\"any\"},\"name\":\"result\",\"optional\":true,\"type\":\"array\"}],\"type\":\"function\"}],\"type\":\"function\"},{\"async\":\"callback\",\"description\":\"Injects CSS into a page. For details, see the $(topic:content_scripts)[programmatic injection] section of the content scripts doc.\",\"name\":\"insertCSS\",\"parameters\":[{\"description\":\"The ID of the tab in which to insert the CSS; defaults to the active tab of the current window.\",\"minimum\":0,\"name\":\"tabId\",\"optional\":true,\"type\":\"integer\"},{\"$ref\":\"extensionTypes.InjectDetails\",\"description\":\"Details of the CSS text to insert.\",\"name\":\"details\"},{\"description\":\"Called when all the CSS has been inserted.\",\"name\":\"callback\",\"optional\":true,\"parameters\":[],\"type\":\"function\"}],\"type\":\"function\"},{\"async\":\"callback\",\"description\":\"Removes injected CSS from a page. For details, see the $(topic:content_scripts)[programmatic injection] section of the content scripts doc.\",\"name\":\"removeCSS\",\"parameters\":[{\"description\":\"The ID of the tab from which to remove the injected CSS; defaults to the active tab of the current window.\",\"minimum\":0,\"name\":\"tabId\",\"optional\":true,\"type\":\"integer\"},{\"$ref\":\"extensionTypes.InjectDetails\",\"description\":\"Details of the CSS text to remove.\",\"name\":\"details\"},{\"description\":\"Called when all the CSS has been removed.\",\"name\":\"callback\",\"optional\":true,\"parameters\":[],\"type\":\"function\"}],\"type\":\"function\"},{\"async\":\"callback\",\"description\":\"Zooms a specified tab.\",\"name\":\"setZoom\",\"parameters\":[{\"description\":\"The ID of the tab to zoom; defaults to the active tab of the current window.\",\"minimum\":0,\"name\":\"tabId\",\"optional\":true,\"type\":\"integer\"},{\"description\":\"The new zoom factor. Use a value of 0 here to set the tab to its current default zoom factor. Values greater than zero specify a (possibly non-default) zoom factor for the tab.\",\"name\":\"zoomFactor\",\"type\":\"number\"},{\"description\":\"Called after the zoom factor has been changed.\",\"name\":\"callback\",\"optional\":true,\"parameters\":[],\"type\":\"function\"}],\"type\":\"function\"},{\"async\":\"callback\",\"description\":\"Gets the current zoom factor of a specified tab.\",\"name\":\"getZoom\",\"parameters\":[{\"description\":\"The ID of the tab to get the current zoom factor from; defaults to the active tab of the current window.\",\"minimum\":0,\"name\":\"tabId\",\"optional\":true,\"type\":\"integer\"},{\"description\":\"Called with the tab's current zoom factor after it has been fetched.\",\"name\":\"callback\",\"parameters\":[{\"description\":\"The tab's current zoom factor.\",\"name\":\"zoomFactor\",\"type\":\"number\"}],\"type\":\"function\"}],\"type\":\"function\"},{\"async\":\"callback\",\"description\":\"Sets the zoom settings for a specified tab, which define how zoom changes are handled. These settings are reset to defaults upon navigating the tab.\",\"name\":\"setZoomSettings\",\"parameters\":[{\"description\":\"The ID of the tab to change the zoom settings for; defaults to the active tab of the current window.\",\"minimum\":0,\"name\":\"tabId\",\"optional\":true,\"type\":\"integer\"},{\"$ref\":\"ZoomSettings\",\"description\":\"Defines how zoom changes are handled and at what scope.\",\"name\":\"zoomSettings\"},{\"description\":\"Called after the zoom settings have been changed.\",\"name\":\"callback\",\"optional\":true,\"parameters\":[],\"type\":\"function\"}],\"type\":\"function\"},{\"async\":\"callback\",\"description\":\"Gets the current zoom settings of a specified tab.\",\"name\":\"getZoomSettings\",\"parameters\":[{\"description\":\"The ID of the tab to get the current zoom settings from; defaults to the active tab of the current window.\",\"minimum\":0,\"name\":\"tabId\",\"optional\":true,\"type\":\"integer\"},{\"description\":\"Called with the tab's current zoom settings.\",\"name\":\"callback\",\"parameters\":[{\"$ref\":\"ZoomSettings\",\"description\":\"The tab's current zoom settings.\",\"name\":\"zoomSettings\"}],\"type\":\"function\"}],\"type\":\"function\"},{\"description\":\"Prints page in active tab.\",\"name\":\"print\",\"parameters\":[],\"type\":\"function\"},{\"async\":\"callback\",\"description\":\"Shows print preview for page in active tab.\",\"name\":\"printPreview\",\"parameters\":[{\"description\":\"Called after print preview entered.\",\"name\":\"callback\",\"optional\":true,\"parameters\":[],\"type\":\"function\"}],\"type\":\"function\"},{\"async\":\"callback\",\"description\":\"Saves page in active tab as a PDF file.\",\"name\":\"saveAsPDF\",\"parameters\":[{\"$ref\":\"PageSettings\",\"description\":\"The page settings used to save the PDF file.\",\"name\":\"pageSettings\"},{\"description\":\"Called after save as dialog closed.\",\"name\":\"callback\",\"optional\":true,\"parameters\":[{\"description\":\"Save status: saved, replaced, canceled, not_saved, not_replaced.\",\"name\":\"status\",\"type\":\"string\"}],\"type\":\"function\"}],\"type\":\"function\"}],\"namespace\":\"tabs\",\"properties\":{\"TAB_ID_NONE\":{\"description\":\"An ID which represents the absence of a browser tab.\",\"value\":-1}},\"types\":[{\"description\":\"An event that caused a muted state change.\",\"enum\":[{\"description\":\"A user input action has set/overridden the muted state.\",\"name\":\"user\"},{\"description\":\"Tab capture started, forcing a muted state change.\",\"name\":\"capture\"},{\"description\":\"An extension, identified by the extensionId field, set the muted state.\",\"name\":\"extension\"}],\"id\":\"MutedInfoReason\",\"type\":\"string\"},{\"description\":\"Tab muted state and the reason for the last state change.\",\"id\":\"MutedInfo\",\"properties\":{\"extensionId\":{\"description\":\"The ID of the extension that changed the muted state. Not set if an extension was not the reason the muted state last changed.\",\"optional\":true,\"type\":\"string\"},\"muted\":{\"description\":\"Whether the tab is prevented from playing sound (but hasn't necessarily recently produced sound). Equivalent to whether the muted audio indicator is showing.\",\"type\":\"boolean\"},\"reason\":{\"$ref\":\"MutedInfoReason\",\"description\":\"The reason the tab was muted or unmuted. Not set if the tab's mute state has never been changed.\",\"optional\":true}},\"type\":\"object\"},{\"id\":\"Tab\",\"properties\":{\"active\":{\"description\":\"Whether the tab is active in its window. (Does not necessarily mean the window is focused.)\",\"type\":\"boolean\"},\"audible\":{\"description\":\"Whether the tab has produced sound over the past couple of seconds (but it might not be heard if also muted). Equivalent to whether the speaker audio indicator is showing.\",\"optional\":true,\"type\":\"boolean\"},\"cookieStoreId\":{\"description\":\"The CookieStoreId used for the tab.\",\"optional\":true,\"type\":\"string\"},\"discarded\":{\"description\":\"True while the tab is not loaded with content.\",\"optional\":true,\"type\":\"boolean\"},\"favIconUrl\":{\"description\":\"The URL of the tab's favicon. This property is only present if the extension's manifest includes the <code>\\\"tabs\\\"</code> permission. It may also be an empty string if the tab is loading.\",\"optional\":true,\"permissions\":[\"tabs\"],\"type\":\"string\"},\"height\":{\"description\":\"The height of the tab in pixels.\",\"optional\":true,\"type\":\"integer\"},\"highlighted\":{\"description\":\"Whether the tab is highlighted. Works as an alias of active\",\"type\":\"boolean\"},\"id\":{\"description\":\"The ID of the tab. Tab IDs are unique within a browser session. Under some circumstances a Tab may not be assigned an ID, for example when querying foreign tabs using the $(ref:sessions) API, in which case a session ID may be present. Tab ID can also be set to $(ref:tabs.TAB_ID_NONE) for apps and devtools windows.\",\"minimum\":-1,\"optional\":true,\"type\":\"integer\"},\"incognito\":{\"description\":\"Whether the tab is in an incognito window.\",\"type\":\"boolean\"},\"index\":{\"description\":\"The zero-based index of the tab within its window.\",\"minimum\":-1,\"type\":\"integer\"},\"isArticle\":{\"description\":\"Whether the document in the tab can be rendered in reader mode.\",\"optional\":true,\"type\":\"boolean\"},\"isInReaderMode\":{\"description\":\"Whether the document in the tab is being rendered in reader mode.\",\"optional\":true,\"type\":\"boolean\"},\"lastAccessed\":{\"description\":\"The last time the tab was accessed as the number of milliseconds since epoch.\",\"optional\":true,\"type\":\"integer\"},\"mutedInfo\":{\"$ref\":\"MutedInfo\",\"description\":\"Current tab muted state and the reason for the last state change.\",\"optional\":true},\"openerTabId\":{\"description\":\"The ID of the tab that opened this tab, if any. This property is only present if the opener tab still exists.\",\"minimum\":0,\"optional\":true,\"type\":\"integer\"},\"pinned\":{\"description\":\"Whether the tab is pinned.\",\"type\":\"boolean\"},\"selected\":{\"deprecated\":\"Please use $(ref:tabs.Tab.highlighted).\",\"description\":\"Whether the tab is selected.\",\"type\":\"boolean\",\"unsupported\":true},\"sessionId\":{\"description\":\"The session ID used to uniquely identify a Tab obtained from the $(ref:sessions) API.\",\"optional\":true,\"type\":\"string\"},\"status\":{\"description\":\"Either <em>loading</em> or <em>complete</em>.\",\"optional\":true,\"type\":\"string\"},\"title\":{\"description\":\"The title of the tab. This property is only present if the extension's manifest includes the <code>\\\"tabs\\\"</code> permission.\",\"optional\":true,\"permissions\":[\"tabs\"],\"type\":\"string\"},\"url\":{\"description\":\"The URL the tab is displaying. This property is only present if the extension's manifest includes the <code>\\\"tabs\\\"</code> permission.\",\"optional\":true,\"permissions\":[\"tabs\"],\"type\":\"string\"},\"width\":{\"description\":\"The width of the tab in pixels.\",\"optional\":true,\"type\":\"integer\"},\"windowId\":{\"description\":\"The ID of the window the tab is contained within.\",\"minimum\":0,\"optional\":true,\"type\":\"integer\"}},\"type\":\"object\"},{\"description\":\"Defines how zoom changes are handled, i.e. which entity is responsible for the actual scaling of the page; defaults to <code>automatic</code>.\",\"enum\":[{\"description\":\"Zoom changes are handled automatically by the browser.\",\"name\":\"automatic\"},{\"description\":\"Overrides the automatic handling of zoom changes. The <code>onZoomChange</code> event will still be dispatched, and it is the responsibility of the extension to listen for this event and manually scale the page. This mode does not support <code>per-origin</code> zooming, and will thus ignore the <code>scope</code> zoom setting and assume <code>per-tab</code>.\",\"name\":\"manual\"},{\"description\":\"Disables all zooming in the tab. The tab will revert to the default zoom level, and all attempted zoom changes will be ignored.\",\"name\":\"disabled\"}],\"id\":\"ZoomSettingsMode\",\"type\":\"string\"},{\"description\":\"Defines whether zoom changes will persist for the page's origin, or only take effect in this tab; defaults to <code>per-origin</code> when in <code>automatic</code> mode, and <code>per-tab</code> otherwise.\",\"enum\":[{\"description\":\"Zoom changes will persist in the zoomed page's origin, i.e. all other tabs navigated to that same origin will be zoomed as well. Moreover, <code>per-origin</code> zoom changes are saved with the origin, meaning that when navigating to other pages in the same origin, they will all be zoomed to the same zoom factor. The <code>per-origin</code> scope is only available in the <code>automatic</code> mode.\",\"name\":\"per-origin\"},{\"description\":\"Zoom changes only take effect in this tab, and zoom changes in other tabs will not affect the zooming of this tab. Also, <code>per-tab</code> zoom changes are reset on navigation; navigating a tab will always load pages with their <code>per-origin</code> zoom factors.\",\"name\":\"per-tab\"}],\"id\":\"ZoomSettingsScope\",\"type\":\"string\"},{\"description\":\"Defines how zoom changes in a tab are handled and at what scope.\",\"id\":\"ZoomSettings\",\"properties\":{\"defaultZoomFactor\":{\"description\":\"Used to return the default zoom level for the current tab in calls to tabs.getZoomSettings.\",\"optional\":true,\"type\":\"number\"},\"mode\":{\"$ref\":\"ZoomSettingsMode\",\"description\":\"Defines how zoom changes are handled, i.e. which entity is responsible for the actual scaling of the page; defaults to <code>automatic</code>.\",\"optional\":true},\"scope\":{\"$ref\":\"ZoomSettingsScope\",\"description\":\"Defines whether zoom changes will persist for the page's origin, or only take effect in this tab; defaults to <code>per-origin</code> when in <code>automatic</code> mode, and <code>per-tab</code> otherwise.\",\"optional\":true}},\"type\":\"object\"},{\"description\":\"The page settings including: orientation, scale, background, margins, headers, footers.\",\"id\":\"PageSettings\",\"properties\":{\"footerCenter\":{\"description\":\"The text for the page's center footer. Default: ''.\",\"optional\":true,\"type\":\"string\"},\"footerLeft\":{\"description\":\"The text for the page's left footer. Default: '&PT'.\",\"optional\":true,\"type\":\"string\"},\"footerRight\":{\"description\":\"The text for the page's right footer. Default: '&D'.\",\"optional\":true,\"type\":\"string\"},\"headerCenter\":{\"description\":\"The text for the page's center header. Default: ''.\",\"optional\":true,\"type\":\"string\"},\"headerLeft\":{\"description\":\"The text for the page's left header. Default: '&T'.\",\"optional\":true,\"type\":\"string\"},\"headerRight\":{\"description\":\"The text for the page's right header. Default: '&U'.\",\"optional\":true,\"type\":\"string\"},\"marginBottom\":{\"description\":\"The margin between the page content and the bottom edge of the paper (inches). Default: 0.5.\",\"optional\":true,\"type\":\"number\"},\"marginLeft\":{\"description\":\"The margin between the page content and the left edge of the paper (inches). Default: 0.5.\",\"optional\":true,\"type\":\"number\"},\"marginRight\":{\"description\":\"The margin between the page content and the right edge of the paper (inches). Default: 0.5.\",\"optional\":true,\"type\":\"number\"},\"marginTop\":{\"description\":\"The margin between the page content and the top edge of the paper (inches). Default: 0.5.\",\"optional\":true,\"type\":\"number\"},\"orientation\":{\"description\":\"The page content orientation: 0 = portrait, 1 = landscape. Default: 0.\",\"optional\":true,\"type\":\"integer\"},\"paperHeight\":{\"description\":\"The paper height in paper size units. Default: 11.0.\",\"optional\":true,\"type\":\"number\"},\"paperSizeUnit\":{\"description\":\"The page size unit: 0 = inches, 1 = millimeters. Default: 0.\",\"optional\":true,\"type\":\"integer\"},\"paperWidth\":{\"description\":\"The paper width in paper size units. Default: 8.5.\",\"optional\":true,\"type\":\"number\"},\"scaling\":{\"description\":\"The page content scaling factor: 1.0 = 100% = normal size. Default: 1.0.\",\"optional\":true,\"type\":\"number\"},\"showBackgroundColors\":{\"description\":\"Whether the page background colors should be shown. Default: false.\",\"optional\":true,\"type\":\"boolean\"},\"showBackgroundImages\":{\"description\":\"Whether the page background images should be shown. Default: false.\",\"optional\":true,\"type\":\"boolean\"},\"shrinkToFit\":{\"description\":\"Whether the page content should shrink to fit the page width (overrides scaling). Default: true.\",\"optional\":true,\"type\":\"boolean\"}},\"type\":\"object\"},{\"description\":\"Whether the tabs have completed loading.\",\"enum\":[\"loading\",\"complete\"],\"id\":\"TabStatus\",\"type\":\"string\"},{\"description\":\"The type of window.\",\"enum\":[\"normal\",\"popup\",\"panel\",\"app\",\"devtools\"],\"id\":\"WindowType\",\"type\":\"string\"}]},{\"allowedContexts\":[\"content\",\"devtools\"],\"defaultContexts\":[\"content\",\"devtools\"],\"description\":\"none\",\"events\":[{\"description\":\"Used to test sending messages to extensions.\",\"name\":\"onMessage\",\"parameters\":[{\"name\":\"message\",\"type\":\"string\"},{\"name\":\"argument\",\"type\":\"any\"}],\"type\":\"function\"}],\"functions\":[{\"description\":\"Notifies the browser process that test code running in the extension failed.  This is only used for internal unit testing.\",\"name\":\"notifyFail\",\"parameters\":[{\"name\":\"message\",\"type\":\"string\"}],\"type\":\"function\"},{\"description\":\"Notifies the browser process that test code running in the extension passed.  This is only used for internal unit testing.\",\"name\":\"notifyPass\",\"parameters\":[{\"name\":\"message\",\"optional\":true,\"type\":\"string\"}],\"type\":\"function\"},{\"description\":\"Logs a message during internal unit testing.\",\"name\":\"log\",\"parameters\":[{\"name\":\"message\",\"type\":\"string\"}],\"type\":\"function\"},{\"allowAmbiguousOptionalArguments\":true,\"description\":\"Sends a string message to the browser process, generating a Notification that C++ test code can wait for.\",\"name\":\"sendMessage\",\"parameters\":[{\"name\":\"arg1\",\"optional\":true,\"type\":\"any\"},{\"name\":\"arg2\",\"optional\":true,\"type\":\"any\"}],\"type\":\"function\"},{\"name\":\"fail\",\"parameters\":[{\"name\":\"message\",\"optional\":true,\"type\":\"any\"}],\"type\":\"function\"},{\"name\":\"succeed\",\"parameters\":[{\"name\":\"message\",\"optional\":true,\"type\":\"any\"}],\"type\":\"function\"},{\"allowAmbiguousOptionalArguments\":true,\"name\":\"assertTrue\",\"parameters\":[{\"name\":\"test\",\"optional\":true,\"type\":\"any\"},{\"name\":\"message\",\"optional\":true,\"type\":\"string\"}],\"type\":\"function\"},{\"allowAmbiguousOptionalArguments\":true,\"name\":\"assertFalse\",\"parameters\":[{\"name\":\"test\",\"optional\":true,\"type\":\"any\"},{\"name\":\"message\",\"optional\":true,\"type\":\"string\"}],\"type\":\"function\"},{\"name\":\"assertBool\",\"parameters\":[{\"choices\":[{\"type\":\"string\"},{\"type\":\"boolean\"}],\"name\":\"test\"},{\"name\":\"expected\",\"type\":\"boolean\"},{\"name\":\"message\",\"optional\":true,\"type\":\"string\"}],\"type\":\"function\",\"unsupported\":true},{\"allowAmbiguousOptionalArguments\":true,\"name\":\"checkDeepEq\",\"parameters\":[{\"name\":\"expected\",\"type\":\"any\"},{\"name\":\"actual\",\"type\":\"any\"}],\"type\":\"function\",\"unsupported\":true},{\"allowAmbiguousOptionalArguments\":true,\"name\":\"assertEq\",\"parameters\":[{\"name\":\"expected\",\"optional\":true,\"type\":\"any\"},{\"name\":\"actual\",\"optional\":true,\"type\":\"any\"},{\"name\":\"message\",\"optional\":true,\"type\":\"string\"}],\"type\":\"function\"},{\"name\":\"assertNoLastError\",\"parameters\":[],\"type\":\"function\",\"unsupported\":true},{\"name\":\"assertLastError\",\"parameters\":[{\"name\":\"expectedError\",\"type\":\"string\"}],\"type\":\"function\",\"unsupported\":true},{\"async\":true,\"name\":\"assertRejects\",\"parameters\":[{\"$ref\":\"Promise\",\"name\":\"promise\"},{\"$ref\":\"ExpectedError\",\"name\":\"expectedError\",\"optional\":true},{\"name\":\"message\",\"optional\":true,\"type\":\"string\"}],\"type\":\"function\"},{\"name\":\"assertThrows\",\"parameters\":[{\"name\":\"func\",\"type\":\"function\"},{\"$ref\":\"ExpectedError\",\"name\":\"expectedError\",\"optional\":true},{\"name\":\"message\",\"optional\":true,\"type\":\"string\"}],\"type\":\"function\"}],\"namespace\":\"test\",\"types\":[{\"choices\":[{\"type\":\"string\"},{\"additionalProperties\":true,\"isInstanceOf\":\"RegExp\",\"type\":\"object\"},{\"type\":\"function\"}],\"id\":\"ExpectedError\"},{\"choices\":[{\"additionalProperties\":true,\"properties\":{\"then\":{\"type\":\"function\"}},\"type\":\"object\"},{\"additionalProperties\":true,\"isInstanceOf\":\"Promise\",\"type\":\"object\"}],\"id\":\"Promise\"}]},{\"description\":\"The theme API allows customizing of visual elements of the browser.\",\"events\":[{\"description\":\"Fired when a new theme has been applied\",\"name\":\"onUpdated\",\"parameters\":[{\"$ref\":\"ThemeUpdateInfo\",\"description\":\"Details of the theme update\",\"name\":\"updateInfo\"}],\"type\":\"function\"}],\"functions\":[{\"async\":true,\"description\":\"Returns the current theme for the specified window or the last focused window.\",\"name\":\"getCurrent\",\"parameters\":[{\"description\":\"The window for which we want the theme.\",\"name\":\"windowId\",\"optional\":true,\"type\":\"integer\"}],\"type\":\"function\"},{\"async\":true,\"description\":\"Make complete updates to the theme. Resolves when the update has completed.\",\"name\":\"update\",\"parameters\":[{\"description\":\"The id of the window to update. No id updates all windows.\",\"name\":\"windowId\",\"optional\":true,\"type\":\"integer\"},{\"$ref\":\"manifest.ThemeType\",\"description\":\"The properties of the theme to update.\",\"name\":\"details\"}],\"type\":\"function\"},{\"async\":true,\"description\":\"Removes the updates made to the theme.\",\"name\":\"reset\",\"parameters\":[{\"description\":\"The id of the window to reset. No id resets all windows.\",\"name\":\"windowId\",\"optional\":true,\"type\":\"integer\"}],\"type\":\"function\"}],\"namespace\":\"theme\",\"permissions\":[\"theme\"],\"types\":[{\"description\":\"Info provided in the onUpdated listener.\",\"id\":\"ThemeUpdateInfo\",\"properties\":{\"theme\":{\"description\":\"The new theme after update\",\"type\":\"object\"},\"windowId\":{\"description\":\"The id of the window the theme has been applied to\",\"optional\":true,\"type\":\"integer\"}},\"type\":\"object\"}]},{\"description\":\"Use the chrome.topSites API to access the top sites that are displayed on the new tab page. \",\"functions\":[{\"async\":\"callback\",\"description\":\"Gets a list of top sites.\",\"name\":\"get\",\"parameters\":[{\"name\":\"options\",\"optional\":true,\"properties\":{\"providers\":{\"description\":\"Which providers to get top sites from. Possible values are \\\"places\\\" and \\\"activityStream\\\".\",\"items\":{\"type\":\"string\"},\"optional\":true,\"type\":\"array\"}},\"type\":\"object\"},{\"name\":\"callback\",\"parameters\":[{\"items\":{\"$ref\":\"MostVisitedURL\"},\"name\":\"results\",\"type\":\"array\"}],\"type\":\"function\"}],\"type\":\"function\"}],\"namespace\":\"topSites\",\"permissions\":[\"topSites\"],\"types\":[{\"description\":\"An object encapsulating a most visited URL, such as the URLs on the new tab page.\",\"id\":\"MostVisitedURL\",\"properties\":{\"title\":{\"description\":\"The title of the page.\",\"optional\":true,\"type\":\"string\"},\"url\":{\"description\":\"The most visited URL.\",\"type\":\"string\"}},\"type\":\"object\"}]},{\"description\":\"Contains types used by other schemas.\",\"namespace\":\"types\",\"types\":[{\"description\":\"The scope of the Setting. One of<ul><li><var>regular</var>: setting for the regular profile (which is inherited by the incognito profile if not overridden elsewhere),</li><li><var>regular_only</var>: setting for the regular profile only (not inherited by the incognito profile),</li><li><var>incognito_persistent</var>: setting for the incognito profile that survives browser restarts (overrides regular preferences),</li><li><var>incognito_session_only</var>: setting for the incognito profile that can only be set during an incognito session and is deleted when the incognito session ends (overrides regular and incognito_persistent preferences).</li></ul> Only <var>regular</var> is supported by Firefox at this time.\",\"enum\":[\"regular\",\"regular_only\",\"incognito_persistent\",\"incognito_session_only\"],\"id\":\"SettingScope\",\"type\":\"string\"},{\"description\":\"One of<ul><li><var>not_controllable</var>: cannot be controlled by any extension</li><li><var>controlled_by_other_extensions</var>: controlled by extensions with higher precedence</li><li><var>controllable_by_this_extension</var>: can be controlled by this extension</li><li><var>controlled_by_this_extension</var>: controlled by this extension</li></ul>\",\"enum\":[\"not_controllable\",\"controlled_by_other_extensions\",\"controllable_by_this_extension\",\"controlled_by_this_extension\"],\"id\":\"LevelOfControl\",\"type\":\"string\"},{\"events\":[{\"description\":\"Fired after the setting changes.\",\"name\":\"onChange\",\"parameters\":[{\"name\":\"details\",\"properties\":{\"incognitoSpecific\":{\"description\":\"Whether the value that has changed is specific to the incognito session.<br/>This property will <em>only</em> be present if the user has enabled the extension in incognito mode.\",\"optional\":true,\"type\":\"boolean\"},\"levelOfControl\":{\"$ref\":\"LevelOfControl\",\"description\":\"The level of control of the setting.\"},\"value\":{\"description\":\"The value of the setting after the change.\",\"type\":\"any\"}},\"type\":\"object\"}],\"type\":\"function\",\"unsupported\":true}],\"functions\":[{\"async\":\"callback\",\"description\":\"Gets the value of a setting.\",\"name\":\"get\",\"parameters\":[{\"description\":\"Which setting to consider.\",\"name\":\"details\",\"properties\":{\"incognito\":{\"description\":\"Whether to return the value that applies to the incognito session (default false).\",\"optional\":true,\"type\":\"boolean\"}},\"type\":\"object\"},{\"name\":\"callback\",\"parameters\":[{\"description\":\"Details of the currently effective value.\",\"name\":\"details\",\"properties\":{\"incognitoSpecific\":{\"description\":\"Whether the effective value is specific to the incognito session.<br/>This property will <em>only</em> be present if the <var>incognito</var> property in the <var>details</var> parameter of <code>get()</code> was true.\",\"optional\":true,\"type\":\"boolean\"},\"levelOfControl\":{\"$ref\":\"LevelOfControl\",\"description\":\"The level of control of the setting.\"},\"value\":{\"description\":\"The value of the setting.\",\"type\":\"any\"}},\"type\":\"object\"}],\"type\":\"function\"}],\"type\":\"function\"},{\"async\":\"callback\",\"description\":\"Sets the value of a setting.\",\"name\":\"set\",\"parameters\":[{\"description\":\"Which setting to change.\",\"name\":\"details\",\"properties\":{\"scope\":{\"$ref\":\"SettingScope\",\"description\":\"Where to set the setting (default: regular).\",\"optional\":true},\"value\":{\"description\":\"The value of the setting. <br/>Note that every setting has a specific value type, which is described together with the setting. An extension should <em>not</em> set a value of a different type.\",\"type\":\"any\"}},\"type\":\"object\"},{\"description\":\"Called at the completion of the set operation.\",\"name\":\"callback\",\"optional\":true,\"parameters\":[],\"type\":\"function\"}],\"type\":\"function\"},{\"async\":\"callback\",\"description\":\"Clears the setting, restoring any default value.\",\"name\":\"clear\",\"parameters\":[{\"description\":\"Which setting to clear.\",\"name\":\"details\",\"properties\":{\"scope\":{\"$ref\":\"SettingScope\",\"description\":\"Where to clear the setting (default: regular).\",\"optional\":true}},\"type\":\"object\"},{\"description\":\"Called at the completion of the clear operation.\",\"name\":\"callback\",\"optional\":true,\"parameters\":[],\"type\":\"function\"}],\"type\":\"function\"}],\"id\":\"Setting\",\"type\":\"object\"}]},{\"description\":\"Use the <code>browser.webNavigation</code> API to receive notifications about the status of navigation requests in-flight.\",\"events\":[{\"description\":\"Fired when a navigation is about to occur.\",\"extraParameters\":[{\"$ref\":\"EventUrlFilters\",\"description\":\"Conditions that the URL being navigated to must satisfy. The 'schemes' and 'ports' fields of UrlFilter are ignored for this event.\",\"name\":\"filters\",\"optional\":true}],\"name\":\"onBeforeNavigate\",\"parameters\":[{\"name\":\"details\",\"properties\":{\"frameId\":{\"description\":\"0 indicates the navigation happens in the tab content window; a positive value indicates navigation in a subframe. Frame IDs are unique for a given tab and process.\",\"type\":\"integer\"},\"parentFrameId\":{\"description\":\"ID of frame that wraps the frame. Set to -1 of no parent frame exists.\",\"type\":\"integer\"},\"processId\":{\"description\":\"The ID of the process runs the renderer for this tab.\",\"type\":\"integer\",\"unsupported\":true},\"tabId\":{\"description\":\"The ID of the tab in which the navigation is about to occur.\",\"type\":\"integer\"},\"timeStamp\":{\"description\":\"The time when the browser was about to start the navigation, in milliseconds since the epoch.\",\"type\":\"number\"},\"url\":{\"type\":\"string\"}},\"type\":\"object\"}],\"type\":\"function\"},{\"description\":\"Fired when a navigation is committed. The document (and the resources it refers to, such as images and subframes) might still be downloading, but at least part of the document has been received from the server and the browser has decided to switch to the new document.\",\"extraParameters\":[{\"$ref\":\"EventUrlFilters\",\"description\":\"Conditions that the URL being navigated to must satisfy. The 'schemes' and 'ports' fields of UrlFilter are ignored for this event.\",\"name\":\"filters\",\"optional\":true}],\"name\":\"onCommitted\",\"parameters\":[{\"name\":\"details\",\"properties\":{\"frameId\":{\"description\":\"0 indicates the navigation happens in the tab content window; a positive value indicates navigation in a subframe. Frame IDs are unique within a tab.\",\"type\":\"integer\"},\"processId\":{\"description\":\"The ID of the process runs the renderer for this tab.\",\"type\":\"integer\",\"unsupported\":true},\"tabId\":{\"description\":\"The ID of the tab in which the navigation occurs.\",\"type\":\"integer\"},\"timeStamp\":{\"description\":\"The time when the navigation was committed, in milliseconds since the epoch.\",\"type\":\"number\"},\"transitionQualifiers\":{\"description\":\"A list of transition qualifiers.\",\"items\":{\"$ref\":\"TransitionQualifier\"},\"type\":\"array\",\"unsupported\":true},\"transitionType\":{\"$ref\":\"TransitionType\",\"description\":\"Cause of the navigation.\",\"unsupported\":true},\"url\":{\"type\":\"string\"}},\"type\":\"object\"}],\"type\":\"function\"},{\"description\":\"Fired when the page's DOM is fully constructed, but the referenced resources may not finish loading.\",\"extraParameters\":[{\"$ref\":\"EventUrlFilters\",\"description\":\"Conditions that the URL being navigated to must satisfy. The 'schemes' and 'ports' fields of UrlFilter are ignored for this event.\",\"name\":\"filters\",\"optional\":true}],\"name\":\"onDOMContentLoaded\",\"parameters\":[{\"name\":\"details\",\"properties\":{\"frameId\":{\"description\":\"0 indicates the navigation happens in the tab content window; a positive value indicates navigation in a subframe. Frame IDs are unique within a tab.\",\"type\":\"integer\"},\"processId\":{\"description\":\"The ID of the process runs the renderer for this tab.\",\"type\":\"integer\",\"unsupported\":true},\"tabId\":{\"description\":\"The ID of the tab in which the navigation occurs.\",\"type\":\"integer\"},\"timeStamp\":{\"description\":\"The time when the page's DOM was fully constructed, in milliseconds since the epoch.\",\"type\":\"number\"},\"url\":{\"type\":\"string\"}},\"type\":\"object\"}],\"type\":\"function\"},{\"description\":\"Fired when a document, including the resources it refers to, is completely loaded and initialized.\",\"extraParameters\":[{\"$ref\":\"EventUrlFilters\",\"description\":\"Conditions that the URL being navigated to must satisfy. The 'schemes' and 'ports' fields of UrlFilter are ignored for this event.\",\"name\":\"filters\",\"optional\":true}],\"name\":\"onCompleted\",\"parameters\":[{\"name\":\"details\",\"properties\":{\"frameId\":{\"description\":\"0 indicates the navigation happens in the tab content window; a positive value indicates navigation in a subframe. Frame IDs are unique within a tab.\",\"type\":\"integer\"},\"processId\":{\"description\":\"The ID of the process runs the renderer for this tab.\",\"type\":\"integer\",\"unsupported\":true},\"tabId\":{\"description\":\"The ID of the tab in which the navigation occurs.\",\"type\":\"integer\"},\"timeStamp\":{\"description\":\"The time when the document finished loading, in milliseconds since the epoch.\",\"type\":\"number\"},\"url\":{\"type\":\"string\"}},\"type\":\"object\"}],\"type\":\"function\"},{\"description\":\"Fired when an error occurs and the navigation is aborted. This can happen if either a network error occurred, or the user aborted the navigation.\",\"extraParameters\":[{\"$ref\":\"EventUrlFilters\",\"description\":\"Conditions that the URL being navigated to must satisfy. The 'schemes' and 'ports' fields of UrlFilter are ignored for this event.\",\"name\":\"filters\",\"optional\":true}],\"name\":\"onErrorOccurred\",\"parameters\":[{\"name\":\"details\",\"properties\":{\"error\":{\"description\":\"The error description.\",\"type\":\"string\",\"unsupported\":true},\"frameId\":{\"description\":\"0 indicates the navigation happens in the tab content window; a positive value indicates navigation in a subframe. Frame IDs are unique within a tab.\",\"type\":\"integer\"},\"processId\":{\"description\":\"The ID of the process runs the renderer for this tab.\",\"type\":\"integer\",\"unsupported\":true},\"tabId\":{\"description\":\"The ID of the tab in which the navigation occurs.\",\"type\":\"integer\"},\"timeStamp\":{\"description\":\"The time when the error occurred, in milliseconds since the epoch.\",\"type\":\"number\"},\"url\":{\"type\":\"string\"}},\"type\":\"object\"}],\"type\":\"function\"},{\"description\":\"Fired when a new window, or a new tab in an existing window, is created to host a navigation.\",\"extraParameters\":[{\"$ref\":\"EventUrlFilters\",\"description\":\"Conditions that the URL being navigated to must satisfy. The 'schemes' and 'ports' fields of UrlFilter are ignored for this event.\",\"name\":\"filters\",\"optional\":true}],\"name\":\"onCreatedNavigationTarget\",\"parameters\":[{\"name\":\"details\",\"properties\":{\"sourceFrameId\":{\"description\":\"The ID of the frame with sourceTabId in which the navigation is triggered. 0 indicates the main frame.\",\"type\":\"integer\"},\"sourceProcessId\":{\"description\":\"The ID of the process runs the renderer for the source tab.\",\"type\":\"integer\"},\"sourceTabId\":{\"description\":\"The ID of the tab in which the navigation is triggered.\",\"type\":\"integer\"},\"tabId\":{\"description\":\"The ID of the tab in which the url is opened\",\"type\":\"integer\"},\"timeStamp\":{\"description\":\"The time when the browser was about to create a new view, in milliseconds since the epoch.\",\"type\":\"number\"},\"url\":{\"description\":\"The URL to be opened in the new window.\",\"type\":\"string\"}},\"type\":\"object\"}],\"type\":\"function\"},{\"description\":\"Fired when the reference fragment of a frame was updated. All future events for that frame will use the updated URL.\",\"extraParameters\":[{\"$ref\":\"EventUrlFilters\",\"description\":\"Conditions that the URL being navigated to must satisfy. The 'schemes' and 'ports' fields of UrlFilter are ignored for this event.\",\"name\":\"filters\",\"optional\":true}],\"name\":\"onReferenceFragmentUpdated\",\"parameters\":[{\"name\":\"details\",\"properties\":{\"frameId\":{\"description\":\"0 indicates the navigation happens in the tab content window; a positive value indicates navigation in a subframe. Frame IDs are unique within a tab.\",\"type\":\"integer\"},\"processId\":{\"description\":\"The ID of the process runs the renderer for this tab.\",\"type\":\"integer\",\"unsupported\":true},\"tabId\":{\"description\":\"The ID of the tab in which the navigation occurs.\",\"type\":\"integer\"},\"timeStamp\":{\"description\":\"The time when the navigation was committed, in milliseconds since the epoch.\",\"type\":\"number\"},\"transitionQualifiers\":{\"description\":\"A list of transition qualifiers.\",\"items\":{\"$ref\":\"TransitionQualifier\"},\"type\":\"array\",\"unsupported\":true},\"transitionType\":{\"$ref\":\"TransitionType\",\"description\":\"Cause of the navigation.\",\"unsupported\":true},\"url\":{\"type\":\"string\"}},\"type\":\"object\"}],\"type\":\"function\"},{\"description\":\"Fired when the contents of the tab is replaced by a different (usually previously pre-rendered) tab.\",\"name\":\"onTabReplaced\",\"parameters\":[{\"name\":\"details\",\"properties\":{\"replacedTabId\":{\"description\":\"The ID of the tab that was replaced.\",\"type\":\"integer\"},\"tabId\":{\"description\":\"The ID of the tab that replaced the old tab.\",\"type\":\"integer\"},\"timeStamp\":{\"description\":\"The time when the replacement happened, in milliseconds since the epoch.\",\"type\":\"number\"}},\"type\":\"object\"}],\"type\":\"function\"},{\"description\":\"Fired when the frame's history was updated to a new URL. All future events for that frame will use the updated URL.\",\"extraParameters\":[{\"$ref\":\"EventUrlFilters\",\"description\":\"Conditions that the URL being navigated to must satisfy. The 'schemes' and 'ports' fields of UrlFilter are ignored for this event.\",\"name\":\"filters\",\"optional\":true}],\"name\":\"onHistoryStateUpdated\",\"parameters\":[{\"name\":\"details\",\"properties\":{\"frameId\":{\"description\":\"0 indicates the navigation happens in the tab content window; a positive value indicates navigation in a subframe. Frame IDs are unique within a tab.\",\"type\":\"integer\"},\"processId\":{\"description\":\"The ID of the process runs the renderer for this tab.\",\"type\":\"integer\",\"unsupported\":true},\"tabId\":{\"description\":\"The ID of the tab in which the navigation occurs.\",\"type\":\"integer\"},\"timeStamp\":{\"description\":\"The time when the navigation was committed, in milliseconds since the epoch.\",\"type\":\"number\"},\"transitionQualifiers\":{\"description\":\"A list of transition qualifiers.\",\"items\":{\"$ref\":\"TransitionQualifier\"},\"type\":\"array\",\"unsupported\":true},\"transitionType\":{\"$ref\":\"TransitionType\",\"description\":\"Cause of the navigation.\",\"unsupported\":true},\"url\":{\"type\":\"string\"}},\"type\":\"object\"}],\"type\":\"function\"}],\"functions\":[{\"async\":\"callback\",\"description\":\"Retrieves information about the given frame. A frame refers to an &lt;iframe&gt; or a &lt;frame&gt; of a web page and is identified by a tab ID and a frame ID.\",\"name\":\"getFrame\",\"parameters\":[{\"description\":\"Information about the frame to retrieve information about.\",\"name\":\"details\",\"properties\":{\"frameId\":{\"description\":\"The ID of the frame in the given tab.\",\"minimum\":0,\"type\":\"integer\"},\"processId\":{\"description\":\"The ID of the process runs the renderer for this tab.\",\"optional\":true,\"type\":\"integer\"},\"tabId\":{\"description\":\"The ID of the tab in which the frame is.\",\"minimum\":0,\"type\":\"integer\"}},\"type\":\"object\"},{\"name\":\"callback\",\"parameters\":[{\"description\":\"Information about the requested frame, null if the specified frame ID and/or tab ID are invalid.\",\"name\":\"details\",\"optional\":true,\"properties\":{\"errorOccurred\":{\"description\":\"True if the last navigation in this frame was interrupted by an error, i.e. the onErrorOccurred event fired.\",\"optional\":true,\"type\":\"boolean\"},\"frameId\":{\"description\":\"The ID of the frame. 0 indicates that this is the main frame; a positive value indicates the ID of a subframe.\",\"type\":\"integer\"},\"parentFrameId\":{\"description\":\"ID of frame that wraps the frame. Set to -1 of no parent frame exists.\",\"type\":\"integer\"},\"tabId\":{\"description\":\"The ID of the tab in which the frame is.\",\"type\":\"integer\"},\"url\":{\"description\":\"The URL currently associated with this frame, if the frame identified by the frameId existed at one point in the given tab. The fact that an URL is associated with a given frameId does not imply that the corresponding frame still exists.\",\"type\":\"string\"}},\"type\":\"object\"}],\"type\":\"function\"}],\"type\":\"function\"},{\"async\":\"callback\",\"description\":\"Retrieves information about all frames of a given tab.\",\"name\":\"getAllFrames\",\"parameters\":[{\"description\":\"Information about the tab to retrieve all frames from.\",\"name\":\"details\",\"properties\":{\"tabId\":{\"description\":\"The ID of the tab.\",\"minimum\":0,\"type\":\"integer\"}},\"type\":\"object\"},{\"name\":\"callback\",\"parameters\":[{\"description\":\"A list of frames in the given tab, null if the specified tab ID is invalid.\",\"items\":{\"properties\":{\"errorOccurred\":{\"description\":\"True if the last navigation in this frame was interrupted by an error, i.e. the onErrorOccurred event fired.\",\"optional\":true,\"type\":\"boolean\"},\"frameId\":{\"description\":\"The ID of the frame. 0 indicates that this is the main frame; a positive value indicates the ID of a subframe.\",\"type\":\"integer\"},\"parentFrameId\":{\"description\":\"ID of frame that wraps the frame. Set to -1 of no parent frame exists.\",\"type\":\"integer\"},\"processId\":{\"description\":\"The ID of the process runs the renderer for this tab.\",\"type\":\"integer\",\"unsupported\":true},\"tabId\":{\"description\":\"The ID of the tab in which the frame is.\",\"type\":\"integer\"},\"url\":{\"description\":\"The URL currently associated with this frame.\",\"type\":\"string\"}},\"type\":\"object\"},\"name\":\"details\",\"optional\":true,\"type\":\"array\"}],\"type\":\"function\"}],\"type\":\"function\"}],\"namespace\":\"webNavigation\",\"permissions\":[\"webNavigation\"],\"types\":[{\"description\":\"Cause of the navigation. The same transition types as defined in the history API are used. These are the same transition types as defined in the $(topic:transition_types)[history API] except with <code>\\\"start_page\\\"</code> in place of <code>\\\"auto_toplevel\\\"</code> (for backwards compatibility).\",\"enum\":[\"link\",\"typed\",\"auto_bookmark\",\"auto_subframe\",\"manual_subframe\",\"generated\",\"start_page\",\"form_submit\",\"reload\",\"keyword\",\"keyword_generated\"],\"id\":\"TransitionType\",\"type\":\"string\"},{\"enum\":[\"client_redirect\",\"server_redirect\",\"forward_back\",\"from_address_bar\"],\"id\":\"TransitionQualifier\",\"type\":\"string\"},{\"id\":\"EventUrlFilters\",\"properties\":{\"url\":{\"items\":{\"$ref\":\"events.UrlFilter\"},\"minItems\":1,\"type\":\"array\"}},\"type\":\"object\"}]},{\"description\":\"Use the <code>browser.webRequest</code> API to observe and analyze traffic and to intercept, block, or modify requests in-flight.\",\"events\":[{\"description\":\"Fired when a request is about to occur.\",\"extraParameters\":[{\"$ref\":\"RequestFilter\",\"description\":\"A set of filters that restricts the events that will be sent to this listener.\",\"name\":\"filter\"},{\"description\":\"Array of extra information that should be passed to the listener function.\",\"items\":{\"$ref\":\"OnBeforeRequestOptions\"},\"name\":\"extraInfoSpec\",\"optional\":true,\"type\":\"array\"}],\"name\":\"onBeforeRequest\",\"parameters\":[{\"name\":\"details\",\"properties\":{\"documentUrl\":{\"description\":\"URL of the page into which the requested resource will be loaded.\",\"optional\":true,\"type\":\"string\"},\"frameId\":{\"description\":\"The value 0 indicates that the request happens in the main frame; a positive value indicates the ID of a subframe in which the request happens. If the document of a (sub-)frame is loaded (<code>type</code> is <code>main_frame</code> or <code>sub_frame</code>), <code>frameId</code> indicates the ID of this frame, not the ID of the outer frame. Frame IDs are unique within a tab.\",\"type\":\"integer\"},\"method\":{\"description\":\"Standard HTTP method.\",\"type\":\"string\"},\"originUrl\":{\"description\":\"URL of the resource that triggered this request.\",\"optional\":true,\"type\":\"string\"},\"parentFrameId\":{\"description\":\"ID of frame that wraps the frame which sent the request. Set to -1 if no parent frame exists.\",\"type\":\"integer\"},\"requestBody\":{\"description\":\"Contains the HTTP request body data. Only provided if extraInfoSpec contains 'requestBody'.\",\"optional\":true,\"properties\":{\"error\":{\"description\":\"Errors when obtaining request body data.\",\"optional\":true,\"type\":\"string\"},\"formData\":{\"additionalProperties\":{\"items\":{\"type\":\"string\"},\"type\":\"array\"},\"description\":\"If the request method is POST and the body is a sequence of key-value pairs encoded in UTF8, encoded as either multipart/form-data, or application/x-www-form-urlencoded, this dictionary is present and for each key contains the list of all values for that key. If the data is of another media type, or if it is malformed, the dictionary is not present. An example value of this dictionary is {'key': ['value1', 'value2']}.\",\"optional\":true,\"properties\":{},\"type\":\"object\"},\"raw\":{\"description\":\"If the request method is PUT or POST, and the body is not already parsed in formData, then the unparsed request body elements are contained in this array.\",\"items\":{\"$ref\":\"UploadData\"},\"optional\":true,\"type\":\"array\"}},\"type\":\"object\"},\"requestId\":{\"description\":\"The ID of the request. Request IDs are unique within a browser session. As a result, they could be used to relate different events of the same request.\",\"type\":\"string\"},\"tabId\":{\"description\":\"The ID of the tab in which the request takes place. Set to -1 if the request isn't related to a tab.\",\"type\":\"integer\"},\"timeStamp\":{\"description\":\"The time when this signal is triggered, in milliseconds since the epoch.\",\"type\":\"number\"},\"type\":{\"$ref\":\"ResourceType\",\"description\":\"How the requested resource will be used.\"},\"url\":{\"type\":\"string\"}},\"type\":\"object\"}],\"returns\":{\"$ref\":\"BlockingResponse\",\"description\":\"If \\\"blocking\\\" is specified in the \\\"extraInfoSpec\\\" parameter, the event listener should return an object of this type.\",\"optional\":true},\"type\":\"function\"},{\"description\":\"Fired before sending an HTTP request, once the request headers are available. This may occur after a TCP connection is made to the server, but before any HTTP data is sent. \",\"extraParameters\":[{\"$ref\":\"RequestFilter\",\"description\":\"A set of filters that restricts the events that will be sent to this listener.\",\"name\":\"filter\"},{\"description\":\"Array of extra information that should be passed to the listener function.\",\"items\":{\"$ref\":\"OnBeforeSendHeadersOptions\"},\"name\":\"extraInfoSpec\",\"optional\":true,\"type\":\"array\"}],\"name\":\"onBeforeSendHeaders\",\"parameters\":[{\"name\":\"details\",\"properties\":{\"documentUrl\":{\"description\":\"URL of the page into which the requested resource will be loaded.\",\"optional\":true,\"type\":\"string\"},\"frameId\":{\"description\":\"The value 0 indicates that the request happens in the main frame; a positive value indicates the ID of a subframe in which the request happens. If the document of a (sub-)frame is loaded (<code>type</code> is <code>main_frame</code> or <code>sub_frame</code>), <code>frameId</code> indicates the ID of this frame, not the ID of the outer frame. Frame IDs are unique within a tab.\",\"type\":\"integer\"},\"method\":{\"description\":\"Standard HTTP method.\",\"type\":\"string\"},\"originUrl\":{\"description\":\"URL of the resource that triggered this request.\",\"optional\":true,\"type\":\"string\"},\"parentFrameId\":{\"description\":\"ID of frame that wraps the frame which sent the request. Set to -1 if no parent frame exists.\",\"type\":\"integer\"},\"requestHeaders\":{\"$ref\":\"HttpHeaders\",\"description\":\"The HTTP request headers that are going to be sent out with this request.\",\"optional\":true},\"requestId\":{\"description\":\"The ID of the request. Request IDs are unique within a browser session. As a result, they could be used to relate different events of the same request.\",\"type\":\"string\"},\"tabId\":{\"description\":\"The ID of the tab in which the request takes place. Set to -1 if the request isn't related to a tab.\",\"type\":\"integer\"},\"timeStamp\":{\"description\":\"The time when this signal is triggered, in milliseconds since the epoch.\",\"type\":\"number\"},\"type\":{\"$ref\":\"ResourceType\",\"description\":\"How the requested resource will be used.\"},\"url\":{\"type\":\"string\"}},\"type\":\"object\"}],\"returns\":{\"$ref\":\"BlockingResponse\",\"description\":\"If \\\"blocking\\\" is specified in the \\\"extraInfoSpec\\\" parameter, the event listener should return an object of this type.\",\"optional\":true},\"type\":\"function\"},{\"description\":\"Fired just before a request is going to be sent to the server (modifications of previous onBeforeSendHeaders callbacks are visible by the time onSendHeaders is fired).\",\"extraParameters\":[{\"$ref\":\"RequestFilter\",\"description\":\"A set of filters that restricts the events that will be sent to this listener.\",\"name\":\"filter\"},{\"description\":\"Array of extra information that should be passed to the listener function.\",\"items\":{\"$ref\":\"OnSendHeadersOptions\"},\"name\":\"extraInfoSpec\",\"optional\":true,\"type\":\"array\"}],\"name\":\"onSendHeaders\",\"parameters\":[{\"name\":\"details\",\"properties\":{\"documentUrl\":{\"description\":\"URL of the page into which the requested resource will be loaded.\",\"optional\":true,\"type\":\"string\"},\"frameId\":{\"description\":\"The value 0 indicates that the request happens in the main frame; a positive value indicates the ID of a subframe in which the request happens. If the document of a (sub-)frame is loaded (<code>type</code> is <code>main_frame</code> or <code>sub_frame</code>), <code>frameId</code> indicates the ID of this frame, not the ID of the outer frame. Frame IDs are unique within a tab.\",\"type\":\"integer\"},\"method\":{\"description\":\"Standard HTTP method.\",\"type\":\"string\"},\"originUrl\":{\"description\":\"URL of the resource that triggered this request.\",\"optional\":true,\"type\":\"string\"},\"parentFrameId\":{\"description\":\"ID of frame that wraps the frame which sent the request. Set to -1 if no parent frame exists.\",\"type\":\"integer\"},\"requestHeaders\":{\"$ref\":\"HttpHeaders\",\"description\":\"The HTTP request headers that have been sent out with this request.\",\"optional\":true},\"requestId\":{\"description\":\"The ID of the request. Request IDs are unique within a browser session. As a result, they could be used to relate different events of the same request.\",\"type\":\"string\"},\"tabId\":{\"description\":\"The ID of the tab in which the request takes place. Set to -1 if the request isn't related to a tab.\",\"type\":\"integer\"},\"timeStamp\":{\"description\":\"The time when this signal is triggered, in milliseconds since the epoch.\",\"type\":\"number\"},\"type\":{\"$ref\":\"ResourceType\",\"description\":\"How the requested resource will be used.\"},\"url\":{\"type\":\"string\"}},\"type\":\"object\"}],\"type\":\"function\"},{\"description\":\"Fired when HTTP response headers of a request have been received.\",\"extraParameters\":[{\"$ref\":\"RequestFilter\",\"description\":\"A set of filters that restricts the events that will be sent to this listener.\",\"name\":\"filter\"},{\"description\":\"Array of extra information that should be passed to the listener function.\",\"items\":{\"$ref\":\"OnHeadersReceivedOptions\"},\"name\":\"extraInfoSpec\",\"optional\":true,\"type\":\"array\"}],\"name\":\"onHeadersReceived\",\"parameters\":[{\"name\":\"details\",\"properties\":{\"documentUrl\":{\"description\":\"URL of the page into which the requested resource will be loaded.\",\"optional\":true,\"type\":\"string\"},\"frameId\":{\"description\":\"The value 0 indicates that the request happens in the main frame; a positive value indicates the ID of a subframe in which the request happens. If the document of a (sub-)frame is loaded (<code>type</code> is <code>main_frame</code> or <code>sub_frame</code>), <code>frameId</code> indicates the ID of this frame, not the ID of the outer frame. Frame IDs are unique within a tab.\",\"type\":\"integer\"},\"method\":{\"description\":\"Standard HTTP method.\",\"type\":\"string\"},\"originUrl\":{\"description\":\"URL of the resource that triggered this request.\",\"optional\":true,\"type\":\"string\"},\"parentFrameId\":{\"description\":\"ID of frame that wraps the frame which sent the request. Set to -1 if no parent frame exists.\",\"type\":\"integer\"},\"requestId\":{\"description\":\"The ID of the request. Request IDs are unique within a browser session. As a result, they could be used to relate different events of the same request.\",\"type\":\"string\"},\"responseHeaders\":{\"$ref\":\"HttpHeaders\",\"description\":\"The HTTP response headers that have been received with this response.\",\"optional\":true},\"statusCode\":{\"description\":\"Standard HTTP status code returned by the server.\",\"type\":\"integer\"},\"statusLine\":{\"description\":\"HTTP status line of the response or the 'HTTP/0.9 200 OK' string for HTTP/0.9 responses (i.e., responses that lack a status line).\",\"type\":\"string\"},\"tabId\":{\"description\":\"The ID of the tab in which the request takes place. Set to -1 if the request isn't related to a tab.\",\"type\":\"integer\"},\"timeStamp\":{\"description\":\"The time when this signal is triggered, in milliseconds since the epoch.\",\"type\":\"number\"},\"type\":{\"$ref\":\"ResourceType\",\"description\":\"How the requested resource will be used.\"},\"url\":{\"type\":\"string\"}},\"type\":\"object\"}],\"returns\":{\"$ref\":\"BlockingResponse\",\"description\":\"If \\\"blocking\\\" is specified in the \\\"extraInfoSpec\\\" parameter, the event listener should return an object of this type.\",\"optional\":true},\"type\":\"function\"},{\"description\":\"Fired when an authentication failure is received. The listener has three options: it can provide authentication credentials, it can cancel the request and display the error page, or it can take no action on the challenge. If bad user credentials are provided, this may be called multiple times for the same request.\",\"extraParameters\":[{\"$ref\":\"RequestFilter\",\"description\":\"A set of filters that restricts the events that will be sent to this listener.\",\"name\":\"filter\"},{\"description\":\"Array of extra information that should be passed to the listener function.\",\"items\":{\"$ref\":\"OnAuthRequiredOptions\"},\"name\":\"extraInfoSpec\",\"optional\":true,\"type\":\"array\"}],\"name\":\"onAuthRequired\",\"parameters\":[{\"name\":\"details\",\"properties\":{\"challenger\":{\"description\":\"The server requesting authentication.\",\"properties\":{\"host\":{\"type\":\"string\"},\"port\":{\"type\":\"integer\"}},\"type\":\"object\"},\"documentUrl\":{\"description\":\"URL of the page into which the requested resource will be loaded.\",\"optional\":true,\"type\":\"string\"},\"frameId\":{\"description\":\"The value 0 indicates that the request happens in the main frame; a positive value indicates the ID of a subframe in which the request happens. If the document of a (sub-)frame is loaded (<code>type</code> is <code>main_frame</code> or <code>sub_frame</code>), <code>frameId</code> indicates the ID of this frame, not the ID of the outer frame. Frame IDs are unique within a tab.\",\"type\":\"integer\"},\"isProxy\":{\"description\":\"True for Proxy-Authenticate, false for WWW-Authenticate.\",\"type\":\"boolean\"},\"method\":{\"description\":\"Standard HTTP method.\",\"type\":\"string\"},\"originUrl\":{\"description\":\"URL of the resource that triggered this request.\",\"optional\":true,\"type\":\"string\"},\"parentFrameId\":{\"description\":\"ID of frame that wraps the frame which sent the request. Set to -1 if no parent frame exists.\",\"type\":\"integer\"},\"realm\":{\"description\":\"The authentication realm provided by the server, if there is one.\",\"optional\":true,\"type\":\"string\"},\"requestId\":{\"description\":\"The ID of the request. Request IDs are unique within a browser session. As a result, they could be used to relate different events of the same request.\",\"type\":\"string\"},\"responseHeaders\":{\"$ref\":\"HttpHeaders\",\"description\":\"The HTTP response headers that were received along with this response.\",\"optional\":true},\"scheme\":{\"description\":\"The authentication scheme, e.g. Basic or Digest.\",\"type\":\"string\"},\"statusCode\":{\"description\":\"Standard HTTP status code returned by the server.\",\"type\":\"integer\"},\"statusLine\":{\"description\":\"HTTP status line of the response or the 'HTTP/0.9 200 OK' string for HTTP/0.9 responses (i.e., responses that lack a status line) or an empty string if there are no headers.\",\"type\":\"string\"},\"tabId\":{\"description\":\"The ID of the tab in which the request takes place. Set to -1 if the request isn't related to a tab.\",\"type\":\"integer\"},\"timeStamp\":{\"description\":\"The time when this signal is triggered, in milliseconds since the epoch.\",\"type\":\"number\"},\"type\":{\"$ref\":\"ResourceType\",\"description\":\"How the requested resource will be used.\"},\"url\":{\"type\":\"string\"}},\"type\":\"object\"},{\"name\":\"callback\",\"optional\":true,\"parameters\":[{\"$ref\":\"BlockingResponse\",\"name\":\"response\"}],\"type\":\"function\"}],\"returns\":{\"$ref\":\"BlockingResponse\",\"description\":\"If \\\"blocking\\\" is specified in the \\\"extraInfoSpec\\\" parameter, the event listener should return an object of this type.\",\"optional\":true},\"type\":\"function\"},{\"description\":\"Fired when the first byte of the response body is received. For HTTP requests, this means that the status line and response headers are available.\",\"extraParameters\":[{\"$ref\":\"RequestFilter\",\"description\":\"A set of filters that restricts the events that will be sent to this listener.\",\"name\":\"filter\"},{\"description\":\"Array of extra information that should be passed to the listener function.\",\"items\":{\"$ref\":\"OnResponseStartedOptions\"},\"name\":\"extraInfoSpec\",\"optional\":true,\"type\":\"array\"}],\"name\":\"onResponseStarted\",\"parameters\":[{\"name\":\"details\",\"properties\":{\"documentUrl\":{\"description\":\"URL of the page into which the requested resource will be loaded.\",\"optional\":true,\"type\":\"string\"},\"frameId\":{\"description\":\"The value 0 indicates that the request happens in the main frame; a positive value indicates the ID of a subframe in which the request happens. If the document of a (sub-)frame is loaded (<code>type</code> is <code>main_frame</code> or <code>sub_frame</code>), <code>frameId</code> indicates the ID of this frame, not the ID of the outer frame. Frame IDs are unique within a tab.\",\"type\":\"integer\"},\"fromCache\":{\"description\":\"Indicates if this response was fetched from disk cache.\",\"type\":\"boolean\"},\"ip\":{\"description\":\"The server IP address that the request was actually sent to. Note that it may be a literal IPv6 address.\",\"optional\":true,\"type\":\"string\"},\"method\":{\"description\":\"Standard HTTP method.\",\"type\":\"string\"},\"originUrl\":{\"description\":\"URL of the resource that triggered this request.\",\"optional\":true,\"type\":\"string\"},\"parentFrameId\":{\"description\":\"ID of frame that wraps the frame which sent the request. Set to -1 if no parent frame exists.\",\"type\":\"integer\"},\"requestId\":{\"description\":\"The ID of the request. Request IDs are unique within a browser session. As a result, they could be used to relate different events of the same request.\",\"type\":\"string\"},\"responseHeaders\":{\"$ref\":\"HttpHeaders\",\"description\":\"The HTTP response headers that were received along with this response.\",\"optional\":true},\"statusCode\":{\"description\":\"Standard HTTP status code returned by the server.\",\"type\":\"integer\"},\"statusLine\":{\"description\":\"HTTP status line of the response or the 'HTTP/0.9 200 OK' string for HTTP/0.9 responses (i.e., responses that lack a status line) or an empty string if there are no headers.\",\"type\":\"string\"},\"tabId\":{\"description\":\"The ID of the tab in which the request takes place. Set to -1 if the request isn't related to a tab.\",\"type\":\"integer\"},\"timeStamp\":{\"description\":\"The time when this signal is triggered, in milliseconds since the epoch.\",\"type\":\"number\"},\"type\":{\"$ref\":\"ResourceType\",\"description\":\"How the requested resource will be used.\"},\"url\":{\"type\":\"string\"}},\"type\":\"object\"}],\"type\":\"function\"},{\"description\":\"Fired when a server-initiated redirect is about to occur.\",\"extraParameters\":[{\"$ref\":\"RequestFilter\",\"description\":\"A set of filters that restricts the events that will be sent to this listener.\",\"name\":\"filter\"},{\"description\":\"Array of extra information that should be passed to the listener function.\",\"items\":{\"$ref\":\"OnBeforeRedirectOptions\"},\"name\":\"extraInfoSpec\",\"optional\":true,\"type\":\"array\"}],\"name\":\"onBeforeRedirect\",\"parameters\":[{\"name\":\"details\",\"properties\":{\"documentUrl\":{\"description\":\"URL of the page into which the requested resource will be loaded.\",\"optional\":true,\"type\":\"string\"},\"frameId\":{\"description\":\"The value 0 indicates that the request happens in the main frame; a positive value indicates the ID of a subframe in which the request happens. If the document of a (sub-)frame is loaded (<code>type</code> is <code>main_frame</code> or <code>sub_frame</code>), <code>frameId</code> indicates the ID of this frame, not the ID of the outer frame. Frame IDs are unique within a tab.\",\"type\":\"integer\"},\"fromCache\":{\"description\":\"Indicates if this response was fetched from disk cache.\",\"type\":\"boolean\"},\"ip\":{\"description\":\"The server IP address that the request was actually sent to. Note that it may be a literal IPv6 address.\",\"optional\":true,\"type\":\"string\"},\"method\":{\"description\":\"Standard HTTP method.\",\"type\":\"string\"},\"originUrl\":{\"description\":\"URL of the resource that triggered this request.\",\"optional\":true,\"type\":\"string\"},\"parentFrameId\":{\"description\":\"ID of frame that wraps the frame which sent the request. Set to -1 if no parent frame exists.\",\"type\":\"integer\"},\"redirectUrl\":{\"description\":\"The new URL.\",\"type\":\"string\"},\"requestId\":{\"description\":\"The ID of the request. Request IDs are unique within a browser session. As a result, they could be used to relate different events of the same request.\",\"type\":\"string\"},\"responseHeaders\":{\"$ref\":\"HttpHeaders\",\"description\":\"The HTTP response headers that were received along with this redirect.\",\"optional\":true},\"statusCode\":{\"description\":\"Standard HTTP status code returned by the server.\",\"type\":\"integer\"},\"statusLine\":{\"description\":\"HTTP status line of the response or the 'HTTP/0.9 200 OK' string for HTTP/0.9 responses (i.e., responses that lack a status line) or an empty string if there are no headers.\",\"type\":\"string\"},\"tabId\":{\"description\":\"The ID of the tab in which the request takes place. Set to -1 if the request isn't related to a tab.\",\"type\":\"integer\"},\"timeStamp\":{\"description\":\"The time when this signal is triggered, in milliseconds since the epoch.\",\"type\":\"number\"},\"type\":{\"$ref\":\"ResourceType\",\"description\":\"How the requested resource will be used.\"},\"url\":{\"type\":\"string\"}},\"type\":\"object\"}],\"type\":\"function\"},{\"description\":\"Fired when a request is completed.\",\"extraParameters\":[{\"$ref\":\"RequestFilter\",\"description\":\"A set of filters that restricts the events that will be sent to this listener.\",\"name\":\"filter\"},{\"description\":\"Array of extra information that should be passed to the listener function.\",\"items\":{\"$ref\":\"OnCompletedOptions\"},\"name\":\"extraInfoSpec\",\"optional\":true,\"type\":\"array\"}],\"name\":\"onCompleted\",\"parameters\":[{\"name\":\"details\",\"properties\":{\"documentUrl\":{\"description\":\"URL of the page into which the requested resource will be loaded.\",\"optional\":true,\"type\":\"string\"},\"frameId\":{\"description\":\"The value 0 indicates that the request happens in the main frame; a positive value indicates the ID of a subframe in which the request happens. If the document of a (sub-)frame is loaded (<code>type</code> is <code>main_frame</code> or <code>sub_frame</code>), <code>frameId</code> indicates the ID of this frame, not the ID of the outer frame. Frame IDs are unique within a tab.\",\"type\":\"integer\"},\"fromCache\":{\"description\":\"Indicates if this response was fetched from disk cache.\",\"type\":\"boolean\"},\"ip\":{\"description\":\"The server IP address that the request was actually sent to. Note that it may be a literal IPv6 address.\",\"optional\":true,\"type\":\"string\"},\"method\":{\"description\":\"Standard HTTP method.\",\"type\":\"string\"},\"originUrl\":{\"description\":\"URL of the resource that triggered this request.\",\"optional\":true,\"type\":\"string\"},\"parentFrameId\":{\"description\":\"ID of frame that wraps the frame which sent the request. Set to -1 if no parent frame exists.\",\"type\":\"integer\"},\"requestId\":{\"description\":\"The ID of the request. Request IDs are unique within a browser session. As a result, they could be used to relate different events of the same request.\",\"type\":\"string\"},\"responseHeaders\":{\"$ref\":\"HttpHeaders\",\"description\":\"The HTTP response headers that were received along with this response.\",\"optional\":true},\"statusCode\":{\"description\":\"Standard HTTP status code returned by the server.\",\"type\":\"integer\"},\"statusLine\":{\"description\":\"HTTP status line of the response or the 'HTTP/0.9 200 OK' string for HTTP/0.9 responses (i.e., responses that lack a status line) or an empty string if there are no headers.\",\"type\":\"string\"},\"tabId\":{\"description\":\"The ID of the tab in which the request takes place. Set to -1 if the request isn't related to a tab.\",\"type\":\"integer\"},\"timeStamp\":{\"description\":\"The time when this signal is triggered, in milliseconds since the epoch.\",\"type\":\"number\"},\"type\":{\"$ref\":\"ResourceType\",\"description\":\"How the requested resource will be used.\"},\"url\":{\"type\":\"string\"}},\"type\":\"object\"}],\"type\":\"function\"},{\"description\":\"Fired when an error occurs.\",\"extraParameters\":[{\"$ref\":\"RequestFilter\",\"description\":\"A set of filters that restricts the events that will be sent to this listener.\",\"name\":\"filter\"}],\"name\":\"onErrorOccurred\",\"parameters\":[{\"name\":\"details\",\"properties\":{\"documentUrl\":{\"description\":\"URL of the page into which the requested resource will be loaded.\",\"optional\":true,\"type\":\"string\"},\"error\":{\"description\":\"The error description. This string is <em>not</em> guaranteed to remain backwards compatible between releases. You must not parse and act based upon its content.\",\"type\":\"string\"},\"frameId\":{\"description\":\"The value 0 indicates that the request happens in the main frame; a positive value indicates the ID of a subframe in which the request happens. If the document of a (sub-)frame is loaded (<code>type</code> is <code>main_frame</code> or <code>sub_frame</code>), <code>frameId</code> indicates the ID of this frame, not the ID of the outer frame. Frame IDs are unique within a tab.\",\"type\":\"integer\"},\"fromCache\":{\"description\":\"Indicates if this response was fetched from disk cache.\",\"type\":\"boolean\"},\"ip\":{\"description\":\"The server IP address that the request was actually sent to. Note that it may be a literal IPv6 address.\",\"optional\":true,\"type\":\"string\"},\"method\":{\"description\":\"Standard HTTP method.\",\"type\":\"string\"},\"originUrl\":{\"description\":\"URL of the resource that triggered this request.\",\"optional\":true,\"type\":\"string\"},\"parentFrameId\":{\"description\":\"ID of frame that wraps the frame which sent the request. Set to -1 if no parent frame exists.\",\"type\":\"integer\"},\"requestId\":{\"description\":\"The ID of the request. Request IDs are unique within a browser session. As a result, they could be used to relate different events of the same request.\",\"type\":\"string\"},\"tabId\":{\"description\":\"The ID of the tab in which the request takes place. Set to -1 if the request isn't related to a tab.\",\"type\":\"integer\"},\"timeStamp\":{\"description\":\"The time when this signal is triggered, in milliseconds since the epoch.\",\"type\":\"number\"},\"type\":{\"$ref\":\"ResourceType\",\"description\":\"How the requested resource will be used.\"},\"url\":{\"type\":\"string\"}},\"type\":\"object\"}],\"type\":\"function\"}],\"functions\":[{\"async\":\"callback\",\"description\":\"Needs to be called when the behavior of the webRequest handlers has changed to prevent incorrect handling due to caching. This function call is expensive. Don't call it often.\",\"name\":\"handlerBehaviorChanged\",\"parameters\":[{\"name\":\"callback\",\"optional\":true,\"parameters\":[],\"type\":\"function\"}],\"type\":\"function\"},{\"description\":\"...\",\"name\":\"filterResponseData\",\"parameters\":[{\"name\":\"requestId\",\"type\":\"string\"}],\"permissions\":[\"webRequestBlocking\"],\"returns\":{\"additionalProperties\":{\"type\":\"any\"},\"isInstanceOf\":\"StreamFilter\",\"type\":\"object\"},\"type\":\"function\"}],\"namespace\":\"webRequest\",\"permissions\":[\"webRequest\"],\"properties\":{\"MAX_HANDLER_BEHAVIOR_CHANGED_CALLS_PER_10_MINUTES\":{\"description\":\"The maximum number of times that <code>handlerBehaviorChanged</code> can be called per 10 minute sustained interval. <code>handlerBehaviorChanged</code> is an expensive function call that shouldn't be called often.\",\"value\":20}},\"types\":[{\"enum\":[\"main_frame\",\"sub_frame\",\"stylesheet\",\"script\",\"image\",\"object\",\"object_subrequest\",\"xmlhttprequest\",\"xbl\",\"xslt\",\"ping\",\"beacon\",\"xml_dtd\",\"font\",\"media\",\"websocket\",\"csp_report\",\"imageset\",\"web_manifest\",\"other\"],\"id\":\"ResourceType\",\"type\":\"string\"},{\"enum\":[\"blocking\",\"requestBody\"],\"id\":\"OnBeforeRequestOptions\",\"type\":\"string\"},{\"enum\":[\"requestHeaders\",\"blocking\"],\"id\":\"OnBeforeSendHeadersOptions\",\"type\":\"string\"},{\"enum\":[\"requestHeaders\"],\"id\":\"OnSendHeadersOptions\",\"type\":\"string\"},{\"enum\":[\"blocking\",\"responseHeaders\"],\"id\":\"OnHeadersReceivedOptions\",\"type\":\"string\"},{\"enum\":[\"responseHeaders\",\"blocking\",\"asyncBlocking\"],\"id\":\"OnAuthRequiredOptions\",\"type\":\"string\"},{\"enum\":[\"responseHeaders\"],\"id\":\"OnResponseStartedOptions\",\"type\":\"string\"},{\"enum\":[\"responseHeaders\"],\"id\":\"OnBeforeRedirectOptions\",\"type\":\"string\"},{\"enum\":[\"responseHeaders\"],\"id\":\"OnCompletedOptions\",\"type\":\"string\"},{\"description\":\"An object describing filters to apply to webRequest events.\",\"id\":\"RequestFilter\",\"properties\":{\"tabId\":{\"optional\":true,\"type\":\"integer\"},\"types\":{\"description\":\"A list of request types. Requests that cannot match any of the types will be filtered out.\",\"items\":{\"$ref\":\"ResourceType\"},\"minItems\":1,\"optional\":true,\"type\":\"array\"},\"urls\":{\"description\":\"A list of URLs or URL patterns. Requests that cannot match any of the URLs will be filtered out.\",\"items\":{\"type\":\"string\"},\"minItems\":1,\"type\":\"array\"},\"windowId\":{\"optional\":true,\"type\":\"integer\"}},\"type\":\"object\"},{\"description\":\"An array of HTTP headers. Each header is represented as a dictionary containing the keys <code>name</code> and either <code>value</code> or <code>binaryValue</code>.\",\"id\":\"HttpHeaders\",\"items\":{\"properties\":{\"binaryValue\":{\"description\":\"Value of the HTTP header if it cannot be represented by UTF-8, stored as individual byte values (0..255).\",\"items\":{\"type\":\"integer\"},\"optional\":true,\"type\":\"array\"},\"name\":{\"description\":\"Name of the HTTP header.\",\"type\":\"string\"},\"value\":{\"description\":\"Value of the HTTP header if it can be represented by UTF-8.\",\"optional\":true,\"type\":\"string\"}},\"type\":\"object\"},\"type\":\"array\"},{\"description\":\"Returns value for event handlers that have the 'blocking' extraInfoSpec applied. Allows the event handler to modify network requests.\",\"id\":\"BlockingResponse\",\"properties\":{\"authCredentials\":{\"description\":\"Only used as a response to the onAuthRequired event. If set, the request is made using the supplied credentials.\",\"optional\":true,\"properties\":{\"password\":{\"type\":\"string\"},\"username\":{\"type\":\"string\"}},\"type\":\"object\"},\"cancel\":{\"description\":\"If true, the request is cancelled. Used in onBeforeRequest, this prevents the request from being sent.\",\"optional\":true,\"type\":\"boolean\"},\"redirectUrl\":{\"description\":\"Only used as a response to the onBeforeRequest and onHeadersReceived events. If set, the original request is prevented from being sent/completed and is instead redirected to the given URL. Redirections to non-HTTP schemes such as data: are allowed. Redirects initiated by a redirect action use the original request method for the redirect, with one exception: If the redirect is initiated at the onHeadersReceived stage, then the redirect will be issued using the GET method.\",\"optional\":true,\"type\":\"string\"},\"requestHeaders\":{\"$ref\":\"HttpHeaders\",\"description\":\"Only used as a response to the onBeforeSendHeaders event. If set, the request is made with these request headers instead.\",\"optional\":true},\"responseHeaders\":{\"$ref\":\"HttpHeaders\",\"description\":\"Only used as a response to the onHeadersReceived event. If set, the server is assumed to have responded with these response headers instead. Only return <code>responseHeaders</code> if you really want to modify the headers in order to limit the number of conflicts (only one extension may modify <code>responseHeaders</code> for each request).\",\"optional\":true}},\"type\":\"object\"},{\"description\":\"Contains data uploaded in a URL request.\",\"id\":\"UploadData\",\"properties\":{\"bytes\":{\"description\":\"An ArrayBuffer with a copy of the data.\",\"optional\":true,\"type\":\"any\"},\"file\":{\"description\":\"A string with the file's path and name.\",\"optional\":true,\"type\":\"string\"}},\"type\":\"object\"}]},{\"description\":\"Use the <code>browser.windows</code> API to interact with browser windows. You can use this API to create, modify, and rearrange windows in the browser.\",\"events\":[{\"description\":\"Fired when a window is created.\",\"filters\":[{\"description\":\"Conditions that the window's type being created must satisfy. By default it will satisfy <code>['app', 'normal', 'panel', 'popup']</code>, with <code>'app'</code> and <code>'panel'</code> window types limited to the extension's own windows.\",\"items\":{\"$ref\":\"WindowType\"},\"name\":\"windowTypes\",\"type\":\"array\"}],\"name\":\"onCreated\",\"parameters\":[{\"$ref\":\"Window\",\"description\":\"Details of the window that was created.\",\"name\":\"window\"}],\"type\":\"function\"},{\"description\":\"Fired when a window is removed (closed).\",\"filters\":[{\"description\":\"Conditions that the window's type being removed must satisfy. By default it will satisfy <code>['app', 'normal', 'panel', 'popup']</code>, with <code>'app'</code> and <code>'panel'</code> window types limited to the extension's own windows.\",\"items\":{\"$ref\":\"WindowType\"},\"name\":\"windowTypes\",\"type\":\"array\"}],\"name\":\"onRemoved\",\"parameters\":[{\"description\":\"ID of the removed window.\",\"minimum\":0,\"name\":\"windowId\",\"type\":\"integer\"}],\"type\":\"function\"},{\"description\":\"Fired when the currently focused window changes. Will be $(ref:windows.WINDOW_ID_NONE) if all browser windows have lost focus. Note: On some Linux window managers, WINDOW_ID_NONE will always be sent immediately preceding a switch from one browser window to another.\",\"filters\":[{\"description\":\"Conditions that the window's type being removed must satisfy. By default it will satisfy <code>['app', 'normal', 'panel', 'popup']</code>, with <code>'app'</code> and <code>'panel'</code> window types limited to the extension's own windows.\",\"items\":{\"$ref\":\"WindowType\"},\"name\":\"windowTypes\",\"type\":\"array\"}],\"name\":\"onFocusChanged\",\"parameters\":[{\"description\":\"ID of the newly focused window.\",\"minimum\":-1,\"name\":\"windowId\",\"type\":\"integer\"}],\"type\":\"function\"}],\"functions\":[{\"async\":\"callback\",\"description\":\"Gets details about a window.\",\"name\":\"get\",\"parameters\":[{\"minimum\":-2,\"name\":\"windowId\",\"type\":\"integer\"},{\"description\":\"\",\"name\":\"getInfo\",\"optional\":true,\"properties\":{\"populate\":{\"description\":\"If true, the $(ref:windows.Window) object will have a <var>tabs</var> property that contains a list of the $(ref:tabs.Tab) objects. The <code>Tab</code> objects only contain the <code>url</code>, <code>title</code> and <code>favIconUrl</code> properties if the extension's manifest file includes the <code>\\\"tabs\\\"</code> permission.\",\"optional\":true,\"type\":\"boolean\"},\"windowTypes\":{\"description\":\"If set, the $(ref:windows.Window) returned will be filtered based on its type. If unset the default filter is set to <code>['app', 'normal', 'panel', 'popup']</code>, with <code>'app'</code> and <code>'panel'</code> window types limited to the extension's own windows.\",\"items\":{\"$ref\":\"WindowType\"},\"optional\":true,\"type\":\"array\"}},\"type\":\"object\"},{\"name\":\"callback\",\"parameters\":[{\"$ref\":\"Window\",\"name\":\"window\"}],\"type\":\"function\"}],\"type\":\"function\"},{\"async\":\"callback\",\"description\":\"Gets the $(topic:current-window)[current window].\",\"name\":\"getCurrent\",\"parameters\":[{\"description\":\"\",\"name\":\"getInfo\",\"optional\":true,\"properties\":{\"populate\":{\"description\":\"If true, the $(ref:windows.Window) object will have a <var>tabs</var> property that contains a list of the $(ref:tabs.Tab) objects. The <code>Tab</code> objects only contain the <code>url</code>, <code>title</code> and <code>favIconUrl</code> properties if the extension's manifest file includes the <code>\\\"tabs\\\"</code> permission.\",\"optional\":true,\"type\":\"boolean\"},\"windowTypes\":{\"description\":\"If set, the $(ref:windows.Window) returned will be filtered based on its type. If unset the default filter is set to <code>['app', 'normal', 'panel', 'popup']</code>, with <code>'app'</code> and <code>'panel'</code> window types limited to the extension's own windows.\",\"items\":{\"$ref\":\"WindowType\"},\"optional\":true,\"type\":\"array\"}},\"type\":\"object\"},{\"name\":\"callback\",\"parameters\":[{\"$ref\":\"Window\",\"name\":\"window\"}],\"type\":\"function\"}],\"type\":\"function\"},{\"async\":\"callback\",\"description\":\"Gets the window that was most recently focused &mdash; typically the window 'on top'.\",\"name\":\"getLastFocused\",\"parameters\":[{\"description\":\"\",\"name\":\"getInfo\",\"optional\":true,\"properties\":{\"populate\":{\"description\":\"If true, the $(ref:windows.Window) object will have a <var>tabs</var> property that contains a list of the $(ref:tabs.Tab) objects. The <code>Tab</code> objects only contain the <code>url</code>, <code>title</code> and <code>favIconUrl</code> properties if the extension's manifest file includes the <code>\\\"tabs\\\"</code> permission.\",\"optional\":true,\"type\":\"boolean\"},\"windowTypes\":{\"description\":\"If set, the $(ref:windows.Window) returned will be filtered based on its type. If unset the default filter is set to <code>['app', 'normal', 'panel', 'popup']</code>, with <code>'app'</code> and <code>'panel'</code> window types limited to the extension's own windows.\",\"items\":{\"$ref\":\"WindowType\"},\"optional\":true,\"type\":\"array\"}},\"type\":\"object\"},{\"name\":\"callback\",\"parameters\":[{\"$ref\":\"Window\",\"name\":\"window\"}],\"type\":\"function\"}],\"type\":\"function\"},{\"async\":\"callback\",\"description\":\"Gets all windows.\",\"name\":\"getAll\",\"parameters\":[{\"description\":\"\",\"name\":\"getInfo\",\"optional\":true,\"properties\":{\"populate\":{\"description\":\"If true, each $(ref:windows.Window) object will have a <var>tabs</var> property that contains a list of the $(ref:tabs.Tab) objects for that window. The <code>Tab</code> objects only contain the <code>url</code>, <code>title</code> and <code>favIconUrl</code> properties if the extension's manifest file includes the <code>\\\"tabs\\\"</code> permission.\",\"optional\":true,\"type\":\"boolean\"},\"windowTypes\":{\"description\":\"If set, the $(ref:windows.Window) returned will be filtered based on its type. If unset the default filter is set to <code>['app', 'normal', 'panel', 'popup']</code>, with <code>'app'</code> and <code>'panel'</code> window types limited to the extension's own windows.\",\"items\":{\"$ref\":\"WindowType\"},\"optional\":true,\"type\":\"array\"}},\"type\":\"object\"},{\"name\":\"callback\",\"parameters\":[{\"items\":{\"$ref\":\"Window\"},\"name\":\"windows\",\"type\":\"array\"}],\"type\":\"function\"}],\"type\":\"function\"},{\"async\":\"callback\",\"description\":\"Creates (opens) a new browser with any optional sizing, position or default URL provided.\",\"name\":\"create\",\"parameters\":[{\"default\":{},\"name\":\"createData\",\"optional\":true,\"properties\":{\"allowScriptsToClose\":{\"description\":\"Allow scripts to close the window.\",\"optional\":true,\"type\":\"boolean\"},\"focused\":{\"description\":\"If true, opens an active window. If false, opens an inactive window.\",\"optional\":true,\"type\":\"boolean\",\"unsupported\":true},\"height\":{\"description\":\"The height in pixels of the new window, including the frame. If not specified defaults to a natural height.\",\"minimum\":0,\"optional\":true,\"type\":\"integer\"},\"incognito\":{\"description\":\"Whether the new window should be an incognito window.\",\"optional\":true,\"type\":\"boolean\"},\"left\":{\"description\":\"The number of pixels to position the new window from the left edge of the screen. If not specified, the new window is offset naturally from the last focused window. This value is ignored for panels.\",\"optional\":true,\"type\":\"integer\"},\"state\":{\"$ref\":\"WindowState\",\"description\":\"The initial state of the window. The 'minimized', 'maximized' and 'fullscreen' states cannot be combined with 'left', 'top', 'width' or 'height'.\",\"optional\":true},\"tabId\":{\"description\":\"The id of the tab for which you want to adopt to the new window.\",\"minimum\":0,\"optional\":true,\"type\":\"integer\"},\"titlePreface\":{\"description\":\"A string to add to the beginning of the window title.\",\"optional\":true,\"type\":\"string\"},\"top\":{\"description\":\"The number of pixels to position the new window from the top edge of the screen. If not specified, the new window is offset naturally from the last focused window. This value is ignored for panels.\",\"optional\":true,\"type\":\"integer\"},\"type\":{\"$ref\":\"CreateType\",\"description\":\"Specifies what type of browser window to create. The 'panel' and 'detached_panel' types create a popup unless the '--enable-panels' flag is set.\",\"optional\":true},\"url\":{\"choices\":[{\"format\":\"relativeUrl\",\"type\":\"string\"},{\"items\":{\"format\":\"relativeUrl\",\"type\":\"string\"},\"type\":\"array\"}],\"description\":\"A URL or array of URLs to open as tabs in the window. Fully-qualified URLs must include a scheme (i.e. 'http://www.google.com', not 'www.google.com'). Relative URLs will be relative to the current page within the extension. Defaults to the New Tab Page.\",\"optional\":true},\"width\":{\"description\":\"The width in pixels of the new window, including the frame. If not specified defaults to a natural width.\",\"minimum\":0,\"optional\":true,\"type\":\"integer\"}},\"type\":\"object\"},{\"name\":\"callback\",\"optional\":true,\"parameters\":[{\"$ref\":\"Window\",\"description\":\"Contains details about the created window.\",\"name\":\"window\",\"optional\":true}],\"type\":\"function\"}],\"type\":\"function\"},{\"async\":\"callback\",\"description\":\"Updates the properties of a window. Specify only the properties that you want to change; unspecified properties will be left unchanged.\",\"name\":\"update\",\"parameters\":[{\"minimum\":-2,\"name\":\"windowId\",\"type\":\"integer\"},{\"name\":\"updateInfo\",\"properties\":{\"drawAttention\":{\"description\":\"If true, causes the window to be displayed in a manner that draws the user's attention to the window, without changing the focused window. The effect lasts until the user changes focus to the window. This option has no effect if the window already has focus. Set to false to cancel a previous draw attention request.\",\"optional\":true,\"type\":\"boolean\"},\"focused\":{\"description\":\"If true, brings the window to the front. If false, brings the next window in the z-order to the front.\",\"optional\":true,\"type\":\"boolean\"},\"height\":{\"description\":\"The height to resize the window to in pixels. This value is ignored for panels.\",\"minimum\":0,\"optional\":true,\"type\":\"integer\"},\"left\":{\"description\":\"The offset from the left edge of the screen to move the window to in pixels. This value is ignored for panels.\",\"optional\":true,\"type\":\"integer\"},\"state\":{\"$ref\":\"WindowState\",\"description\":\"The new state of the window. The 'minimized', 'maximized' and 'fullscreen' states cannot be combined with 'left', 'top', 'width' or 'height'.\",\"optional\":true},\"titlePreface\":{\"description\":\"A string to add to the beginning of the window title.\",\"optional\":true,\"type\":\"string\"},\"top\":{\"description\":\"The offset from the top edge of the screen to move the window to in pixels. This value is ignored for panels.\",\"optional\":true,\"type\":\"integer\"},\"width\":{\"description\":\"The width to resize the window to in pixels. This value is ignored for panels.\",\"minimum\":0,\"optional\":true,\"type\":\"integer\"}},\"type\":\"object\"},{\"name\":\"callback\",\"optional\":true,\"parameters\":[{\"$ref\":\"Window\",\"name\":\"window\"}],\"type\":\"function\"}],\"type\":\"function\"},{\"async\":\"callback\",\"description\":\"Removes (closes) a window, and all the tabs inside it.\",\"name\":\"remove\",\"parameters\":[{\"minimum\":0,\"name\":\"windowId\",\"type\":\"integer\"},{\"name\":\"callback\",\"optional\":true,\"parameters\":[],\"type\":\"function\"}],\"type\":\"function\"}],\"namespace\":\"windows\",\"properties\":{\"WINDOW_ID_CURRENT\":{\"description\":\"The windowId value that represents the $(topic:current-window)[current window].\",\"value\":-2},\"WINDOW_ID_NONE\":{\"description\":\"The windowId value that represents the absence of a browser window.\",\"value\":-1}},\"types\":[{\"description\":\"The type of browser window this is. Under some circumstances a Window may not be assigned type property, for example when querying closed windows from the $(ref:sessions) API.\",\"enum\":[\"normal\",\"popup\",\"panel\",\"app\",\"devtools\"],\"id\":\"WindowType\",\"type\":\"string\"},{\"description\":\"The state of this browser window. Under some circumstances a Window may not be assigned state property, for example when querying closed windows from the $(ref:sessions) API.\",\"enum\":[\"normal\",\"minimized\",\"maximized\",\"fullscreen\",\"docked\"],\"id\":\"WindowState\",\"type\":\"string\"},{\"id\":\"Window\",\"properties\":{\"alwaysOnTop\":{\"description\":\"Whether the window is set to be always on top.\",\"type\":\"boolean\"},\"focused\":{\"description\":\"Whether the window is currently the focused window.\",\"type\":\"boolean\"},\"height\":{\"description\":\"The height of the window, including the frame, in pixels. Under some circumstances a Window may not be assigned height property, for example when querying closed windows from the $(ref:sessions) API.\",\"optional\":true,\"type\":\"integer\"},\"id\":{\"description\":\"The ID of the window. Window IDs are unique within a browser session. Under some circumstances a Window may not be assigned an ID, for example when querying windows using the $(ref:sessions) API, in which case a session ID may be present.\",\"minimum\":0,\"optional\":true,\"type\":\"integer\"},\"incognito\":{\"description\":\"Whether the window is incognito.\",\"type\":\"boolean\"},\"left\":{\"description\":\"The offset of the window from the left edge of the screen in pixels. Under some circumstances a Window may not be assigned left property, for example when querying closed windows from the $(ref:sessions) API.\",\"optional\":true,\"type\":\"integer\"},\"sessionId\":{\"description\":\"The session ID used to uniquely identify a Window obtained from the $(ref:sessions) API.\",\"optional\":true,\"type\":\"string\"},\"state\":{\"$ref\":\"WindowState\",\"description\":\"The state of this browser window.\",\"optional\":true},\"tabs\":{\"description\":\"Array of $(ref:tabs.Tab) objects representing the current tabs in the window.\",\"items\":{\"$ref\":\"tabs.Tab\"},\"optional\":true,\"type\":\"array\"},\"title\":{\"description\":\"The title of the window. Read-only.\",\"optional\":true,\"type\":\"string\"},\"top\":{\"description\":\"The offset of the window from the top edge of the screen in pixels. Under some circumstances a Window may not be assigned top property, for example when querying closed windows from the $(ref:sessions) API.\",\"optional\":true,\"type\":\"integer\"},\"type\":{\"$ref\":\"WindowType\",\"description\":\"The type of browser window this is.\",\"optional\":true},\"width\":{\"description\":\"The width of the window, including the frame, in pixels. Under some circumstances a Window may not be assigned width property, for example when querying closed windows from the $(ref:sessions) API.\",\"optional\":true,\"type\":\"integer\"}},\"type\":\"object\"},{\"description\":\"Specifies what type of browser window to create. The 'panel' and 'detached_panel' types create a popup unless the '--enable-panels' flag is set.\",\"enum\":[\"normal\",\"popup\",\"panel\",\"detached_panel\"],\"id\":\"CreateType\",\"type\":\"string\"}]}]");
 
 /***/ }),
-/* 63 */
+/* 64 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -33027,45 +43363,45 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _lodash = __webpack_require__(0);
 
-var _sinon = __webpack_require__(10);
+var _sinon = __webpack_require__(11);
 
 var _sinon2 = _interopRequireDefault(_sinon);
 
-var _stub = __webpack_require__(64);
+var _stub = __webpack_require__(65);
 
 var _stub2 = _interopRequireDefault(_stub);
 
-var _events = __webpack_require__(65);
+var _events = __webpack_require__(66);
 
 var _events2 = _interopRequireDefault(_events);
 
-var _props = __webpack_require__(74);
+var _props = __webpack_require__(75);
 
 var _props2 = _interopRequireDefault(_props);
 
-var _manager = __webpack_require__(76);
+var _manager = __webpack_require__(77);
 
 var _manager2 = _interopRequireDefault(_manager);
 
-var _props3 = __webpack_require__(77);
+var _props3 = __webpack_require__(78);
 
-var _chromeSettings = __webpack_require__(78);
+var _chromeSettings = __webpack_require__(79);
 
 var _chromeSettings2 = _interopRequireDefault(_chromeSettings);
 
-var _contentSettings = __webpack_require__(79);
+var _contentSettings = __webpack_require__(80);
 
 var _contentSettings2 = _interopRequireDefault(_contentSettings);
 
-var _elementsPanel = __webpack_require__(80);
+var _elementsPanel = __webpack_require__(81);
 
 var _elementsPanel2 = _interopRequireDefault(_elementsPanel);
 
-var _sourcePanel = __webpack_require__(81);
+var _sourcePanel = __webpack_require__(82);
 
 var _sourcePanel2 = _interopRequireDefault(_sourcePanel);
 
-var _storageArea = __webpack_require__(82);
+var _storageArea = __webpack_require__(83);
 
 var _storageArea2 = _interopRequireDefault(_storageArea);
 
@@ -33279,7 +43615,7 @@ exports.default = Api;
 module.exports = exports['default'];
 
 /***/ }),
-/* 64 */
+/* 65 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -33291,7 +43627,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _cache = __webpack_require__(54);
+var _cache = __webpack_require__(55);
 
 var _cache2 = _interopRequireDefault(_cache);
 
@@ -33412,7 +43748,7 @@ exports.default = StubsCache;
 module.exports = exports['default'];
 
 /***/ }),
-/* 65 */
+/* 66 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -33426,11 +43762,11 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _lodash = __webpack_require__(0);
 
-var _index = __webpack_require__(66);
+var _index = __webpack_require__(67);
 
 var _index2 = _interopRequireDefault(_index);
 
-var _cache = __webpack_require__(54);
+var _cache = __webpack_require__(55);
 
 var _cache2 = _interopRequireDefault(_cache);
 
@@ -33525,7 +43861,7 @@ exports.default = EventsCache;
 module.exports = exports['default'];
 
 /***/ }),
-/* 66 */
+/* 67 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -33540,7 +43876,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       * @overview ChromeEvent class
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       */
 
-var _isFunction = __webpack_require__(67);
+var _isFunction = __webpack_require__(68);
 
 var _isFunction2 = _interopRequireDefault(_isFunction);
 
@@ -33683,11 +44019,11 @@ exports.default = ChromeEvent;
 module.exports = exports['default'];
 
 /***/ }),
-/* 67 */
+/* 68 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseGetTag = __webpack_require__(68),
-    isObject = __webpack_require__(73);
+var baseGetTag = __webpack_require__(69),
+    isObject = __webpack_require__(74);
 
 /** `Object#toString` result references. */
 var asyncTag = '[object AsyncFunction]',
@@ -33726,12 +44062,12 @@ module.exports = isFunction;
 
 
 /***/ }),
-/* 68 */
+/* 69 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var Symbol = __webpack_require__(60),
-    getRawTag = __webpack_require__(71),
-    objectToString = __webpack_require__(72);
+var Symbol = __webpack_require__(61),
+    getRawTag = __webpack_require__(72),
+    objectToString = __webpack_require__(73);
 
 /** `Object#toString` result references. */
 var nullTag = '[object Null]',
@@ -33760,10 +44096,10 @@ module.exports = baseGetTag;
 
 
 /***/ }),
-/* 69 */
+/* 70 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var freeGlobal = __webpack_require__(70);
+var freeGlobal = __webpack_require__(71);
 
 /** Detect free variable `self`. */
 var freeSelf = typeof self == 'object' && self && self.Object === Object && self;
@@ -33775,7 +44111,7 @@ module.exports = root;
 
 
 /***/ }),
-/* 70 */
+/* 71 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {/** Detect free variable `global` from Node.js. */
@@ -33786,10 +44122,10 @@ module.exports = freeGlobal;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(2)))
 
 /***/ }),
-/* 71 */
+/* 72 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var Symbol = __webpack_require__(60);
+var Symbol = __webpack_require__(61);
 
 /** Used for built-in method references. */
 var objectProto = Object.prototype;
@@ -33838,7 +44174,7 @@ module.exports = getRawTag;
 
 
 /***/ }),
-/* 72 */
+/* 73 */
 /***/ (function(module, exports) {
 
 /** Used for built-in method references. */
@@ -33866,7 +44202,7 @@ module.exports = objectToString;
 
 
 /***/ }),
-/* 73 */
+/* 74 */
 /***/ (function(module, exports) {
 
 /**
@@ -33903,7 +44239,7 @@ module.exports = isObject;
 
 
 /***/ }),
-/* 74 */
+/* 75 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -33915,11 +44251,11 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _noop = __webpack_require__(75);
+var _noop = __webpack_require__(76);
 
 var _noop2 = _interopRequireDefault(_noop);
 
-var _cache = __webpack_require__(54);
+var _cache = __webpack_require__(55);
 
 var _cache2 = _interopRequireDefault(_cache);
 
@@ -34015,7 +44351,7 @@ exports.default = PropsCache;
 module.exports = exports['default'];
 
 /***/ }),
-/* 75 */
+/* 76 */
 /***/ (function(module, exports) {
 
 /**
@@ -34038,7 +44374,7 @@ module.exports = noop;
 
 
 /***/ }),
-/* 76 */
+/* 77 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -34086,7 +44422,7 @@ exports.default = Manager;
 module.exports = exports["default"];
 
 /***/ }),
-/* 77 */
+/* 78 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -34140,7 +44476,7 @@ function getValue(val, ref) {
 }
 
 /***/ }),
-/* 78 */
+/* 79 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -34194,7 +44530,7 @@ exports.default = ChromeSettings;
 module.exports = exports['default'];
 
 /***/ }),
-/* 79 */
+/* 80 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -34247,7 +44583,7 @@ exports.default = ContentSettings;
 module.exports = exports['default'];
 
 /***/ }),
-/* 80 */
+/* 81 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -34299,7 +44635,7 @@ exports.default = ElementsPanel;
 module.exports = exports['default'];
 
 /***/ }),
-/* 81 */
+/* 82 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -34351,7 +44687,7 @@ exports.default = SourcePanel;
 module.exports = exports['default'];
 
 /***/ }),
-/* 82 */
+/* 83 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -34405,20 +44741,20 @@ exports.default = StorageArea;
 module.exports = exports['default'];
 
 /***/ }),
-/* 83 */
+/* 84 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var map = {
-	"./alarm.js": 84,
-	"./contextMenus.js": 85,
-	"./cookies.js": 86,
-	"./extension.js": 87,
-	"./i18n.js": 88,
-	"./notifications.js": 89,
-	"./runtime.js": 90,
-	"./storage.js": 91,
-	"./tabs.js": 92,
-	"./windows.js": 93
+	"./alarm.js": 85,
+	"./contextMenus.js": 86,
+	"./cookies.js": 87,
+	"./extension.js": 88,
+	"./i18n.js": 89,
+	"./notifications.js": 90,
+	"./runtime.js": 91,
+	"./storage.js": 92,
+	"./tabs.js": 93,
+	"./windows.js": 94
 };
 
 
@@ -34439,10 +44775,10 @@ webpackContext.keys = function webpackContextKeys() {
 };
 webpackContext.resolve = webpackContextResolve;
 module.exports = webpackContext;
-webpackContext.id = 83;
+webpackContext.id = 84;
 
 /***/ }),
-/* 84 */
+/* 85 */
 /***/ (function(module, exports) {
 
 // window.browser.alarms.clear.callsFake(() => Promise.resolve())
@@ -34451,7 +44787,7 @@ webpackContext.id = 83;
 // window.browser.alarms.onAlarm.removeListener.callsFake(() => Promise.resolve())
 
 /***/ }),
-/* 85 */
+/* 86 */
 /***/ (function(module, exports) {
 
 window.browser.menus.create.callsFake(() => Promise.resolve())
@@ -34468,7 +44804,7 @@ Object.keys(window.browser.menus).forEach(key => {
 
 
 /***/ }),
-/* 86 */
+/* 87 */
 /***/ (function(module, exports) {
 
 window.browser.cookies.get.callsFake(() => Promise.resolve())
@@ -34479,14 +44815,14 @@ window.browser.cookies.set.callsFake(() => Promise.resolve())
 
 
 /***/ }),
-/* 87 */
+/* 88 */
 /***/ (function(module, exports) {
 
 window.browser.extension.inIncognitoContext = false
 
 
 /***/ }),
-/* 88 */
+/* 89 */
 /***/ (function(module, exports) {
 
 window.browser.i18n.getMessage.callsFake(text => text)
@@ -34494,7 +44830,7 @@ window.browser.i18n.getUILanguage.returns(navigator.language)
 
 
 /***/ }),
-/* 89 */
+/* 90 */
 /***/ (function(module, exports) {
 
 window.browser.notifications.create.callsFake((...args) => {
@@ -34518,14 +44854,14 @@ window.browser.notifications.create.callsFake((...args) => {
 window.browser.notifications.getAll.callsFake(() => Promise.resolve({}))
 
 /***/ }),
-/* 90 */
+/* 91 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(0);
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var sinon__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(10);
+/* harmony import */ var sinon__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(11);
 /* harmony import */ var sinon__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(sinon__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _helpers__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(1);
 
@@ -34583,7 +44919,7 @@ window.browser.runtime.getManifest.callsFake(()=>({version:window.latestVersion}
 
 
 /***/ }),
-/* 91 */
+/* 92 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -34789,12 +45125,12 @@ function notifyListeners (changes, area) {
 
 
 /***/ }),
-/* 92 */
+/* 93 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _mock_utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(9);
+/* harmony import */ var _mock_utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(10);
 
 window.browser.tabs.create.callsFake(({ url }) => {
   if (!url) {
@@ -34811,13 +45147,25 @@ window.browser.tabs.create.callsFake(({ url }) => {
     id: `${Date.now()}`
   })
 })
-window.browser.tabs.query.callsFake(() => Promise.resolve([]))
+window.browser.tabs.query.callsFake((...args) => {
+  if(_.isEmpty(args[0])){
+    return Promise.resolve([{id:'forWordSaved',url:'utools.html'}])
+  }else{
+    return Promise.resolve([])
+  }
+})
 window.browser.tabs.highlight.callsFake(() => Promise.resolve())
-window.browser.tabs.sendMessage.callsFake(() => Promise.resolve())
+window.browser.tabs.sendMessage.callsFake((tabId, message) => {
+  if(tabId == 'forWordSaved'){
+    return window.browser.runtime.sendMessage(message)
+  }else{
+    return Promise.resolve()
+  }
+})
 
 
 /***/ }),
-/* 93 */
+/* 94 */
 /***/ (function(module, exports) {
 
 window.browser.windows.create.callsFake(({ url }) => {

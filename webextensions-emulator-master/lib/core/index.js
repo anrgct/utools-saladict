@@ -1,6 +1,6 @@
 import browser from 'sinon-chrome/webextensions'
 import { openIframe, utoolsStorage, loadAllJs, restoreIndexedBDData, restoreLocalStorageData } from '../mock/utils'
-import { exportToJson } from '../mock/idb-backup-and-restore.js'
+import { exportDatabase } from '../mock/idb-export-import'
 import { run } from '../mock/addon'
 import '../mock/refactor.css'
 window.browser = browser
@@ -36,10 +36,14 @@ utools.onPluginEnter(({ code, type, payload }) => {
 })
 
 async function init() {
+    utools.db.remove("indexedDBData")
     localStorageData = new utoolsStorage('localStorageData');
-    indexedDBData = new utoolsStorage('indexedDBData');
+    indexedDBData = new utoolsStorage('indexedDBDataV2');
     versionData = new utoolsStorage('versionData');
+    // 还原内部storage
     restoreLocalStorageData(localStorageData);
+    // 还原indexedDB
+    await restoreIndexedBDData(indexedDBData)
     let utoolsPageScript = [
       "assets/runtime.7c358480.js",
       "assets/view-vendor.e505b0d9.js",
@@ -47,13 +51,11 @@ async function init() {
       "assets/20.c4eab594.js",
       "assets/background.3ba95e36.js"
     ];
-    // 先加载沙拉
+    // 加载沙拉
     await loadAllJs(utoolsPageScript);
-    // 再还原indexedDB
-    await restoreIndexedBDData(indexedDBData)
 
     inited = true;
-    mockOnInstalled();
+    await mockOnInstalled();
     enterEventListener && enterEventListener();
 
 }
@@ -66,7 +68,7 @@ utools.onPluginReady(() => {
 // 模拟install事件
 function mockOnInstalled(){
     //install
-    window.browser.storage.sync.get().then((data) => {
+    return window.browser.storage.sync.get().then((data) => {
         if (!data.activeProfileID) {
           console.log('mock install')
           window.browser.runtime.onInstalled._listeners.forEach((listener) => {
@@ -96,18 +98,13 @@ function mockOnInstalled(){
 // 保存indexedDB
 function saveIndexedBDData() {
     console.log("saveIndexedBDData -> saveIndexedBDData")
-    return new Promise((resolve, reject) => {
-        var request = indexedDB.open('SaladictWords')
-        request.onsuccess = async function (event) {
-            let db = request.result;
-            // console.log('数据库打开成功');
-            let data = await exportToJson(db)
-            if (data) {
-                indexedDBData.save(data);
-            }
-            db.close()
-            resolve()
-        };
+    return new Promise(async (resolve, reject) => {
+        let data = await exportDatabase('SaladictWords')
+        console.log("saveIndexedBDData -> data", data)
+        if (data) {
+            indexedDBData.save(data);
+        }
+        resolve()
     })
 }
 

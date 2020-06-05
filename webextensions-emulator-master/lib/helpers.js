@@ -6,6 +6,7 @@ export const msgBgListeners = ('fake_env_msgBackgroundListeners')
 
 export function runtimeSendMessage (listenersArea) {
   function sendMessage (extensionId, message) {
+    // console.log('runtime.sendMessage:',extensionId && extensionId.type)
     // 监听WORD_SAVED保存indexedDB
     if (extensionId && extensionId.type && ['WORD_SAVED'].includes(extensionId.type)) {
       window.saveIndexedBDData && window.saveIndexedBDData()

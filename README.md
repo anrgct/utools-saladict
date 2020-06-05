@@ -24,7 +24,7 @@
 
 ### 更新记录
 
-*2020-06-04 升级沙拉查词 v7.13.2*
+*2020-06-05 升级沙拉查词 v7.13.2*
 
 [查看历史更新记录](https://github.com/anrgct/utools-saladic/releases)
 

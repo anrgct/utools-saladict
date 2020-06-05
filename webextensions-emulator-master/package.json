@@ -41,6 +41,8 @@
   },
   "dependencies": {
     "css-loader": "^3.5.3",
+    "dexie": "^3.0.1",
+    "dexie-export-import": "^1.0.0-rc.2",
     "lodash": "^4.17.11",
     "replace-in-file": "^6.0.0",
     "sinon-chrome": "^2.3.2",

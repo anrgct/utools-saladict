@@ -1263,6 +1263,18 @@ detect-node@^2.0.4:
   resolved "https://registry.npm.taobao.org/detect-node/download/detect-node-2.0.4.tgz#014ee8f8f669c5c58023da64b8179c083a28c46c"
   integrity sha1-AU7o+PZpxcWAI9pkuBecCDooxGw=
 
+dexie-export-import@^1.0.0-rc.2:
+  version "1.0.0-rc.2"
+  resolved "https://registry.npm.taobao.org/dexie-export-import/download/dexie-export-import-1.0.0-rc.2.tgz#65267ecae6fe78c4122687fd978341010c6f367a"
+  integrity sha1-ZSZ+yub+eMQSJof9l4NBAQxvNno=
+  dependencies:
+    dexie "^3.0.0-alpha.5 || ^2.0.4"
+
+"dexie@^3.0.0-alpha.5 || ^2.0.4", dexie@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.npm.taobao.org/dexie/download/dexie-3.0.1.tgz#faafeb94be0d5e18b25d700546a2c05725511cfc"
+  integrity sha1-+q/rlL4NXhiyXXAFRqLAVyVRHPw=
+
 diff@^3.1.0:
   version "3.5.0"
   resolved "https://registry.npm.taobao.org/diff/download/diff-3.5.0.tgz?cache=0&sync_timestamp=1578890988059&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fdiff%2Fdownload%2Fdiff-3.5.0.tgz#800c0dd1e0a8bfbc95835c202ad220fe317e5a12"
