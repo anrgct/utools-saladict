@@ -1,0 +1,1 @@
+(window.saladictEntry=window.saladictEntry||[]).push([[83],{1359:function(t,i,n){(i=n(219)(!1)).push([t.i,".dictVocabulary-Long{padding-left:5px;border-left:1px solid #666}",""]),t.exports=i},697:function(t,i,n){var o=n(1359);t.exports="string"==typeof o?o:o.toString()}}]);

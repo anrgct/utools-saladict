@@ -1,1 +1,0 @@
-(window.saladictEntry=window.saladictEntry||[]).push([[135],{629:function(t,n,e){"use strict";e.r(n),e.d(n,"DictGoogleDict",(function(){return a}));var r=e(0),i=e.n(r);const a=({result:t})=>i.a.createElement("div",{dangerouslySetInnerHTML:{__html:t.entry}});n.default=a}}]);

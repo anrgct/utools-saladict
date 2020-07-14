@@ -1,5 +1,5 @@
 {
-  "version": "7.13.2",
+  "version": "7.14.5",
   "content_scripts": [
     {
       "css": [
@@ -10,10 +10,10 @@
       ],
       "js": [
         "assets/browser-polyfill.min.js",
-        "assets/runtime.7c358480.js",
-        "assets/view-vendor.e505b0d9.js",
-        "assets/18.dc13ff03.js",
-        "assets/content.53e31f7b.js"
+        "assets/runtime.cd89f126.js",
+        "assets/view-vendor.78e40906.js",
+        "assets/18.05ccfe7e.js",
+        "assets/content.da2f3402.js"
       ]
     },
     {
@@ -24,10 +24,10 @@
       ],
       "js": [
         "assets/browser-polyfill.min.js",
-        "assets/runtime.7c358480.js",
-        "assets/view-vendor.e505b0d9.js",
-        "assets/21.ce2907c7.js",
-        "assets/selection.64d339cc.js"
+        "assets/runtime.cd89f126.js",
+        "assets/view-vendor.78e40906.js",
+        "assets/21.6bbbbfd1.js",
+        "assets/selection.dbb41fbb.js"
       ]
     }
   ],
@@ -50,11 +50,11 @@
   "background": {
     "scripts": [
       "assets/browser-polyfill.min.js",
-      "assets/runtime.7c358480.js",
-      "assets/view-vendor.e505b0d9.js",
-      "assets/dexie.8d869c28.js",
-      "assets/20.c4eab594.js",
-      "assets/background.3ba95e36.js"
+      "assets/runtime.cd89f126.js",
+      "assets/view-vendor.78e40906.js",
+      "assets/dexie.ff1da2a5.js",
+      "assets/20.c8795468.js",
+      "assets/background.c9da7cd5.js"
     ],
     "persistent": true
   },
@@ -125,7 +125,6 @@
   "permissions": [
     "<all_urls>",
     "alarms",
-    "clipboardRead",
     "contextMenus",
     "cookies",
     "notifications",
@@ -136,7 +135,9 @@
     "webRequestBlocking"
   ],
   "optional_permissions": [
-    "clipboardWrite"
+    "clipboardRead",
+    "clipboardWrite",
+    "background"
   ],
   "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
   "incognito": "split",
