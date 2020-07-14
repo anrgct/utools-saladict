@@ -17219,10 +17219,14 @@ const msgBgListeners = ('fake_env_msgBackgroundListeners')
 
 function runtimeSendMessage (listenersArea) {
   function sendMessage (extensionId, message) {
-    // console.log('runtime.sendMessage:',extensionId && extensionId.type)
+    // console.log('runtime.sendMessage:',extensionId && extensionId.type,message)
     // 监听WORD_SAVED保存indexedDB
     if (extensionId && extensionId.type && ['WORD_SAVED'].includes(extensionId.type)) {
       window.saveIndexedBDData && window.saveIndexedBDData()
+    }
+    // 修改不能删除生词记录问题
+    if (extensionId && extensionId.type && ['SYNC_SERVICE_DOWNLOAD'].includes(extensionId.type)) {
+      return Promise.resolve(true)
     }
     return new Promise((resolve, reject) => {
       if (typeof extensionId !== 'string') {
@@ -43053,7 +43057,7 @@ module.exports = function (list, options) {
 var ___CSS_LOADER_API_IMPORT___ = __webpack_require__(59);
 exports = ___CSS_LOADER_API_IMPORT___(false);
 // Module
-exports.push([module.i, "html,body{\n    height: 100%;\n    margin:0;\n    padding:0;\n}\n#saladict-paste{\n    display: none;\n}\niframe{\n    border: 0;\n}\n.iframe-wrap{\n    width: 100%;\n    height: 100%;\n    position: absolute;\n    top: 0;\n    left: 0;\n    overflow: hidden;\n}\n.close-iframe-btn{\n    position: absolute;\n    top: 0;\n    right: 5px;\n    line-height: 1.5;\n    font-weight: 400;\n    white-space: nowrap;\n    text-align: center;\n    background-image: none;\n    border: 1px solid transparent;\n    -moz-user-select: none;\n    -ms-user-select: none;\n    user-select: none;\n    -ms-touch-action: manipulation;\n    touch-action: manipulation;\n    padding: 0 5px;\n    font-size: 15px;\n    border-radius: 4px;\n    color: #fff;\n    background-color: #ff4d4f;\n    border-color: #ff4d4f;\n    text-shadow: 0 -1px 0 rgba(0,0,0,0.12);\n    -webkit-box-shadow: 0 2px 0 rgba(0,0,0,0.045);\n    box-shadow: 0 2px 0 rgba(0,0,0,0.045);\n    cursor: pointer;\n}\n/* 搜索条隐藏 */\n.dictPanel-Root .menuBar-Btn:nth-of-type(6),.dictPanel-Root .menuBar-Btn:nth-of-type(7){\n    display: none;\n}\n/* 设置页隐藏 */\n/* main.ant-layout-content[data-option-content=Dictionaries] .ant-col-13,\nmain.ant-layout-content[data-option-content=Profiles] .ant-col-12{\n    width: 100%;\n} */\nmain.ant-layout-content .saladict-form-btns button:nth-of-type(2),\nmain.ant-layout-content[data-option-content=General] form>.ant-row:nth-of-type(1),\nmain.ant-layout-content[data-option-content=Notebook] form>.ant-row:nth-of-type(6),\nmain.ant-layout-content[data-option-content=Notebook] form>.ant-row:nth-of-type(7),\nmain.ant-layout-content[data-option-content=Privacy] form>.ant-row:nth-of-type(1),\nmain.ant-layout-content[data-option-content=SearchModes] form>.ant-row:nth-of-type(1),\nmain.ant-layout-content[data-option-content=SearchModes] form>.ant-row:nth-of-type(2),\nmain.ant-layout-content[data-option-content=SearchModes] form>.ant-row:nth-of-type(3),\nmain.ant-layout-content[data-option-content=SearchModes] form>.ant-row:nth-of-type(4),\nmain.ant-layout-content[data-option-content=SearchModes] form>.ant-row:nth-of-type(5),\nmain.ant-layout-content[data-option-content=SearchModes] form>.ant-row:nth-of-type(6),\nmain.ant-layout-content[data-option-content=SearchModes] form>.ant-row:nth-of-type(7),\nmain.ant-layout-content[data-option-content=DictPanel] form>.ant-row:nth-of-type(6),\nmain.ant-layout-content[data-option-content=DictPanel] form>.ant-row:nth-of-type(7),\nmain.ant-layout-content[data-option-content=DictPanel] form>.ant-row:nth-of-type(9),\nmain.ant-layout-content[data-option-content=DictPanel] form>.ant-row:nth-of-type(10),\nmain.ant-layout-content[data-option-content=DictPanel] form>.ant-row:nth-of-type(11){\n    display: none;\n}\n.ant-layout-sider .ant-menu-item:nth-of-type(8),\n.ant-layout-sider .ant-menu-item:nth-of-type(9),\n.ant-layout-sider .ant-menu-item:nth-of-type(11),\n.ant-layout-sider .ant-menu-item:nth-of-type(12),\n.ant-layout-sider .ant-menu-item:nth-of-type(13){\n    display: none;\n}", ""]);
+exports.push([module.i, "html,body{\n    height: 100%;\n    margin:0;\n    padding:0;\n}\n#saladict-paste{\n    display: none;\n}\niframe{\n    border: 0;\n}\n.iframe-wrap{\n    width: 100%;\n    height: 100%;\n    position: absolute;\n    top: 0;\n    left: 0;\n    overflow: hidden;\n}\n.close-iframe-btn{\n    position: absolute;\n    top: 0;\n    right: 5px;\n    line-height: 1.5;\n    font-weight: 400;\n    white-space: nowrap;\n    text-align: center;\n    background-image: none;\n    border: 1px solid transparent;\n    -moz-user-select: none;\n    -ms-user-select: none;\n    user-select: none;\n    -ms-touch-action: manipulation;\n    touch-action: manipulation;\n    padding: 0 5px;\n    font-size: 15px;\n    border-radius: 4px;\n    color: #fff;\n    background-color: #ff4d4f;\n    border-color: #ff4d4f;\n    text-shadow: 0 -1px 0 rgba(0,0,0,0.12);\n    -webkit-box-shadow: 0 2px 0 rgba(0,0,0,0.045);\n    box-shadow: 0 2px 0 rgba(0,0,0,0.045);\n    cursor: pointer;\n}\n/* 搜索条隐藏 */\n.dictPanel-Root .menuBar-Btn:nth-of-type(6),.dictPanel-Root .menuBar-Btn:nth-of-type(7){\n    display: none;\n}\n/* 设置页隐藏 */\n/* main.ant-layout-content[data-option-content=Dictionaries] .ant-col-13,\nmain.ant-layout-content[data-option-content=Profiles] .ant-col-12{\n    width: 100%;\n} */\nmain.ant-layout-content .saladict-form-btns button:nth-of-type(2),\nmain.ant-layout-content[data-option-content=General] form>.ant-row:nth-of-type(1),\nmain.ant-layout-content[data-option-content=General] form>.ant-row:nth-of-type(3),\nmain.ant-layout-content[data-option-content=Notebook] form>.ant-row:nth-of-type(6),\nmain.ant-layout-content[data-option-content=Notebook] form>.ant-row:nth-of-type(7),\nmain.ant-layout-content[data-option-content=Privacy] form>.ant-row:nth-of-type(1),\nmain.ant-layout-content[data-option-content=SearchModes] form>.ant-row:nth-of-type(1),\nmain.ant-layout-content[data-option-content=SearchModes] form>.ant-row:nth-of-type(2),\nmain.ant-layout-content[data-option-content=SearchModes] form>.ant-row:nth-of-type(3),\nmain.ant-layout-content[data-option-content=SearchModes] form>.ant-row:nth-of-type(4),\nmain.ant-layout-content[data-option-content=SearchModes] form>.ant-row:nth-of-type(5),\nmain.ant-layout-content[data-option-content=SearchModes] form>.ant-row:nth-of-type(6),\nmain.ant-layout-content[data-option-content=SearchModes] form>.ant-row:nth-of-type(7),\nmain.ant-layout-content[data-option-content=DictPanel] form>.ant-row:nth-of-type(6),\nmain.ant-layout-content[data-option-content=DictPanel] form>.ant-row:nth-of-type(7),\nmain.ant-layout-content[data-option-content=DictPanel] form>.ant-row:nth-of-type(9),\nmain.ant-layout-content[data-option-content=DictPanel] form>.ant-row:nth-of-type(10),\nmain.ant-layout-content[data-option-content=DictPanel] form>.ant-row:nth-of-type(11){\n    display: none;\n}\n.ant-layout-sider .ant-menu-item:nth-of-type(8),\n.ant-layout-sider .ant-menu-item:nth-of-type(9),\n.ant-layout-sider .ant-menu-item:nth-of-type(11),\n.ant-layout-sider .ant-menu-item:nth-of-type(12),\n.ant-layout-sider .ant-menu-item:nth-of-type(13),\n.ant-layout-sider .ant-menu-item:nth-of-type(16){\n    display: none;\n}", ""]);
 // Exports
 module.exports = exports;
 
@@ -43227,7 +43231,7 @@ window.addEventListener('load', _mock_addon__WEBPACK_IMPORTED_MODULE_3__[/* run 
 
 let inited, enterEventListener;
 let localStorageData, indexedDBData, versionData;
-let latestVersion = '7.13.2'
+let latestVersion = '7.14.5'
 
 utools.onPluginEnter(({ code, type, payload }) => {
     console.log('utools.onPluginEnter')
@@ -43237,10 +43241,18 @@ utools.onPluginEnter(({ code, type, payload }) => {
     }
     enterEventListener = () => {
         Object(_mock_utils__WEBPACK_IMPORTED_MODULE_1__[/* openIframe */ "b"])('quick-search.html', { hideCloseBtn: true })
-        document.execCommand = function (e) {
+        document.execCommand = function (cmd) {
+            // console.log("document.execCommand -> cmd", cmd)
             // let clipboardText = clipboard.readText();
             // let queryStr = payload || clipboardText;
-            document.getElementById("saladict-paste").value = payload
+            if(cmd == 'copy'){
+                let textArea = document.querySelectorAll('textarea');
+                textArea = textArea[textArea.length - 1];
+                let text = textArea.value;
+                utools.copyText(text)
+            }else if(cmd == 'paste'){
+                document.getElementById("saladict-paste").value = payload
+            }
         }
     }
     if (inited) {
@@ -43259,11 +43271,11 @@ async function init() {
     // 还原indexedDB
     await Object(_mock_utils__WEBPACK_IMPORTED_MODULE_1__[/* restoreIndexedBDData */ "c"])(indexedDBData)
     let utoolsPageScript = [
-      "assets/runtime.7c358480.js",
-      "assets/view-vendor.e505b0d9.js",
-      "assets/dexie.8d869c28.js",
-      "assets/20.c4eab594.js",
-      "assets/background.3ba95e36.js"
+        "assets/runtime.cd89f126.js",
+        "assets/view-vendor.78e40906.js",
+        "assets/dexie.ff1da2a5.js",
+        "assets/20.c8795468.js",
+        "assets/background.c9da7cd5.js"
     ];
     // 加载沙拉
     await Object(_mock_utils__WEBPACK_IMPORTED_MODULE_1__[/* loadAllJs */ "a"])(utoolsPageScript);
@@ -44751,10 +44763,11 @@ var map = {
 	"./extension.js": 88,
 	"./i18n.js": 89,
 	"./notifications.js": 90,
-	"./runtime.js": 91,
-	"./storage.js": 92,
-	"./tabs.js": 93,
-	"./windows.js": 94
+	"./permissions.js": 91,
+	"./runtime.js": 92,
+	"./storage.js": 93,
+	"./tabs.js": 94,
+	"./windows.js": 95
 };
 
 
@@ -44855,6 +44868,13 @@ window.browser.notifications.getAll.callsFake(() => Promise.resolve({}))
 
 /***/ }),
 /* 91 */
+/***/ (function(module, exports) {
+
+window.browser.permissions.contains.callsFake(() => Promise.resolve(true))
+window.browser.permissions.request.callsFake(() => Promise.resolve(true))
+
+/***/ }),
+/* 92 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -44919,7 +44939,7 @@ window.browser.runtime.getManifest.callsFake(()=>({version:window.latestVersion}
 
 
 /***/ }),
-/* 92 */
+/* 93 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -45125,7 +45145,7 @@ function notifyListeners (changes, area) {
 
 
 /***/ }),
-/* 93 */
+/* 94 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -45165,7 +45185,7 @@ window.browser.tabs.sendMessage.callsFake((tabId, message) => {
 
 
 /***/ }),
-/* 94 */
+/* 95 */
 /***/ (function(module, exports) {
 
 window.browser.windows.create.callsFake(({ url }) => {

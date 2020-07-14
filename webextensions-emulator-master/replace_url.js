@@ -6,6 +6,11 @@ const options = [
     to: 'n.p="./"'
   },
   {
+    files: '../ext-saladic/assets/background*.js',
+    from: /\/options.html/g,
+    to: 'options.html'
+  },
+  {
     files: '../ext-saladic/assets/runtime*.js',
     from: /n.p\+"assets\/"/g,
     to: 'n.p+""'

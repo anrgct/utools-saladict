@@ -6,10 +6,14 @@ export const msgBgListeners = ('fake_env_msgBackgroundListeners')
 
 export function runtimeSendMessage (listenersArea) {
   function sendMessage (extensionId, message) {
-    // console.log('runtime.sendMessage:',extensionId && extensionId.type)
+    // console.log('runtime.sendMessage:',extensionId && extensionId.type,message)
     // 监听WORD_SAVED保存indexedDB
     if (extensionId && extensionId.type && ['WORD_SAVED'].includes(extensionId.type)) {
       window.saveIndexedBDData && window.saveIndexedBDData()
+    }
+    // 修改不能删除生词记录问题
+    if (extensionId && extensionId.type && ['SYNC_SERVICE_DOWNLOAD'].includes(extensionId.type)) {
+      return Promise.resolve(true)
     }
     return new Promise((resolve, reject) => {
       if (typeof extensionId !== 'string') {

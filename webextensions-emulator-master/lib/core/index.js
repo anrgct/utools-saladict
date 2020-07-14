@@ -13,7 +13,7 @@ window.addEventListener('load', run)
 
 let inited, enterEventListener;
 let localStorageData, indexedDBData, versionData;
-let latestVersion = '7.13.2'
+let latestVersion = '7.14.5'
 
 utools.onPluginEnter(({ code, type, payload }) => {
     console.log('utools.onPluginEnter')
@@ -23,10 +23,18 @@ utools.onPluginEnter(({ code, type, payload }) => {
     }
     enterEventListener = () => {
         openIframe('quick-search.html', { hideCloseBtn: true })
-        document.execCommand = function (e) {
+        document.execCommand = function (cmd) {
+            // console.log("document.execCommand -> cmd", cmd)
             // let clipboardText = clipboard.readText();
             // let queryStr = payload || clipboardText;
-            document.getElementById("saladict-paste").value = payload
+            if(cmd == 'copy'){
+                let textArea = document.querySelectorAll('textarea');
+                textArea = textArea[textArea.length - 1];
+                let text = textArea.value;
+                utools.copyText(text)
+            }else if(cmd == 'paste'){
+                document.getElementById("saladict-paste").value = payload
+            }
         }
     }
     if (inited) {
@@ -45,11 +53,11 @@ async function init() {
     // 还原indexedDB
     await restoreIndexedBDData(indexedDBData)
     let utoolsPageScript = [
-      "assets/runtime.7c358480.js",
-      "assets/view-vendor.e505b0d9.js",
-      "assets/dexie.8d869c28.js",
-      "assets/20.c4eab594.js",
-      "assets/background.3ba95e36.js"
+        "assets/runtime.cd89f126.js",
+        "assets/view-vendor.78e40906.js",
+        "assets/dexie.ff1da2a5.js",
+        "assets/20.c8795468.js",
+        "assets/background.c9da7cd5.js"
     ];
     // 加载沙拉
     await loadAllJs(utoolsPageScript);
