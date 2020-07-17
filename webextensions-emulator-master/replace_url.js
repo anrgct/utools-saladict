@@ -32,6 +32,11 @@ const options = [
   },
   {
     files: '../ext-saladic/assets/*.js',
+    from: /qsPreload:"selection"/g,
+    to: 'qsPreload:"clipboard"'
+  },
+  {
+    files: '../ext-saladic/assets/*.js',
     from: /browser.runtime.getURL\("\/audio-control.html"/g,
     to: 'browser.runtime.getURL("audio-control.html"'
   },

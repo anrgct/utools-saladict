@@ -24,7 +24,7 @@ utools.onPluginEnter(({ code, type, payload }) => {
     enterEventListener = () => {
         openIframe('quick-search.html', { hideCloseBtn: true })
         document.execCommand = function (cmd) {
-            // console.log("document.execCommand -> cmd", cmd)
+            // console.log("document.execCommand -> cmd", cmd,payload)
             // let clipboardText = clipboard.readText();
             // let queryStr = payload || clipboardText;
             if(cmd == 'copy'){

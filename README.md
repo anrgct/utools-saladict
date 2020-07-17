@@ -48,8 +48,11 @@
 
 
 ### 其他
-[本项目地址](https://github.com/anrgct/utools-saladict) 如果你觉得不错，给个 Star 支持一下吧！
+
+> 如果项目出现不能快捷查词或者词典设置页面错乱等问题，请到utools插件中心——账号与数据——沙拉查词——文档——清空，重启utools，打开沙拉查词即可
 
 特别感谢crimx大佬的开挂式辅导、感谢却步大佬的耐心审查
+
+[本项目地址](https://github.com/anrgct/utools-saladict) 给个 Star 支持一下
 
 
