@@ -43231,7 +43231,7 @@ window.addEventListener('load', _mock_addon__WEBPACK_IMPORTED_MODULE_3__[/* run 
 
 let inited, enterEventListener;
 let localStorageData, indexedDBData, versionData;
-let latestVersion = '7.14.5'
+let latestVersion = '7.15.1'
 
 utools.onPluginEnter(({ code, type, payload }) => {
     console.log('utools.onPluginEnter')
@@ -43271,11 +43271,11 @@ async function init() {
     // 还原indexedDB
     await Object(_mock_utils__WEBPACK_IMPORTED_MODULE_1__[/* restoreIndexedBDData */ "c"])(indexedDBData)
     let utoolsPageScript = [
-        "assets/runtime.cd89f126.js",
-        "assets/view-vendor.78e40906.js",
-        "assets/dexie.ff1da2a5.js",
-        "assets/20.c8795468.js",
-        "assets/background.c9da7cd5.js"
+      "assets/runtime.9f8be0be.js",
+      "assets/view-vendor.3dc611a9.js",
+      "assets/dexie.ff1da2a5.js",
+      "assets/20.16ec49ef.js",
+      "assets/background.bea7b0f5.js"
     ];
     // 加载沙拉
     await Object(_mock_utils__WEBPACK_IMPORTED_MODULE_1__[/* loadAllJs */ "a"])(utoolsPageScript);
