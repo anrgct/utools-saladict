@@ -1,5 +1,5 @@
 {
-  "version": "7.15.1",
+  "version": "7.18.0",
   "content_scripts": [
     {
       "css": [
@@ -11,10 +11,10 @@
       ],
       "js": [
         "assets/browser-polyfill.min.js",
-        "assets/runtime.9f8be0be.js",
-        "assets/view-vendor.3dc611a9.js",
-        "assets/18.09ef6588.js",
-        "assets/content.0d144ac8.js"
+        "assets/runtime.c141d6d4.js",
+        "assets/view-vendor.13bec606.js",
+        "assets/18.4e6a1c78.js",
+        "assets/content.588543e3.js"
       ]
     },
     {
@@ -25,10 +25,10 @@
       ],
       "js": [
         "assets/browser-polyfill.min.js",
-        "assets/runtime.9f8be0be.js",
-        "assets/view-vendor.3dc611a9.js",
-        "assets/21.a177319b.js",
-        "assets/selection.590937b9.js"
+        "assets/runtime.c141d6d4.js",
+        "assets/view-vendor.13bec606.js",
+        "assets/21.9a785952.js",
+        "assets/selection.fd6ff2fa.js"
       ]
     }
   ],
@@ -51,11 +51,11 @@
   "background": {
     "scripts": [
       "assets/browser-polyfill.min.js",
-      "assets/runtime.9f8be0be.js",
-      "assets/view-vendor.3dc611a9.js",
-      "assets/dexie.ff1da2a5.js",
-      "assets/20.16ec49ef.js",
-      "assets/background.bea7b0f5.js"
+      "assets/runtime.c141d6d4.js",
+      "assets/view-vendor.13bec606.js",
+      "assets/dexie.c13adbda.js",
+      "assets/20.880b8cca.js",
+      "assets/background.84f753a3.js"
     ],
     "persistent": true
   },
@@ -92,6 +92,15 @@
     },
     "open-google": {
       "description": "__MSG_command_open_google__"
+    },
+    "open-caiyun": {
+      "description": "__MSG_command_open_caiyun__"
+    },
+    "next-history": {
+      "description": "__MSG_command_next_history__"
+    },
+    "prev-history": {
+      "description": "__MSG_command_prev_history__"
     },
     "next-profile": {
       "description": "__MSG_command_next_profile__"

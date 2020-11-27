@@ -13,7 +13,7 @@ window.addEventListener('load', run)
 
 let inited, enterEventListener;
 let localStorageData, indexedDBData, versionData;
-let latestVersion = '7.15.1'
+let latestVersion = '7.18.0'
 
 utools.onPluginEnter(({ code, type, payload }) => {
     console.log('utools.onPluginEnter')
