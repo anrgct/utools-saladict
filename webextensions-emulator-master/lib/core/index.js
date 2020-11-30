@@ -53,11 +53,11 @@ async function init() {
     // 还原indexedDB
     await restoreIndexedBDData(indexedDBData)
     let utoolsPageScript = [
-      "assets/runtime.9f8be0be.js",
-      "assets/view-vendor.3dc611a9.js",
-      "assets/dexie.ff1da2a5.js",
-      "assets/20.16ec49ef.js",
-      "assets/background.bea7b0f5.js"
+        "assets/runtime.c141d6d4.js",
+        "assets/view-vendor.13bec606.js",
+        "assets/dexie.c13adbda.js",
+        "assets/20.880b8cca.js",
+        "assets/background.84f753a3.js"
     ];
     // 加载沙拉
     await loadAllJs(utoolsPageScript);
