@@ -1,0 +1,24 @@
+{
+  "name": "utools-saladict",
+  "version": "1.0.0",
+  "description": "本项目移植自广受好评的chrome划词翻译插件——[沙拉查词](https://saladict.crimx.com/)",
+  "main": "preload.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/anrgct/utools-saladic.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/anrgct/utools-saladic/issues"
+  },
+  "homepage": "https://github.com/anrgct/utools-saladic#readme",
+  "dependencies": {
+    "axios": "^0.21.0",
+    "axios-cookiejar-support": "^1.0.1",
+    "tough-cookie": "^4.0.0"
+  }
+}

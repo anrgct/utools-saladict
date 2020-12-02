@@ -25,6 +25,17 @@ const options = [
     from: /a="\/assets\/"\+`antd/g,
     to: 'a="./assets/"+`antd'
   },
+  //替换axios模块
+  {
+    files: '../ext-saladic/assets/*.js',
+    from: /[\w]\(596\)/g,
+    to: 'window.axios'
+  },
+  {
+    files: '../ext-saladic/assets/*.js',
+    from: 'responseType:"document"}).then(({data:e})=>e)',
+    to: 'responseType:"document"}).then(({data:e})=>new DOMParser().parseFromString(e,"text/html"))'
+  },
   {
     files: '../ext-saladic/assets/*.js',
     from: /qsAuto:!1/g,
