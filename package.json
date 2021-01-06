@@ -17,7 +17,7 @@
   },
   "homepage": "https://github.com/anrgct/utools-saladic#readme",
   "dependencies": {
-    "axios": "^0.21.0",
+    "axios": "^0.21.1",
     "axios-cookiejar-support": "^1.0.1",
     "tough-cookie": "^4.0.0"
   }
