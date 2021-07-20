@@ -1,9 +1,9 @@
 {
-  "version": "7.18.0",
+  "version": "7.19.0",
   "content_scripts": [
     {
       "css": [
-        "assets/content.11b45b2f.css",
+        "assets/content.d3a99ffd.css",
         "assets/content.css"
       ],
       "matches": [
@@ -11,10 +11,10 @@
       ],
       "js": [
         "assets/browser-polyfill.min.js",
-        "assets/runtime.c141d6d4.js",
+        "assets/runtime.4097fa5f.js",
         "assets/view-vendor.13bec606.js",
-        "assets/18.4e6a1c78.js",
-        "assets/content.588543e3.js"
+        "assets/18.827da3d5.js",
+        "assets/content.0bf00037.js"
       ]
     },
     {
@@ -25,10 +25,10 @@
       ],
       "js": [
         "assets/browser-polyfill.min.js",
-        "assets/runtime.c141d6d4.js",
+        "assets/runtime.4097fa5f.js",
         "assets/view-vendor.13bec606.js",
-        "assets/21.9a785952.js",
-        "assets/selection.fd6ff2fa.js"
+        "assets/21.fa5a96c8.js",
+        "assets/selection.947dc220.js"
       ]
     }
   ],
@@ -51,11 +51,11 @@
   "background": {
     "scripts": [
       "assets/browser-polyfill.min.js",
-      "assets/runtime.c141d6d4.js",
+      "assets/runtime.4097fa5f.js",
       "assets/view-vendor.13bec606.js",
       "assets/dexie.c13adbda.js",
-      "assets/20.880b8cca.js",
-      "assets/background.84f753a3.js"
+      "assets/20.473a1c38.js",
+      "assets/background.68a7256d.js"
     ],
     "persistent": true
   },

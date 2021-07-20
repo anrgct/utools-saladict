@@ -42,10 +42,9 @@
 
 ### 更新记录
 
-*2020-12-02*
+*2021-07-20*
 
-- 升级沙拉查词 v7.18.0
-- 修复沪江小D，腾讯翻译君，彩云小译等词典
+- 升级沙拉查词 v7.19.0
 
 [历史更新记录](https://github.com/anrgct/utools-saladic/releases)
 
@@ -57,5 +56,3 @@
 特别感谢crimx大佬的开挂式辅导、感谢却步大佬的耐心审查
 
 [本项目地址](https://github.com/anrgct/utools-saladict) 给个 Star 支持一下
-
-
