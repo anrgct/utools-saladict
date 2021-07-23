@@ -74,9 +74,7 @@ export function runtimeSendMessage (listenersArea) {
 }
 
 export const connectPageListeners = ('fake_env_connectPageListeners')
-export const connectBgListeners = (
-  'fake_env_connectBackgroundListeners'
-)
+export const connectBgListeners = ('fake_env_connectBackgroundListeners')
 
 export function runtimeConnect (listenersArea) {
   return function connect (...args) {

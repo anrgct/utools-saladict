@@ -5,7 +5,6 @@ window.browser.cookies.remove.callsFake(() => Promise.resolve());
 // window.browser.cookies.set.callsFake(() => Promise.resolve());
 
 window.browser.cookies.set.callsFake((obj) => {
-  // console.log("🚀 ~ file: cookies.js ~ line 8 ~ window.browser.cookies.set.callsFake ~ obj", obj)
   // obj.key = obj.name;
   // let cookie = new tough.Cookie(obj);
   // tough._CookieJar.setCookie(cookie, obj.url);

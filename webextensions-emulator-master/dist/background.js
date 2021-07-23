@@ -17336,9 +17336,7 @@ function runtimeSendMessage (listenersArea) {
 }
 
 const connectPageListeners = ('fake_env_connectPageListeners')
-const connectBgListeners = (
-  'fake_env_connectBackgroundListeners'
-)
+const connectBgListeners = ('fake_env_connectBackgroundListeners')
 
 function runtimeConnect (listenersArea) {
   return function connect (...args) {

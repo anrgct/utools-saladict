@@ -1,4 +1,5 @@
 const shell = require("electron").shell;
+const url = require('url').URL
 //打开外部链接
 window.openExternal = function (url) {
   shell.openExternal(url);
@@ -19,13 +20,22 @@ const axios = require("axios").create({
   //   host: "localhost",
   //   port: 8888,
   // },
+  withCredentials:true
 });
 tough._CookieJar = CookieJar;
+// function setCookie(cookieStr, url){
+//   return new Promise((res, rej)=>{
+//     CookieJar.setCookie(cookieStr, url)
+//   })
+// }
 axiosCookieJarSupport(axios);
 axios.interceptors.request.use(
   (config) => {
     //处理腾讯翻译君bug
-    config.headers.referer = config.url;
+    let targetURl = new url(config.url)
+    let urlOrigin = targetURl.origin
+    config.headers.referer = urlOrigin;
+    // config.headers.origin = urlOrigin;
     return config;
   },
   (error) => {
@@ -33,12 +43,21 @@ axios.interceptors.request.use(
   }
 );
 axios.interceptors.response.use(
-  (response) => {
-  // console.log("🚀 ~ file: preload.js ~ line 36 ~ response", response)
+  async (response) => {
+    // console.log("🚀 ~ file: preload.js ~ line 36 ~ response", response)
+    //处理有道翻译bug
+    let {headers, config} = response
+    let resSetCookie = headers['set-cookie']
+    if(resSetCookie && resSetCookie.length){
+      cookies = resSetCookie.map(tough.Cookie.parse);
+      for (let i of cookies){
+        await CookieJar.setCookie(i, config.url)
+      }
+    }
     return response;
   },
   (error) => {
-  // console.log("🚀 ~ file: preload.js ~ line 40 ~ error", error)
+    // console.log("🚀 ~ file: preload.js ~ line 40 ~ error", error)
     return Promise.reject(error);
   }
 );

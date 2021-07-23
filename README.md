@@ -1,3 +1,14 @@
+# *重要提示*
+
+> utools出于版权风险考虑，本插件已被插件市场下架，只能从github [release页面](https://github.com/anrgct/utools-saladict/releases)手动下载`upx`文件安装
+
+### 安装方法
+
+以下两种方法都可以：
+- ~~在utools应用中心下载安装~~
+- 在github的[release页面](https://github.com/anrgct/utools-saladict/releases)下再最新upx文件，拖动到utools的搜索框中，按提示操作
+
+
 ### 沙拉查词-utools移植版本
 
 本项目移植自广受好评的chrome划词翻译插件——[沙拉查词](https://saladict.crimx.com/)
@@ -34,12 +45,6 @@
 | pdf阅读        | √      |   无    |
 | 生词同步        | 扇贝，WebDAV，Anki Connect      |   Anki Connect    |
 
-### 安装方法
-
-以下两种方法都可以：
-- 在utools应用中心下载安装
-- 在github的release页面下再最新upx文件手动安装到utools
-
 ### 更新记录
 
 *2021-07-20*
@@ -47,7 +52,6 @@
 - 升级沙拉查词 v7.19.0
 
 [历史更新记录](https://github.com/anrgct/utools-saladic/releases)
-
 
 ### 其他
 

@@ -17336,9 +17336,7 @@ function runtimeSendMessage (listenersArea) {
 }
 
 const connectPageListeners = ('fake_env_connectPageListeners')
-const connectBgListeners = (
-  'fake_env_connectBackgroundListeners'
-)
+const connectBgListeners = ('fake_env_connectBackgroundListeners')
 
 function runtimeConnect (listenersArea) {
   return function connect (...args) {
@@ -43280,7 +43278,7 @@ window.addEventListener('load', _mock_addon__WEBPACK_IMPORTED_MODULE_3__[/* run 
 
 let inited, enterEventListener;
 let localStorageData, indexedDBData, versionData;
-let latestVersion = '7.18.0'
+let latestVersion = '7.19.0'
 
 utools.onPluginEnter(({ code, type, payload }) => {
     console.log('utools.onPluginEnter')
@@ -43320,15 +43318,15 @@ async function init() {
     // 还原indexedDB
     await Object(_mock_utils__WEBPACK_IMPORTED_MODULE_1__[/* restoreIndexedBDData */ "c"])(indexedDBData)
     let utoolsPageScript = [
-        "assets/runtime.c141d6d4.js",
+        "assets/runtime.4097fa5f.js",
         "assets/view-vendor.13bec606.js",
         "assets/dexie.c13adbda.js",
-        "assets/20.880b8cca.js",
-        "assets/background.84f753a3.js"
+        "assets/20.473a1c38.js",
+        "assets/background.68a7256d.js"
     ];
     // 加载沙拉
     await Object(_mock_utils__WEBPACK_IMPORTED_MODULE_1__[/* loadAllJs */ "a"])(utoolsPageScript);
-
+    
     inited = true;
     await mockOnInstalled();
     enterEventListener && enterEventListener();
@@ -44876,7 +44874,6 @@ window.browser.cookies.remove.callsFake(() => Promise.resolve());
 // window.browser.cookies.set.callsFake(() => Promise.resolve());
 
 window.browser.cookies.set.callsFake((obj) => {
-  // console.log("🚀 ~ file: cookies.js ~ line 8 ~ window.browser.cookies.set.callsFake ~ obj", obj)
   // obj.key = obj.name;
   // let cookie = new tough.Cookie(obj);
   // tough._CookieJar.setCookie(cookie, obj.url);
