@@ -1271,9 +1271,9 @@ dexie-export-import@^1.0.0-rc.2:
     dexie "^3.0.0-alpha.5 || ^2.0.4"
 
 "dexie@^3.0.0-alpha.5 || ^2.0.4", dexie@^3.0.1:
-  version "3.0.1"
-  resolved "https://registry.npm.taobao.org/dexie/download/dexie-3.0.1.tgz#faafeb94be0d5e18b25d700546a2c05725511cfc"
-  integrity sha1-+q/rlL4NXhiyXXAFRqLAVyVRHPw=
+  version "3.2.2"
+  resolved "https://registry.yarnpkg.com/dexie/-/dexie-3.2.2.tgz#fa6f2a3c0d6ed0766f8d97a03720056f88fe0e01"
+  integrity sha512-q5dC3HPmir2DERlX+toCBbHQXW5MsyrFqPFcovkH9N2S/UW/H3H5AWAB6iEOExeraAu+j+zRDG+zg/D7YhH0qg==
 
 diff@^3.1.0:
   version "3.5.0"
